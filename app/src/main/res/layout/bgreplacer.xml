@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择要处理的内容(目标文件):"
+		android:id="@+id/bgreplacerTextView1"/>
+
+	<Spinner
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/bgreplacerTextView1"
+		android:id="@+id/bgreplacerSpinner1"
+		android:entries="@array/path_bg"/>
+
+	<Spinner
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_toRightOf="@id/bgreplacerSpinner1"
+		android:layout_below="@id/bgreplacerTextView1"
+		android:id="@+id/bgreplacerSpinner2"
+		android:entries="@array/filename_bg"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择图片:"
+		android:layout_below="@id/bgreplacerSpinner1"
+		android:id="@+id/bgreplacerTextView2"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/bgreplacerTextView2"
+		android:id="@+id/bgreplacerPic"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择图片"
+		android:layout_toRightOf="@id/bgreplacerPic"
+		android:layout_below="@id/bgreplacerTextView2"
+		android:id="@+id/bgreplacerbtn_select"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="更新"
+		android:layout_below="@id/bgreplacerbtn_select"
+		android:id="@+id/bgreplacerbtn_update"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="使用说明:\n加载背景，地图加载背景，匹配背景三个选项下都必须放入1,2,3三张图片才能生效，选择替换内容和图片后点击更新即可（注：全部替换三张图片后，游戏中仍然有概率出现默认图片，游戏本身机制如此，MOD无法消除）"
+		android:layout_below="@id/bgreplacerbtn_update"
+		android:id="@+id/bgreplacerTextView3"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="慎点！移除所有更改！！"
+		android:layout_toRightOf="@id/bgreplacerbtn_update"
+		android:layout_below="@id/bgreplacerbtn_select"
+		android:id="@+id/bgreplacer_remove"/>
+
+</RelativeLayout>
+

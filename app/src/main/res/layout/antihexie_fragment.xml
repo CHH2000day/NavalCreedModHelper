@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="点击下方按钮进行舰名反和谐(丢失所有自定义舰名)"
+		android:id="@+id/antihexiefragmentTextView1"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="反和谐"
+		android:layout_below="@id/antihexiefragmentTextView1"
+		android:id="@+id/antihexiefragmentButtonExec"/>
+
+</RelativeLayout>
+

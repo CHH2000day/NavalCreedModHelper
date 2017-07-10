@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+	<string-array name="path_bg">
+		<item>加载背景</item>
+		<item>地图加载背景</item>
+		<item>匹配背景</item>
+	</string-array>
+	<string-array name="filename_bg">
+		<item>图片1</item>
+		<item>图片2</item>
+		<item>图片3</item>
+	</string-array>
+	<string-array name="country_crewpic">
+		<item>美国</item>
+		<item>日本</item>
+		<item>英国</item>
+		<item>中国</item>
+		<item>意大利</item>
+		<item>法国</item>
+		<item>苏联</item>
+		<item>德国</item>
+	</string-array>
+	<string-array name="crewpic_name">
+		<item>头像1</item>
+		<item>头像2</item>
+		<item>头像3</item>
+		<item>头像4</item>
+		<item>头像5</item>
+		<item>头像6</item>
+		<item>头像7</item>
+		<item>头像8</item>
+		<item>头像9</item>
+		<item>头像10</item>
+		<item>头像11</item>
+		<item>头像12</item>
+		<item>头像13</item>
+		<item>头像14</item>
+		<item>头像15</item>
+		<item>头像16</item>
+	</string-array>
+	</resources>

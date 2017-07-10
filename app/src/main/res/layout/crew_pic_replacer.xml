@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择国家:"
+		android:id="@+id/crewpicreplacerTextView1"/>
+
+	<Spinner
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/crewpicreplacerTextView1"
+		android:id="@+id/crewpicreplacerSpinnerCountry"
+		android:entries="@array/country_crewpic"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择目标船员头像:"
+		android:layout_below="@id/crewpicreplacerSpinnerCountry"
+		android:id="@+id/crewpicreplacerTextView2"/>
+
+	<Spinner
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/crewpicreplacerTextView2"
+		android:id="@+id/crewpicreplacerSpinnerCrew"
+		android:entries="@array/crewpic_name"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择图片"
+		android:layout_below="@id/crewpicreplacerSpinnerCrew"
+		android:id="@+id/crewpicreplacerButtonSelectPic"
+		android:layout_alignParentRight="true"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="替换"
+		android:layout_below="@id/crewpicreplacerButtonSelectPic"
+		android:id="@+id/crewpicreplacerButtonReplace"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="未选择图片"
+		android:layout_below="@id/crewpicreplacerSpinnerCrew"
+		android:layout_toLeftOf="@id/crewpicreplacerButtonSelectPic"
+		android:layout_alignParentLeft="true"
+		android:layout_alignBottom="@id/crewpicreplacerButtonSelectPic"
+		android:gravity="center_vertical"
+		android:id="@+id/crewpicreplacerSelectedFile"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="清空该更改"
+		android:layout_toRightOf="@id/crewpicreplacerButtonReplace"
+		android:layout_below="@id/crewpicreplacerSelectedFile"
+		android:id="@+id/crewpicreplacerButtonRemove"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="使用说明:\n每个国家有15-16个头像可供替换，替换部分即可生效，不必全部替换，替换后可通过修改成员名字选择所替换的头像\n流程：选择所替换国家和头像序号后选择图片然后点击替换\n点击清空更改清空该船员头像更改，长按清空更改清空该国家所有船员头像更改"
+		android:layout_below="@id/crewpicreplacerButtonReplace"/>
+
+</RelativeLayout>
+
