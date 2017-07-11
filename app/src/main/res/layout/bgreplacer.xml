@@ -32,19 +32,13 @@
 		android:layout_below="@id/bgreplacerSpinner1"
 		android:id="@+id/bgreplacerTextView2"/>
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:layout_below="@id/bgreplacerTextView2"
-		android:id="@+id/bgreplacerPic"/>
-
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:text="选择图片"
-		android:layout_toRightOf="@id/bgreplacerPic"
 		android:layout_below="@id/bgreplacerTextView2"
-		android:id="@+id/bgreplacerbtn_select"/>
+		android:id="@+id/bgreplacerbtn_select"
+		android:layout_alignParentRight="true"/>
 
 	<Button
 		android:layout_height="wrap_content"
@@ -67,6 +61,15 @@
 		android:layout_toRightOf="@id/bgreplacerbtn_update"
 		android:layout_below="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacer_remove"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/bgreplacerTextView2"
+		android:layout_toLeftOf="@id/bgreplacerbtn_select"
+		android:layout_alignParentLeft="true"
+		android:layout_alignBottom="@id/bgreplacerbtn_select"
+		android:id="@+id/bgreplacerPic"/>
 
 </RelativeLayout>
 

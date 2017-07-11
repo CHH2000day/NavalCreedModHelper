@@ -1,6 +1,7 @@
 package com.CHH2000day.navalcreed.modhelper;
 
 import android.content.*;
+import android.net.*;
 import android.os.*;
 import android.support.design.widget.*;
 import android.support.v4.app.*;
@@ -8,6 +9,7 @@ import android.support.v4.view.*;
 import android.support.v4.widget.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
+import android.util.*;
 import android.view.*;
 import cn.bmob.v3.*;
 import cn.bmob.v3.datatype.*;
@@ -15,10 +17,8 @@ import cn.bmob.v3.exception.*;
 import cn.bmob.v3.listener.*;
 import java.io.*;
 import java.util.*;
-import android.net.*;
 
 public class Main extends AppCompatActivity
-implements NavigationView.OnNavigationItemSelectedListener
 {
 	private ViewPager mViewPager;
 	private TabLayout mTabLayout;
@@ -136,7 +136,7 @@ implements NavigationView.OnNavigationItemSelectedListener
 
 		return true;
 	}
-
+/*
 	@SuppressWarnings("StatementWithEmptyBody")
 	@Override
 	public boolean onNavigationItemSelected(MenuItem item)
@@ -172,7 +172,7 @@ implements NavigationView.OnNavigationItemSelectedListener
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
-	}
+	}*/
 
 	private class UpdateThread extends Thread
 	{
@@ -186,7 +186,12 @@ implements NavigationView.OnNavigationItemSelectedListener
 
 					@Override
 					public void done(final UniversalObject universalobj, BmobException p2)
-					{int serverver=universalobj.getVersion().intValue();
+					{
+						if(p2!=null){
+							Log.w("Updater","Failed to get update data");
+							return;
+						}
+						int serverver=universalobj.getVersion().intValue();
 						try
 						{
 							int currver=getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;

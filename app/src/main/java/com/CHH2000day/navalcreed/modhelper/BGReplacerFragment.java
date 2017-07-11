@@ -143,8 +143,12 @@ public class BGReplacerFragment extends Fragment
 		// TODO: Implement this methodsuper.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 1)
 		{
+			if(data==null){
+				Snackbar.make(v,"文件为空！",Snackbar.LENGTH_LONG).show();
+				return;}
 			try
 			{
+				
 				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData()));
 				picname.setText(data.getData().toString());
 			}

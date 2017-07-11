@@ -29,9 +29,9 @@ public class CrewPicReplacerFragment extends Fragment
 				public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4)
 				{
 					selectedcountry = p3;
-					if(p3==3){
+					/*if(p3==3){
 						Snackbar.make(v,"该选项可能存在bug",Snackbar.LENGTH_LONG).show();
-					}
+					}*/
 					// TODO: Implement this method
 				}
 
@@ -180,6 +180,10 @@ public class CrewPicReplacerFragment extends Fragment
 		{
 			try
 			{
+				if(data==null){
+					Snackbar.make(v,"文件为空！",Snackbar.LENGTH_LONG).show();
+					return;
+				}
 				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData()));
 				selectedpic.setText(data.getData().toString());
 			}
