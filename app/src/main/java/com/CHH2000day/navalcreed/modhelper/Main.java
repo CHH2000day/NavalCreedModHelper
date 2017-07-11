@@ -27,6 +27,8 @@ public class Main extends AppCompatActivity
 	private List<String> titles;
 	private LayoutInflater li;
 	private Handler mupdateHandler;
+	private static final String GENERAL="general";
+	private static final String ANNOU_VER="annover";
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -37,8 +39,20 @@ public class Main extends AppCompatActivity
 		mupdateHandler = new Handler(){
 			public void handleMessage(Message msg)
 			{
-				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
-				adb.create().show();
+				switch (msg.what)
+				{
+					case 0:
+						AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
+						adb.create().show();
+						break;
+					case 1:
+						AlertDialog.Builder adb0=new AlertDialog.Builder(Main.this);
+						adb0.setTitle("公告")
+							.setMessage(msg.obj.toString())
+							.setPositiveButton("确定", null)
+							.create().show();
+						break;
+				}
 			}
 		};
 		/*禁用FloatingActionButton
@@ -72,13 +86,14 @@ public class Main extends AppCompatActivity
 		fragments.add(new AboutFragment());
 		titles = new ArrayList<String>();
 		titles.add("背景替换");
-		titles.add("组员头像修改");
+		titles.add("船员头像修改");
 		titles.add("反和谐");
 		titles.add("关于");
 		mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
 		mViewPager.setAdapter(mAdapter);
 		mTabLayout.setupWithViewPager(mViewPager);
 		new UpdateThread().start();
+		new AnnouncementThread().start();
 	}
 
 	@Override
@@ -136,45 +151,45 @@ public class Main extends AppCompatActivity
 
 		return true;
 	}
-/*
-	@SuppressWarnings("StatementWithEmptyBody")
-	@Override
-	public boolean onNavigationItemSelected(MenuItem item)
-	{
-		// Handle navigation view item clicks here.
-		int id = item.getItemId();
+	/*
+	 @SuppressWarnings("StatementWithEmptyBody")
+	 @Override
+	 public boolean onNavigationItemSelected(MenuItem item)
+	 {
+	 // Handle navigation view item clicks here.
+	 int id = item.getItemId();
 
-		if (id == R.id.nav_camera)
-		{
-			// Handle the camera action
-		}
-		else if (id == R.id.nav_gallery)
-		{
+	 if (id == R.id.nav_camera)
+	 {
+	 // Handle the camera action
+	 }
+	 else if (id == R.id.nav_gallery)
+	 {
 
-		}
-		else if (id == R.id.nav_slideshow)
-		{
+	 }
+	 else if (id == R.id.nav_slideshow)
+	 {
 
-		}
-		else if (id == R.id.nav_manage)
-		{
+	 }
+	 else if (id == R.id.nav_manage)
+	 {
 
-		}
-		else if (id == R.id.nav_share)
-		{
+	 }
+	 else if (id == R.id.nav_share)
+	 {
 
-		}
-		else if (id == R.id.nav_send)
-		{
+	 }
+	 else if (id == R.id.nav_send)
+	 {
 
-		}
+	 }
 
-		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		drawer.closeDrawer(GravityCompat.START);
-		return true;
-	}*/
+	 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+	 drawer.closeDrawer(GravityCompat.START);
+	 return true;
+	 }*/
 
-	private class UpdateThread extends Thread
+	protected class UpdateThread extends Thread
 	{
 
 		@Override
@@ -187,8 +202,9 @@ public class Main extends AppCompatActivity
 					@Override
 					public void done(final UniversalObject universalobj, BmobException p2)
 					{
-						if(p2!=null){
-							Log.w("Updater","Failed to get update data");
+						if (p2 != null)
+						{
+							Log.w("Updater", "Failed to get update data");
 							return;
 						}
 						int serverver=universalobj.getVersion().intValue();
@@ -241,6 +257,38 @@ public class Main extends AppCompatActivity
 						}
 						catch (Exception e)
 						{e.printStackTrace();}}
+				});
+			// TODO: Implement this method
+			super.run();
+
+		}
+
+	}
+	private class AnnouncementThread extends Thread
+	{
+
+		@Override
+		public void run()
+		{
+			BmobQuery<BmobMessage> query=new BmobQuery<BmobMessage>();
+			query.getObject(StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage>(){
+
+					@Override
+					public void done(BmobMessage p1, BmobException p2)
+					{
+						if (p2 != null)
+						{
+							p2.printStackTrace();
+							return;
+						}
+						int id=p1.getmsgid();
+						int currid=getSharedPreferences(GENERAL,0).getInt(ANNOU_VER,-1);
+						if(id>currid){
+							getSharedPreferences(GENERAL,0).edit().putInt(ANNOU_VER,id).commit();
+							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1,p1.getMessage()));
+						}
+						// TODO: Implement this method
+					}
 				});
 			// TODO: Implement this method
 			super.run();
