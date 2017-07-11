@@ -37,7 +37,7 @@ public class Main extends AppCompatActivity
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		mupdateHandler = new Handler(){
-			public void handleMessage(Message msg)
+			public void handleMessage(final Message msg)
 			{
 				switch (msg.what)
 				{
@@ -50,6 +50,15 @@ public class Main extends AppCompatActivity
 						adb0.setTitle("公告")
 							.setMessage(msg.obj.toString())
 							.setPositiveButton("确定", null)
+							.setNegativeButton("复制", new DialogInterface.OnClickListener(){
+
+								@Override
+								public void onClick(DialogInterface p1, int p2)
+								{ClipboardManager cmb = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);  
+									cmb.setText(msg.obj.toString().trim());  
+									// TODO: Implement this method
+								}
+							})
 							.create().show();
 						break;
 				}
