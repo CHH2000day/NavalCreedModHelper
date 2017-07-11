@@ -8,7 +8,7 @@ public class UniversalObject extends BmobObject
 	private String type;
 	private BmobFile packagefile;
 	private String changelog;
-
+	private boolean avail;
 
 
 	public Integer getVersion()
