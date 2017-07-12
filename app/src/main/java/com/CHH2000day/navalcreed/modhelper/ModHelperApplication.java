@@ -34,7 +34,7 @@ private String parfilePath="";
 			}
 		};
 		Bmob.initialize(ModHelperApplication.this,StaticData.API_KEY);
-		
+		BmobInstallation.getCurrentInstallation().save();
 		Log.i("Bmob initalized","Bmob initalized");
 		try
 		{

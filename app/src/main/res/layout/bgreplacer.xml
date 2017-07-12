@@ -69,7 +69,8 @@
 		android:layout_toLeftOf="@id/bgreplacerbtn_select"
 		android:layout_alignParentLeft="true"
 		android:layout_alignBottom="@id/bgreplacerbtn_select"
-		android:id="@+id/bgreplacerPic"/>
+		android:id="@+id/bgreplacerPic"
+		android:text="请选择文件"/>
 
 </RelativeLayout>
 
