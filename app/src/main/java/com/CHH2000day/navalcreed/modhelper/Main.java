@@ -39,29 +39,10 @@ public class Main extends AppCompatActivity
 		mupdateHandler = new Handler(){
 			public void handleMessage(final Message msg)
 			{
-				switch (msg.what)
-				{
-					case 0:
 						AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
 						adb.create().show();
-						break;
-					case 1:
-						AlertDialog.Builder adb0=new AlertDialog.Builder(Main.this);
-						adb0.setTitle("公告")
-							.setMessage(msg.obj.toString())
-							.setPositiveButton("确定", null)
-							.setNegativeButton("复制", new DialogInterface.OnClickListener(){
-
-								@Override
-								public void onClick(DialogInterface p1, int p2)
-								{ClipboardManager cmb = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);  
-									cmb.setText(msg.obj.toString().trim());  
-									// TODO: Implement this method
-								}
-							})
-							.create().show();
-						break;
-				}
+						
+				
 			}
 		};
 		/*禁用FloatingActionButton
@@ -101,6 +82,7 @@ public class Main extends AppCompatActivity
 		mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
 		mViewPager.setAdapter(mAdapter);
 		mTabLayout.setupWithViewPager(mViewPager);
+		
 		new UpdateThread().start();
 		new AnnouncementThread().start();
 	}
@@ -283,18 +265,31 @@ public class Main extends AppCompatActivity
 			query.getObject(StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage>(){
 
 					@Override
-					public void done(BmobMessage p1, BmobException p2)
+					public void done(final BmobMessage bmobmsg, BmobException p2)
 					{
 						if (p2 != null)
 						{
 							p2.printStackTrace();
 							return;
 						}
-						int id=p1.getmsgid();
+						int id=bmobmsg.getmsgid();
 						int currid=getSharedPreferences(GENERAL,0).getInt(ANNOU_VER,-1);
 						if(id>currid){
-							getSharedPreferences(GENERAL,0).edit().putInt(ANNOU_VER,id).commit();
-							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1,p1.getMessage()));
+							getSharedPreferences(GENERAL,0).edit().putInt(ANNOU_VER,id).commit();AlertDialog.Builder adb0=new AlertDialog.Builder(Main.this);
+							adb0.setTitle("公告")
+								.setMessage(bmobmsg.getMessage())
+								.setPositiveButton("确定", null)
+								.setNegativeButton("复制", new DialogInterface.OnClickListener(){
+
+									@Override
+									public void onClick(DialogInterface p1, int p2)
+									{ClipboardManager cmb = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);  
+										cmb.setText(bmobmsg.tocopy().trim());  
+										// TODO: Implement this method
+									}
+								});
+							
+							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1,adb0));
 						}
 						// TODO: Implement this method
 					}
