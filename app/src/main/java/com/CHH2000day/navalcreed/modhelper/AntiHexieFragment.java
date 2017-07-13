@@ -30,7 +30,7 @@ public class AntiHexieFragment extends Fragment
 					Snackbar.make(v,"操作开始，在出现提示前请勿关闭程序",Snackbar.LENGTH_LONG).show();
 					String path=new StringBuilder()
 						.append(((ModHelperApplication)getActivity().getApplication()).getResFilePath())
-						.append("/files/datas")
+						.append("/files/datas/")
 						.append("customnames.lua").toString();
 					final File f=new File(path);
 					if (f.exists() && f.isFile())
