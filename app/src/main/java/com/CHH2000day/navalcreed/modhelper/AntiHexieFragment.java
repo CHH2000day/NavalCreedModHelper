@@ -11,15 +11,22 @@ import cn.bmob.v3.listener.*;
 import cn.bmob.v3.exception.*;
 import cn.bmob.v3.datatype.*;
 import android.support.design.widget.*;
+import android.content.*;
 
 public class AntiHexieFragment extends Fragment
 {
 	private View v;
 	private Button exec;
+	private String path;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		v = inflater.inflate(R.layout.antihexie_fragment, null);
+		path = new StringBuilder()
+			.append(((ModHelperApplication)getActivity().getApplication()).getResFilePath())
+			.append("/files/datas/")
+			.append("customnames.lua").toString();
+		
 		exec = (Button)v.findViewById(R.id.antihexiefragmentButtonExec);
 
 		exec.setOnClickListener(new OnClickListener(){
@@ -27,11 +34,7 @@ public class AntiHexieFragment extends Fragment
 				@Override
 				public void onClick(View p1)
 				{
-					Snackbar.make(v,"操作开始，在出现提示前请勿关闭程序",Snackbar.LENGTH_LONG).show();
-					String path=new StringBuilder()
-						.append(((ModHelperApplication)getActivity().getApplication()).getResFilePath())
-						.append("/files/datas/")
-						.append("customnames.lua").toString();
+					Snackbar.make(v, "操作开始，在出现提示前请勿关闭程序", Snackbar.LENGTH_LONG).show();
 					final File f=new File(path);
 					if (f.exists() && f.isFile())
 					{
@@ -114,6 +117,34 @@ public class AntiHexieFragment extends Fragment
 					 mh.prepare();
 					 mh.startAsync();*/
 					// TODO: Implement this method
+				}
+			});
+		exec.setOnLongClickListener(new OnLongClickListener(){
+
+				@Override
+				public boolean onLongClick(View p1)
+				{
+				final File f=new File(path);
+				AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
+				adb.setTitle("提示")
+					.setMessage("确定要移除反和谐么？")
+					.setNegativeButton("否",null)
+						.setPositiveButton("移除", new DialogInterface.OnClickListener(){
+
+							@Override
+							public void onClick(DialogInterface p1, int p2)
+							{
+								if(f.isFile()){
+									f.delete();
+								}
+								Snackbar.make(v,"操作成功",Snackbar.LENGTH_LONG).show();
+								// TODO: Implement this method
+							}
+						})
+					.create()
+					.show();
+					// TODO: Implement this method
+					return true;
 				}
 			});
 		// TODO: Implement this method
