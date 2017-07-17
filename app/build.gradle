@@ -9,12 +9,12 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 11
-        versionName "2.1.1"
+        versionCode 14
+        versionName "2.2.2"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

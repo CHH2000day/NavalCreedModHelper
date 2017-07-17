@@ -164,10 +164,10 @@ public class CrewPicReplacerFragment extends Fragment
 	{
 		return new StringBuilder()
 			.append(((ModHelperApplication)getActivity().getApplication()).getResFilePath())
-			.append("/files/pics/crewhead/")
+			.append("/files/pic/crewhead/")
 			.append(countrys[country])
 			.append("/")
-			.append(num)
+			.append((num+1))
 			.append(".png")
 			.toString();
 	}

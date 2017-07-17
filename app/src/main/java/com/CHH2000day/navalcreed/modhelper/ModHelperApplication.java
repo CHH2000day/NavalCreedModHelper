@@ -58,7 +58,7 @@ private String parfilePath="";
 	}
 	public String getResFilePath(){
 		if("".equals(parfilePath)){
-			parfilePath="sdcard/Android/data/com.loong.warship.zl";
+			parfilePath="/sdcard/Android/data/com.loong.warship.zl";
 		}
 		return parfilePath;
 	}
