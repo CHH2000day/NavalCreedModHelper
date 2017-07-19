@@ -23,8 +23,10 @@ public class AntiHexieFragment extends Fragment
 	{
 		v = inflater.inflate(R.layout.antihexie_fragment, null);
 		path = new StringBuilder()
-			.append(((ModHelperApplication)getActivity().getApplication()).getResFilePath())
-			.append("/files/datas/")
+			.append(((ModHelperApplication)getActivity().getApplication()).getResFilesDirPath())
+			.append(File.separatorChar)
+			.append("datas")
+			.append(File.separatorChar)
 			.append("customnames.lua").toString();
 		
 		exec = (Button)v.findViewById(R.id.antihexiefragmentButtonExec);

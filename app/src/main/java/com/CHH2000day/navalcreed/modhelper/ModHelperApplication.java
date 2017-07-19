@@ -4,10 +4,17 @@ import android.content.pm.*;
 import android.util.*;
 import cn.bmob.v3.*;
 import java.io.*;
+import android.os.storage.*;
+import android.os.*;
 public class ModHelperApplication extends Application
-{private android.os.Handler merrmsghdl;
-private File parfile;
-private String parfilePath="";
+{
+	//never used
+	//private android.os.Handler merrmsghdl;
+private File resDir;
+private File sdcard;
+private File resfilesdir;
+private String resfilePath="";
+	public static final String GAME_PKGNAME="com.loong.warship.zl";
 	private boolean isMainPage=true;
 
 	public void setIsMainPage ( boolean isMainPage )
@@ -22,7 +29,7 @@ private String parfilePath="";
 	@Override
 	public void onCreate ( )
 	{
-		merrmsghdl = new android.os.Handler(){
+		/*merrmsghdl = new android.os.Handler(){
 			public void handleMessage ( android.os.Message msg )
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( ModHelperApplication.this );
@@ -32,7 +39,7 @@ private String parfilePath="";
 					.create ( )
 					.show ( );
 			}
-		};
+		};*/
 		Bmob.initialize(ModHelperApplication.this,StaticData.API_KEY);
 		BmobInstallation.getCurrentInstallation().save();
 		Log.i("Bmob initalized","Bmob initalized");
@@ -46,21 +53,39 @@ private String parfilePath="";
 		// TODO: Implement this method
 		super.onCreate ( );
 	}
-	public android.os.Handler getErrMsgHdl ( )
+	/*public android.os.Handler getErrMsgHdl ( )
 	{
 		return merrmsghdl;
-	}
+	}*/
 	public File getResDir(){
-		if(parfile==null){
+		if(resDir==null){
+			sdcard=Environment.getExternalStorageDirectory();
+			//resfilePath: /sdcard/Android/data/$pkgname
+			resfilePath=new StringBuilder()
+						.append(sdcard.getAbsolutePath())
+						.append(File.separatorChar)
+						.append("Android")
+						.append(File.separatorChar)
+						.append("data")
+						.append(File.separatorChar)
+						.append(GAME_PKGNAME)
+						.toString();
+		resDir=new File(resfilePath);
 			
 		}
-		return null;
+		return resDir;
 	}
-	public String getResFilePath(){
-		if("".equals(parfilePath)){
-			parfilePath="/sdcard/Android/data/com.loong.warship.zl";
+	public String getResPath(){
+		return getResDir().getAbsolutePath();
+	}
+	public File getResFilesDir(){
+		if(resfilesdir==null){
+			resfilesdir=new File(getResDir(),"files");
 		}
-		return parfilePath;
+		return resfilesdir;
+	}
+	public String getResFilesDirPath(){
+		return getResFilesDir().getAbsolutePath();
 	}
 	
 }

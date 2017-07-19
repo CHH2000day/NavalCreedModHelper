@@ -27,7 +27,11 @@ public class BGReplacerFragment extends Fragment
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		abs_path = new StringBuilder().append(((ModHelperApplication)getActivity().getApplication()).getResFilePath()).append("/files/pic").toString();
+		abs_path = new StringBuilder()
+					.append(((ModHelperApplication)getActivity().getApplication()).getResFilesDirPath())
+					.append(File.separatorChar)
+					.append("pic")
+					.toString();
 		v=inflater.inflate(R.layout.bgreplacer, null);
 		cateory = (Spinner)v.findViewById(R.id.bgreplacerSpinner1);
 		cateory.setOnItemSelectedListener(new OnItemSelectedListener(){
