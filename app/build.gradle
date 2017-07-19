@@ -4,10 +4,10 @@ android {
     compileSdkVersion 21
     buildToolsVersion "21.1.0"
 	useLibrary 'org.apache.http.legacy'
-
+	
     defaultConfig {
         applicationId "com.CHH2000day.navalcreed.modhelper"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 21
         versionCode 14
         versionName "2.2.2"
@@ -26,7 +26,7 @@ dependencies {
 	compile 'com.android.support:appcompat-v7:+'
 	compile 'com.android.support:recyclerview-v7:+'
 	compile 'com.android.support:cardview-v7:+'
-	//Wav module removed forever for space
+	//Wav convert module removed for space reason.
 	//compile 'com.github.adrielcafe:AndroidAudioConverter:+'
 	//compile 'com.github.adrielcafe:ffmpeg-android-java:v0.3.2'
 	
