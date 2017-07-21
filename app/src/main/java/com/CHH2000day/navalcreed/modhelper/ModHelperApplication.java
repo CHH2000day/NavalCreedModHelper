@@ -29,17 +29,6 @@ private String resfilePath="";
 	@Override
 	public void onCreate ( )
 	{
-		/*merrmsghdl = new android.os.Handler(){
-			public void handleMessage ( android.os.Message msg )
-			{
-				AlertDialog.Builder adb=new AlertDialog.Builder ( ModHelperApplication.this );
-				adb.setTitle ( "Oops..." )
-					.setMessage ( msg.obj.toString ( ) )
-					.setPositiveButton ( "OK", null )
-					.create ( )
-					.show ( );
-			}
-		};*/
 		Bmob.initialize(ModHelperApplication.this,StaticData.API_KEY);
 		BmobInstallation.getCurrentInstallation().save();
 		Log.i("Bmob initalized","Bmob initalized");
