@@ -83,11 +83,13 @@ public class Main extends AppCompatActivity
 		fragments.add(mBGReplacerFragment);
 		fragments.add(mCrewPicReplacerFragment);
 		fragments.add(mAntiHexieFragment);
+		fragments.add(mBGMReplacerFragment);
 		fragments.add(new AboutFragment());
 		titles = new ArrayList<String>();
 		titles.add("背景替换");
 		titles.add("船员头像修改");
 		titles.add("反和谐");
+		titles.add("BGM替换");
 		titles.add("关于");
 		mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
 		mViewPager.setAdapter(mAdapter);
