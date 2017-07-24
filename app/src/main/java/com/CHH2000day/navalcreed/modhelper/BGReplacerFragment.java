@@ -142,6 +142,19 @@ public class BGReplacerFragment extends FunctionFragment
 		Utils.delDir(new File(abs_path));
 		Snackbar.make(v, "更改已移除", Snackbar.LENGTH_LONG).show();
 	}
+
+	@Override
+	public void onDestroy ()
+	{
+		// TODO: Implement this method
+		if(ba!=null){
+			ba.recycle();
+			//手动释放以防止Bitmap未被释放
+			
+		}
+		super.onDestroy ( );
+	}
+	
 	@Override
 	public boolean installMod (int typenum, int num, byte[] deceyptedFileData) throws IOException
 	{
@@ -149,6 +162,7 @@ public class BGReplacerFragment extends FunctionFragment
 		return false;
 		//Not finished
 	}
+	
 	
 
 	@Override
@@ -162,7 +176,10 @@ public class BGReplacerFragment extends FunctionFragment
 				return;}
 			try
 			{
-				
+				if(ba!=null){
+					ba.recycle();
+					//手动释放以防止Bitmap未被释放
+				}
 				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData()));
 				picname.setText(data.getData().toString());
 			}

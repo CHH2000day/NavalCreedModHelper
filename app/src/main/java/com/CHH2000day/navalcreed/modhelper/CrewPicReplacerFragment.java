@@ -156,6 +156,19 @@ public class CrewPicReplacerFragment extends FunctionFragment
 		return v;
 	}
 
+	@Override
+	public void onDestroy ()
+	{
+		if(ba!=null){
+			ba.recycle();
+			//手动释放以防止Bitmap未被释放
+			
+		}
+		// TODO: Implement this method
+		super.onDestroy ( );
+	}
+
+	
 	private File getFile(int country, int num)
 	{
 		return new File(getFilePath(country, num));
@@ -195,6 +208,10 @@ public class CrewPicReplacerFragment extends FunctionFragment
 				if(data==null){
 					Snackbar.make(v,"文件为空！",Snackbar.LENGTH_LONG).show();
 					return;
+				}
+				if(ba!=null){
+					//手动释放以防止Bitmap未被释放
+					ba.recycle();
 				}
 				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData()));
 				selectedpic.setText(data.getData().toString());
