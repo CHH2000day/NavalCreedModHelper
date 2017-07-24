@@ -29,6 +29,7 @@ public class Main extends AppCompatActivity
 	private Handler mupdateHandler;
 	private static final String GENERAL="general";
 	private static final String ANNOU_VER="annover";
+	private FunctionFragment BGReplacerFragment,AntiHexieFragment,CrewPicReplacerFragment,AboutFragment,BGMReplacerFragment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -68,6 +69,7 @@ public class Main extends AppCompatActivity
 		//配置ViewPager与TabLayout
 		mViewPager = (ViewPager)findViewById(R.id.viewPager);
 		mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
+		//构造Fragment实例
 		//进行数据配置
 		fragments = new ArrayList<Fragment>();
 		fragments.add(new BGReplacerFragment());
@@ -87,6 +89,7 @@ public class Main extends AppCompatActivity
 		new AnnouncementThread().start();
 	}
 
+	
 	@Override
 	public void onBackPressed()
 	{
