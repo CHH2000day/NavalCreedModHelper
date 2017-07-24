@@ -13,7 +13,7 @@ import cn.bmob.v3.datatype.*;
 import android.support.design.widget.*;
 import android.content.*;
 
-public class AntiHexieFragment extends FunctionFragment
+public class CustomShipNameFragment extends FunctionFragment
 {
 
 	
