@@ -13,8 +13,10 @@ import java.io.*;
 import android.view.View.OnClickListener;
 import android.support.design.widget.*;
 
-public class BGReplacerFragment extends Fragment
+public class BGReplacerFragment extends FunctionFragment
 {
+
+	
 	private static final String[] filename={"loadingbg1.jpg","loadingbg2.jpg","loadingbg3.jpg"};
 	private static final String[] cateoty={"loading","loadingmap","matching"};
 	private String abs_path/*="/sdcard/Android/data/com.tencent.navalcreed/files/pic"*/;
@@ -140,6 +142,14 @@ public class BGReplacerFragment extends Fragment
 		Utils.delDir(new File(abs_path));
 		Snackbar.make(v, "更改已移除", Snackbar.LENGTH_LONG).show();
 	}
+	@Override
+	public boolean installMod (int typenum, int num, byte[] deceyptedFileData) throws IOException
+	{
+		// TODO: Implement this method
+		return false;
+		//Not finished
+	}
+	
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
