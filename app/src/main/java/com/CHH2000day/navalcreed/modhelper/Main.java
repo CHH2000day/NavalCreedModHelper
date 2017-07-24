@@ -29,7 +29,11 @@ public class Main extends AppCompatActivity
 	private Handler mupdateHandler;
 	private static final String GENERAL="general";
 	private static final String ANNOU_VER="annover";
-	private FunctionFragment BGReplacerFragment,AntiHexieFragment,CrewPicReplacerFragment,AboutFragment,BGMReplacerFragment;
+	private CrewPicReplacerFragment mCrewPicReplacerFragment;
+	private BGReplacerFragment mBGReplacerFragment;
+	private BGMReplacerFragment mBGMReplacerFragment;
+	private CustomShipNameFragment mAntiHexieFragment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -70,11 +74,15 @@ public class Main extends AppCompatActivity
 		mViewPager = (ViewPager)findViewById(R.id.viewPager);
 		mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
 		//构造Fragment实例
+		mBGReplacerFragment=new BGReplacerFragment();
+		mCrewPicReplacerFragment=new CrewPicReplacerFragment();
+		mAntiHexieFragment=new CustomShipNameFragment();
+		mBGMReplacerFragment=new BGMReplacerFragment();
 		//进行数据配置
 		fragments = new ArrayList<Fragment>();
-		fragments.add(new BGReplacerFragment());
-		fragments.add(new CrewPicReplacerFragment());
-		fragments.add(new AntiHexieFragment());
+		fragments.add(mBGReplacerFragment);
+		fragments.add(mCrewPicReplacerFragment);
+		fragments.add(mAntiHexieFragment);
 		fragments.add(new AboutFragment());
 		titles = new ArrayList<String>();
 		titles.add("背景替换");
@@ -101,6 +109,18 @@ public class Main extends AppCompatActivity
 		{
 			exit();
 		}
+	}
+	public BGReplacerFragment getBGReplacerFragment(){
+		return mBGReplacerFragment;
+	}
+	public BGMReplacerFragment getBGMReplacerFragment(){
+		return mBGMReplacerFragment;
+	}
+	public CrewPicReplacerFragment getCrewPicReplacerFragment(){
+		return mCrewPicReplacerFragment;
+	}
+	public CustomShipNameFragment getCustomShipNameFragment(){
+		return mAntiHexieFragment;
 	}
 
 	public void exit()
