@@ -8,6 +8,18 @@ public class BGMReplacerFragment extends FunctionFragment
 
 	
 	private View v;
+	private static final int MUSICCOUNT_HARBOR=6;
+	private static final int MUSICCOUNT_LOADING=3;
+	private static final int MUSICCOUNT_BATTLESTART=4;
+	private static final int MUSICCOUNT_BATTLEHEAT=7;
+	private static final int MUSICCOUNT_BATTLEEND=3;
+	private static final int MUSICCOUNT_BATTLEVICTORY=4;
+	private static final int MUSICCOUNT_BATTLEFAIL=2;
+	
+	
+	
+	
+	
 
 	@Override
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)

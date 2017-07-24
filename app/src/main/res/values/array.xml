@@ -40,8 +40,8 @@
 	</string-array>
 	<string-array name="bgm_scene">
 	</string-array>
-	<string-array name="bgm_music">
-	</string-array>
 	<string-array name="bgm_fail">
+	</string-array>
+	<string-array name="bgm_loading">
 	</string-array>
 	</resources>
