@@ -13,7 +13,8 @@ public class BGMReplacerFragment extends FunctionFragment
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// TODO: Implement this method
-		return super.onCreateView ( inflater, container, savedInstanceState );
+		v=inflater.inflate(R.layout.bgmreplacer,null);
+		return v;
 	}
 	@Override
 	public boolean installMod (int typenum, int num, byte[] deceyptedFileData)

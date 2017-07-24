@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择情景"
+		android:id="@+id/bgmreplacerTextView1"/>
+
+	<Spinner
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/bgmreplacerTextView1"
+		android:id="@+id/bgmreplacerScene"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择要替换的音乐:"
+		android:layout_below="@id/bgmreplacerScene"
+		android:id="@+id/bgmreplacerTextView2"/>
+
+	<Spinner
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_below="@id/bgmreplacerTextView2"
+		android:id="@+id/bgmreplacerMusic"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="替换"
+		android:layout_below="@id/bgmreplacerMusic"
+		android:id="@+id/bgmreplacerUpdate"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="移除更改"
+		android:layout_toRightOf="@id/bgmreplacerUpdate"
+		android:layout_below="@id/bgmreplacerMusic"
+		android:id="@+id/bgmreplacerRemove"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明"
+		android:layout_below="@id/bgmreplacerUpdate"/>
+
+</RelativeLayout>
+
