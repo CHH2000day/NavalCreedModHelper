@@ -11,18 +11,23 @@ public class UniversalObject extends BmobObject
 	private boolean avail;
 
 
-	public Integer getVersion()
+	public Integer getVersion ()
 	{
 		return version;
 	}
 
 
-	public BmobFile getPackagefile()
+	public BmobFile getPackagefile ()
 	{
 		return packagefile;
 	}
 
-	public String getChangelog()
+	public String getChangelog ()
 	{
 		return changelog;
-	}}
+	}
+	public boolean isAvail ()
+	{
+		return avail;
+	}
+}
