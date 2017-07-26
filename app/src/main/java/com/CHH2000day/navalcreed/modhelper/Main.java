@@ -33,21 +33,21 @@ public class Main extends AppCompatActivity
 	private BGReplacerFragment mBGReplacerFragment;
 	private BGMReplacerFragment mBGMReplacerFragment;
 	private CustomShipNameFragment mAntiHexieFragment;
-	
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	protected void onCreate (Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
-		mupdateHandler = new Handler(){
-			public void handleMessage(final Message msg)
+		super.onCreate ( savedInstanceState );
+		setContentView ( R.layout.main );
+		Toolbar toolbar = (Toolbar) findViewById ( R.id.toolbar );
+		setSupportActionBar ( toolbar );
+		mupdateHandler = new Handler ( ){
+			public void handleMessage (final Message msg)
 			{
-						AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
-						adb.create().show();
-						
-				
+				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
+				adb.create ( ).show ( );
+
+
 			}
 		};
 		/*禁用FloatingActionButton
@@ -66,103 +66,107 @@ public class Main extends AppCompatActivity
 		 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
 		 toggle.syncState ( );
 		 drawer.setDrawerListener ( toggle );*/
-		li = LayoutInflater.from(this);
+		li = LayoutInflater.from ( this );
 		/*禁用NavigationView
 		 NavigationView navigationView = (NavigationView) findViewById ( R.id.nav_view );
 		 navigationView.setNavigationItemSelectedListener ( this );*/
 		//配置ViewPager与TabLayout
-		mViewPager = (ViewPager)findViewById(R.id.viewPager);
-		mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
+		mViewPager = (ViewPager)findViewById ( R.id.viewPager );
+		mTabLayout = (TabLayout)findViewById ( R.id.tabLayout );
 		//构造Fragment实例
-		mBGReplacerFragment=new BGReplacerFragment();
-		mCrewPicReplacerFragment=new CrewPicReplacerFragment();
-		mAntiHexieFragment=new CustomShipNameFragment();
-		mBGMReplacerFragment=new BGMReplacerFragment();
+		mBGReplacerFragment = new BGReplacerFragment ( );
+		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
+		mAntiHexieFragment = new CustomShipNameFragment ( );
+		mBGMReplacerFragment = new BGMReplacerFragment ( );
 		//进行数据配置
-		fragments = new ArrayList<Fragment>();
-		fragments.add(mBGReplacerFragment);
-		fragments.add(mCrewPicReplacerFragment);
-		fragments.add(mAntiHexieFragment);
-		fragments.add(mBGMReplacerFragment);
-		fragments.add(new AboutFragment());
-		titles = new ArrayList<String>();
-		titles.add("背景替换");
-		titles.add("船员头像修改");
-		titles.add("反和谐");
-		titles.add("BGM替换");
-		titles.add("关于");
-		mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
-		mViewPager.setAdapter(mAdapter);
-		mTabLayout.setupWithViewPager(mViewPager);
-		
-		new UpdateThread().start();
-		new AnnouncementThread().start();
+		fragments = new ArrayList<Fragment> ( );
+		fragments.add ( mBGReplacerFragment );
+		fragments.add ( mCrewPicReplacerFragment );
+		fragments.add ( mAntiHexieFragment );
+		fragments.add ( mBGMReplacerFragment );
+		fragments.add ( new AboutFragment ( ) );
+		titles = new ArrayList<String> ( );
+		titles.add ( "背景替换" );
+		titles.add ( "船员头像修改" );
+		titles.add ( "反和谐" );
+		titles.add ( "BGM替换" );
+		titles.add ( "关于" );
+		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
+		mViewPager.setAdapter ( mAdapter );
+		mTabLayout.setupWithViewPager ( mViewPager );
+
+		new UpdateThread ( ).start ( );
+		new AnnouncementThread ( ).start ( );
 	}
 
-	
+
 	@Override
-	public void onBackPressed()
+	public void onBackPressed ()
 	{
-		if (!((ModHelperApplication)getApplication()).isMainPage())
+		if (!((ModHelperApplication)getApplication ( )).isMainPage ( ))
 		{
-			super.onBackPressed();
+			super.onBackPressed ( );
 		}
 		else
 		{
-			exit();
+			exit ( );
 		}
 	}
-	public BGReplacerFragment getBGReplacerFragment(){
+	public BGReplacerFragment getBGReplacerFragment ()
+	{
 		return mBGReplacerFragment;
 	}
-	public BGMReplacerFragment getBGMReplacerFragment(){
+	public BGMReplacerFragment getBGMReplacerFragment ()
+	{
 		return mBGMReplacerFragment;
 	}
-	public CrewPicReplacerFragment getCrewPicReplacerFragment(){
+	public CrewPicReplacerFragment getCrewPicReplacerFragment ()
+	{
 		return mCrewPicReplacerFragment;
 	}
-	public CustomShipNameFragment getCustomShipNameFragment(){
+	public CustomShipNameFragment getCustomShipNameFragment ()
+	{
 		return mAntiHexieFragment;
 	}
 
-	public void exit()
+	public void exit ()
 	{
-		AlertDialog.Builder adb=new AlertDialog.Builder(this);
-		adb.setTitle("确定")
-			.setMessage("是否退出？")
-			.setPositiveButton("是", new DialogInterface.OnClickListener(){
+		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
+		adb.setTitle ( "确定" )
+			.setMessage ( "是否退出？" )
+			.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
 
 				@Override
-				public void onClick(DialogInterface p1, int p2)
+				public void onClick (DialogInterface p1, int p2)
 				{
-					android.os.Process.killProcess(android.os.Process.myPid());
+					android.os.Process.killProcess ( android.os.Process.myPid ( ) );
 					// TODO: Implement this method
 				}
-			})
-			.setNegativeButton("否", null)
-			.create()
-			.show();
+			} )
+			.setNegativeButton ( "否", null )
+			.create ( )
+			.show ( );
 	}
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
+	public boolean onCreateOptionsMenu (Menu menu)
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater ( ).inflate ( R.menu.main, menu );
 		return true;
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item)
+	public boolean onOptionsItemSelected (MenuItem item)
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
+		int id = item.getItemId ( );
 
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_exit)
 		{
-			exit();
+			exit ( );
 		}
 
 		return true;
@@ -209,73 +213,96 @@ public class Main extends AppCompatActivity
 	{
 
 		@Override
-		public void run()
+		public void run ()
 		{
-			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject>();
+			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject> ( );
 
-			query.getObject(StaticData.DATAID_RELEASE, new QueryListener<UniversalObject>(){
+			query.getObject ( StaticData.getDataid ( ), new QueryListener<UniversalObject> ( ){
 
 					@Override
-					public void done(final UniversalObject universalobj, BmobException p2)
+					public void done (final UniversalObject universalobj, BmobException p2)
 					{
 						if (p2 != null)
 						{
-							Log.w("Updater", "Failed to get update data");
+							Log.w ( "Updater", "Failed to get update data" );
 							return;
 						}
-						int serverver=universalobj.getVersion().intValue();
+						//如果为测试版，检测服务器端是否允许测试
+						if (BuildConfig.DEBUG)
+						{
+							if (!universalobj.isAvail ( ))
+							{
+								AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+								adb.setTitle ( "提示" )
+									.setMessage ( "测试未开始" )
+									.setCancelable ( false )
+									.setPositiveButton ( "退出", new DialogInterface.OnClickListener ( ){
+
+										@Override
+										public void onClick (DialogInterface p1, int p2)
+										{
+											System.exit ( 0 );
+											// TODO: Implement this method
+										}
+									} );
+								mupdateHandler.sendMessage ( mupdateHandler.obtainMessage ( 0, adb ) );
+								return;
+
+							}
+						}
+						int serverver=universalobj.getVersion ( ).intValue ( );
 						try
 						{
-							int currver=getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+							int currver=getPackageManager ( ).getPackageInfo ( getPackageName ( ), 0 ).versionCode;
 							if (serverver <= currver)
 							{
 								return;
 							}
-							AlertDialog.Builder adb=new AlertDialog.Builder(Main.this);
-							adb.setTitle("发现更新")
-								.setMessage(universalobj.getChangelog())
-								.setNegativeButton("取消", null)
-								.setPositiveButton("更新", new DialogInterface.OnClickListener(){
+							AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+							adb.setTitle ( "发现更新" )
+								.setMessage ( universalobj.getChangelog ( ) )
+								.setNegativeButton ( "取消", null )
+								.setPositiveButton ( "更新", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick(DialogInterface p1, int p2)
-									{BmobFile tgtfile=universalobj.getPackagefile();
+									public void onClick (DialogInterface p1, int p2)
+									{BmobFile tgtfile=universalobj.getPackagefile ( );
 										if (tgtfile == null)
 										{
 											return;
 										}
-										Snackbar.make(mViewPager, "开始下载", Snackbar.LENGTH_LONG).show();
-										final File distfile=new File(getExternalCacheDir(), "update.apk");
-										tgtfile.download(distfile, new DownloadFileListener(){
+										Snackbar.make ( mViewPager, "开始下载", Snackbar.LENGTH_LONG ).show ( );
+										final File distfile=new File ( getExternalCacheDir ( ), "update.apk" );
+										tgtfile.download ( distfile, new DownloadFileListener ( ){
 
 												@Override
-												public void done(String p1, BmobException p2)
+												public void done (String p1, BmobException p2)
 												{
-													Snackbar.make(mViewPager, "下载完成", Snackbar.LENGTH_LONG).show();
-													Intent i=new Intent(Intent.ACTION_VIEW);
-													i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-													i.setDataAndType(Uri.fromFile(distfile), "application/vnd.android.package-archive");
-													startActivity(i);
+													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
+													Intent i=new Intent ( Intent.ACTION_VIEW );
+													i.setFlags ( Intent.FLAG_ACTIVITY_NEW_TASK );
+													i.setDataAndType ( Uri.fromFile ( distfile ), "application/vnd.android.package-archive" );
+													startActivity ( i );
 													// TODO: Implement this method
 												}
 
 												@Override
-												public void onProgress(Integer p1, long p2)
+												public void onProgress (Integer p1, long p2)
 												{
 													// TODO: Implement this method
 												}
-											});
+											} );
 										// TODO: Implement this method
 									}
-								});
-							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
+								} );
+							mupdateHandler.sendMessage ( mupdateHandler.obtainMessage ( 0, adb ) );
 							// TODO: Implement this method
 						}
 						catch (Exception e)
-						{e.printStackTrace();}}
-				});
+						{e.printStackTrace ( );}}
+				} );
 			// TODO: Implement this method
-			super.run();
+			super.run ( );
 
 		}
 
@@ -284,43 +311,44 @@ public class Main extends AppCompatActivity
 	{
 
 		@Override
-		public void run()
+		public void run ()
 		{
-			BmobQuery<BmobMessage> query=new BmobQuery<BmobMessage>();
-			query.getObject(StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage>(){
+			BmobQuery<BmobMessage> query=new BmobQuery<BmobMessage> ( );
+			query.getObject ( StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage> ( ){
 
 					@Override
-					public void done(final BmobMessage bmobmsg, BmobException p2)
+					public void done (final BmobMessage bmobmsg, BmobException p2)
 					{
 						if (p2 != null)
 						{
-							p2.printStackTrace();
+							p2.printStackTrace ( );
 							return;
 						}
-						int id=bmobmsg.getmsgid();
-						int currid=getSharedPreferences(GENERAL,0).getInt(ANNOU_VER,-1);
-						if(id>currid){
-							getSharedPreferences(GENERAL,0).edit().putInt(ANNOU_VER,id).commit();AlertDialog.Builder adb0=new AlertDialog.Builder(Main.this);
-							adb0.setTitle("公告")
-								.setMessage(bmobmsg.getMessage())
-								.setPositiveButton("确定", null)
-								.setNegativeButton("复制", new DialogInterface.OnClickListener(){
+						int id=bmobmsg.getmsgid ( );
+						int currid=getSharedPreferences ( GENERAL, 0 ).getInt ( ANNOU_VER, -1 );
+						if (id > currid)
+						{
+							getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );AlertDialog.Builder adb0=new AlertDialog.Builder ( Main.this );
+							adb0.setTitle ( "公告" )
+								.setMessage ( bmobmsg.getMessage ( ) )
+								.setPositiveButton ( "确定", null )
+								.setNegativeButton ( "复制", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick(DialogInterface p1, int p2)
-									{ClipboardManager cmb = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);  
-										cmb.setText(bmobmsg.tocopy().trim());  
+									public void onClick (DialogInterface p1, int p2)
+									{ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );  
+										cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  
 										// TODO: Implement this method
 									}
-								});
-							
-							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1,adb0));
+								} );
+
+							mupdateHandler.sendMessage ( mupdateHandler.obtainMessage ( 1, adb0 ) );
 						}
 						// TODO: Implement this method
 					}
-				});
+				} );
 			// TODO: Implement this method
-			super.run();
+			super.run ( );
 
 		}
 
