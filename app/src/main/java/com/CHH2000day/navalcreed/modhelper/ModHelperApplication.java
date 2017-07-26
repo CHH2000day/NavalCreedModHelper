@@ -6,6 +6,8 @@ import cn.bmob.v3.*;
 import java.io.*;
 import android.os.storage.*;
 import android.os.*;
+import com.CHH2000day.*;
+import android.content.pm.PackageManager.*;
 public class ModHelperApplication extends Application
 {
 	//never used
@@ -14,7 +16,10 @@ private File resDir;
 private File sdcard;
 private File resfilesdir;
 private String resfilePath="";
-	public static final String GAME_PKGNAME="com.loong.warship.zl";
+public static final String GAME_PKGNAME="com.loong.warship.zl";
+//public static final String GAME_PKGNAME="IARJisxjM8tihdkvzU52XrgfhNLAY1FK";
+	
+private String pkg_name=GAME_PKGNAME;
 	private boolean isMainPage=true;
 
 	public void setIsMainPage ( boolean isMainPage )
@@ -38,7 +43,17 @@ private String resfilePath="";
 		}
 		catch (PackageManager.NameNotFoundException e)
 		{}
-		
+		/*try
+		{
+			Signature s=getPackageManager ( ).getPackageInfo ( getPackageName ( ), getPackageManager ( ).GET_SIGNATURES ).signatures[ 0 ];
+			IceKeyHelper mhelper=new IceKeyHelper ( s.toByteArray(), 0 );
+			pkg_name=new String(mhelper.decrypt(Base64.decode(GAME_PKGNAME,Base64.DEFAULT)));
+			Log.e(pkg_name,pkg_name);
+			}
+		catch (Exception e)
+		{}
+		*/
+		//加密部分存在问题,暂不实装
 		// TODO: Implement this method
 		super.onCreate ( );
 	}
@@ -57,7 +72,7 @@ private String resfilePath="";
 						.append(File.separatorChar)
 						.append("data")
 						.append(File.separatorChar)
-						.append(GAME_PKGNAME)
+						.append(pkg_name)
 						.toString();
 		resDir=new File(resfilePath);
 			
