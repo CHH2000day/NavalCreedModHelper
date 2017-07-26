@@ -104,7 +104,7 @@ public class BGMReplacerFragment extends FunctionFragment
 							@Override
 							public void onClick (DialogInterface p1, int p2)
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_type, curr_music, FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -127,7 +127,7 @@ public class BGMReplacerFragment extends FunctionFragment
 							@Override
 							public void onClick (DialogInterface p1, int p2)
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_type, curr_music, FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -176,7 +176,7 @@ public class BGMReplacerFragment extends FunctionFragment
 						{
 							try
 							{
-								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_type, curr_music, fileformat ) );
+								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_scene,curr_type, curr_music, fileformat ) );
 								h.sendEmptyMessage ( 0 );
 							}
 							catch (IOException e)
@@ -236,7 +236,7 @@ public class BGMReplacerFragment extends FunctionFragment
 		return false;
 		//Not finished
 	}
-	private File getTargetFile (int type, int num, String format)
+	private File getTargetFile (int scene,int type, int num, String format)
 	{
 		File f=new File (
 			new StringBuilder ( )
@@ -246,7 +246,7 @@ public class BGMReplacerFragment extends FunctionFragment
 			.append ( File.separatorChar )
 			.append ( "Music" )
 			.append ( File.separatorChar )
-			.append ( SCENE[ type ] )
+			.append ( SCENE[ scene ] )
 			.append ( File.separatorChar )
 			.append ( getFileName ( type, num ) )
 			.append ( format )
