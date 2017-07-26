@@ -42,7 +42,7 @@
 		android:layout_width="wrap_content"
 		android:text="未选择"
 		android:layout_below="@id/bgmreplacerMusic"
-		android:id="@+id/bgmreplacerTextView3"
+		android:id="@+id/bgmreplacerText"
 		android:layout_alignBottom="@id/bgmreplacerSelect"
 		android:gravity="center_vertical"/>
 
@@ -51,14 +51,14 @@
 		android:layout_width="wrap_content"
 		android:text="替换"
 		android:id="@+id/bgmreplacerUpdate"
-		android:layout_below="@id/bgmreplacerTextView3"/>
+		android:layout_below="@id/bgmreplacerText"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:text="移除更改"
 		android:layout_toRightOf="@id/bgmreplacerUpdate"
-		android:layout_below="@id/bgmreplacerTextView3"
+		android:layout_below="@id/bgmreplacerText"
 		android:id="@+id/bgmreplacerRemove"/>
 
 	<TextView

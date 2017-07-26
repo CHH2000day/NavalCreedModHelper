@@ -1,13 +1,21 @@
 package com.CHH2000day.navalcreed.modhelper;
 
+import android.app.*;
 import android.content.*;
+import android.database.*;
 import android.os.*;
-import android.util.*;
+import android.provider.*;
+import android.support.design.widget.*;
 import android.view.*;
+import android.view.View.*;
 import android.widget.*;
+import android.widget.AdapterView.*;
 import java.io.*;
 import java.util.*;
-import android.widget.AdapterView.*;
+
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import java.nio.channels.*;
 public class BGMReplacerFragment extends FunctionFragment
 {
 
@@ -19,8 +27,8 @@ public class BGMReplacerFragment extends FunctionFragment
 	private static final int MUSICCOUNT_BATTLEEND=3;
 	private static final int MUSICCOUNT_BATTLEVICTORY=4;
 	private static final int MUSICCOUNT_BATTLEFAIL=2;
-	private static final String[] SCENE={"Harbor","BattleStart","BattleHeat","BattleEnd","Victory","Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/,"Loading"};
-	private static final String[] SCENE_TOSHOW={"港口","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败","加载音乐"};
+	private static final String[] SCENE={"Harbor","Loading","BattleStart","BattleHeat","BattleEnd","Victory","Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/};
+	private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
 	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
 	private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
 	private static final String[] FILENAMES_BATTLEFAIL={"Danger","Fail"};
@@ -37,14 +45,18 @@ public class BGMReplacerFragment extends FunctionFragment
 	public static final int TYPE_BATTLEFAIL=16;
 	public static final String FORMAT_OGG=".ogg";
 	public static final String FORMAT_WAV=".wav";
-	
+
+
 
 	private ModHelperApplication mapplication;
 	private FileNameAdapter mfilenameadapter;
 	private View v;
 	private Spinner mSceneSpinner,mFileNameSpinner;
-	private int curr_scene,currmusic;
-
+	private int curr_scene,curr_type,curr_music;
+	private Button select,remove,update;
+	private TextView mtextview;
+	private String msourcefilepath;
+	private String fileformat;
 
 
 
@@ -54,20 +66,139 @@ public class BGMReplacerFragment extends FunctionFragment
 	{
 		// TODO: Implement this method
 		v = inflater.inflate ( R.layout.bgmreplacer, null );
-		mSceneSpinner=(Spinner)v.findViewById(R.id.bgmreplacerScene);
-		mFileNameSpinner=(Spinner)v.findViewById(R.id.bgmreplacerMusic);
+		mSceneSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerScene );
+		mFileNameSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerMusic );
+		mtextview = (TextView)v.findViewById ( R.id.bgmreplacerText );
+		select = (Button)v.findViewById ( R.id.bgmreplacerSelect );
+		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
+		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
+		select.setOnClickListener ( new OnClickListener ( ){
+
+				@Override
+				public void onClick (View p1)
+				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
+					intent.setType ( "audio/ogg;audio/vorbis" );
+					startActivityForResult ( intent, 2 );
+
+					// TODO: Implement this method
+				}
+			} );
+		remove.setOnClickListener ( new OnClickListener ( ){
+
+				@Override
+				public void onClick (View p1)
+				{
+					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+					adb.setTitle ( "提示" )
+						.setMessage ( new StringBuilder ( )
+									 .append ( "确定要移除对" )
+									 .append ( SCENE_TOSHOW[ curr_scene ] )
+									 .append ( "的更改么？" )
+									 .toString ( ) )
+						.setNegativeButton ( "否", null )
+						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+
+							@Override
+							public void onClick (DialogInterface p1, int p2)
+							{
+								String s=Utils.delDir ( getTargetFile ( curr_type, curr_music, FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
+								// TODO: Implement this method
+							}
+						} )
+						.create ( )
+						.show ( );
+					// TODO: Implement this method
+				}
+			} );
+		remove.setOnLongClickListener ( new OnLongClickListener ( ){
+
+				@Override
+				public boolean onLongClick (View p1)
+				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+					adb.setTitle ( "提示" )
+						.setMessage ( "确定要移除所有对BGM的更改么？" )
+						.setNegativeButton ( "否", null )
+						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+
+							@Override
+							public void onClick (DialogInterface p1, int p2)
+							{
+								String s=Utils.delDir ( getTargetFile ( curr_type, curr_music, FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
+								// TODO: Implement this method
+							}
+						} )
+						.create ( )
+						.show ( );
+
+					// TODO: Implement this method
+					return true;
+				}
+			} );
+		update.setOnClickListener ( new OnClickListener ( ){
+
+				@Override
+				public void onClick (View p1)
+				{
+					if (null == msourcefilepath || "".equals ( msourcefilepath ) || null == fileformat || "".equals ( fileformat ))
+					{
+						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+						return;
+					}
+					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+					adb.setTitle ( "请稍等" )
+						.setMessage ( "正在复制文件" )
+						.setCancelable ( false );
+					final AlertDialog ad=adb.create ( );
+					ad.setCancelable ( false );
+					final Handler h=new Handler ( ){
+						public void handleMessage (Message msg)
+						{
+							ad.dismiss ( );
+							switch (msg.what)
+							{
+								case 0:
+									//无异常
+									Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+									break;
+								case 1:
+									//操作出现异常
+									Snackbar.make ( v, ((Throwable)msg.obj).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+							}
+						}
+					};
+					new Thread ( ){
+						public void run ()
+						{
+							try
+							{
+								Utils.copyFile ( new File ( msourcefilepath ), getTargetFile ( curr_type, curr_music, fileformat ) );
+								h.sendEmptyMessage(0);
+							}
+							catch (IOException e)
+							{
+								h.sendMessage(h.obtainMessage(1,e));
+							}
+
+						}
+					}.start ( );
+					// TODO: Implement this method
+				}
+			} );
 		//配置场景选择的适配器
-		mSceneSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),TEXTVIEW_RES_ID,SCENE_TOSHOW));
+		mSceneSpinner.setAdapter ( new ArrayAdapter<String> ( getActivity ( ), TEXTVIEW_RES_ID, SCENE_TOSHOW ) );
 		//初始化文件名的适配器
-		mfilenameadapter = FileNameAdapter.getInstance(getActivity(),TEXTVIEW_RES_ID,TYPE_HARBOR);
-		mFileNameSpinner.setAdapter(mfilenameadapter);
+		mfilenameadapter = FileNameAdapter.getInstance ( getActivity ( ), TEXTVIEW_RES_ID, TYPE_HARBOR );
+		mFileNameSpinner.setAdapter ( mfilenameadapter );
 		mSceneSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
 				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
 				{
-					curr_scene=p3;
-					mFileNameSpinner.setAdapter(FileNameAdapter.getInstance(getActivity(),TEXTVIEW_RES_ID,curr_scene+10));
+					curr_scene = p3;
+					curr_type = p3 + 10;
+					mFileNameSpinner.setAdapter ( FileNameAdapter.getInstance ( getActivity ( ), TEXTVIEW_RES_ID, curr_type ) );
 					// TODO: Implement this method
 				}
 
@@ -77,7 +208,21 @@ public class BGMReplacerFragment extends FunctionFragment
 					// TODO: Implement this method
 				}
 			} );
-		
+		mFileNameSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+
+				@Override
+				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
+				{
+					curr_music = p3;
+					// TODO: Implement this method
+				}
+
+				@Override
+				public void onNothingSelected (AdapterView<?> p1)
+				{
+					// TODO: Implement this method
+				}
+			} );
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		return v;
 	}
@@ -154,6 +299,42 @@ public class BGMReplacerFragment extends FunctionFragment
 		return Arrays.copyOf ( FILENAMES_UNIVERSAL, count );
 	}
 
+	@Override
+	public void onActivityResult (int requestCode, int resultCode, Intent data)
+	{
+		// TODO: Implement this method
+		super.onActivityResult ( requestCode, resultCode, data );
+		if (requestCode == 2)
+		{
+			if (data != null)
+			{
+				ContentResolver cr = getActivity ( ).getContentResolver ( );
+				Cursor cursor = cr.query ( data.getData ( ), null, null, null, null ); 
+				cursor.moveToFirst ( );
+				String url = cursor.getString ( cursor.getColumnIndexOrThrow ( MediaStore.Audio.Media.DATA ) ); 
+				String s=url.substring ( url.length ( ) - 4 ).toLowerCase ( );
+				if (FORMAT_OGG.equals ( s ))
+				{
+					msourcefilepath = url;
+					fileformat = FORMAT_OGG;
+					mtextview.setText ( msourcefilepath );
+				}
+				if (FORMAT_WAV.equals ( s ))
+				{
+					msourcefilepath = url;
+					fileformat = FORMAT_WAV;
+					mtextview.setText ( msourcefilepath );
+
+				}
+			}
+			else
+			{
+				Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+			}
+		}
+	}
+
+
 	private static class FileNameAdapter extends ArrayAdapter<String>
 	{
 
@@ -164,21 +345,21 @@ public class BGMReplacerFragment extends FunctionFragment
 		{
 			data = getFileNameStringsToShow ( type );
 			act_data = getFileNameStrings ( type );
-			self = new FileNameAdapter ( context, textViewResId, data);
+			self = new FileNameAdapter ( context, textViewResId, data );
 			return self;
 		}
-		private FileNameAdapter (Context context, int textViewResourceId,String[] data)
+		private FileNameAdapter (Context context, int textViewResourceId, String[] data)
 		{
 			super ( context, textViewResourceId, data );
 		}
 		/*
-		public void reconfigure (int type)
-		{
-			this.clear ( );
-			this.data = getFileNameStringsToShow ( type );
-			this.act_data = getFileNameStrings ( type );
-			this.addAll(data);
-		}*/
+		 public void reconfigure (int type)
+		 {
+		 this.clear ( );
+		 this.data = getFileNameStringsToShow ( type );
+		 this.act_data = getFileNameStrings ( type );
+		 this.addAll(data);
+		 }*/
 		public String[] getCurrentData ()
 		{
 			return this.act_data;
