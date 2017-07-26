@@ -16,6 +16,7 @@ import java.util.*;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import java.nio.channels.*;
+import android.net.*;
 public class BGMReplacerFragment extends FunctionFragment
 {
 
@@ -45,7 +46,9 @@ public class BGMReplacerFragment extends FunctionFragment
 	public static final int TYPE_BATTLEFAIL=16;
 	public static final String FORMAT_OGG=".ogg";
 	public static final String FORMAT_WAV=".wav";
-
+	public static final String FORMAT_UNKNOWN="ERROR";
+	public static final byte[] HEADER_WAV={ 82, 73, 70, 70 };
+	public static final byte[] HEADER_OGG={ 79, 103, 103, 83 };
 
 
 	private ModHelperApplication mapplication;
@@ -55,8 +58,8 @@ public class BGMReplacerFragment extends FunctionFragment
 	private int curr_scene,curr_type,curr_music;
 	private Button select,remove,update;
 	private TextView mtextview;
-	private String msourcefilepath;
 	private String fileformat;
+	private Uri srcfile;
 
 
 
@@ -77,7 +80,7 @@ public class BGMReplacerFragment extends FunctionFragment
 				@Override
 				public void onClick (View p1)
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
-					intent.setType ( "audio/ogg;audio/vorbis" );
+					intent.setType ( "*/*" );
 					startActivityForResult ( intent, 2 );
 
 					// TODO: Implement this method
@@ -141,7 +144,7 @@ public class BGMReplacerFragment extends FunctionFragment
 				@Override
 				public void onClick (View p1)
 				{
-					if (null == msourcefilepath || "".equals ( msourcefilepath ) || null == fileformat || "".equals ( fileformat ))
+					if (null == srcfile || null == fileformat || "".equals ( fileformat ))
 					{
 						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 						return;
@@ -173,12 +176,12 @@ public class BGMReplacerFragment extends FunctionFragment
 						{
 							try
 							{
-								Utils.copyFile ( new File ( msourcefilepath ), getTargetFile ( curr_type, curr_music, fileformat ) );
-								h.sendEmptyMessage(0);
+								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_type, curr_music, fileformat ) );
+								h.sendEmptyMessage ( 0 );
 							}
 							catch (IOException e)
 							{
-								h.sendMessage(h.obtainMessage(1,e));
+								h.sendMessage ( h.obtainMessage ( 1, e ) );
 							}
 
 						}
@@ -255,6 +258,24 @@ public class BGMReplacerFragment extends FunctionFragment
 	{
 		return getFileNameStrings ( type )[ num ];
 	}
+	protected String identifyFormat (InputStream in, boolean closeStream) throws IOException
+	{
+		byte[] b=new byte[4];
+		in.read ( b );
+		if (closeStream)
+		{
+			in.close ( );
+		}
+		if (Arrays.equals ( b, HEADER_WAV ))
+		{
+			return FORMAT_WAV;
+		}
+		if (Arrays.equals ( b, HEADER_OGG ))
+		{
+			return FORMAT_OGG;
+		}
+		return FORMAT_UNKNOWN;
+	}
 	private static String[] getFileNameStringsToShow (int type)
 	{
 		if (type == TYPE_BATTLEFAIL)
@@ -308,24 +329,22 @@ public class BGMReplacerFragment extends FunctionFragment
 		{
 			if (data != null)
 			{
-				ContentResolver cr = getActivity ( ).getContentResolver ( );
-				Cursor cursor = cr.query ( data.getData ( ), null, null, null, null ); 
-				cursor.moveToFirst ( );
-				String url = cursor.getString ( cursor.getColumnIndexOrThrow ( MediaStore.Audio.Media.DATA ) ); 
-				String s=url.substring ( url.length ( ) - 4 ).toLowerCase ( );
-				if (FORMAT_OGG.equals ( s ))
+				String s=FORMAT_UNKNOWN;
+				try
 				{
-					msourcefilepath = url;
-					fileformat = FORMAT_OGG;
-					mtextview.setText ( msourcefilepath );
+					s = identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ), true ) ;
 				}
-				if (FORMAT_WAV.equals ( s ))
+				catch (IOException e)
+				{Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
+				if (s.equals ( FORMAT_UNKNOWN ))
 				{
-					msourcefilepath = url;
-					fileformat = FORMAT_WAV;
-					mtextview.setText ( msourcefilepath );
+					Snackbar.make ( v, "文件格式错误！文件不为wav编码或ogg编码", Snackbar.LENGTH_LONG ).show ( );
+					return;
+				}else{
+					srcfile=data.getData();
+					fileformat=s;
+				}
 
-				}
 			}
 			else
 			{
