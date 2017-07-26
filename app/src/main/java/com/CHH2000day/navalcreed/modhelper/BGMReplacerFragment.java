@@ -343,6 +343,7 @@ public class BGMReplacerFragment extends FunctionFragment
 				}else{
 					srcfile=data.getData();
 					fileformat=s;
+					mtextview.setText(new StringBuilder().append(srcfile.getPath()).append("   ").append("文件格式:").append(fileformat).toString());
 				}
 
 			}
