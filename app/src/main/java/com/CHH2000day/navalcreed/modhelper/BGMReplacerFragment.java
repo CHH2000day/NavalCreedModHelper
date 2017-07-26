@@ -7,6 +7,7 @@ import android.view.*;
 import android.widget.*;
 import java.io.*;
 import java.util.*;
+import android.widget.AdapterView.*;
 public class BGMReplacerFragment extends FunctionFragment
 {
 
@@ -26,6 +27,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
 	private static final String[] FILENAMES_LOADING={"Loading","Login","Queuing"};
 	private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
+	private static final int TEXTVIEW_RES_ID=android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item;
 	public static final int TYPE_HARBOR=10;
 	public static final int TYPE_LOADING=11;
 	public static final int TYPE_BATTLESTART=12;
@@ -35,12 +37,13 @@ public class BGMReplacerFragment extends FunctionFragment
 	public static final int TYPE_BATTLEFAIL=16;
 	public static final String FORMAT_OGG=".ogg";
 	public static final String FORMAT_WAV=".wav";
-
+	
 
 	private ModHelperApplication mapplication;
 	private FileNameAdapter mfilenameadapter;
 	private View v;
 	private Spinner mSceneSpinner,mFileNameSpinner;
+	private int curr_scene,currmusic;
 
 
 
@@ -51,8 +54,30 @@ public class BGMReplacerFragment extends FunctionFragment
 	{
 		// TODO: Implement this method
 		v = inflater.inflate ( R.layout.bgmreplacer, null );
+		mSceneSpinner=(Spinner)v.findViewById(R.id.bgmreplacerScene);
+		mFileNameSpinner=(Spinner)v.findViewById(R.id.bgmreplacerMusic);
+		//配置场景选择的适配器
+		mSceneSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),TEXTVIEW_RES_ID,SCENE_TOSHOW));
 		//初始化文件名的适配器
-		mfilenameadapter = new FileNameAdapter ( getActivity ( ), android.R.layout.simple_spinner_dropdown_item, FILENAMES_UNSELECTED );
+		mfilenameadapter = FileNameAdapter.getInstance(getActivity(),TEXTVIEW_RES_ID,TYPE_HARBOR);
+		mFileNameSpinner.setAdapter(mfilenameadapter);
+		mSceneSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+
+				@Override
+				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
+				{
+					curr_scene=p3;
+					mFileNameSpinner.setAdapter(FileNameAdapter.getInstance(getActivity(),TEXTVIEW_RES_ID,curr_scene+10));
+					// TODO: Implement this method
+				}
+
+				@Override
+				public void onNothingSelected (AdapterView<?> p1)
+				{
+					// TODO: Implement this method
+				}
+			} );
+		
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		return v;
 	}
@@ -139,19 +164,21 @@ public class BGMReplacerFragment extends FunctionFragment
 		{
 			data = getFileNameStringsToShow ( type );
 			act_data = getFileNameStrings ( type );
-			self = new FileNameAdapter ( context, textViewResId, data );
+			self = new FileNameAdapter ( context, textViewResId, data);
 			return self;
 		}
-		private FileNameAdapter (Context context, int textViewResourceId, String[] data)
+		private FileNameAdapter (Context context, int textViewResourceId,String[] data)
 		{
 			super ( context, textViewResourceId, data );
 		}
+		/*
 		public void reconfigure (int type)
 		{
 			this.clear ( );
 			this.data = getFileNameStringsToShow ( type );
 			this.act_data = getFileNameStrings ( type );
-		}
+			this.addAll(data);
+		}*/
 		public String[] getCurrentData ()
 		{
 			return this.act_data;
