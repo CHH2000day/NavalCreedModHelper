@@ -1,5 +1,6 @@
 package com.CHH2000day.navalcreed.modhelper;
 import java.io.*;
+import java.nio.channels.*;
 
 public class Utils
 {public static byte[] readAllbytes(InputStream in) throws IOException{
@@ -26,5 +27,26 @@ public class Utils
         }
         return f.delete();
     }
+	public static void copyFile(File infile,File outfile)throws IOException{
+		if(!outfile.getParentFile().exists())
+		{
+			outfile.getParentFile().mkdirs();
+		}
+		FileChannel inchannel=null;
+		FileChannel outchannel=null;
+		try
+		{
+		inchannel=new FileInputStream(infile).getChannel();
+		outchannel=new FileOutputStream(outfile).getChannel();
+		outchannel.transferFrom(inchannel,0,inchannel.size());
+		}
+		finally
+		{
+			inchannel.close();
+			outchannel.close();
+			
+		}
+		
+	}
 	
 }
