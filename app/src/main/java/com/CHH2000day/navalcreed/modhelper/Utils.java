@@ -6,7 +6,7 @@ public class Utils
 {
 	public static byte[] readAllbytes (InputStream in) throws IOException
 	{
-		byte[] cache=new byte[8];
+		byte[] cache=new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream ( );
 		int i;
 		while ((i = in.read ( cache )) != -1)
@@ -65,7 +65,7 @@ public class Utils
 		}
 		FileOutputStream fos=new FileOutputStream(outfile);
 		int i;
-		byte[] cache=new byte[8];
+		byte[] cache=new byte[1024];
 		while((i=in.read(cache))!=-1){
 			fos.write(cache,0,i);
 		}

@@ -171,6 +171,7 @@ public class BGMReplacerFragment extends FunctionFragment
 							}
 						}
 					};
+					ad.show();
 					new Thread ( ){
 						public void run ()
 						{
