@@ -58,7 +58,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	private int curr_scene,curr_type,curr_music;
 	private Button select,remove,update;
 	private TextView mtextview;
-	private String fileformat;
+	//private String fileformat;
 	private Uri srcfile;
 
 
@@ -144,7 +144,7 @@ public class BGMReplacerFragment extends FunctionFragment
 				@Override
 				public void onClick (View p1)
 				{
-					if (null == srcfile || null == fileformat || "".equals ( fileformat ))
+					if (null == srcfile /*|| null == fileformat || "".equals ( fileformat )*/)
 					{
 						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 						return;
@@ -177,7 +177,7 @@ public class BGMReplacerFragment extends FunctionFragment
 						{
 							try
 							{
-								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_scene,curr_type, curr_music, fileformat ) );
+								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_scene,curr_type, curr_music, FORMAT_WAV ) );
 								h.sendEmptyMessage ( 0 );
 							}
 							catch (IOException e)
@@ -271,10 +271,11 @@ public class BGMReplacerFragment extends FunctionFragment
 		{
 			return FORMAT_WAV;
 		}
+		/*将判断为OGG格式的部分禁用以禁止使用ogg格式
 		if (Arrays.equals ( b, HEADER_OGG ))
 		{
 			return FORMAT_OGG;
-		}
+		}*/
 		return FORMAT_UNKNOWN;
 	}
 	private static String[] getFileNameStringsToShow (int type)
@@ -339,12 +340,12 @@ public class BGMReplacerFragment extends FunctionFragment
 				{Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
 				if (s.equals ( FORMAT_UNKNOWN ))
 				{
-					Snackbar.make ( v, "文件格式错误！文件不为wav编码或ogg编码", Snackbar.LENGTH_LONG ).show ( );
+					Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}else{
 					srcfile=data.getData();
-					fileformat=s;
-					mtextview.setText(new StringBuilder().append(srcfile.getPath()).append("   ").append("文件格式:").append(fileformat).toString());
+					//fileformat=s;
+					mtextview.setText(new StringBuilder().append(srcfile.getPath()).toString());
 				}
 
 			}
