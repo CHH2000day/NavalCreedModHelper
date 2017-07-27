@@ -7,7 +7,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="点击下方按钮进行舰名反和谐(丢失所有自定义舰名)"
+		android:text="点击下方按钮进行舰名反和谐(丢失所有自定义舰名)，长按按钮可删除反和谐(还是丢失所有自定义舰名)"
 		android:id="@+id/antihexiefragmentTextView1"/>
 
 	<Button

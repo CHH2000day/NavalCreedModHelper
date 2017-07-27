@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_height="match_parent"
 		android:layout_width="match_parent"
-		android:text="软件制作:@CHH2000day\n软件说明:@此生\n图标提供:@猫咪要保护所有人\nQQ群:620912393\n我的邀请码:LVI73ECW,希望帮帮萌新"/>
+		android:text="软件制作:@CHH2000day\n连一个commit都没有的另一个开发者(仅限可能):@Aid-CVN78\n软件说明:@此生 @天津风\n图标提供:@猫咪要保护所有人\nQQ群:620912393\n我的邀请码:LVI73ECW,希望帮帮萌新"/>
 
 </LinearLayout>
 
