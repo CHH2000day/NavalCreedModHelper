@@ -332,6 +332,10 @@ public class BGMReplacerFragment extends FunctionFragment
 			if (data != null)
 			{
 				String s=FORMAT_UNKNOWN;
+				if(data.getData()==null){
+					Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+					return;
+				}
 				try
 				{
 					s = identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ), true ) ;
@@ -352,6 +356,7 @@ public class BGMReplacerFragment extends FunctionFragment
 			else
 			{
 				Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+				return;
 			}
 		}
 	}
