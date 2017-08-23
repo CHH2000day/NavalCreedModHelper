@@ -17,6 +17,9 @@ import cn.bmob.v3.exception.*;
 import cn.bmob.v3.listener.*;
 import java.io.*;
 import java.util.*;
+import java.net.*;
+import android.text.TextUtils;
+import java.util.zip.*;
 
 public class Main extends AppCompatActivity
 {
@@ -97,6 +100,82 @@ public class Main extends AppCompatActivity
 
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
+		if (Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ))
+		{
+			String filepath;
+			if (TextUtils.isEmpty ( getIntent ( ).getData ( ).getPath ( ) ))
+			{
+				return;
+			}
+			filepath = getIntent ( ).getData ( ).getPath ( );
+			try
+			{
+				final ZipFile mzipfile=new ZipFile ( filepath );
+				AlertDialog ad1;
+				AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+				adb.setTitle ( "确定要继续么" )
+					.setMessage ( new StringBuilder ( )
+								 .append ( "确定要安装mod文件:" )
+								 .append ( filepath )
+								 .append ( " " )
+								 .append ( "么？" )
+								 .append ( "\n" )
+								 .append ( "安装该mod文件可能对游戏/设备造成损坏，请确认该mod文件来自于可信渠道" )
+								 .toString ( ) )
+					.setNegativeButton ( "取消", null )
+					.setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
+
+						@Override
+						public void onClick (DialogInterface p1, int p2)
+						{
+							AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
+							adbb.setTitle ( "正在安装mod文件，请稍等" )
+								.setMessage ( "正在安装mod，所需时间由mod文件大小及设备性能所决定" )
+								.setCancelable ( false );
+							final AlertDialog dialog=adbb.create ( );
+							dialog.setCanceledOnTouchOutside ( false );
+							dialog.show ( );
+							final Handler h=new Handler ( ){
+								public void handleMessage (Message msg)
+								{
+									dialog.dismiss ( );
+									if (msg.what != 0)
+									{
+										Snackbar.make ( mViewPager, ((Throwable)msg.obj).getMessage ( ), Snackbar.LENGTH_LONG ).show();
+									}
+								}
+							};
+							new Thread ( ){
+								public void run ()
+								{try
+									{
+										Utils.decompresssZIPFile ( mzipfile, "/sdcard/tt" );
+										h.sendEmptyMessage ( 0 );
+									}
+									catch (IOException e)
+									{
+										h.sendMessage ( h.obtainMessage ( 1, e ) );
+									}
+								}
+							}.start ( );
+
+							// TODO: Implement this method
+						}
+					} )
+					.setCancelable ( false );
+				ad1 = adb.create ( );
+				ad1.setCanceledOnTouchOutside ( false );
+				ad1.show ( );
+
+			}
+			catch (IOException e)
+			{
+				Snackbar.make ( mViewPager, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+				return;
+			}
+
+
+		}
 	}
 
 
