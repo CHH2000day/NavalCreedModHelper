@@ -154,7 +154,7 @@ public class Main extends AppCompatActivity
 								public void run ()
 								{try
 									{
-										Utils.decompresssZIPFile ( mzipfile, getModHelperApplication().getResFilesDirPath() );
+										Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
 										h.sendEmptyMessage ( 0 );
 									}
 									catch (IOException e)
@@ -184,8 +184,9 @@ public class Main extends AppCompatActivity
 	}
 
 
-	public ModHelperApplication getModHelperApplication(){
-		return(ModHelperApplication)getApplication();
+	public ModHelperApplication getModHelperApplication ()
+	{
+		return(ModHelperApplication)getApplication ( );
 	}
 	@Override
 	public void onBackPressed ()
@@ -411,20 +412,34 @@ public class Main extends AppCompatActivity
 							p2.printStackTrace ( );
 							return;
 						}
-						int id=bmobmsg.getmsgid ( );
+						final int id=bmobmsg.getmsgid ( );
 						int currid=getSharedPreferences ( GENERAL, 0 ).getInt ( ANNOU_VER, -1 );
+						AlertDialog.Builder adb0=new AlertDialog.Builder ( Main.this );
+
 						if (id > currid)
 						{
-							getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );AlertDialog.Builder adb0=new AlertDialog.Builder ( Main.this );
 							adb0.setTitle ( "公告" )
 								.setMessage ( bmobmsg.getMessage ( ) )
 								.setPositiveButton ( "确定", null )
+								.setNegativeButton ( "不再显示该公告", new DialogInterface.OnClickListener ( ){
+
+									@Override
+									public void onClick (DialogInterface p1, int p2)
+									{
+										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
+
+										// TODO: Implement this method
+									}
+								} )
 								.setNegativeButton ( "复制", new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick (DialogInterface p1, int p2)
-									{ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );  
+									{
+										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );  
 										cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  
+										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
+
 										// TODO: Implement this method
 									}
 								} );
