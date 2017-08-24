@@ -141,7 +141,12 @@ public class Main extends AppCompatActivity
 									dialog.dismiss ( );
 									if (msg.what != 0)
 									{
-										Snackbar.make ( mViewPager, ((Throwable)msg.obj).getMessage ( ), Snackbar.LENGTH_LONG ).show();
+										Snackbar.make ( mViewPager, ((Throwable)msg.obj).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+									}
+									else
+									{
+										Snackbar.make ( mViewPager, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+
 									}
 								}
 							};
@@ -149,7 +154,7 @@ public class Main extends AppCompatActivity
 								public void run ()
 								{try
 									{
-										Utils.decompresssZIPFile ( mzipfile, "/sdcard/tt" );
+										Utils.decompresssZIPFile ( mzipfile, getModHelperApplication().getResFilesDirPath() );
 										h.sendEmptyMessage ( 0 );
 									}
 									catch (IOException e)
@@ -179,6 +184,9 @@ public class Main extends AppCompatActivity
 	}
 
 
+	public ModHelperApplication getModHelperApplication(){
+		return(ModHelperApplication)getApplication();
+	}
 	@Override
 	public void onBackPressed ()
 	{
