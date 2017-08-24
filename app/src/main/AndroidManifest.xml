@@ -23,7 +23,7 @@
 				<data android:scheme="file" />
 				<data android:host="*" />
 				<data android:mimeType="*/*" />
-				<data android:pathPattern=".*\\.ncmod" />
+				<data android:pathPattern=".*\\.ncmod-test" />
 				
 			</intent-filter>
 			
