@@ -75,9 +75,10 @@ public class Utils
 		fos.flush ( );
 		in.close ( );
 		fos.close ( );
-		
+
 	}
-	public static void decompresssZIPFile(ZipFile srcFile,String destFilePath) throws IOException{
+	public static void decompresssZIPFile (ZipFile srcFile, String destFilePath) throws IOException
+	{
 		ZipEntry entry = null;
 		String entryFilePath = null;
 		File entryFile = null;
@@ -85,51 +86,63 @@ public class Utils
 		byte[] buffer = new byte[bufferSize];
 		BufferedInputStream bis = null;
 		BufferedOutputStream bos = null;
-		Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>)srcFile.entries();
+		SecurityManager securityManager = new SecurityManager ( );
+		Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>)srcFile.entries ( );
 		//循环对压缩包里的每一个文件进行解压		
-		while(entries.hasMoreElements())
+		while (entries.hasMoreElements ( ))
 		{
-			entry = entries.nextElement();
-			System.out.println("Selecting file:"+entry.getName());
+			entry = entries.nextElement ( );
+			System.out.println ( "Selecting file:" + entry.getName ( ) );
 			//构建压缩包中一个文件解压后保存的文件全路径
-			entryFilePath = new StringBuilder()
-							.append(destFilePath)
-							.append(File.separator)
-							.append(entry.getName())
-							.toString();
-			entryFile = new File(entryFilePath);
-			if (!entryFile.getParentFile().exists()){
-				entryFile.getParentFile().mkdirs();
+			entryFilePath = new StringBuilder ( )
+				.append ( destFilePath )
+				.append ( File.separator )
+				.append ( entry.getName ( ) )
+				.toString ( );
+			entryFile = new File ( entryFilePath );
+			if (!entryFile.getParentFile ( ).exists ( ))
+			{
+				entryFile.getParentFile ( ).mkdirs ( );
 			}
-			if(entry.getSize()==0){
-				entryFile.mkdirs();
+			//判断该目标文件是否应为目录
+			if (entry.getSize ( ) == 0)
+			{
+				//判断目标目录是否以文件方式存在
+				if (entryFile.isFile ( ))
+				{
+					//检测文件是否允许删除，如果不允许删除，将会抛出SecurityException
+					securityManager.checkDelete ( entryFilePath );
+					//删除已存在的目标文件
+					entryFile.delete ( );	
+				}
+				entryFile.mkdirs ( );
 				continue;
 			}
-			else if (entry.isDirectory()){
-				System.out.println("Trying to Delete Dir:"+entryFilePath);
-				delDir(entryFile);
+			else if (entry.isDirectory ( ))
+			{
+				System.out.println ( "Trying to Delete Dir:" + entryFilePath );
+				delDir ( entryFile );
 			}
-			
-			
-			if (entryFile.exists())
+
+
+			if (entryFile.exists ( ))
 			{
 				//检测文件是否允许删除，如果不允许删除，将会抛出SecurityException
-				SecurityManager securityManager = new SecurityManager();
-				securityManager.checkDelete(entryFilePath);
+				securityManager.checkDelete ( entryFilePath );
 				//删除已存在的目标文件
-				entryFile.delete();	
+				entryFile.delete ( );	
 			}
 
 			//写入文件
-			System.out.println("Trying to write to file:"+entryFilePath);
-			bos = new BufferedOutputStream(new FileOutputStream(entryFile));
-			bis = new BufferedInputStream(srcFile.getInputStream(entry));
-			while ((count = bis.read(buffer, 0, bufferSize)) != -1)
+			System.out.println ( "Trying to write to file:" + entryFilePath );
+			bos = new BufferedOutputStream ( new FileOutputStream ( entryFile ) );
+			bis = new BufferedInputStream ( srcFile.getInputStream ( entry ) );
+			while ((count = bis.read ( buffer, 0, bufferSize )) != -1)
 			{
-				bos.write(buffer, 0, count);
+				bos.write ( buffer, 0, count );
 			}
-			bos.flush();
-			bos.close();			
+			bos.flush ( );
+			bos.close ( );			
 		}
 	}
 }
