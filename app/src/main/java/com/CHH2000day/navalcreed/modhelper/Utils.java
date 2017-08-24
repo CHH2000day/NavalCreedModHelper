@@ -105,7 +105,7 @@ public class Utils
 				entryFile.getParentFile ( ).mkdirs ( );
 			}
 			//判断该目标文件是否应为目录
-			if (entry.getSize ( ) == 0)
+			if (entry.isDirectory ( ))
 			{
 				//判断目标目录是否以文件方式存在
 				if (entryFile.isFile ( ))
@@ -115,13 +115,19 @@ public class Utils
 					//删除已存在的目标文件
 					entryFile.delete ( );	
 				}
-				entryFile.mkdirs ( );
+				if (!entryFile.exists ( ))
+				{
+					entryFile.mkdirs ( );
+				}
 				continue;
 			}
-			else if (entry.isDirectory ( ))
+			else if (!entry.isDirectory ( ))
 			{
-				System.out.println ( "Trying to Delete Dir:" + entryFilePath );
-				delDir ( entryFile );
+				if (entryFile.isDirectory ( ))
+				{
+					System.out.println ( "Trying to Delete Dir:" + entryFilePath );
+					delDir ( entryFile );
+				}
 			}
 
 
