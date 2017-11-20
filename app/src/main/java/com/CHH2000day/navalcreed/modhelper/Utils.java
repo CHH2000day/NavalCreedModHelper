@@ -24,8 +24,7 @@ public class Utils
 		{
 			return FORMAT_WAV;
 		}
-		//将判断为OGG格式的部分禁用以禁止使用ogg格式
-		 if (Arrays.equals ( b, HEADER_OGG ))
+		if (Arrays.equals ( b, HEADER_OGG ))
 		 {
 		 return FORMAT_OGG;
 		 }
