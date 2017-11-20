@@ -6,6 +6,32 @@ import java.util.*;
 
 public class Utils
 {
+	public static final String FORMAT_OGG=".ogg";
+	public static final String FORMAT_WAV=".wav";
+	public static final String FORMAT_UNKNOWN="ERROR";
+	public static final byte[] HEADER_WAV={ 82, 73, 70, 70 };
+	public static final byte[] HEADER_OGG={ 79, 103, 103, 83 };
+	
+	public static String identifyFormat (InputStream in, boolean closeStream) throws IOException
+	{
+		byte[] b=new byte[4];
+		in.read ( b );
+		if (closeStream)
+		{
+			in.close ( );
+		}
+		if (Arrays.equals ( b, HEADER_WAV ))
+		{
+			return FORMAT_WAV;
+		}
+		//将判断为OGG格式的部分禁用以禁止使用ogg格式
+		 if (Arrays.equals ( b, HEADER_OGG ))
+		 {
+		 return FORMAT_OGG;
+		 }
+		return FORMAT_UNKNOWN;
+	}
+	
 	public static byte[] readAllbytes (InputStream in) throws IOException
 	{
 		byte[] cache=new byte[1024];

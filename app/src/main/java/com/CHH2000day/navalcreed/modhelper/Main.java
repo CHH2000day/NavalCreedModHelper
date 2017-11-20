@@ -97,7 +97,6 @@ public class Main extends AppCompatActivity
 		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
 		mViewPager.setAdapter ( mAdapter );
 		mTabLayout.setupWithViewPager ( mViewPager );
-
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
 		if (Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ))
@@ -421,7 +420,7 @@ public class Main extends AppCompatActivity
 							adb0.setTitle ( "公告" )
 								.setMessage ( bmobmsg.getMessage ( ) )
 								.setPositiveButton ( "确定", null )
-								.setNegativeButton ( "不再显示该公告", new DialogInterface.OnClickListener ( ){
+								.setNeutralButton  (  "不再显示该公告", new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick (DialogInterface p1, int p2)

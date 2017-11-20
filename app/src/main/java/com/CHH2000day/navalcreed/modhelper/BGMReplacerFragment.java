@@ -44,11 +44,6 @@ public class BGMReplacerFragment extends FunctionFragment
 	public static final int TYPE_BATTLEEND=14;
 	public static final int TYPE_BATTLEVICTORY=15;
 	public static final int TYPE_BATTLEFAIL=16;
-	public static final String FORMAT_OGG=".ogg";
-	public static final String FORMAT_WAV=".wav";
-	public static final String FORMAT_UNKNOWN="ERROR";
-	public static final byte[] HEADER_WAV={ 82, 73, 70, 70 };
-	public static final byte[] HEADER_OGG={ 79, 103, 103, 83 };
 
 
 	private ModHelperApplication mapplication;
@@ -104,7 +99,7 @@ public class BGMReplacerFragment extends FunctionFragment
 							@Override
 							public void onClick (DialogInterface p1, int p2)
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -127,7 +122,7 @@ public class BGMReplacerFragment extends FunctionFragment
 							@Override
 							public void onClick (DialogInterface p1, int p2)
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -177,7 +172,7 @@ public class BGMReplacerFragment extends FunctionFragment
 						{
 							try
 							{
-								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_scene,curr_type, curr_music, FORMAT_WAV ) );
+								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_scene,curr_type, curr_music, Utils.FORMAT_WAV ) );
 								h.sendEmptyMessage ( 0 );
 							}
 							catch (IOException e)
@@ -261,22 +256,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	}
 	protected String identifyFormat (InputStream in, boolean closeStream) throws IOException
 	{
-		byte[] b=new byte[4];
-		in.read ( b );
-		if (closeStream)
-		{
-			in.close ( );
-		}
-		if (Arrays.equals ( b, HEADER_WAV ))
-		{
-			return FORMAT_WAV;
-		}
-		/*将判断为OGG格式的部分禁用以禁止使用ogg格式
-		if (Arrays.equals ( b, HEADER_OGG ))
-		{
-			return FORMAT_OGG;
-		}*/
-		return FORMAT_UNKNOWN;
+		return Utils.identifyFormat(in,closeStream);
 	}
 	private static String[] getFileNameStringsToShow (int type)
 	{
@@ -331,7 +311,7 @@ public class BGMReplacerFragment extends FunctionFragment
 		{
 			if (data != null)
 			{
-				String s=FORMAT_UNKNOWN;
+				String s=Utils.FORMAT_UNKNOWN;
 				if(data.getData()==null){
 					Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 					return;
@@ -342,7 +322,7 @@ public class BGMReplacerFragment extends FunctionFragment
 				}
 				catch (IOException e)
 				{Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
-				if (s.equals ( FORMAT_UNKNOWN ))
+				if (!Utils.FORMAT_WAV.equals(s))
 				{
 					Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
 					return;
