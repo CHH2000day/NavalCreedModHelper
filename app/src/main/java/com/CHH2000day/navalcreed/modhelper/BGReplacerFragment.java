@@ -34,7 +34,7 @@ public class BGReplacerFragment extends FunctionFragment
 					.append(File.separatorChar)
 					.append("pic")
 					.toString();
-		v=inflater.inflate(R.layout.bgreplacer, null);
+		v=inflater.inflate(R.layout.bgreplacer_fragment, null);
 		cateory = (Spinner)v.findViewById(R.id.bgreplacerSpinner1);
 		cateory.setOnItemSelectedListener(new OnItemSelectedListener(){
 

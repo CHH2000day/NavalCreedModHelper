@@ -63,7 +63,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		// TODO: Implement this method
-		v = inflater.inflate ( R.layout.bgmreplacer, null );
+		v = inflater.inflate ( R.layout.bgmreplacer_fragment, null );
 		mSceneSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerScene );
 		mFileNameSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerMusic );
 		mtextview = (TextView)v.findViewById ( R.id.bgmreplacerText );
