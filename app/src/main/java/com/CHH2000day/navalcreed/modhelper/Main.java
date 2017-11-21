@@ -36,16 +36,17 @@ public class Main extends AppCompatActivity
 	private BGReplacerFragment mBGReplacerFragment;
 	private BGMReplacerFragment mBGMReplacerFragment;
 	private CustomShipNameFragment mAntiHexieFragment;
+	private LoginMovieReplacer mLoginMovieReplacer;
 
 	@Override
-	protected void onCreate (Bundle savedInstanceState)
+	protected void onCreate ( Bundle savedInstanceState )
 	{
 		super.onCreate ( savedInstanceState );
 		setContentView ( R.layout.main );
 		Toolbar toolbar = (Toolbar) findViewById ( R.id.toolbar );
 		setSupportActionBar ( toolbar );
 		mupdateHandler = new Handler ( ){
-			public void handleMessage (final Message msg)
+			public void handleMessage ( final Message msg )
 			{
 				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
 				adb.create ( ).show ( );
@@ -78,18 +79,21 @@ public class Main extends AppCompatActivity
 		mTabLayout = (TabLayout)findViewById ( R.id.tabLayout );
 		//构造Fragment实例
 		mBGReplacerFragment = new BGReplacerFragment ( );
+		mLoginMovieReplacer = new LoginMovieReplacer ( );
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
 		mBGMReplacerFragment = new BGMReplacerFragment ( );
 		//进行数据配置
 		fragments = new ArrayList<Fragment> ( );
 		fragments.add ( mBGReplacerFragment );
+		fragments.add ( mLoginMovieReplacer );
 		fragments.add ( mCrewPicReplacerFragment );
 		fragments.add ( mAntiHexieFragment );
 		fragments.add ( mBGMReplacerFragment );
 		fragments.add ( new AboutFragment ( ) );
 		titles = new ArrayList<String> ( );
 		titles.add ( "背景替换" );
+		titles.add ( "登录动画修改" );
 		titles.add ( "船员头像修改" );
 		titles.add ( "反和谐" );
 		titles.add ( "BGM替换" );
@@ -99,10 +103,10 @@ public class Main extends AppCompatActivity
 		mTabLayout.setupWithViewPager ( mViewPager );
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
-		if (Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ))
+		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
 			String filepath;
-			if (TextUtils.isEmpty ( getIntent ( ).getData ( ).getPath ( ) ))
+			if ( TextUtils.isEmpty ( getIntent ( ).getData ( ).getPath ( ) ) )
 			{
 				return;
 			}
@@ -125,7 +129,7 @@ public class Main extends AppCompatActivity
 					.setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
 
 						@Override
-						public void onClick (DialogInterface p1, int p2)
+						public void onClick ( DialogInterface p1, int p2 )
 						{
 							AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
 							adbb.setTitle ( "正在安装mod文件，请稍等" )
@@ -135,12 +139,12 @@ public class Main extends AppCompatActivity
 							dialog.setCanceledOnTouchOutside ( false );
 							dialog.show ( );
 							final Handler h=new Handler ( ){
-								public void handleMessage (Message msg)
+								public void handleMessage ( Message msg )
 								{
 									dialog.dismiss ( );
-									if (msg.what != 0)
+									if ( msg.what != 0 )
 									{
-										Snackbar.make ( mViewPager, ((Throwable)msg.obj).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+										Snackbar.make ( mViewPager, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
 									}
 									else
 									{
@@ -150,7 +154,7 @@ public class Main extends AppCompatActivity
 								}
 							};
 							new Thread ( ){
-								public void run ()
+								public void run ( )
 								{try
 									{
 										Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
@@ -183,14 +187,14 @@ public class Main extends AppCompatActivity
 	}
 
 
-	public ModHelperApplication getModHelperApplication ()
+	public ModHelperApplication getModHelperApplication ( )
 	{
 		return(ModHelperApplication)getApplication ( );
 	}
 	@Override
-	public void onBackPressed ()
+	public void onBackPressed ( )
 	{
-		if (!((ModHelperApplication)getApplication ( )).isMainPage ( ))
+		if ( !( (ModHelperApplication)getApplication ( ) ).isMainPage ( ) )
 		{
 			super.onBackPressed ( );
 		}
@@ -199,24 +203,24 @@ public class Main extends AppCompatActivity
 			exit ( );
 		}
 	}
-	public BGReplacerFragment getBGReplacerFragment ()
+	public BGReplacerFragment getBGReplacerFragment ( )
 	{
 		return mBGReplacerFragment;
 	}
-	public BGMReplacerFragment getBGMReplacerFragment ()
+	public BGMReplacerFragment getBGMReplacerFragment ( )
 	{
 		return mBGMReplacerFragment;
 	}
-	public CrewPicReplacerFragment getCrewPicReplacerFragment ()
+	public CrewPicReplacerFragment getCrewPicReplacerFragment ( )
 	{
 		return mCrewPicReplacerFragment;
 	}
-	public CustomShipNameFragment getCustomShipNameFragment ()
+	public CustomShipNameFragment getCustomShipNameFragment ( )
 	{
 		return mAntiHexieFragment;
 	}
 
-	public void exit ()
+	public void exit ( )
 	{
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 		adb.setTitle ( "确定" )
@@ -224,7 +228,7 @@ public class Main extends AppCompatActivity
 			.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
 
 				@Override
-				public void onClick (DialogInterface p1, int p2)
+				public void onClick ( DialogInterface p1, int p2 )
 				{
 					android.os.Process.killProcess ( android.os.Process.myPid ( ) );
 					// TODO: Implement this method
@@ -235,7 +239,7 @@ public class Main extends AppCompatActivity
 			.show ( );
 	}
 	@Override
-	public boolean onCreateOptionsMenu (Menu menu)
+	public boolean onCreateOptionsMenu ( Menu menu )
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater ( ).inflate ( R.menu.main, menu );
@@ -243,7 +247,7 @@ public class Main extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onOptionsItemSelected (MenuItem item)
+	public boolean onOptionsItemSelected ( MenuItem item )
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -251,7 +255,7 @@ public class Main extends AppCompatActivity
 		int id = item.getItemId ( );
 
 		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_exit)
+		if ( id == R.id.action_exit )
 		{
 			exit ( );
 		}
@@ -300,24 +304,24 @@ public class Main extends AppCompatActivity
 	{
 
 		@Override
-		public void run ()
+		public void run ( )
 		{
 			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject> ( );
 
 			query.getObject ( StaticData.getDataid ( ), new QueryListener<UniversalObject> ( ){
 
 					@Override
-					public void done (final UniversalObject universalobj, BmobException p2)
+					public void done ( final UniversalObject universalobj, BmobException p2 )
 					{
-						if (p2 != null)
+						if ( p2 != null )
 						{
 							Log.w ( "Updater", "Failed to get update data" );
 							return;
 						}
 						//如果为测试版，检测服务器端是否允许测试
-						if (BuildConfig.DEBUG)
+						if ( BuildConfig.DEBUG )
 						{
-							if (!universalobj.isAvail ( ))
+							if ( !universalobj.isAvail ( ) )
 							{
 								AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
 								adb.setTitle ( "提示" )
@@ -326,7 +330,7 @@ public class Main extends AppCompatActivity
 									.setPositiveButton ( "退出", new DialogInterface.OnClickListener ( ){
 
 										@Override
-										public void onClick (DialogInterface p1, int p2)
+										public void onClick ( DialogInterface p1, int p2 )
 										{
 											System.exit ( 0 );
 											// TODO: Implement this method
@@ -341,7 +345,7 @@ public class Main extends AppCompatActivity
 						try
 						{
 							int currver=getPackageManager ( ).getPackageInfo ( getPackageName ( ), 0 ).versionCode;
-							if (serverver <= currver)
+							if ( serverver <= currver )
 							{
 								return;
 							}
@@ -352,9 +356,9 @@ public class Main extends AppCompatActivity
 								.setPositiveButton ( "更新", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{BmobFile tgtfile=universalobj.getPackagefile ( );
-										if (tgtfile == null)
+										if ( tgtfile == null )
 										{
 											return;
 										}
@@ -363,7 +367,7 @@ public class Main extends AppCompatActivity
 										tgtfile.download ( distfile, new DownloadFileListener ( ){
 
 												@Override
-												public void done (String p1, BmobException p2)
+												public void done ( String p1, BmobException p2 )
 												{
 													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
 													Intent i=new Intent ( Intent.ACTION_VIEW );
@@ -374,7 +378,7 @@ public class Main extends AppCompatActivity
 												}
 
 												@Override
-												public void onProgress (Integer p1, long p2)
+												public void onProgress ( Integer p1, long p2 )
 												{
 													// TODO: Implement this method
 												}
@@ -398,15 +402,15 @@ public class Main extends AppCompatActivity
 	{
 
 		@Override
-		public void run ()
+		public void run ( )
 		{
 			BmobQuery<BmobMessage> query=new BmobQuery<BmobMessage> ( );
 			query.getObject ( StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage> ( ){
 
 					@Override
-					public void done (final BmobMessage bmobmsg, BmobException p2)
+					public void done ( final BmobMessage bmobmsg, BmobException p2 )
 					{
-						if (p2 != null)
+						if ( p2 != null )
 						{
 							p2.printStackTrace ( );
 							return;
@@ -415,7 +419,7 @@ public class Main extends AppCompatActivity
 						int currid=getSharedPreferences ( GENERAL, 0 ).getInt ( ANNOU_VER, -1 );
 						AlertDialog.Builder adb0=new AlertDialog.Builder ( Main.this );
 
-						if (id > currid)
+						if ( id > currid )
 						{
 							adb0.setTitle ( "公告" )
 								.setMessage ( bmobmsg.getMessage ( ) )
@@ -423,7 +427,7 @@ public class Main extends AppCompatActivity
 								.setNeutralButton  (  "不再显示该公告", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{
 										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
 
@@ -433,7 +437,7 @@ public class Main extends AppCompatActivity
 								.setNegativeButton ( "复制", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{
 										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );  
 										cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  

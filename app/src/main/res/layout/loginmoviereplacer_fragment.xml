@@ -1,6 +1,54 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
-    
-</LinearLayout>
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="请选择文件:"
+		android:id="@+id/loginmoviereplacerfragmentTextViewUnused"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择"
+		android:layout_below="@id/loginmoviereplacerfragmentTextViewUnused"
+		android:id="@+id/loginmoviereplacerfragmentButtonSelect"
+		android:layout_alignParentRight="true"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="未选择文件"
+		android:layout_below="@id/loginmoviereplacerfragmentTextViewUnused"
+		android:id="@+id/loginmoviereplacerfragmentTextView"
+		android:layout_alignBottom="@id/loginmoviereplacerfragmentButtonSelect"
+		android:gravity="center_vertical"
+		android:layout_toLeftOf="@id/loginmoviereplacerfragmentButtonSelect"
+		android:layout_alignParentLeft="true"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="移除"
+		android:layout_below="@id/loginmoviereplacerfragmentButtonSelect"
+		android:id="@+id/loginmoviereplacerfragmentButtonUpdate"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="使用说明:"
+		android:layout_below="@id/loginmoviereplacerfragmentButtonUpdate"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="Button"
+		android:layout_below="@id/loginmoviereplacerfragmentTextView"
+		android:layout_toRightOf="@+id/loginmoviereplacerfragmentButtonUpdate"
+		android:id="@+id/loginmoviereplacerfragmentButtonRemove"/>
+
+</RelativeLayout>
+
