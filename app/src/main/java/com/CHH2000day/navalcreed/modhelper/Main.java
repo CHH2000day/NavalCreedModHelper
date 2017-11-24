@@ -20,6 +20,9 @@ import java.util.*;
 import java.net.*;
 import android.text.TextUtils;
 import java.util.zip.*;
+import android.support.v4.content.*;
+import android.*;
+import android.content.pm.*;
 
 public class Main extends AppCompatActivity
 {
@@ -38,6 +41,8 @@ public class Main extends AppCompatActivity
 	private CustomShipNameFragment mAntiHexieFragment;
 	private LoginMovieReplacer mLoginMovieReplacer;
 
+
+	private static final int PERMISSION_CHECK_CODE=125;
 	@Override
 	protected void onCreate ( Bundle savedInstanceState )
 	{
@@ -101,8 +106,6 @@ public class Main extends AppCompatActivity
 		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
 		mViewPager.setAdapter ( mAdapter );
 		mTabLayout.setupWithViewPager ( mViewPager );
-		new UpdateThread ( ).start ( );
-		new AnnouncementThread ( ).start ( );
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
 			String filepath;
@@ -183,6 +186,76 @@ public class Main extends AppCompatActivity
 			}
 
 
+		}
+	}
+
+	@Override
+	protected void onStart ( )
+	{
+		// TODO: Implement this method
+		super.onStart ( );
+		new UpdateThread ( ).start ( );
+		new AnnouncementThread ( ).start ( );
+
+	}
+
+	@Override
+	protected void onResume ( )
+	{
+		// TODO: Implement this method
+		super.onResume ( );
+		checkPermission ( );
+	}
+
+
+
+	public void checkPermission ( )
+	{
+		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
+		{
+			if ( PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission_group.STORAGE ) )
+			{
+				AlertDialog.Builder adb=new AlertDialog.Builder ( this );
+				adb.setTitle ( "权限请求" )
+					.setMessage ( "战舰联盟mod助手需要\"储存空间\"权限才能正常运行，是否授予权限？" )
+					.setNegativeButton ( "取消并退出", new DialogInterface.OnClickListener ( ){
+
+						@Override
+						public void onClick ( DialogInterface p1, int p2 )
+						{
+							finish ( );
+							// TODO: Implement this method
+						}
+					} )
+					.setPositiveButton ( "授予权限", new DialogInterface.OnClickListener ( ){
+
+						@Override
+						public void onClick ( DialogInterface p1, int p2 )
+						{
+							ActivityCompat.requestPermissions ( Main.this, new String[]{Manifest.permission_group.STORAGE}, PERMISSION_CHECK_CODE );
+							// TODO: Implement this method
+						}
+					} )
+					.setCancelable ( false );
+				AlertDialog ad=adb.create ( );
+				ad.setCanceledOnTouchOutside ( false );
+				ad.show ( );
+
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult ( int requestCode, String[] permissions, int[] grantResults )
+	{
+		// TODO: Implement this method
+		super.onRequestPermissionsResult ( requestCode, permissions, grantResults );
+		if ( PERMISSION_CHECK_CODE == requestCode )
+		{
+			if ( PackageManager.PERMISSION_GRANTED != grantResults [ 0 ] )
+			{
+				checkPermission ( );
+			}
 		}
 	}
 

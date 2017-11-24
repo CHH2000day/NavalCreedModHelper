@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 25
     buildToolsVersion "21.1.0"
 	useLibrary 'org.apache.http.legacy'
 	
     defaultConfig {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 16
-        targetSdkVersion 21
+        targetSdkVersion 25
         versionCode 22
         versionName "2.4.2"
     }
