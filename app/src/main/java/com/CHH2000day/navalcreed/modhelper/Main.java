@@ -213,7 +213,7 @@ public class Main extends AppCompatActivity
 	{
 		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
 		{
-			if ( PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission_group.STORAGE ) )
+			if ( PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.READ_EXTERNAL_STORAGE )||PackageManager.PERMISSION_GRANTED!=ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) )
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 				adb.setTitle ( "权限请求" )
