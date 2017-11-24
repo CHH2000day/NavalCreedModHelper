@@ -38,14 +38,14 @@
 
 	<TextView
 		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="使用说明:"
+		android:layout_width="match_parent"
+		android:text="使用说明:\n登录动画只支持使用以下格式替换:\n文件格式:ogv\n视频编码:theora\n建议在电脑端使用ffmpeg2theora转码后再放到手机里"
 		android:layout_below="@id/loginmoviereplacerfragmentButtonUpdate"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="Button"
+		android:text="移除"
 		android:layout_below="@id/loginmoviereplacerfragmentTextView"
 		android:layout_toRightOf="@+id/loginmoviereplacerfragmentButtonUpdate"
 		android:id="@+id/loginmoviereplacerfragmentButtonRemove"/>
