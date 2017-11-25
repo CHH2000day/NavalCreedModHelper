@@ -44,5 +44,6 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<!--允许读取手机状态 用于创建BmobInstallation--> 
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-		
+	<!--并不知道这权限到底干啥的，不加会有莫名其妙的SecurityException-->
+	<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"/>
 </manifest>
