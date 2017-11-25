@@ -172,7 +172,7 @@ public class BGReplacerFragment extends FunctionFragment
 	public void onActivityResult(int requestCode, int resultCode,@NonNull Intent data)
 	{
 		// TODO: Implement this methodsuper.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 1&&resultCode==AppCompatActivity.RESULT_OK)
+		if (data!=null&&requestCode == 1&&resultCode==AppCompatActivity.RESULT_OK)
 		{
 			try
 			{
@@ -187,12 +187,9 @@ public class BGReplacerFragment extends FunctionFragment
 			catch (final Exception e)
 			{
 				e.printStackTrace();
-				String clazz = new Object() {
-					public String getClassName() {
-						String clazzName = e.getClass().getName();
-						return clazzName.substring(0, clazzName.lastIndexOf('$'));
-					}
-				}.getClassName();
+				String clazzn =e.getClass().getName();
+				String clazz=clazzn.substring(0, clazzn.lastIndexOf('$'));
+						
 				Snackbar.make(v,clazz,Snackbar.LENGTH_LONG).show();
 			}
 		}
