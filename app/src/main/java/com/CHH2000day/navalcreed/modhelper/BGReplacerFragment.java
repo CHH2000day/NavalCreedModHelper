@@ -171,7 +171,8 @@ public class BGReplacerFragment extends FunctionFragment
 	@Override
 	public void onActivityResult(int requestCode, int resultCode,@NonNull Intent data)
 	{
-		// TODO: Implement this methodsuper.onActivityResult(requestCode, resultCode, data);
+		// TODO: Implement this method
+		super.onActivityResult(requestCode, resultCode, data);
 		if (data!=null&&requestCode == 1&&resultCode==AppCompatActivity.RESULT_OK)
 		{
 			try
