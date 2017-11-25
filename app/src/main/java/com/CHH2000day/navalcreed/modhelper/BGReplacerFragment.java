@@ -12,6 +12,8 @@ import java.io.*;
 
 import android.view.View.OnClickListener;
 import android.support.design.widget.*;
+import android.support.annotation.*;
+import android.net.*;
 
 public class BGReplacerFragment extends FunctionFragment
 {
@@ -80,6 +82,7 @@ public class BGReplacerFragment extends FunctionFragment
 					Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
 					intent.setType("image/*");
 					startActivityForResult(intent, 1);
+					
 					// TODO: Implement this method
 				}
 			});
@@ -166,25 +169,32 @@ public class BGReplacerFragment extends FunctionFragment
 	
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data)
+	public void onActivityResult(int requestCode, int resultCode,@NonNull Intent data)
 	{
 		// TODO: Implement this methodsuper.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == 1)
+		if (requestCode == 1&&resultCode==AppCompatActivity.RESULT_OK)
 		{
-			if(data==null){
-				Snackbar.make(v,"文件为空！",Snackbar.LENGTH_LONG).show();
-				return;}
 			try
 			{
 				if(ba!=null){
 					ba.recycle();
 					//手动释放以防止Bitmap未被释放
 				}
-				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData()));
+				Uri u=data.getData();
+				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(u));
 				picname.setText(data.getData().toString());
 			}
-			catch (FileNotFoundException e)
-			{e.printStackTrace();}
+			catch (final Exception e)
+			{
+				e.printStackTrace();
+				String clazz = new Object() {
+					public String getClassName() {
+						String clazzName = e.getClass().getName();
+						return clazzName.substring(0, clazzName.lastIndexOf('$'));
+					}
+				}.getClassName();
+				Snackbar.make(v,clazz,Snackbar.LENGTH_LONG).show();
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
