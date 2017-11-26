@@ -23,6 +23,7 @@ import java.util.zip.*;
 import android.support.v4.content.*;
 import android.*;
 import android.content.pm.*;
+import android.support.annotation.*;
 
 public class Main extends AppCompatActivity
 {
@@ -246,13 +247,15 @@ public class Main extends AppCompatActivity
 	}
 
 	@Override
-	public void onRequestPermissionsResult ( int requestCode, String[] permissions, int[] grantResults )
+	public void onRequestPermissionsResult ( int requestCode, String[] permissions,@NonNull int[] grantResults )
 	{
 		// TODO: Implement this method
 		super.onRequestPermissionsResult ( requestCode, permissions, grantResults );
 		if ( PERMISSION_CHECK_CODE == requestCode )
 		{
-			if ( PackageManager.PERMISSION_GRANTED != grantResults [ 0 ] )
+			
+			
+			if (grantResults.length<=0|| PackageManager.PERMISSION_GRANTED != grantResults [ 0 ] )
 			{
 				checkPermission ( );
 			}
