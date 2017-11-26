@@ -233,7 +233,7 @@ public class Main extends AppCompatActivity
 						@Override
 						public void onClick ( DialogInterface p1, int p2 )
 						{
-							ActivityCompat.requestPermissions ( Main.this, new String[]{Manifest.permission_group.STORAGE}, PERMISSION_CHECK_CODE );
+							ActivityCompat.requestPermissions ( Main.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CHECK_CODE );
 							// TODO: Implement this method
 						}
 					} )
