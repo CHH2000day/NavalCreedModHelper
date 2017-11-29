@@ -214,7 +214,7 @@ public class Main extends AppCompatActivity
 	{
 		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
 		{
-			if ( PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.READ_EXTERNAL_STORAGE )||PackageManager.PERMISSION_GRANTED!=ContextCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE) )
+			if ( PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.READ_EXTERNAL_STORAGE ) || PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) )
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 				adb.setTitle ( "权限请求" )
@@ -247,15 +247,15 @@ public class Main extends AppCompatActivity
 	}
 
 	@Override
-	public void onRequestPermissionsResult ( int requestCode, String[] permissions,@NonNull int[] grantResults )
+	public void onRequestPermissionsResult ( int requestCode, String[] permissions, @NonNull int[] grantResults )
 	{
 		// TODO: Implement this method
 		super.onRequestPermissionsResult ( requestCode, permissions, grantResults );
 		if ( PERMISSION_CHECK_CODE == requestCode )
 		{
-			
-			
-			if (grantResults.length<=0|| PackageManager.PERMISSION_GRANTED != grantResults [ 0 ] )
+
+
+			if ( grantResults.length <= 0 || PackageManager.PERMISSION_GRANTED != grantResults [ 0 ] )
 			{
 				checkPermission ( );
 			}
@@ -439,7 +439,7 @@ public class Main extends AppCompatActivity
 											return;
 										}
 										Snackbar.make ( mViewPager, "开始下载", Snackbar.LENGTH_LONG ).show ( );
-										final File distfile=new File ( getExternalCacheDir ( ), "update.apk" );
+										final File distfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
 										tgtfile.download ( distfile, new DownloadFileListener ( ){
 
 												@Override
@@ -447,8 +447,18 @@ public class Main extends AppCompatActivity
 												{
 													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
 													Intent i=new Intent ( Intent.ACTION_VIEW );
+													Uri data;
 													i.setFlags ( Intent.FLAG_ACTIVITY_NEW_TASK );
-													i.setDataAndType ( Uri.fromFile ( distfile ), "application/vnd.android.package-archive" );
+													if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N )
+													{
+														data = FileProvider.getUriForFile ( Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", distfile );
+														i.addFlags ( i.FLAG_GRANT_READ_URI_PERMISSION );
+													}
+													else
+													{
+														data = Uri.fromFile ( distfile );
+													}
+													i.setDataAndType ( data, "application/vnd.android.package-archive" );
 													startActivity ( i );
 													// TODO: Implement this method
 												}
