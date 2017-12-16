@@ -24,6 +24,7 @@ import android.support.v4.content.*;
 import android.*;
 import android.content.pm.*;
 import android.support.annotation.*;
+import android.view.View.*;
 
 public class Main extends AppCompatActivity
 {
@@ -33,7 +34,7 @@ public class Main extends AppCompatActivity
 	private List<Fragment> fragments;
 	private List<String> titles;
 	private LayoutInflater li;
-	private Handler mupdateHandler;
+	private Handler mupdateHandler,mvercheckHandler;
 	private static final String GENERAL="general";
 	private static final String ANNOU_VER="annover";
 	private CrewPicReplacerFragment mCrewPicReplacerFragment;
@@ -194,7 +195,46 @@ public class Main extends AppCompatActivity
 	protected void onStart ( )
 	{
 		// TODO: Implement this method
+
 		super.onStart ( );
+		//进行检查
+		AlertDialog.Builder adb_ver=new AlertDialog.Builder ( this );
+		adb_ver.setCancelable ( false );
+		adb_ver.setTitle ( "验证中...." )
+			.setMessage ( "验证测试版是否可用....\n请稍等....." );
+		final AlertDialog ad_ver=adb_ver.create ( );
+		ad_ver.setCanceledOnTouchOutside ( false );
+
+		mvercheckHandler = new Handler ( ){
+			public void handleMessage ( Message msg )
+			{
+				switch ( msg.what )
+				{
+					case -1:
+						//测试版可用
+						ad_ver.dismiss();
+						break;
+					case 0:
+						//测试版不可用
+						Snackbar.make ( mViewPager, "测试版不可用！", Snackbar.LENGTH_INDEFINITE ).setAction ( "退出", new OnClickListener ( ){
+
+								@Override
+								public void onClick ( View p1 )
+								{
+									finish();
+									// TODO: Implement this method
+								}
+							} ).show ( ) ;
+
+						break;
+				}
+			}
+		};
+		if ( StaticData.DATAID_BETA.equals ( StaticData.getDataid ( ) ) )
+		{
+			ad_ver.show();
+
+		}
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
 
