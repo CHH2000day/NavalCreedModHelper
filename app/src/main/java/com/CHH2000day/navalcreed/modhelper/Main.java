@@ -55,6 +55,7 @@ public class Main extends AppCompatActivity
 		mupdateHandler = new Handler ( ){
 			public void handleMessage ( final Message msg )
 			{
+				
 				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
 				adb.create ( ).show ( );
 
@@ -235,6 +236,7 @@ public class Main extends AppCompatActivity
 			ad_ver.show();
 
 		}
+		
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
 
@@ -439,22 +441,9 @@ public class Main extends AppCompatActivity
 						{
 							if ( !universalobj.isAvail ( ) )
 							{
-								AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
-								adb.setTitle ( "提示" )
-									.setMessage ( "测试未开始" )
-									.setCancelable ( false )
-									.setPositiveButton ( "退出", new DialogInterface.OnClickListener ( ){
-
-										@Override
-										public void onClick ( DialogInterface p1, int p2 )
-										{
-											System.exit ( 0 );
-											// TODO: Implement this method
-										}
-									} );
-								mupdateHandler.sendMessage ( mupdateHandler.obtainMessage ( 0, adb ) );
-								return;
-
+								mvercheckHandler.sendEmptyMessage(0);
+							}else{
+								mvercheckHandler.sendEmptyMessage(-1);
 							}
 						}
 						int serverver=universalobj.getVersion ( ).intValue ( );
@@ -479,12 +468,20 @@ public class Main extends AppCompatActivity
 											return;
 										}
 										Snackbar.make ( mViewPager, "开始下载", Snackbar.LENGTH_LONG ).show ( );
+										AlertDialog.Builder db=new AlertDialog.Builder(Main.this);
+										db.setTitle("正在下载")
+										.setMessage("请稍等")
+										.setCancelable(false);
+										final AlertDialog d=db.create();
+										d.setCanceledOnTouchOutside(false);
+										d.show();
 										final File distfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
 										tgtfile.download ( distfile, new DownloadFileListener ( ){
 
 												@Override
 												public void done ( String p1, BmobException p2 )
 												{
+													d.dismiss();
 													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
 													Intent i=new Intent ( Intent.ACTION_VIEW );
 													Uri data;
