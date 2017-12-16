@@ -179,17 +179,22 @@ public class BGReplacerFragment extends FunctionFragment
 			{
 				if(ba!=null){
 					ba.recycle();
+					System.gc();
 					//手动释放以防止Bitmap未被释放
 				}
 				Uri u=data.getData();
+				
 				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(u));
 				picname.setText(data.getData().toString());
+				
 			}
-			catch (final Exception e)
+			catch (final Throwable t)
 			{
-				e.printStackTrace();
-				String clazzn =e.getClass().getName();
-				String clazz=clazzn.substring(0, clazzn.lastIndexOf('$'));
+				t.printStackTrace();
+				String clazzn =t.getClass().getName();
+				int p=clazzn.lastIndexOf('$');
+				
+				String clazz=(p>0)?clazzn.substring(0,p):"错误";
 						
 				Snackbar.make(v,clazz,Snackbar.LENGTH_LONG).show();
 			}

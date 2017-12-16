@@ -126,6 +126,9 @@ public class LoginMovieReplacer extends Fragment
 		super.onActivityResult ( requestCode, resultCode, data );
 		if ( requestCode != QUERY_CODE )
 		{return;}
+		if( resultCode != AppCompatActivity.RESULT_OK){
+			return;
+		}
 		if ( data == null || data.getData ( ) == null )
 		{Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 			return;}

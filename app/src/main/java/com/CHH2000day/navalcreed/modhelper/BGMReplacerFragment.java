@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import java.nio.channels.*;
 import android.net.*;
+import android.support.v7.app.AppCompatActivity;
 public class BGMReplacerFragment extends FunctionFragment
 {
 
@@ -307,7 +308,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if (requestCode == 2)
+		if (requestCode == 2&&resultCode==AppCompatActivity.RESULT_OK)
 		{
 			if (data != null)
 			{
