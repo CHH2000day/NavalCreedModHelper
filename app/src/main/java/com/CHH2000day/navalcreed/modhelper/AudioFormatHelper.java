@@ -19,16 +19,7 @@ public class AudioFormatHelper
 	private boolean isdecoded=false;
 	private boolean isUnneededtocompress=false;
 	//需要用到的UI操作的部分
-	private Handler mEmptyHandler=new Handler ( ){
-
-		@Override
-		public void handleMessage ( Message msg )
-		{
-			// TODO: Implement this method
-			//DO:NOTHING
-		}
-
-	};
+	private Handler mEmptyHandler;
 	public static final int STATUS_START=1000;
 	public static final int STATUS_LOADINGFILE=1001;
 	public static final int STATUS_TRANSCODING=1002;
@@ -54,19 +45,34 @@ public class AudioFormatHelper
 
 	public AudioFormatHelper ( File audioFile ) throws FileNotFoundException
 	{
+		
 		//检查文件是否存在及可读
 		if ( !audioFile.exists ( ) || !audioFile.canRead ( ) )
 		{
 			throw new FileNotFoundException ( "Audio file:" + audioFile.getPath ( ) + " could not be found" );
 		}
+		init();
 		this.srcFile = audioFile;
 		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
 	}
 	public AudioFormatHelper ( Uri audioFilePath, Context context )
 	{
+		init();
 		srcFileUri = audioFilePath;
 		mcontext = context;
 		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
+	}
+	private void init(){
+	mEmptyHandler=new Handler ( ){
+
+			@Override
+			public void handleMessage ( Message msg )
+			{
+				// TODO: Implement this method
+				//DO:NOTHING
+			}
+
+		};
 	}
 	//转码至wav
 	public String compressToWav ( File targetFile )
@@ -87,7 +93,7 @@ public class AudioFormatHelper
 			}
 			else
 			{
-				in = mcontext.openFileInput ( srcFileUri.toString ( ) );
+				in = mcontext.getContentResolver().openInputStream( srcFileUri);
 			}
 			byte[] b=new byte[4];
 			if ( Arrays.equals ( b, HEADER_WAV ) )
@@ -178,7 +184,7 @@ public class AudioFormatHelper
 							}
 							else
 							{
-								decodeddata.write ( Utils.readAllbytes ( mcontext.openFileInput ( srcFileUri.toString ( ) ) ) );
+								decodeddata.write ( Utils.readAllbytes ( mcontext.getContentResolver().openInputStream( srcFileUri ) ) );
 							}
 							isdecoded = true;
 							me.release ( );
@@ -189,8 +195,8 @@ public class AudioFormatHelper
 				//更新选定的音轨
 				soundtrackIndex = i;
 				//从文件获取采样率与声道数
-				mSampleRate = Integer.getInteger ( md.getString ( MediaFormat.KEY_SAMPLE_RATE ) );
-				mChannel = Integer.getInteger ( md.getString ( MediaFormat.KEY_CHANNEL_COUNT ) );
+				mSampleRate = md.getInteger ( MediaFormat.KEY_SAMPLE_RATE );
+				mChannel = md.getInteger ( MediaFormat.KEY_CHANNEL_COUNT );
 				break;
 			}
 		}
@@ -198,16 +204,23 @@ public class AudioFormatHelper
 		{
 			throw new Exception ( "No audio track counld be found from file." );
 		}
+		me.selectTrack(soundtrackIndex);
 		//创建解码器
 		MediaCodec mc=MediaCodec.createDecoderByType ( mime );
 		mc.configure ( md, null, null, 0 );
+		
 		mc.setCallback ( new MediaCodec.Callback ( ){
 
+			int role=0;
 				@Override
 				public void onInputBufferAvailable ( MediaCodec p1, int p2 )
 				{
+					if(isdecoded){return;}
+					if(role==0){me.advance();}
 					// TODO: Implement this method
+					role++;
 					int len=me.readSampleData ( p1.getInputBuffer ( p2 ), 0 );
+					me.advance();
 					if ( len < 0 )
 					{
 						p1.queueInputBuffer ( p2, 0, 0, 0, p1.BUFFER_FLAG_END_OF_STREAM );
@@ -229,15 +242,12 @@ public class AudioFormatHelper
 					}
 					else
 					{
-						try
-						{
-							decodeddata.write ( p1.getInputBuffer ( p2 ).array ( ) );
+							byte[] b=new byte[p1.getOutputBuffer(p2).remaining()];
+							p1.getOutputBuffer(p2).get(b,0,b.length);
+							p1.getOutputBuffer(p2).clear();
+							decodeddata.write ( b,0,b.length);
+							p1.releaseOutputBuffer(p2,false);
 						}
-						catch (IOException e)
-						{
-
-						}
-					}
 
 					// TODO: Implement this method
 
@@ -252,6 +262,7 @@ public class AudioFormatHelper
 				@Override
 				public void onOutputFormatChanged ( MediaCodec p1, MediaFormat p2 )
 				{
+				
 					// TODO: Implement this method
 				}
 			} );
