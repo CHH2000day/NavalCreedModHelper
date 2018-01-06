@@ -78,10 +78,36 @@ public class AudioFormatHelper
 		String errorcode="";
 		UIHandler.sendEmptyMessage ( STATUS_START );
 		InputStream in;
-
 		try
 		{
-			boolean bl=decodeAudio ( null, UIHandler );
+			//验证源文件是否已为wav格式
+			if ( srcFile != null )
+			{
+				in = new FileInputStream ( srcFile );
+			}
+			else
+			{
+				in = mcontext.openFileInput ( srcFileUri.toString ( ) );
+			}
+			byte[] b=new byte[4];
+			if ( Arrays.equals ( b, HEADER_WAV ) )
+			{
+				//若是，直接读取为已解码数据，并跳过添加文件头
+				isUnneededtocompress = true;
+				decodeddata.reset ( );
+				decodeddata.write ( HEADER_WAV, 0, HEADER_WAV.length );
+				byte[] cache=new byte[1024 * 256];
+				int len;
+				while ( ( len = in.read ( cache ) ) > 0 )
+				{
+					decodeddata.write ( cache, 0, len );
+				}
+			}
+			else
+			{
+				//解码数据
+				boolean bl=decodeAudio ( null, UIHandler );
+			}
 		}
 		catch (Exception e)
 		{
@@ -93,6 +119,7 @@ public class AudioFormatHelper
 			UIHandler.sendEmptyMessage ( STATUS_WRITING );
 			Sink s=Okio.sink ( targetFile );
 			BufferedSink f=Okio.buffer ( s );
+			//若源文件已为wav格式，跳过添加文件头
 			if ( !isUnneededtocompress )
 			{
 				f.write ( getWavHeader ( decodeddata.size ( ) ) );
