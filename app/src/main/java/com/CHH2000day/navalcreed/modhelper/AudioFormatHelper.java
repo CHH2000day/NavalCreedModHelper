@@ -84,6 +84,9 @@ public class AudioFormatHelper
 	}
 	public String compressToWav (final File targetFile,final Handler UIHandler )
 	{
+		if(!targetFile.getParentFile().exists()){
+			targetFile.getParentFile().mkdirs();
+		}
 		String errorcode="";
 		UIHandler.sendEmptyMessage ( STATUS_START );
 		InputStream in;
@@ -155,6 +158,7 @@ public class AudioFormatHelper
 		}
 		errorcode = RESULT_OK;
 		UIHandler.sendEmptyMessage ( STATUS_DONE );
+		isProcessed = true;
 		return errorcode;
 
 	}
@@ -297,7 +301,6 @@ public class AudioFormatHelper
 		mc.stop ( );
 		mc.release ( );
 		me.release ( );
-		isProcessed = true;
 		return false;
 	}
 	//由pcm格式数据获取wav的文件头

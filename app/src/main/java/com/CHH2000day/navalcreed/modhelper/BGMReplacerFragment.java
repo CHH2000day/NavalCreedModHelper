@@ -155,7 +155,7 @@ public class BGMReplacerFragment extends FunctionFragment
 					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "请稍等" )
-						.setView ( R.layout.dialog_transcode )
+						.setView ( dialogView )
 						.setCancelable ( false )
 						.setPositiveButton ( "关闭", null );
 					final AlertDialog ad=adb.create ( );
@@ -215,6 +215,7 @@ public class BGMReplacerFragment extends FunctionFragment
 							 */
 							starttime = System.currentTimeMillis ( );
 							String s=afh.compressToWav ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ), h );
+							afh.recycle();
 							s = ( AudioFormatHelper.RESULT_OK.equals ( s ) ) ? "操作完成": s;
 							h.sendMessage ( h.obtainMessage ( 1, s ) );
 							//}
@@ -442,6 +443,15 @@ public class BGMReplacerFragment extends FunctionFragment
 		{
 			button = ad.getButton ( ad.BUTTON_POSITIVE );
 			button.setClickable ( false );
+			button.setOnClickListener ( new OnClickListener ( ){
+
+					@Override
+					public void onClick ( View p1 )
+					{
+						ad.dismiss();
+						// TODO: Implement this method
+					}
+				} );
 			// TODO: Implement this method
 		}
 
