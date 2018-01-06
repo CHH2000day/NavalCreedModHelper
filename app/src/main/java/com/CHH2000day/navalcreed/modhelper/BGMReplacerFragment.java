@@ -37,7 +37,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
 	private static final String[] FILENAMES_LOADING={"Loading","Login","Queuing"};
 	private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
-	private static final int TEXTVIEW_RES_ID=android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item;
+	private static final int TEXTVIEW_RES_ID=R.layout.support_simple_spinner_dropdown_item;
 	public static final int TYPE_HARBOR=10;
 	public static final int TYPE_LOADING=11;
 	public static final int TYPE_BATTLESTART=12;
@@ -60,6 +60,7 @@ public class BGMReplacerFragment extends FunctionFragment
 
 
 
+	
 	@Override
 	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
@@ -71,6 +72,16 @@ public class BGMReplacerFragment extends FunctionFragment
 		select = (Button)v.findViewById ( R.id.bgmreplacerSelect );
 		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
 		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
+		
+		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
+		return v;
+	}
+
+	@Override
+	public void onActivityCreated ( Bundle savedInstanceState )
+	{
+		// TODO: Implement this method
+		super.onActivityCreated ( savedInstanceState );
 		select.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
@@ -150,7 +161,7 @@ public class BGMReplacerFragment extends FunctionFragment
 						return;
 					}
 					//开始创建进度对话框
-					dialogView = inflater.inflate ( R.layout.dialog_transcode, null );
+					dialogView = LayoutInflater.from(getActivity()).inflate ( R.layout.dialog_transcode, null );
 					progress = (TextView)dialogView.findViewById ( R.id.dialogtranscodeTextView );
 					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
@@ -165,7 +176,6 @@ public class BGMReplacerFragment extends FunctionFragment
 					final Handler h=new Handler ( ){
 						public void handleMessage ( Message msg )
 						{
-							ad.dismiss ( );
 							switch ( msg.what )
 							{
 								case AudioFormatHelper.STATUS_START:
@@ -266,9 +276,8 @@ public class BGMReplacerFragment extends FunctionFragment
 					// TODO: Implement this method
 				}
 			} );
-		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
-		return v;
 	}
+	
 	@Override
 	public boolean installMod ( int typenum, int num, byte[] deceyptedFileData )
 	{
@@ -442,7 +451,6 @@ public class BGMReplacerFragment extends FunctionFragment
 		public void onShow ( DialogInterface p1 )
 		{
 			button = ad.getButton ( ad.BUTTON_POSITIVE );
-			button.setClickable ( false );
 			button.setOnClickListener ( new OnClickListener ( ){
 
 					@Override
@@ -452,6 +460,8 @@ public class BGMReplacerFragment extends FunctionFragment
 						// TODO: Implement this method
 					}
 				} );
+			button.setClickable ( false );
+			
 			// TODO: Implement this method
 		}
 

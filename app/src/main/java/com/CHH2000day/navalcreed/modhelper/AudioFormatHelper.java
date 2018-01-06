@@ -226,6 +226,7 @@ public class AudioFormatHelper
 		//创建解码器
 		MediaCodec mc=MediaCodec.createDecoderByType ( mime );
 		mc.configure ( md, null, null, 0 );
+		UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
 
 		mc.setCallback ( new MediaCodec.Callback ( ){
 
