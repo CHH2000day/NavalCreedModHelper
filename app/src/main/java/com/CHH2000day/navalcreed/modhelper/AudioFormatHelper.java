@@ -80,9 +80,9 @@ public class AudioFormatHelper
 	//转码至wav
 	public String compressToWav ( File targetFile )
 	{
-		return conpressToWav ( targetFile, mEmptyHandler );
+		return compressToWav ( targetFile, mEmptyHandler );
 	}
-	public String conpressToWav ( File targetFile, Handler UIHandler )
+	public String compressToWav (final File targetFile,final Handler UIHandler )
 	{
 		String errorcode="";
 		UIHandler.sendEmptyMessage ( STATUS_START );
@@ -158,7 +158,7 @@ public class AudioFormatHelper
 		return errorcode;
 
 	}
-	private boolean decodeAudio ( String[] exceptions , Handler UIHandler ) throws Exception
+	private boolean decodeAudio ( String[] exceptions , final Handler UIHandler ) throws Exception
 	{
 
 		UIHandler.sendEmptyMessage ( STATUS_LOADINGFILE );
@@ -274,6 +274,7 @@ public class AudioFormatHelper
 				@Override
 				public void onError ( MediaCodec p1, MediaCodec.CodecException p2 )
 				{
+					UIHandler.handleMessage(UIHandler.obtainMessage(STATUS_ERROR,p2));
 					// TODO: Implement this method
 				}
 
