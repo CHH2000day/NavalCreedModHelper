@@ -61,7 +61,7 @@ public class BGMReplacerFragment extends FunctionFragment
 
 
 	@Override
-	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
 		v = inflater.inflate ( R.layout.bgmreplacer_fragment, null );
@@ -74,7 +74,7 @@ public class BGMReplacerFragment extends FunctionFragment
 		select.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
-				public void onClick (View p1)
+				public void onClick ( View p1 )
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					startActivityForResult ( intent, 2 );
@@ -85,22 +85,22 @@ public class BGMReplacerFragment extends FunctionFragment
 		remove.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
-				public void onClick (View p1)
+				public void onClick ( View p1 )
 				{
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "提示" )
 						.setMessage ( new StringBuilder ( )
 									 .append ( "确定要移除对" )
-									 .append ( SCENE_TOSHOW[ curr_scene ] )
+									 .append ( SCENE_TOSHOW [ curr_scene ] )
 									 .append ( "的更改么？" )
 									 .toString ( ) )
 						.setNegativeButton ( "否", null )
 						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
 
 							@Override
-							public void onClick (DialogInterface p1, int p2)
+							public void onClick ( DialogInterface p1, int p2 )
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -113,7 +113,7 @@ public class BGMReplacerFragment extends FunctionFragment
 		remove.setOnLongClickListener ( new OnLongClickListener ( ){
 
 				@Override
-				public boolean onLongClick (View p1)
+				public boolean onLongClick ( View p1 )
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "提示" )
 						.setMessage ( "确定要移除所有对BGM的更改么？" )
@@ -121,9 +121,9 @@ public class BGMReplacerFragment extends FunctionFragment
 						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
 
 							@Override
-							public void onClick (DialogInterface p1, int p2)
+							public void onClick ( DialogInterface p1, int p2 )
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_scene,curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -137,49 +137,91 @@ public class BGMReplacerFragment extends FunctionFragment
 			} );
 		update.setOnClickListener ( new OnClickListener ( ){
 
+				View dialogView;
+				TextView progress;
+				ProgressBar pb;
+				long starttime;
 				@Override
-				public void onClick (View p1)
+				public void onClick ( View p1 )
 				{
-					if (null == srcfile /*|| null == fileformat || "".equals ( fileformat )*/)
+					if ( null == srcfile /*|| null == fileformat || "".equals ( fileformat )*/)
 					{
 						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
+					//开始创建进度对话框
+					dialogView = inflater.inflate ( R.layout.dialog_transcode, null );
+					progress = (TextView)dialogView.findViewById ( R.id.dialogtranscodeTextView );
+					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "请稍等" )
-						.setMessage ( "正在复制文件" )
-						.setCancelable ( false );
+						.setView ( R.layout.dialog_transcode )
+						.setCancelable ( false )
+						.setPositiveButton ( "关闭", null );
 					final AlertDialog ad=adb.create ( );
+					final Monitor mon=new Monitor ( ad );
+					ad.setOnShowListener ( mon );
 					ad.setCancelable ( false );
 					final Handler h=new Handler ( ){
-						public void handleMessage (Message msg)
+						public void handleMessage ( Message msg )
 						{
 							ad.dismiss ( );
-							switch (msg.what)
+							switch ( msg.what )
 							{
-								case 0:
+								case AudioFormatHelper.STATUS_START:
 									//无异常
-									Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+									progress.setText ( "正在开始......" );
+									break;
+								case AudioFormatHelper.STATUS_LOADINGFILE:
+									//操作出现异常
+									progress.setText ( "正在从源文件获得音频轨....." );
+									break;
+								case AudioFormatHelper.STATUS_TRANSCODING:
+									progress.setText ( "正在转码......" );
+									break;
+								case AudioFormatHelper.STATUS_WRITING:
+									progress.setText ( "正在写出文件....." );
+									break;
+								case AudioFormatHelper.STATUS_DONE:
+									long usedtime=System.currentTimeMillis ( ) - starttime;
+									pb.setIndeterminate ( false );
+									pb.setProgress ( 100 );
+									progress.setText ( "操作完成，共用时:" + String.valueOf ( usedtime ) + "ms" );
+									mon.ondone ( );
+									break;
+								case AudioFormatHelper.STATUS_ERROR:
+									String s=progress.getText ( ).toString ( );
+									Exception e=(Exception)msg.obj;
+									progress.setText ( s + "\n" + e.getMessage ( ) );
+									pb.setIndeterminate ( false );
+									pb.setProgress ( 100 );
+									mon.ondone ( );
 									break;
 								case 1:
-									//操作出现异常
-									Snackbar.make ( v, ((Throwable)msg.obj).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+									Snackbar.make ( v, (String)msg.obj, Snackbar.LENGTH_LONG ).show ( );
+									break;
 							}
 						}
 					};
-					ad.show();
+					ad.show ( );
+					final AudioFormatHelper afh=new AudioFormatHelper ( srcfile, getActivity ( ) );
 					new Thread ( ){
-						public void run ()
+						public void run ( )
 						{
-							try
-							{
-								Utils.copyFile ( getActivity().getContentResolver().openInputStream(srcfile), getTargetFile ( curr_scene,curr_type, curr_music, Utils.FORMAT_WAV ) );
-								h.sendEmptyMessage ( 0 );
-							}
-							catch (IOException e)
-							{
-								h.sendMessage ( h.obtainMessage ( 1, e ) );
-							}
+							//try
+							//{
+							/*音频转码，移除原代码
+							 Utils.copyFile ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ) );
+							 */
+							starttime = System.currentTimeMillis ( );
+							String s=afh.compressToWav ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ), h );
+							s = ( AudioFormatHelper.RESULT_OK.equals ( s ) ) ? "操作完成": s;
+							h.sendMessage ( h.obtainMessage ( 1, s ) );
+							//}
+							/*catch (IOException e)
+							 {
+							 h.sendMessage ( h.obtainMessage ( 1, e ) );
+							 }*/
 
 						}
 					}.start ( );
@@ -194,7 +236,7 @@ public class BGMReplacerFragment extends FunctionFragment
 		mSceneSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
-				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
+				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )
 				{
 					curr_scene = p3;
 					curr_type = p3 + 10;
@@ -203,7 +245,7 @@ public class BGMReplacerFragment extends FunctionFragment
 				}
 
 				@Override
-				public void onNothingSelected (AdapterView<?> p1)
+				public void onNothingSelected ( AdapterView<?> p1 )
 				{
 					// TODO: Implement this method
 				}
@@ -211,14 +253,14 @@ public class BGMReplacerFragment extends FunctionFragment
 		mFileNameSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
-				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
+				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )
 				{
 					curr_music = p3;
 					// TODO: Implement this method
 				}
 
 				@Override
-				public void onNothingSelected (AdapterView<?> p1)
+				public void onNothingSelected ( AdapterView<?> p1 )
 				{
 					// TODO: Implement this method
 				}
@@ -227,13 +269,13 @@ public class BGMReplacerFragment extends FunctionFragment
 		return v;
 	}
 	@Override
-	public boolean installMod (int typenum, int num, byte[] deceyptedFileData)
+	public boolean installMod ( int typenum, int num, byte[] deceyptedFileData )
 	{
 		// TODO: Implement this method
 		return false;
 		//Not finished
 	}
-	private File getTargetFile (int scene,int type, int num, String format)
+	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (
 			new StringBuilder ( )
@@ -243,7 +285,7 @@ public class BGMReplacerFragment extends FunctionFragment
 			.append ( File.separatorChar )
 			.append ( "Music" )
 			.append ( File.separatorChar )
-			.append ( SCENE[ scene ] )
+			.append ( SCENE [ scene ] )
 			.append ( File.separatorChar )
 			.append ( getFileName ( type, num ) )
 			.append ( format )
@@ -251,38 +293,38 @@ public class BGMReplacerFragment extends FunctionFragment
 		);
 		return f;
 	}
-	String getFileName (int type, int num)
+	String getFileName ( int type, int num )
 	{
-		return getFileNameStrings ( type )[ num ];
+		return getFileNameStrings ( type ) [ num ];
 	}
-	protected String identifyFormat (InputStream in, boolean closeStream) throws IOException
+	protected String identifyFormat ( InputStream in, boolean closeStream ) throws IOException
 	{
-		return Utils.identifyFormat(in,closeStream);
+		return Utils.identifyFormat ( in, closeStream );
 	}
-	private static String[] getFileNameStringsToShow (int type)
+	private static String[] getFileNameStringsToShow ( int type )
 	{
-		if (type == TYPE_BATTLEFAIL)
+		if ( type == TYPE_BATTLEFAIL )
 		{
 			return FILENAMES_BATTLEFAIL_TOSHOW;
 		}
-		if (type == TYPE_LOADING)
+		if ( type == TYPE_LOADING )
 		{
 			return FILENAMES_LOADING_TOSHOW;
 		}
 		return getFileNameStrings ( type );
 	}
-	private static String[] getFileNameStrings (int type)
+	private static String[] getFileNameStrings ( int type )
 	{
-		if (type == TYPE_BATTLEFAIL)
+		if ( type == TYPE_BATTLEFAIL )
 		{
 			return FILENAMES_BATTLEFAIL;
 		}
-		if (type == TYPE_LOADING)
+		if ( type == TYPE_LOADING )
 		{
 			return FILENAMES_LOADING;
 		}
 		int count=0;
-		switch (type)
+		switch ( type )
 		{
 			case TYPE_HARBOR:
 				count = MUSICCOUNT_HARBOR;
@@ -304,34 +346,41 @@ public class BGMReplacerFragment extends FunctionFragment
 	}
 
 	@Override
-	public void onActivityResult (int requestCode, int resultCode, Intent data)
+	public void onActivityResult ( int requestCode, int resultCode, Intent data )
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if (requestCode == 2&&resultCode==AppCompatActivity.RESULT_OK)
+		if ( requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK )
 		{
-			if (data != null)
+			if ( data != null )
 			{
 				String s=Utils.FORMAT_UNKNOWN;
-				if(data.getData()==null){
+				if ( data.getData ( ) == null )
+				{
 					Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}
-				try
-				{
-					s = identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ), true ) ;
-				}
-				catch (IOException e)
-				{Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
-				if (!Utils.FORMAT_WAV.equals(s))
-				{
-					Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
-					return;
-				}else{
-					srcfile=data.getData();
-					//fileformat=s;
-					mtextview.setText(new StringBuilder().append(srcfile.getPath()).toString());
-				}
+				/*测试音频转码,跳过音频格式验证
+				 try
+				 {
+				 s = identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ), true ) ;
+				 }
+				 catch (IOException e)
+				 {Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
+				 if ( !Utils.FORMAT_WAV.equals ( s ) )
+				 {
+				 Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
+				 return;
+				 }
+				 else
+				 {
+				 srcfile = data.getData ( );
+				 //fileformat=s;
+				 mtextview.setText ( new StringBuilder ( ).append ( srcfile.getPath ( ) ).toString ( ) );
+				 }*/
+				srcfile = data.getData ( );
+				mtextview.setText ( new StringBuilder ( ).append ( srcfile.getPath ( ) ).toString ( ) );
+
 
 			}
 			else
@@ -349,14 +398,14 @@ public class BGMReplacerFragment extends FunctionFragment
 		private static String[] data;
 		private static String[] act_data;
 		private static FileNameAdapter self;
-		public static FileNameAdapter getInstance (Context context, int textViewResId, int type)
+		public static FileNameAdapter getInstance ( Context context, int textViewResId, int type )
 		{
 			data = getFileNameStringsToShow ( type );
 			act_data = getFileNameStrings ( type );
 			self = new FileNameAdapter ( context, textViewResId, data );
 			return self;
 		}
-		private FileNameAdapter (Context context, int textViewResourceId, String[] data)
+		private FileNameAdapter ( Context context, int textViewResourceId, String[] data )
 		{
 			super ( context, textViewResourceId, data );
 		}
@@ -368,9 +417,32 @@ public class BGMReplacerFragment extends FunctionFragment
 		 this.act_data = getFileNameStrings ( type );
 		 this.addAll(data);
 		 }*/
-		public String[] getCurrentData ()
+		public String[] getCurrentData ( )
 		{
 			return this.act_data;
+		}
+
+
+	}
+	public class Monitor implements DialogInterface.OnShowListener
+	{
+		private Button button;
+		private AlertDialog ad;
+		public Monitor ( AlertDialog dialog )
+		{
+			ad = dialog;
+		}
+		public void ondone ( )
+		{
+			button.setClickable ( true );
+		}
+
+		@Override
+		public void onShow ( DialogInterface p1 )
+		{
+			button = ad.getButton ( ad.BUTTON_POSITIVE );
+			button.setClickable ( false );
+			// TODO: Implement this method
 		}
 
 
