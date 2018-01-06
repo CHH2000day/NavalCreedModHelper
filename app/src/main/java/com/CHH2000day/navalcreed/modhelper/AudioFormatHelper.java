@@ -12,12 +12,14 @@ import okio.*;
 public class AudioFormatHelper
 {
 	//源文件
-	private File srcFile;
-	private Uri srcFileUri;
-	private Context mcontext;
+	protected File srcFile;
+	private File mTargetFile;
+	protected Uri srcFileUri;
+	protected Context mcontext;
 	private ByteArrayOutputStream decodeddata;
 	private boolean isdecoded=false;
 	private boolean isUnneededtocompress=false;
+	private boolean isProcessed=false;
 	//需要用到的UI操作的部分
 	private Handler mEmptyHandler;
 	public static final int STATUS_START=1000;
@@ -45,25 +47,26 @@ public class AudioFormatHelper
 
 	public AudioFormatHelper ( File audioFile ) throws FileNotFoundException
 	{
-		
+
 		//检查文件是否存在及可读
 		if ( !audioFile.exists ( ) || !audioFile.canRead ( ) )
 		{
 			throw new FileNotFoundException ( "Audio file:" + audioFile.getPath ( ) + " could not be found" );
 		}
-		init();
+		init ( );
 		this.srcFile = audioFile;
 		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
 	}
 	public AudioFormatHelper ( Uri audioFilePath, Context context )
 	{
-		init();
+		init ( );
 		srcFileUri = audioFilePath;
 		mcontext = context;
 		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
 	}
-	private void init(){
-	mEmptyHandler=new Handler ( ){
+	private void init ( )
+	{
+		mEmptyHandler = new Handler ( ){
 
 			@Override
 			public void handleMessage ( Message msg )
@@ -84,55 +87,66 @@ public class AudioFormatHelper
 		String errorcode="";
 		UIHandler.sendEmptyMessage ( STATUS_START );
 		InputStream in;
-		try
-		{
-			//验证源文件是否已为wav格式
-			if ( srcFile != null )
+		if ( !isProcessed )
+		{mTargetFile = targetFile;
+			try
 			{
-				in = new FileInputStream ( srcFile );
-			}
-			else
-			{
-				in = mcontext.getContentResolver().openInputStream( srcFileUri);
-			}
-			byte[] b=new byte[4];
-			if ( Arrays.equals ( b, HEADER_WAV ) )
-			{
-				//若是，直接读取为已解码数据，并跳过添加文件头
-				isUnneededtocompress = true;
-				decodeddata.reset ( );
-				decodeddata.write ( HEADER_WAV, 0, HEADER_WAV.length );
-				byte[] cache=new byte[1024 * 256];
-				int len;
-				while ( ( len = in.read ( cache ) ) > 0 )
+				//验证源文件是否已为wav格式
+				if ( srcFile != null )
 				{
-					decodeddata.write ( cache, 0, len );
+					in = new FileInputStream ( srcFile );
+				}
+				else
+				{
+					in = mcontext.getContentResolver ( ).openInputStream ( srcFileUri );
+				}
+				byte[] b=new byte[4];
+				if ( Arrays.equals ( b, HEADER_WAV ) )
+				{
+					//若是，直接读取为已解码数据，并跳过添加文件头
+					isUnneededtocompress = true;
+					decodeddata.reset ( );
+					decodeddata.write ( HEADER_WAV, 0, HEADER_WAV.length );
+					byte[] cache=new byte[1024 * 256];
+					int len;
+					while ( ( len = in.read ( cache ) ) > 0 )
+					{
+						decodeddata.write ( cache, 0, len );
+					}
+				}
+				else
+				{
+					//解码数据
+					boolean bl=decodeAudio ( null, UIHandler );
 				}
 			}
-			else
+			catch (Exception e)
 			{
-				//解码数据
-				boolean bl=decodeAudio ( null, UIHandler );
+				UIHandler.sendMessage ( UIHandler.obtainMessage ( STATUS_ERROR, e ) );
+				return e.getMessage ( );
 			}
-		}
-		catch (Exception e)
-		{
-			UIHandler.sendMessage ( UIHandler.obtainMessage ( STATUS_ERROR, e ) );
-			return e.getMessage ( );
 		}
 		try
 		{
 			UIHandler.sendEmptyMessage ( STATUS_WRITING );
-			Sink s=Okio.sink ( targetFile );
-			BufferedSink f=Okio.buffer ( s );
-			//若源文件已为wav格式，跳过添加文件头
-			if ( !isUnneededtocompress )
+			if ( isProcessed && mTargetFile != null&&mTargetFile.exists() )
 			{
-				f.write ( getWavHeader ( decodeddata.size ( ) ) );
+				Utils.copyFile(mTargetFile,targetFile);
+
 			}
-			f.write ( decodeddata.toByteArray ( ) );
-			f.flush ( );
-			f.close ( );
+			else
+			{
+				Sink s=Okio.sink ( targetFile );
+				BufferedSink f=Okio.buffer ( s );
+				//若源文件已为wav格式，跳过添加文件头
+				if ( !isUnneededtocompress )
+				{
+					f.write ( getWavHeader ( decodeddata.size ( ) ) );
+				}
+				f.write ( decodeddata.toByteArray ( ) );
+				f.flush ( );
+				f.close ( );
+			}
 		}
 		catch (IOException e)
 		{
@@ -184,7 +198,7 @@ public class AudioFormatHelper
 							}
 							else
 							{
-								decodeddata.write ( Utils.readAllbytes ( mcontext.getContentResolver().openInputStream( srcFileUri ) ) );
+								decodeddata.write ( Utils.readAllbytes ( mcontext.getContentResolver ( ).openInputStream ( srcFileUri ) ) );
 							}
 							isdecoded = true;
 							me.release ( );
@@ -204,25 +218,27 @@ public class AudioFormatHelper
 		{
 			throw new Exception ( "No audio track counld be found from file." );
 		}
-		me.selectTrack(soundtrackIndex);
+		me.selectTrack ( soundtrackIndex );
 		//创建解码器
 		MediaCodec mc=MediaCodec.createDecoderByType ( mime );
 		mc.configure ( md, null, null, 0 );
-		
+
 		mc.setCallback ( new MediaCodec.Callback ( ){
 
-			int role=0;
+				int role=0;
 				@Override
 				public void onInputBufferAvailable ( MediaCodec p1, int p2 )
 				{
-					if(isdecoded){return;}
-					if(role==0){me.advance();}
-					// TODO: Implement this method
+					//如果解码完成，直接停止输入数据
+					if ( isdecoded )
+					{return;}
+					//role:输入次数
 					role++;
 					int len=me.readSampleData ( p1.getInputBuffer ( p2 ), 0 );
-					me.advance();
+					//读取完数据后，移入下一帧
+					me.advance ( );
 					if ( len < 0 )
-					{
+					{//如果数据读完，通知解码器
 						p1.queueInputBuffer ( p2, 0, 0, 0, p1.BUFFER_FLAG_END_OF_STREAM );
 					}
 					else
@@ -236,18 +252,20 @@ public class AudioFormatHelper
 				public void onOutputBufferAvailable ( MediaCodec p1, int p2, MediaCodec.BufferInfo p3 )
 				{
 					if ( p3.flags == p1.BUFFER_FLAG_END_OF_STREAM )
-					{
+					{//如果解码器提示数据读完，停止输入数据，通知主线程
 						isdecoded = true;
 						return;
 					}
 					else
 					{
-							byte[] b=new byte[p1.getOutputBuffer(p2).remaining()];
-							p1.getOutputBuffer(p2).get(b,0,b.length);
-							p1.getOutputBuffer(p2).clear();
-							decodeddata.write ( b,0,b.length);
-							p1.releaseOutputBuffer(p2,false);
-						}
+						//从解码器读取数据
+						byte[] b=new byte[p1.getOutputBuffer ( p2 ).remaining ( )];
+						p1.getOutputBuffer ( p2 ).get ( b, 0, b.length );
+						p1.getOutputBuffer ( p2 ).clear ( );
+						//将数据写入ByteStream
+						decodeddata.write ( b, 0, b.length );
+						p1.releaseOutputBuffer ( p2, false );
+					}
 
 					// TODO: Implement this method
 
@@ -262,7 +280,7 @@ public class AudioFormatHelper
 				@Override
 				public void onOutputFormatChanged ( MediaCodec p1, MediaFormat p2 )
 				{
-				
+
 					// TODO: Implement this method
 				}
 			} );
@@ -278,6 +296,7 @@ public class AudioFormatHelper
 		mc.stop ( );
 		mc.release ( );
 		me.release ( );
+		isProcessed = true;
 		return false;
 	}
 	//由pcm格式数据获取wav的文件头
@@ -341,5 +360,11 @@ public class AudioFormatHelper
 		//文件头生成完成
 		return header;
 	}
+	public void recycle ( )
+	{
+		decodeddata.reset ( );
+		isdecoded = false;
+	}
+
 
 }
