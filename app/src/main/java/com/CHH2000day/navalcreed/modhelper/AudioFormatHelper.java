@@ -104,18 +104,23 @@ public class AudioFormatHelper
 					in = mcontext.getContentResolver ( ).openInputStream ( srcFileUri );
 				}
 				byte[] b=new byte[4];
+				in.read(b);
 				if ( Arrays.equals ( b, HEADER_WAV ) )
 				{
 					//若是，直接读取为已解码数据，并跳过添加文件头
 					isUnneededtocompress = true;
+					if(decodeddata==null){
+						decodeddata=new ByteArrayOutputStream();
+					}
 					decodeddata.reset ( );
 					decodeddata.write ( HEADER_WAV, 0, HEADER_WAV.length );
-					byte[] cache=new byte[1024 * 256];
+					byte[] cache=new byte[1024];
 					int len;
 					while ( ( len = in.read ( cache ) ) > 0 )
 					{
 						decodeddata.write ( cache, 0, len );
 					}
+					in.close();
 				}
 				else
 				{
@@ -240,8 +245,6 @@ public class AudioFormatHelper
 					//role:输入次数
 					role++;
 					int len=me.readSampleData ( p1.getInputBuffer ( p2 ), 0 );
-					//读取完数据后，移入下一帧
-					me.advance ( );
 					if ( len < 0 )
 					{//如果数据读完，通知解码器
 						p1.queueInputBuffer ( p2, 0, 0, 0, p1.BUFFER_FLAG_END_OF_STREAM );
@@ -250,6 +253,9 @@ public class AudioFormatHelper
 					{
 						p1.queueInputBuffer ( p2, 0, len, 0, 0 );
 					}
+					//读取完数据后，移入下一帧
+					me.advance ( );
+					
 
 				}
 
@@ -267,10 +273,10 @@ public class AudioFormatHelper
 						byte[] b=new byte[p1.getOutputBuffer ( p2 ).remaining ( )];
 						p1.getOutputBuffer ( p2 ).get ( b, 0, b.length );
 						p1.getOutputBuffer ( p2 ).clear ( );
+						p1.releaseOutputBuffer ( p2, false );
 						//将数据写入ByteStream
 						decodeddata.write ( b, 0, b.length );
-						p1.releaseOutputBuffer ( p2, false );
-					}
+						}
 
 					// TODO: Implement this method
 
@@ -367,7 +373,8 @@ public class AudioFormatHelper
 	}
 	public void recycle ( )
 	{
-		decodeddata.reset ( );
+		if(decodeddata!=null){
+		decodeddata.reset ( );}
 		isdecoded = false;
 	}
 
