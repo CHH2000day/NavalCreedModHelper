@@ -214,7 +214,7 @@ public class BGMReplacerFragment extends FunctionFragment
 						}
 					};
 					ad.show ( );
-					final AudioFormatHelper afh=new AudioFormatHelper ( srcfile, getActivity ( ) );
+					final AudioFormatHelper afh=FormatHelperFactory.getAudioFormatHelper ( srcfile, getActivity ( ) );
 					new Thread ( ){
 						public void run ( )
 						{
