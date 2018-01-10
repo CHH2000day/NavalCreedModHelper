@@ -13,8 +13,12 @@ public class AudioFormatHelper
 {
 	//源文件
 	protected File srcFile;
-	private File mTargetFile;
+	//private File mTargetFile;
+	//转码时的缓存文件
 	private File cacheFile;
+
+	private HashMap<File,Boolean> valids;
+	private ArrayList<File> cachedFiles;
 	protected Uri srcFileUri;
 	protected Context mcontext;
 	/*
@@ -39,6 +43,7 @@ public class AudioFormatHelper
 	private int mChannel = AudioFormat.CHANNEL_IN_STEREO; //立体声
 	private int mEncoding = AudioFormat.ENCODING_PCM_16BIT;
 
+	public static final int MODE_DENY_ALL_CACHE=-15;
 
 	//文件格式magic number
 	//.wav:RIFF
@@ -60,17 +65,18 @@ public class AudioFormatHelper
 		init ( );
 		this.srcFile = audioFile;
 		mcontext = context;
-		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
 	}
 	public AudioFormatHelper ( Uri audioFilePath, Context context )
 	{
 		init ( );
 		srcFileUri = audioFilePath;
 		mcontext = context;
-		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
 	}
 	private void init ( )
 	{
+		cachedFiles = new ArrayList<File> ( );
+		valids = new HashMap<File,Boolean> ( );
+		mBufferSize = AudioRecord.getMinBufferSize ( mSampleRate, mChannel, mEncoding );
 		mEmptyHandler = new Handler ( ){
 
 			@Override
@@ -96,9 +102,9 @@ public class AudioFormatHelper
 		String errorcode="";
 		UIHandler.sendEmptyMessage ( STATUS_START );
 		InputStream in=null;
-		if ( !isProcessed )
-		{mTargetFile = targetFile;
-			try
+		File cachedFile=getValidCacheFile ( );
+		if ( !isProcessed || cachedFile == null )
+		{	try
 			{
 				//验证源文件是否已为wav格式
 				if ( srcFile != null )
@@ -148,9 +154,11 @@ public class AudioFormatHelper
 		try
 		{
 			UIHandler.sendEmptyMessage ( STATUS_WRITING );
-			if ( isProcessed && mTargetFile != null && mTargetFile.exists ( ) )
+			FormatHelperFactory.refreshCache ( targetFile );
+			//如果存在已处理好的缓存文件，直接复制
+			if ( isProcessed && cachedFile != null && cachedFile.exists ( ) )
 			{
-				Utils.copyFile ( mTargetFile, targetFile );
+				Utils.copyFile ( cachedFile, targetFile );
 
 			}
 			else
@@ -171,6 +179,7 @@ public class AudioFormatHelper
 				}
 				else
 				{
+					//从缓存文件读取数据并处理
 					FileInputStream fis=new FileInputStream ( cacheFile );
 					f.write ( getWavHeader ( fis.available ( ) ) );	
 					int len;
@@ -186,6 +195,7 @@ public class AudioFormatHelper
 				if ( in != null )
 				{
 					in.close ( );}
+				activeCache ( targetFile );
 			}
 
 		}
@@ -433,15 +443,67 @@ public class AudioFormatHelper
 		//文件头生成完成
 		return header;
 	}
+
+
+	//回收使用后的临时资源
 	public void recycle ( )
 	{
 		/*if ( decodeddata != null )
+		 {
+		 decodeddata.reset ( );}*/
+		if ( cacheFile != null )
 		{
-			decodeddata.reset ( );}*/
-		if(cacheFile!=null){
-			cacheFile.delete();
+			cacheFile.delete ( );
 		}
 		isdecoded = false;
+	}
+
+	//使缓存失效
+	public void denyCache ( File file, int mode )
+	{
+		if ( MODE_DENY_ALL_CACHE == mode )
+		{
+			valids.clear ( );
+		}
+		else
+		{
+			if ( file != null )
+			{
+				if ( cachedFiles.contains ( file ) )
+				{
+					valids.put ( file, new Boolean ( false ) );
+				}
+			}
+		}
+	}
+	public void denyCache ( File file )
+	{
+		denyCache ( file, 0 );
+	}
+
+	//激活已转码为wav的缓存文件
+	protected void activeCache ( File file )
+	{
+		if ( !cachedFiles.contains ( file ) )
+		{
+			cachedFiles.add ( file );
+		}
+		valids.put ( file, new Boolean ( true ) );
+	}
+	private File getValidCacheFile ( )
+	{
+		if ( cachedFiles.size ( ) == 0 )
+		{
+			return null;
+		}
+		for ( File f:cachedFiles )
+		{
+			if ( valids.get ( f ) )
+			{
+				return f;
+			}
+		}
+		return null;
 	}
 
 

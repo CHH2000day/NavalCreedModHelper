@@ -111,6 +111,8 @@ public class BGMReplacerFragment extends FunctionFragment
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
 							{
+								//注销所有缓存文件
+								FormatHelperFactory.denyAllCaches();
 								String s=Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
@@ -134,6 +136,8 @@ public class BGMReplacerFragment extends FunctionFragment
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
 							{
+								//注销所有缓存
+								FormatHelperFactory.denyAllCaches();
 								String s=Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method

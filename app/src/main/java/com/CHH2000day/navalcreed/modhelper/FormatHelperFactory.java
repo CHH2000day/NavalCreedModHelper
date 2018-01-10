@@ -2,6 +2,7 @@ package com.CHH2000day.navalcreed.modhelper;
 import android.net.*;
 import android.content.*;
 import java.util.*;
+import java.io.*;
 
 public class FormatHelperFactory
 {
@@ -20,6 +21,36 @@ public class FormatHelperFactory
 			audiohelpers.put ( file, afh );
 		}
 		return afh;
+	}
+	public static void refreshCache ( File file )
+	{
+		if ( audiohelpers == null )
+		{
+			return;
+		}
+		Collection c=audiohelpers.values ( );
+		Iterator i=c.iterator ( );
+		while ( i.hasNext ( ) )
+		{
+			AudioFormatHelper afh=(AudioFormatHelper)i.next ( );
+			afh.denyCache ( file );
+		}
+
+
+	}
+	public static void denyAllCaches ( )
+	{
+		if ( audiohelpers == null )
+		{
+			return;
+		}
+		Collection c=audiohelpers.values ( );
+		Iterator i=c.iterator ( );
+		while ( i.hasNext ( ) )
+		{
+			AudioFormatHelper afh=(AudioFormatHelper)i.next ( );
+			afh.denyCache ( null, afh.MODE_DENY_ALL_CACHE );
+		}
 
 	}
 }
