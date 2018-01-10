@@ -492,7 +492,7 @@ public class AudioFormatHelper
 	}
 	private File getValidCacheFile ( )
 	{
-		if ( cachedFiles.size ( ) == 0 )
+		if ( cachedFiles.isEmpty() || valids.isEmpty ( ) )
 		{
 			return null;
 		}
