@@ -10,7 +10,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 30
-        versionName "2.6.2 beta"
+        versionName "2.6.3 beta"
     }
     buildTypes {
         release {
