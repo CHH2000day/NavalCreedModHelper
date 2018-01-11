@@ -6,13 +6,13 @@ import java.io.*;
 
 public class FormatHelperFactory
 {
-	private static TreeMap<Uri,AudioFormatHelper> audiohelpers;
+	private static HashMap<Uri,AudioFormatHelper> audiohelpers;
 	public static AudioFormatHelper getAudioFormatHelper ( Uri file, Context ctx )
 	{
 		AudioFormatHelper afh=null;
 		if ( audiohelpers == null )
 		{
-			audiohelpers = new TreeMap<Uri,AudioFormatHelper> ( );
+			audiohelpers = new HashMap<Uri,AudioFormatHelper> ( );
 		}
 		afh = audiohelpers.get ( file );
 		if ( afh == null )
