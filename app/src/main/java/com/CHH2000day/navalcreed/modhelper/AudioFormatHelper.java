@@ -492,13 +492,13 @@ public class AudioFormatHelper
 	}
 	private File getValidCacheFile ( )
 	{
-		if ( cachedFiles.isEmpty() || valids.isEmpty ( ) )
+		if ( cachedFiles.isEmpty ( ) || valids.isEmpty ( )  )
 		{
 			return null;
 		}
 		for ( File f:cachedFiles )
 		{
-			if ( valids.get ( f ) )
+			if ( ( valids.get ( f ) != null ) && valids.get ( f ) )
 			{
 				return f;
 			}
