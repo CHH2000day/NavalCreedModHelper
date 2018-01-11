@@ -18,6 +18,7 @@ import android.view.View.OnLongClickListener;
 import java.nio.channels.*;
 import android.net.*;
 import android.support.v7.app.AppCompatActivity;
+import android.graphics.*;
 public class BGMReplacerFragment extends FunctionFragment
 {
 
@@ -206,7 +207,7 @@ public class BGMReplacerFragment extends FunctionFragment
 								case AudioFormatHelper.STATUS_ERROR:
 									String s=progress.getText ( ).toString ( );
 									Exception e=(Exception)msg.obj;
-									progress.setText ( s + "\n" + e.getMessage ( ) );
+									progress.setText ( s + "\n" + "操作出错:" + e.getMessage ( ) );
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
 									mon.ondone ( );
@@ -442,12 +443,14 @@ public class BGMReplacerFragment extends FunctionFragment
 	{
 		private Button button;
 		private AlertDialog ad;
+		private int color;
 		public Monitor ( AlertDialog dialog )
 		{
 			ad = dialog;
 		}
 		public void ondone ( )
 		{
+			button.setTextColor(color);
 			button.setClickable ( true );
 		}
 
@@ -464,8 +467,9 @@ public class BGMReplacerFragment extends FunctionFragment
 						// TODO: Implement this method
 					}
 				} );
+			color=button.getCurrentTextColor();
 			button.setClickable ( false );
-			
+			button.setTextColor(Color.GRAY);
 			// TODO: Implement this method
 		}
 
