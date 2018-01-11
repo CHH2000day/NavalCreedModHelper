@@ -459,7 +459,7 @@ public class AudioFormatHelper
 	}
 
 	//使缓存失效
-	public void denyCache ( File file, int mode )
+	public synchronized void denyCache ( File file, int mode )
 	{
 		if ( MODE_DENY_ALL_CACHE == mode )
 		{
@@ -482,7 +482,7 @@ public class AudioFormatHelper
 	}
 
 	//激活已转码为wav的缓存文件
-	protected void activeCache ( File file )
+	protected synchronized void activeCache ( File file )
 	{
 		if ( !cachedFiles.contains ( file ) )
 		{
@@ -490,7 +490,7 @@ public class AudioFormatHelper
 		}
 		valids.put ( file, new Boolean ( true ) );
 	}
-	private File getValidCacheFile ( )
+	private synchronized File getValidCacheFile ( )
 	{
 		if ( cachedFiles.isEmpty ( ) || valids.isEmpty ( )  )
 		{

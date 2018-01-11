@@ -22,7 +22,7 @@ public class FormatHelperFactory
 		}
 		return afh;
 	}
-	public static void refreshCache ( File file )
+	public synchronized static void refreshCache ( File file )
 	{
 		if ( audiohelpers == null )
 		{
@@ -38,7 +38,7 @@ public class FormatHelperFactory
 
 
 	}
-	public static void denyAllCaches ( )
+	public synchronized static void denyAllCaches ( )
 	{
 		if ( audiohelpers == null )
 		{
