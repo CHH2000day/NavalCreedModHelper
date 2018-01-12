@@ -1,0 +1,19 @@
+**
+Android Open Source Project
+lib:android.support.*
+**
+Copyright (c) 2005-2013, The Android Open Source Project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+http://www.apache.org/licenses/LICENSE-2.0
+
+**
+Okio,OkHttp
+lib:com.squareup.okio 
+https://github.com/square/okio
+lib:com.squareup.okhttp3
+https://github.com/square/okhttp
+**
+Copyright(C) 2013,Square,Inc,
+ Licensed under the Apache License, Version 2.0 (the "License");
+http://www.apache.org/licenses/LICENSE-2.0
