@@ -186,7 +186,7 @@ public class CrewPicReplacerFragment extends FunctionFragment
 			.append ( "crewhead" )
 			.append ( File.separatorChar )
 			.append ( countrys [ country ] )
-			.append ( "/" )
+			.append ( File.separatorChar )
 			.append ( ( num + 1 ) )
 			.append ( ".png" )
 			.toString ( );
