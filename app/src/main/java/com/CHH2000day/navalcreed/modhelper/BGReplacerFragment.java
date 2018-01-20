@@ -188,6 +188,9 @@ public class BGReplacerFragment extends FunctionFragment
 				picname.setText(data.getData().toString());
 				
 			}
+			catch(OutOfMemoryError r){
+				Snackbar.make(v,"文件过大，内存溢出",Snackbar.LENGTH_LONG).show();
+			}
 			catch (final Throwable t)
 			{
 				t.printStackTrace();
