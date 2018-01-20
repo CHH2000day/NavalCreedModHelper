@@ -475,8 +475,8 @@ public class Main extends AppCompatActivity
 										final AlertDialog d=db.create();
 										d.setCanceledOnTouchOutside(false);
 										d.show();
-										final File distfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
-										tgtfile.download ( distfile, new DownloadFileListener ( ){
+										final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
+										tgtfile.download ( destfile, new DownloadFileListener ( ){
 
 												@Override
 												public void done ( String p1, BmobException p2 )
@@ -488,12 +488,12 @@ public class Main extends AppCompatActivity
 													i.setFlags ( Intent.FLAG_ACTIVITY_NEW_TASK );
 													if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N )
 													{
-														data = FileProvider.getUriForFile ( Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", distfile );
+														data = FileProvider.getUriForFile ( Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", destfile );
 														i.addFlags ( i.FLAG_GRANT_READ_URI_PERMISSION );
 													}
 													else
 													{
-														data = Uri.fromFile ( distfile );
+														data = Uri.fromFile ( destfile );
 													}
 													i.setDataAndType ( data, "application/vnd.android.package-archive" );
 													startActivity ( i );
