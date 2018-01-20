@@ -213,7 +213,8 @@ public class BGMReplacerFragment extends FunctionFragment
 									mon.ondone ( );
 									break;
 								case 1:
-									Snackbar.make ( v, (String)msg.obj, Snackbar.LENGTH_LONG ).show ( );
+									//停用该功能以避免IllegalArgumentException
+									//Snackbar.make ( v, (String)msg.obj, Snackbar.LENGTH_LONG ).show ( );
 									break;
 							}
 						}
