@@ -41,7 +41,8 @@ public class LoginMovieReplacer extends Fragment
 				{
 					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
-					startActivityForResult ( intent, QUERY_CODE );
+					intent.addCategory(intent.CATEGORY_OPENABLE);
+					startActivityForResult ( intent.createChooser(intent,"请选择文件选择器"), QUERY_CODE );
 
 					// TODO: Implement this method
 				}

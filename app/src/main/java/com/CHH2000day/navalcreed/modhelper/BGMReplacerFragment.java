@@ -47,7 +47,8 @@ public class BGMReplacerFragment extends FunctionFragment
 	public static final int TYPE_BATTLEVICTORY=15;
 	public static final int TYPE_BATTLEFAIL=16;
 
-
+	private static final int QUERY_CODE=2;
+	
 	private ModHelperApplication mapplication;
 	private FileNameAdapter mfilenameadapter;
 	private View v;
@@ -89,7 +90,8 @@ public class BGMReplacerFragment extends FunctionFragment
 				public void onClick ( View p1 )
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
-					startActivityForResult ( intent, 2 );
+					intent.addCategory(intent.CATEGORY_OPENABLE);
+					startActivityForResult ( intent.createChooser(intent,"请选择文件选择器"), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -366,7 +368,7 @@ public class BGMReplacerFragment extends FunctionFragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if ( requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK )
+		if ( requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK )
 		{
 			if ( data != null )
 			{
