@@ -90,7 +90,12 @@ public class Main extends AppCompatActivity
 		mLoginMovieReplacer = new LoginMovieReplacer ( );
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
+		//如果系统版本为Lollipop前的旧设备，使用旧的BGM转码器
+		if(Build.VERSION_CODES.LOLLIPOP>Build.VERSION.SDK_INT){
+			mBGMReplacerFragment=new BGMReplacerFragmentSDK19B();
+		}else{
 		mBGMReplacerFragment = new BGMReplacerFragment ( );
+		}
 		//进行数据配置
 		fragments = new ArrayList<Fragment> ( );
 		fragments.add ( mBGReplacerFragment );

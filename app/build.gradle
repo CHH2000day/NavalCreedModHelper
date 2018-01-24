@@ -7,7 +7,7 @@ android {
 	
     defaultConfig {
         applicationId "com.CHH2000day.navalcreed.modhelper"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 31
         versionName "2.6.4"
