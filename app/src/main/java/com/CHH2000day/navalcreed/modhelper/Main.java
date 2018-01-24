@@ -55,7 +55,7 @@ public class Main extends AppCompatActivity
 		mupdateHandler = new Handler ( ){
 			public void handleMessage ( final Message msg )
 			{
-				
+
 				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
 				adb.create ( ).show ( );
 
@@ -109,86 +109,12 @@ public class Main extends AppCompatActivity
 		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
 		mViewPager.setAdapter ( mAdapter );
 		mTabLayout.setupWithViewPager ( mViewPager );
+		checkVality();
+		new UpdateThread ( ).start ( );
+		new AnnouncementThread ( ).start ( );
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
-			String filepath;
-			if ( TextUtils.isEmpty ( getIntent ( ).getData ( ).getPath ( ) ) )
-			{
-				return;
-			}
-			filepath = getIntent ( ).getData ( ).getPath ( );
-			try
-			{
-				final ZipFile mzipfile=new ZipFile ( filepath );
-				AlertDialog ad1;
-				AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
-				adb.setTitle ( "确定要继续么" )
-					.setMessage ( new StringBuilder ( )
-								 .append ( "确定要安装mod文件:" )
-								 .append ( filepath )
-								 .append ( " " )
-								 .append ( "么？" )
-								 .append ( "\n" )
-								 .append ( "安装该mod文件可能对游戏/设备造成损坏，请确认该mod文件来自于可信渠道" )
-								 .toString ( ) )
-					.setNegativeButton ( "取消", null )
-					.setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
-
-						@Override
-						public void onClick ( DialogInterface p1, int p2 )
-						{
-							AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
-							adbb.setTitle ( "正在安装mod文件，请稍等" )
-								.setMessage ( "正在安装mod，所需时间由mod文件大小及设备性能所决定" )
-								.setCancelable ( false );
-							final AlertDialog dialog=adbb.create ( );
-							dialog.setCanceledOnTouchOutside ( false );
-							dialog.show ( );
-							final Handler h=new Handler ( ){
-								public void handleMessage ( Message msg )
-								{
-									dialog.dismiss ( );
-									if ( msg.what != 0 )
-									{
-										Snackbar.make ( mViewPager, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-									}
-									else
-									{
-										Snackbar.make ( mViewPager, "操作完成", Snackbar.LENGTH_LONG ).show ( );
-
-									}
-								}
-							};
-							new Thread ( ){
-								public void run ( )
-								{try
-									{
-										Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
-										h.sendEmptyMessage ( 0 );
-									}
-									catch (IOException e)
-									{
-										h.sendMessage ( h.obtainMessage ( 1, e ) );
-									}
-								}
-							}.start ( );
-
-							// TODO: Implement this method
-						}
-					} )
-					.setCancelable ( false );
-				ad1 = adb.create ( );
-				ad1.setCanceledOnTouchOutside ( false );
-				ad1.show ( );
-
-			}
-			catch (IOException e)
-			{
-				Snackbar.make ( mViewPager, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-				return;
-			}
-
-
+			installModPackageBeta(getIntent().getData().getPath());	
 		}
 	}
 
@@ -198,6 +124,100 @@ public class Main extends AppCompatActivity
 		// TODO: Implement this method
 
 		super.onStart ( );
+
+		
+	}
+
+	@Override
+	protected void onResume ( )
+	{
+		// TODO: Implement this method
+		super.onResume ( );
+		checkPermission ( );
+	}
+
+
+
+	private void installModPackageBeta(String path){
+		String filepath;
+		if ( TextUtils.isEmpty ( path ))
+		{
+			return;
+		}
+		filepath = path;
+		try
+		{
+			final ZipFile mzipfile=new ZipFile ( filepath );
+			AlertDialog ad1;
+			AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+			adb.setTitle ( "确定要继续么" )
+				.setMessage ( new StringBuilder ( )
+							 .append ( "确定要安装mod文件:" )
+							 .append ( filepath )
+							 .append ( " " )
+							 .append ( "么？" )
+							 .append ( "\n" )
+							 .append ( "安装该mod文件可能对游戏/设备造成损坏，请确认该mod文件来自于可信渠道" )
+							 .toString ( ) )
+				.setNegativeButton ( "取消", null )
+				.setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
+
+					@Override
+					public void onClick ( DialogInterface p1, int p2 )
+					{
+						AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
+						adbb.setTitle ( "正在安装mod文件，请稍等" )
+							.setMessage ( "正在安装mod，所需时间由mod文件大小及设备性能所决定" )
+							.setCancelable ( false );
+						final AlertDialog dialog=adbb.create ( );
+						dialog.setCanceledOnTouchOutside ( false );
+						dialog.show ( );
+						final Handler h=new Handler ( ){
+							public void handleMessage ( Message msg )
+							{
+								dialog.dismiss ( );
+								if ( msg.what != 0 )
+								{
+									Snackbar.make ( mViewPager, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+								}
+								else
+								{
+									Snackbar.make ( mViewPager, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+
+								}
+							}
+						};
+						new Thread ( ){
+							public void run ( )
+							{try
+								{
+									Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
+									h.sendEmptyMessage ( 0 );
+								}
+								catch (IOException e)
+								{
+									h.sendMessage ( h.obtainMessage ( 1, e ) );
+								}
+							}
+						}.start ( );
+
+						// TODO: Implement this method
+					}
+				} )
+				.setCancelable ( false );
+			ad1 = adb.create ( );
+			ad1.setCanceledOnTouchOutside ( false );
+			ad1.show ( );
+
+		}
+		catch (IOException e)
+		{
+			Snackbar.make ( mViewPager, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+			return;
+		}
+	}
+	private void checkVality ( )
+	{
 		//进行检查
 		AlertDialog.Builder adb_ver=new AlertDialog.Builder ( this );
 		adb_ver.setCancelable ( false );
@@ -213,7 +233,7 @@ public class Main extends AppCompatActivity
 				{
 					case -1:
 						//测试版可用
-						ad_ver.dismiss();
+						ad_ver.dismiss ( );
 						break;
 					case 0:
 						//测试版不可用
@@ -222,7 +242,7 @@ public class Main extends AppCompatActivity
 								@Override
 								public void onClick ( View p1 )
 								{
-									finish();
+									finish ( );
 									// TODO: Implement this method
 								}
 							} ).show ( ) ;
@@ -233,25 +253,11 @@ public class Main extends AppCompatActivity
 		};
 		if ( StaticData.DATAID_BETA.equals ( StaticData.getDataid ( ) ) )
 		{
-			ad_ver.show();
+			ad_ver.show ( );
 
 		}
-		
-		new UpdateThread ( ).start ( );
-		new AnnouncementThread ( ).start ( );
 
 	}
-
-	@Override
-	protected void onResume ( )
-	{
-		// TODO: Implement this method
-		super.onResume ( );
-		checkPermission ( );
-	}
-
-
-
 	public void checkPermission ( )
 	{
 		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
@@ -441,9 +447,11 @@ public class Main extends AppCompatActivity
 						{
 							if ( !universalobj.isAvail ( ) )
 							{
-								mvercheckHandler.sendEmptyMessage(0);
-							}else{
-								mvercheckHandler.sendEmptyMessage(-1);
+								mvercheckHandler.sendEmptyMessage ( 0 );
+							}
+							else
+							{
+								mvercheckHandler.sendEmptyMessage ( -1 );
 							}
 						}
 						int serverver=universalobj.getVersion ( ).intValue ( );
@@ -468,20 +476,20 @@ public class Main extends AppCompatActivity
 											return;
 										}
 										Snackbar.make ( mViewPager, "开始下载", Snackbar.LENGTH_LONG ).show ( );
-										AlertDialog.Builder db=new AlertDialog.Builder(Main.this);
-										db.setTitle("正在下载")
-										.setMessage("请稍等")
-										.setCancelable(false);
-										final AlertDialog d=db.create();
-										d.setCanceledOnTouchOutside(false);
-										d.show();
+										AlertDialog.Builder db=new AlertDialog.Builder ( Main.this );
+										db.setTitle ( "正在下载" )
+											.setMessage ( "请稍等" )
+											.setCancelable ( false );
+										final AlertDialog d=db.create ( );
+										d.setCanceledOnTouchOutside ( false );
+										d.show ( );
 										final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
 										tgtfile.download ( destfile, new DownloadFileListener ( ){
 
 												@Override
 												public void done ( String p1, BmobException p2 )
 												{
-													d.dismiss();
+													d.dismiss ( );
 													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
 													Intent i=new Intent ( Intent.ACTION_VIEW );
 													Uri data;
