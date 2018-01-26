@@ -29,7 +29,7 @@
 			
         </activity>
 		<activity
-			android:name=".ModPackageActvity"
+			android:name=".ModPackageInstallerActvity"
 			android:label="@string/modpkginstaller_name" >
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
@@ -39,6 +39,12 @@
 				<data android:mimeType="*/*" />
 				<data android:pathPattern=".*\\.ncvcp" />
 			</intent-filter>
+			<!--该intent-filter仅供测试使用-->
+			<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 		</activity>
 			
 		<provider

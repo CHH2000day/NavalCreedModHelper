@@ -1,31 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/drawer_layout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:fitsSystemWindows="true">
+	android:fitsSystemWindows="true"
+	tools:openDrawer="start">
 
-	<android.support.design.widget.AppBarLayout
+	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:theme="@style/AppTheme.AppBarOverlay">
+		android:layout_height="match_parent"
+		android:orientation="vertical">
 
-		<android.support.v7.widget.Toolbar
-			android:id="@+id/toolbar"
+		<android.support.design.widget.AppBarLayout
 			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="?attr/colorPrimary"
-			app:popupTheme="@style/AppTheme.PopupOverlay"/>
+			android:layout_height="wrap_content"
+			android:theme="@style/AppTheme.AppBarOverlay">
 
-	</android.support.design.widget.AppBarLayout>
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/modinstallertoolbar"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:background="?attr/colorPrimary"
+				app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-	<RelativeLayout
-		android:id="@+id/modpackageinstaller_main_mainview"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="#ffffff"/>
+		</android.support.design.widget.AppBarLayout>
+
+		<RelativeLayout
+			android:id="@+id/modpackageinstaller_main_mainview"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="取消"
+				android:layout_alignParentLeft="true"
+				android:layout_alignParentBottom="true"
+				android:id="@+id/modpackageinstallermainButton1"/>
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="安装"
+				android:layout_alignParentEnd="true"
+				android:layout_alignParentBottom="true"
+				android:layout_toLeftOf="@id/modpackageinstallermainButton1"
+				android:layout_toRightOf="@id/modpackageinstallermainButton1"
+				android:id="@+id/modinfopageButton2"/>
+
+			<TextView
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="Mod名"
+				android:id="@+id/modinfopageTextView1"
+				android:layout_alignParentTop="true"/>
+
+			<TextView
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="Mod类型"
+				android:layout_below="@id/modinfopageTextView1"
+				android:id="@+id/modinfopageTextView2"/>
+
+			<TextView
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="作者"
+				android:layout_below="@id/modinfopageTextView2"
+				android:id="@+id/modinfopageTextView3"/>
+
+			<Button
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:text="查看预览图"
+				android:layout_below="@id/modinfopageTextView3"
+				android:layout_centerHorizontal="true"
+				android:id="@+id/modinfopageButton1"/>
+
+		</RelativeLayout>
+
+	</LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
-    
 
