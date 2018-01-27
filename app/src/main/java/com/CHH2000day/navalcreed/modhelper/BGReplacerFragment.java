@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.support.design.widget.*;
 import android.support.annotation.*;
 import android.net.*;
+import java.lang.ref.*;
 
 public class BGReplacerFragment extends FunctionFragment
 {
@@ -183,8 +184,11 @@ public class BGReplacerFragment extends FunctionFragment
 					//手动释放以防止Bitmap未被释放
 				}
 				Uri u=data.getData();
-				
-				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(u));
+				InputStream in=getActivity().getContentResolver().openInputStream(u);
+				//ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(u));
+				SoftReference sr=new SoftReference(BitmapFactory.decodeStream(in));
+				ba=(Bitmap)sr.get();
+				in.close();
 				picname.setText(data.getData().toString());
 				
 			}
