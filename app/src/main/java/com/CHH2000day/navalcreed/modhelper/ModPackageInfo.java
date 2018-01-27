@@ -159,7 +159,7 @@ public class ModPackageInfo
 			mpi.setModAuthor(jo.getString(mpi.KEY_MODAUTHOR));
 			mpi.setModInfo(jo.getString(mpi.KEY_MODINFO));
 			mpi.setModTargetVer(jo.getInt(mpi.KEY_TARGETVER));
-			//检查是否有预览图
+			//检查是否有预览图并解码
 			if(jo.getBoolean(mpi.KEY_HASPREVIEW)){
 				byte[] piccache=Base64.decode(jo.getString(mpi.KEY_PREVIEW));
 				mpi.setModPreview(BitmapFactory.decodeByteArray(piccache,0,piccache.length));
