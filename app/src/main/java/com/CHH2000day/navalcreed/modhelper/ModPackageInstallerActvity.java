@@ -6,24 +6,51 @@ import android.support.v7.widget.*;
 import android.content.*;
 import android.widget.RelativeLayout;
 import android.support.v4.app.*;
+import android.support.design.widget.*;
 
 public class ModPackageInstallerActvity extends AppCompatActivity
 {
 	private Toolbar mtoolbar;
 	private RelativeLayout mrl;
-	private String mcurrentFragmentTAG;
+	private String mPkgPath;
 	private static final int ID_MAINVIEW=R.id.modpackageinstaller_main_mainview;
-;
+
 	@Override
 	protected void onCreate ( Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
 		super.onCreate ( savedInstanceState );
+		//初始化UI
 		setContentView(R.layout.modpackageinstaller_main);
 		mtoolbar=(Toolbar)findViewById(R.id.modinstallertoolbar);
 		setSupportActionBar(mtoolbar);
 		mrl=(RelativeLayout)findViewById(ID_MAINVIEW);
-		
+		if(getIntent().getData()!=null){
+		    mPkgPath=getIntent().getData().getPath();
+		}
+		if(getIntent().getData()==null||mPkgPath==null||mPkgPath.equals("")){
+		    Snackbar.make(mrl,"beta",Snackbar.LENGTH_LONG).show();
+			//如果要安装的文件为空，报错
+			//测试，暂不使用
+			/*
+			AlertDialog.Builder adb=new AlertDialog.Builder(this);
+			adb.setTitle("错误")
+				.setMessage("选择的文件不存在")
+				.setPositiveButton ( "退出", new DialogInterface.OnClickListener ( ){
+
+					@Override
+					public void onClick (DialogInterface p1, int p2)
+					{
+						finish();
+						// TODO: Implement this method
+					}
+				} )
+				.setCancelable(false);
+			AlertDialog ad=adb.create();
+			ad.setCanceledOnTouchOutside(false);
+			ad.show();
+			*/
+		}
 		}
 	@Override
 	public boolean onCreateOptionsMenu ( Menu menu )
