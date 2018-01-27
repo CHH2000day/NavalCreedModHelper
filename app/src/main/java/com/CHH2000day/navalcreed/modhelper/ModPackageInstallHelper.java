@@ -8,12 +8,21 @@ import java.util.*;
 import android.support.v7.app.*;
 import android.os.*;
 import okio.*;
+import android.view.*;
+import android.widget.*;
+import android.graphics.*;
+import android.view.View.*;
 
 public class ModPackageInstallHelper
 {
 	//常量声明
 	private static final String FILE_MODINFO="mod.info";
 	private static final String PRIMARYPATH_CV=File.separatorChar + "sound" + File.separatorChar + "Voice";
+	private static final String PRIMARYPATH_BGM=File.separatorChar + "sound" + File.separatorChar + "Music";
+	private static final String PRIMARYPATH_SOUNDEFFECT=File.separatorChar + "sound" + File.separatorChar + "soundeffect" + File.separatorChar + "ginsir";
+	private static final String PRIMARYPATH_BACKGROUND=File.separatorChar + "pic";
+	private static final String PRIMARYPATH_CREWHEAD=File.separatorChar + "pic" + File.separatorChar + "crewhead";
+	private static final String PRIMARYTYPE_OTHER="";
 	private static final String SUBPATH_CV_EN=File.separatorChar + "EnglishUsual";
 	private static final String SUBPATH_CV_CN=File.separatorChar + "ChineseUsual";
 
@@ -59,6 +68,42 @@ public class ModPackageInstallHelper
 	}
 	public void beginInstall ()
 	{
+		checkVersion ( );
+
+
+	}
+	/*文件有效性改为由作者验证，此处不再验证
+	 public boolean checkCVpackageValidity ()
+	 {
+	 return false;
+	 }*/
+	private void checkVersion ()
+	{
+		//检查是否能实现mod包的所有功能
+		if (!mmpi.hasAllFeature ( ))
+		{
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			adb.setTitle ( "注意" )
+				.setMessage ( "目前软件版本可能无法实现mod包里所有功能，是否继续？" )
+				.setNegativeButton ( "取消", null )
+				.setPositiveButton ( "继续", new DialogInterface.OnClickListener ( ){
+
+					@Override
+					public void onClick (DialogInterface p1, int p2)
+					{
+						checkModType ( );
+						// TODO: Implement this method
+					}
+				} );
+			adb.create ( ).show ( );
+		}
+		else
+		{
+			checkModType ( );
+		}
+	}
+	private void checkModType ()
+	{
 		//检查mod包类型
 		//如果mod包类型为语音包，确认安装位置
 		if (mmpi.getModType ( ).equals ( mmpi.MODTYPE_CV ))
@@ -94,13 +139,8 @@ public class ModPackageInstallHelper
 		}
 
 
-
 	}
-	/*文件有效性改为由作者验证，此处不再验证
-	 public boolean checkCVpackageValidity ()
-	 {
-	 return false;
-	 }*/
+
 	private void install ()
 	{
 
@@ -139,13 +179,30 @@ public class ModPackageInstallHelper
 		private Exception e;
 		private String mainPath;
 		private AlertDialog ad;
-		private int counts;
+		private int count;
+		private int totalcount;
+		private View dialogView;
+		private TextView stat;
+		private ProgressBar progressbar;
+		private DialogMonitor dm;
 		protected InstallTask (String modType, int subType)
 		{
 			mainPath = getPath ( modType, subType );
 		}
 		@Override
 		protected Boolean doInBackground (Void[] p1)
+		{
+			if (ModPackageInfo.Versions.VER_0==mmpi.getModTargetVer())
+			{
+				return installModVer0 ( );}
+			else
+			{
+				return installModVer0 ( );
+			}
+
+
+		}
+		private boolean installModVer0 ()
 		{
 			try
 			{
@@ -176,8 +233,8 @@ public class ModPackageInstallHelper
 							targetFile.delete ( );
 						}
 						targetFile.mkdirs ( );
-						counts++;
-						publishProgress(counts);
+						count++;
+						publishProgress ( count );
 					}
 					//非目录则为文件
 					else
@@ -202,8 +259,8 @@ public class ModPackageInstallHelper
 						}
 						bs.flush ( );
 						bs.close ( );
-						counts++;
-						publishProgress(counts);
+						count++;
+						publishProgress ( count );
 					}
 					zis.closeEntry ( );
 
@@ -224,15 +281,41 @@ public class ModPackageInstallHelper
 		@Override
 		protected void onPreExecute ()
 		{
+			dialogView = mactivty.getLayoutInflater ( ).inflate ( R.layout.dialog_installmodpkg, null );
+			stat = (TextView)dialogView.findViewById ( R.id.dialoginstallmodpkgStatus );
+			progressbar = (ProgressBar)dialogView.findViewById ( R.id.dialoginstallmodpkgProgress );
 			// TODO: Implement this method
-			super.onPreExecute ( );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			adb.setTitle ( "正在安装mod包" )
+				.setView ( dialogView )
+				.setPositiveButton ( "关闭", null )
+				.setCancelable ( false );
 
+			ad = adb.create ( );
+			ad.setCanceledOnTouchOutside ( false );
+			dm = new DialogMonitor ( ad );
+			ad.setOnShowListener ( dm );
+			ad.show ( );
 
 		}
 
 		@Override
 		protected void onPostExecute (Boolean result)
 		{
+			progressbar.setProgress ( progressbar.getMax ( ) );
+			dm.ondone ( );
+			if (result)
+			{
+				stat.setText ( "操作成功" );
+			}
+			else
+			{
+				String s=new StringBuilder ( ).append ( "操作失败:" )
+					.append ( "\n" )
+					.append ( e.getMessage ( ) ).toString ( );
+				stat.setText ( s );
+			}
+
 			// TODO: Implement this method
 			super.onPostExecute ( result );
 		}
@@ -240,24 +323,51 @@ public class ModPackageInstallHelper
 		@Override
 		protected void onProgressUpdate (Integer[] values)
 		{
-			// TODO: Implement this method
 			super.onProgressUpdate ( values );
+			if (totalcount == 0)
+			{
+				totalcount = mpkgFile.size ( );
+				progressbar.setMax ( totalcount );
+				progressbar.setIndeterminate ( false );
+				progressbar.setProgress ( 0, true );
+			}
+			progressbar.setProgress ( values[ 0 ], true );
+
+			// TODO: Implement this method
+
 		}
 		private class DialogMonitor implements DialogInterface.OnShowListener
 		{
-
-			public DialogMonitor ()
+			private AlertDialog alertdialog;
+			private Button button;
+			private int color;
+			public DialogMonitor (AlertDialog ad)
 			{
-
+				alertdialog = ad;
 			}
 			public void ondone ()
 			{
-
+				button.setTextColor ( color );
+				button.setClickable ( true );
 			}
 			@Override
 			public void onShow (DialogInterface p1)
-			{
+			{	button = alertdialog.getButton ( ad.BUTTON_POSITIVE );
+				button.setOnClickListener ( new OnClickListener ( ){
+
+						@Override
+						public void onClick (View p1)
+						{
+							ad.dismiss ( );
+							// TODO: Implement this method
+						}
+					} );
+				color = button.getCurrentTextColor ( );
+				button.setClickable ( false );
+				button.setTextColor ( Color.GRAY );
+
 				// TODO: Implement this method
+
 			}
 
 
