@@ -87,7 +87,7 @@ public class ModPackageInfo
 		this.modPreview = modPreview;
 	}
 
-	private boolean hasPreview(){
+	public boolean hasPreview(){
 		return (modPreview==null);
 	}
 	public Bitmap getModPreview ()
