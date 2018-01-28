@@ -13,8 +13,16 @@ import cn.bmob.v3.datatype.*;
 import android.support.design.widget.*;
 import android.content.*;
 
-public class CustomShipNameFragment extends FunctionFragment
+public class CustomShipNameFragment extends ModFragment
 {
+
+	@Override
+	public boolean uninstallMod ()
+	{
+		// TODO: Implement this method
+		return false;
+	}
+
 
 	
 	private View v;
@@ -154,12 +162,6 @@ public class CustomShipNameFragment extends FunctionFragment
 		// TODO: Implement this method
 		return v;
 	}
-	@Override
-	public boolean installMod (int typenum, int num, byte[] deceyptedFileData) throws IOException
-	{
-		// TODO: Implement this method
-		return false;
-		//Not finished
-	}
+	
 	
 }

@@ -228,13 +228,6 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		return v;
 	}
-	@Override
-	public boolean installMod ( int typenum, int num, byte[] deceyptedFileData )
-	{
-		// TODO: Implement this method
-		return false;
-		//Not finished
-	}
 	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (

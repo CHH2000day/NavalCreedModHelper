@@ -19,8 +19,16 @@ import java.nio.channels.*;
 import android.net.*;
 import android.support.v7.app.AppCompatActivity;
 import android.graphics.*;
-public class BGMReplacerFragment extends FunctionFragment
+public class BGMReplacerFragment extends ModFragment
 {
+
+	@Override
+	public boolean uninstallMod ()
+	{
+		// TODO: Implement this method
+		return false;
+	}
+
 
 
 	private static final int MUSICCOUNT_HARBOR=6;
@@ -286,13 +294,6 @@ public class BGMReplacerFragment extends FunctionFragment
 			} );
 	}
 	
-	@Override
-	public boolean installMod ( int typenum, int num, byte[] deceyptedFileData )
-	{
-		// TODO: Implement this method
-		return false;
-		//Not finished
-	}
 	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (

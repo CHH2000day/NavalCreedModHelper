@@ -16,8 +16,9 @@ public class ModHelperApplication extends Application
 	private File sdcard;
 	private File resfilesdir;
 	private String resfilePath="";
+	private static final String STOREDFILE_NAME="mod.install";
 //public static final String GAME_PKGNAME="com.loong.warship.zl";
-	public static final String GAME_PKGNAME="IARJisxjM8tihdkvzU52XrgfhNLAY1FK";
+	private static final String GAME_PKGNAME="IARJisxjM8tihdkvzU52XrgfhNLAY1FK";
 
 	private String pkg_name;
 	private boolean isMainPage=true;
@@ -49,8 +50,7 @@ public class ModHelperApplication extends Application
 			IceKeyHelper mhelper=new IceKeyHelper ( s.toByteArray ( ), 0 );
 			//pkg_name=Base64.encodeToString(mhelper.encrypt(GAME_PKGNAME.getBytes()),Base64.DEFAULT);
 			pkg_name = new String ( mhelper.decrypt ( Base64.decode ( GAME_PKGNAME, Base64.DEFAULT ) ) ).trim ( );
-
-			Log.e ( pkg_name, pkg_name );
+			ModPackageManager.getInstance().init(new File(getResFilesDir(),STOREDFILE_NAME));
 		}
 		catch (Exception e)
 		{}

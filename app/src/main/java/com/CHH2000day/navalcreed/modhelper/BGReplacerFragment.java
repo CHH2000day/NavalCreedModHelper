@@ -16,8 +16,16 @@ import android.support.annotation.*;
 import android.net.*;
 import java.lang.ref.*;
 
-public class BGReplacerFragment extends FunctionFragment
+public class BGReplacerFragment extends ModFragment
 {
+
+	@Override
+	public boolean uninstallMod ()
+	{
+		// TODO: Implement this method
+		return false;
+	}
+
 
 	
 	private static final String[] filename={"loadingbg1.jpg","loadingbg2.jpg","loadingbg3.jpg"};
@@ -157,14 +165,6 @@ public class BGReplacerFragment extends FunctionFragment
 			
 		}
 		super.onDestroy ( );
-	}
-	
-	@Override
-	public boolean installMod (int typenum, int num, byte[] deceyptedFileData) throws IOException
-	{
-		// TODO: Implement this method
-		return false;
-		//Not finished
 	}
 	
 	

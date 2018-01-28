@@ -10,8 +10,16 @@ import android.widget.AdapterView.*;
 import android.support.v7.app.*;
 import android.support.design.widget.*;
 
-public class CrewPicReplacerFragment extends FunctionFragment
+public class CrewPicReplacerFragment extends ModFragment
 {
+
+	@Override
+	public boolean uninstallMod ()
+	{
+		// TODO: Implement this method
+		return false;
+	}
+
 	private View v;
 	private Bitmap ba;
 	private int selectedcountry=0,selectedcrew=0;
@@ -191,14 +199,7 @@ public class CrewPicReplacerFragment extends FunctionFragment
 			.append ( ".png" )
 			.toString ( );
 	}
-	@Override
-	public boolean installMod ( int typenum, int num, byte[] deceyptedFileData ) throws IOException
-	{
-		// TODO: Implement this method
-		return false;
-		//Not finished
-	}
-
+	
 	@Override
 	public void onActivityResult ( int requestCode, int resultCode, Intent data )
 	{
