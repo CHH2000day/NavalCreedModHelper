@@ -57,6 +57,38 @@ public class ModPackageManager
 		}
 
 	}
+	private void commit () throws IOException, JSONException
+	{
+		updateConfig ( false );
+		reflesh ( );
+	}
+
+	public void postUninstall (String modtype, String subtype) throws IOException, JSONException
+	{
+		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
+		{
+			installedMod.put ( subtype, "" );
+		}
+		else
+		{
+			installedMod.put ( modtype, "" );
+		}
+		commit();
+		return;
+
+	}
+	public void postInstall(String modtype,String subtype,String modname) throws IOException, JSONException{
+		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
+		{
+			installedMod.put ( subtype, modname );
+		}
+		else
+		{
+			installedMod.put ( modtype, modname );
+		}
+		commit();
+		
+	}
 
 	private void updateConfig (boolean isNew) throws JSONException, IOException
 	{
@@ -102,6 +134,7 @@ public class ModPackageManager
 		Sink s=Okio.sink ( configFile );
 		BufferedSink bs=Okio.buffer ( s );
 		bs.writeUtf8 ( jo.toString ( ) );
+		bs.close();
 	}
 	public HashMap<String,String> getModList ()
 	{
@@ -117,11 +150,4 @@ public class ModPackageManager
 		return (!"".equals ( installedMod.get ( type ) ));
 	}
 
-	protected static final class IllegalConfigFileException extends RuntimeException
-	{
-		protected IllegalConfigFileException (String msg)
-		{
-			super ( msg );
-		}
-	}
 }
