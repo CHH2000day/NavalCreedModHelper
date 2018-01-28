@@ -18,7 +18,9 @@ public class ModPackageInfo
 	public static final String MODTYPE_BACKGROUND="Background";
 	public static final String MODTYPE_CREWPIC="CrewPic";
 	public static final String MODTYPE_OTHER="Other";
-
+	public static final String SUBTYPE_EMPTY="";
+	public static final String SUB_MODTYPE_CV_CN="CV_CN";
+	public static final String SUB_MODTYPE_CV_EN="CV_EN";
 	//mod信息相关
 	private static final String KEY_MINSUPPORTVER="minSupportVer";
 	private static final String KEY_TARGETVER="targetVer";
