@@ -151,6 +151,7 @@ public class BGReplacerFragment extends ModFragment
 	@Override
 	public boolean uninstallMod ()
 	{
+		ModPackageManager.getInstance().postUninstall(ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.SUBTYPE_EMPTY);
 		for(String s:cateoty){
 			Utils.delDir(new File(abs_path,s));
 		}

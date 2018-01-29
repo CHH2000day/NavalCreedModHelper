@@ -359,7 +359,7 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		//注销所有缓存
 		FormatHelperFactory.denyAllCaches ( );
-
+		ModPackageManager.getInstance().postUninstall(ModPackageInfo.MODTYPE_BGM,ModPackageInfo.SUBTYPE_EMPTY);
 		// TODO: Implement this method
 		return Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) );
 	}

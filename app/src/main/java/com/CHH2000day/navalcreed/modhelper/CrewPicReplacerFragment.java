@@ -129,7 +129,6 @@ public class CrewPicReplacerFragment extends ModFragment
 			} );
 		updatepic = (Button)v.findViewById ( R.id.crewpicreplacerButtonReplace );
 		updatepic.setOnClickListener ( new OnClickListener ( ){
-
 				@Override
 				public void onClick ( View p1 )
 				{if ( null == ba )
@@ -196,6 +195,7 @@ public class CrewPicReplacerFragment extends ModFragment
 	public boolean uninstallMod ()
 	{
 		// TODO: Implement this method
+		ModPackageManager.getInstance().postUninstall(ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUBTYPE_EMPTY);
 		return Utils.delDir ( getFile ( selectedcountry, selectedcrew ).getParentFile ( ) );
 	}
 	
