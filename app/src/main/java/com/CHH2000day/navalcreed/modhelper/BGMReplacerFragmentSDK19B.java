@@ -125,7 +125,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
 							{
-								String s=Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) ) ?"操作完成": "操作失败";
+								String s=uninstallMod() ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}

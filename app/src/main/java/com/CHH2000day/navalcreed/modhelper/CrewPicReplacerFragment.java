@@ -13,13 +13,6 @@ import android.support.design.widget.*;
 public class CrewPicReplacerFragment extends ModFragment
 {
 
-	@Override
-	public boolean uninstallMod ()
-	{
-		// TODO: Implement this method
-		return false;
-	}
-
 	private View v;
 	private Bitmap ba;
 	private int selectedcountry=0,selectedcrew=0;
@@ -117,7 +110,7 @@ public class CrewPicReplacerFragment extends ModFragment
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
-							{if ( Utils.delDir ( getFile ( selectedcountry, selectedcrew ).getParentFile ( ) ) )
+							{if ( uninstallMod() )
 								{
 									Snackbar.make ( v, "所有更改已移除", Snackbar.LENGTH_LONG ).show ( );
 								}
@@ -198,6 +191,12 @@ public class CrewPicReplacerFragment extends ModFragment
 			.append ( ( num + 1 ) )
 			.append ( ".png" )
 			.toString ( );
+	}
+	@Override
+	public boolean uninstallMod ()
+	{
+		// TODO: Implement this method
+		return Utils.delDir ( getFile ( selectedcountry, selectedcrew ).getParentFile ( ) );
 	}
 	
 	@Override
