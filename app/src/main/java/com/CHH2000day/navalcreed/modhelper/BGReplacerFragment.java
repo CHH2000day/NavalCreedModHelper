@@ -19,14 +19,6 @@ import java.lang.ref.*;
 public class BGReplacerFragment extends ModFragment
 {
 
-	@Override
-	public boolean uninstallMod ()
-	{
-		// TODO: Implement this method
-		return false;
-	}
-
-
 	
 	private static final String[] filename={"loadingbg1.jpg","loadingbg2.jpg","loadingbg3.jpg"};
 	private static final String[] cateoty={"loading","loadingmap","matching"};
@@ -151,10 +143,23 @@ public class BGReplacerFragment extends ModFragment
 	}
 	private void removechanges()
 	{
-		Utils.delDir(new File(abs_path));
+		//防止误删船员头像
+		//Utils.delDir(new File(abs_path));
+		uninstallMod();
 		Snackbar.make(v, "更改已移除", Snackbar.LENGTH_LONG).show();
 	}
+	@Override
+	public boolean uninstallMod ()
+	{
+		for(String s:cateoty){
+			Utils.delDir(new File(abs_path,s));
+		}
+		// TODO: Implement this method
+		return true;
+	}
 
+
+	
 	@Override
 	public void onDestroy ()
 	{
@@ -201,7 +206,7 @@ public class BGReplacerFragment extends ModFragment
 				String clazzn =t.getClass().getName();
 				int p=clazzn.lastIndexOf('$');
 				
-				String clazz=(p>0)?clazzn.substring(0,p):"错误";
+				String clazz=(p>=0)?clazzn.substring(0,p):"错误";
 						
 				Snackbar.make(v,clazz,Snackbar.LENGTH_LONG).show();
 			}
