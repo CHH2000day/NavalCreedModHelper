@@ -21,13 +21,13 @@ public class CrewPicReplacerFragment extends ModFragment
 	private TextView selectedpic;
 	private String[] countrys={"usa","japan","uk","china","italy","france","ussr","german"};
 	@Override
-	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
+	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{v = inflater.inflate ( R.layout.crew_pic_replacer, null );
 		country = (Spinner)v.findViewById ( R.id.crewpicreplacerSpinnerCountry );
 		country.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
-				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )
+				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
 				{
 					selectedcountry = p3;
 					/*if(p3==3){
@@ -37,7 +37,7 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 
 				@Override
-				public void onNothingSelected ( AdapterView<?> p1 )
+				public void onNothingSelected (AdapterView<?> p1)
 				{
 					// TODO: Implement this method
 				}
@@ -47,13 +47,13 @@ public class CrewPicReplacerFragment extends ModFragment
 		num.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
-				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )
+				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
 				{selectedcrew = p3;
 					// TODO: Implement this method
 				}
 
 				@Override
-				public void onNothingSelected ( AdapterView<?> p1 )
+				public void onNothingSelected (AdapterView<?> p1)
 				{
 					// TODO: Implement this method
 				}
@@ -62,7 +62,7 @@ public class CrewPicReplacerFragment extends ModFragment
 		selpic.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
-				public void onClick ( View p1 )
+				public void onClick (View p1)
 				{
 					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "image/*" );
@@ -75,15 +75,15 @@ public class CrewPicReplacerFragment extends ModFragment
 		removepic.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
-				public void onClick ( View p1 )
+				public void onClick (View p1)
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "确认" )
 						.setMessage ( "确认要移除更改吗？" )
 						.setPositiveButton ( "移除", new DialogInterface.OnClickListener ( ){
 
 							@Override
-							public void onClick ( DialogInterface p1, int p2 )
-							{if ( getFile ( selectedcountry, selectedcrew ).delete ( ) )
+							public void onClick (DialogInterface p1, int p2)
+							{if (getFile ( selectedcountry, selectedcrew ).delete ( ))
 								{
 									Snackbar.make ( v, "更改已移除", Snackbar.LENGTH_LONG ).show ( );
 								}
@@ -102,15 +102,15 @@ public class CrewPicReplacerFragment extends ModFragment
 		removepic.setOnLongClickListener ( new OnLongClickListener ( ){
 
 				@Override
-				public boolean onLongClick ( View p1 )
+				public boolean onLongClick (View p1)
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "确认" )
 						.setMessage ( "确认要所有移除更改吗？" )
 						.setPositiveButton ( "移除", new DialogInterface.OnClickListener ( ){
 
 							@Override
-							public void onClick ( DialogInterface p1, int p2 )
-							{if ( uninstallMod() )
+							public void onClick (DialogInterface p1, int p2)
+							{if (uninstallMod ( ))
 								{
 									Snackbar.make ( v, "所有更改已移除", Snackbar.LENGTH_LONG ).show ( );
 								}
@@ -129,15 +129,11 @@ public class CrewPicReplacerFragment extends ModFragment
 			} );
 		updatepic = (Button)v.findViewById ( R.id.crewpicreplacerButtonReplace );
 		updatepic.setOnClickListener ( new OnClickListener ( ){
-				@Override
-				public void onClick ( View p1 )
-				{if ( null == ba )
-					{
-						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
-						return;
-					}try
-					{File out=getFile ( selectedcountry, selectedcrew );
-						if ( !out.getParentFile ( ).exists ( ) )
+				private void install ()
+				{
+					try
+					{	File out=getFile ( selectedcountry, selectedcrew );
+						if (!out.getParentFile ( ).exists ( ))
 						{out.getParentFile ( ).mkdirs ( );}
 						FileOutputStream fos=new FileOutputStream ( out );
 						ba.compress ( Bitmap.CompressFormat.PNG, 100, fos );
@@ -149,6 +145,37 @@ public class CrewPicReplacerFragment extends ModFragment
 					{
 						Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
 					}
+				}
+				@Override
+				public void onClick (View p1)
+				{
+					if (null == ba)
+					{
+						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+						return;
+					}
+					if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CREWPIC, ModPackageInfo.SUBTYPE_EMPTY ))
+					{
+						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+						adb.setTitle ( "注意" )
+							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
+							.setNegativeButton ( "取消", null )
+							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+
+								@Override
+								public void onClick (DialogInterface p1, int p2)
+								{
+									uninstallMod ( );
+									install ( );
+									// TODO: Implement this method
+								}
+							} );
+					}
+					else
+					{
+						install ( );
+					}
+
 					// TODO: Implement this method
 				}
 			} );
@@ -159,9 +186,9 @@ public class CrewPicReplacerFragment extends ModFragment
 	}
 
 	@Override
-	public void onDestroy ( )
+	public void onDestroy ()
 	{
-		if ( ba != null )
+		if (ba != null)
 		{
 			ba.recycle ( );
 			//手动释放以防止Bitmap未被释放
@@ -172,22 +199,22 @@ public class CrewPicReplacerFragment extends ModFragment
 	}
 
 
-	private File getFile ( int country, int num )
+	private File getFile (int country, int num)
 	{
 		return new File ( getFilePath ( country, num ) );
 	}
-	private String getFilePath ( int country, int num )
+	private String getFilePath (int country, int num)
 	{
 		return new StringBuilder ( )
-			.append ( ( (ModHelperApplication)getActivity ( ).getApplication ( ) ).getResFilesDirPath ( ) )
+			.append ( ((ModHelperApplication)getActivity ( ).getApplication ( )).getResFilesDirPath ( ) )
 			.append ( File.separatorChar )
 			.append ( "pic" )
 			.append ( File.separatorChar )
 			.append ( "crewhead" )
 			.append ( File.separatorChar )
-			.append ( countrys [ country ] )
+			.append ( countrys[ country ] )
 			.append ( File.separatorChar )
-			.append ( ( num + 1 ) )
+			.append ( (num + 1) )
 			.append ( ".png" )
 			.toString ( );
 	}
@@ -195,25 +222,25 @@ public class CrewPicReplacerFragment extends ModFragment
 	public boolean uninstallMod ()
 	{
 		// TODO: Implement this method
-		ModPackageManager.getInstance().postUninstall(ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUBTYPE_EMPTY);
+		ModPackageManager.getInstance ( ).postUninstall ( ModPackageInfo.MODTYPE_CREWPIC, ModPackageInfo.SUBTYPE_EMPTY );
 		return Utils.delDir ( getFile ( selectedcountry, selectedcrew ).getParentFile ( ) );
 	}
-	
+
 	@Override
-	public void onActivityResult ( int requestCode, int resultCode, Intent data )
+	public void onActivityResult (int requestCode, int resultCode, Intent data)
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if ( requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK )
+		if (requestCode == 2 && resultCode == AppCompatActivity.RESULT_OK)
 		{
 			try
 			{
-				if ( data == null )
+				if (data == null)
 				{
 					Snackbar.make ( v, "文件为空！", Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}
-				if ( ba != null )
+				if (ba != null)
 				{
 					//手动释放以防止Bitmap未被释放
 					ba.recycle ( );

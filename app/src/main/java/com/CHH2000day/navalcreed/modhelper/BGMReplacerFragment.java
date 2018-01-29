@@ -167,6 +167,10 @@ public class BGMReplacerFragment extends ModFragment
 						return;
 					}
 					//开始创建进度对话框
+					// TODO: Implement this method
+				}
+				private void install ()
+				{
 					dialogView = LayoutInflater.from ( getActivity ( ) ).inflate ( R.layout.dialog_transcode, null );
 					progress = (TextView)dialogView.findViewById ( R.id.dialogtranscodeTextView );
 					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );
@@ -243,7 +247,7 @@ public class BGMReplacerFragment extends ModFragment
 
 						}
 					}.start ( );
-					// TODO: Implement this method
+
 				}
 			} );
 		//配置场景选择的适配器
@@ -284,6 +288,7 @@ public class BGMReplacerFragment extends ModFragment
 				}
 			} );
 	}
+
 
 	private File getTargetFile (int scene, int type, int num, String format)
 	{
@@ -359,7 +364,7 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		//注销所有缓存
 		FormatHelperFactory.denyAllCaches ( );
-		ModPackageManager.getInstance().postUninstall(ModPackageInfo.MODTYPE_BGM,ModPackageInfo.SUBTYPE_EMPTY);
+		ModPackageManager.getInstance ( ).postUninstall ( ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY );
 		// TODO: Implement this method
 		return Utils.delDir ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ).getParentFile ( ).getParentFile ( ) );
 	}
