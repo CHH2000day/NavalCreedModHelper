@@ -152,6 +152,7 @@ public class BGReplacerFragment extends ModFragment
 										// TODO: Implement this method
 									}
 								} );
+							adb.create().show();
 						}
 						else
 						{

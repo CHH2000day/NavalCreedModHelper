@@ -166,11 +166,34 @@ public class BGMReplacerFragment extends ModFragment
 						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
-					//开始创建进度对话框
+					if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BACKGROUND, ModPackageInfo.SUBTYPE_EMPTY ))
+					{
+						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+						adb.setTitle ( "注意" )
+							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
+							.setNegativeButton ( "取消", null )
+							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+
+								@Override
+								public void onClick (DialogInterface p1, int p2)
+								{
+									uninstallMod ( );
+									install ( );
+									// TODO: Implement this method
+								}
+							} );
+						adb.create().show();
+					}
+					else
+					{
+						install ( );
+					}
 					// TODO: Implement this method
 				}
 				private void install ()
 				{
+					//开始创建进度对话框
+					
 					dialogView = LayoutInflater.from ( getActivity ( ) ).inflate ( R.layout.dialog_transcode, null );
 					progress = (TextView)dialogView.findViewById ( R.id.dialogtranscodeTextView );
 					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );

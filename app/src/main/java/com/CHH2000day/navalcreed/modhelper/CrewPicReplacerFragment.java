@@ -170,6 +170,7 @@ public class CrewPicReplacerFragment extends ModFragment
 									// TODO: Implement this method
 								}
 							} );
+						adb.create().show();
 					}
 					else
 					{
