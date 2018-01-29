@@ -63,7 +63,7 @@ public class ModPackageManager
 		reflesh ( );
 	}
 
-	public void postUninstall (String modtype, String subtype) throws IOException, JSONException
+	public void postUninstall (String modtype, String subtype)
 	{
 		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
 		{
@@ -73,11 +73,18 @@ public class ModPackageManager
 		{
 			installedMod.put ( modtype, "" );
 		}
-		commit();
+		try
+		{
+			commit ( );
+		}
+		catch (IOException e)
+		{e.printStackTrace();}
+		catch (JSONException e)
+		{e.printStackTrace();}
 		return;
 
 	}
-	public void postInstall(String modtype,String subtype,String modname) throws IOException, JSONException{
+	public void postInstall(String modtype,String subtype,String modname) {
 		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
 		{
 			installedMod.put ( subtype, modname );
@@ -86,8 +93,15 @@ public class ModPackageManager
 		{
 			installedMod.put ( modtype, modname );
 		}
-		commit();
-		
+		try
+		{
+			commit ( );
+		}
+		catch (IOException e)
+		{e.printStackTrace();}
+		catch (JSONException e)
+		{e.printStackTrace();}
+
 	}
 
 	private void updateConfig (boolean isNew) throws JSONException, IOException
