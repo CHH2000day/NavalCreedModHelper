@@ -38,7 +38,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	public static final int TYPE_BATTLEFAIL=16;
 
 	private static final int QUERY_CODE=2;
-	
+
 	private ModHelperApplication mapplication;
 	private FileNameAdapter mfilenameadapter;
 	private View v;
@@ -60,26 +60,26 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		mSceneSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerScene );
 		mFileNameSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerMusic );
 		pathTextView = (TextView)v.findViewById ( R.id.bgmreplacerText );
-		infoTextView=(TextView)v.findViewById(R.id.bgmreplacerfragmentTextViewInfo);
+		infoTextView = (TextView)v.findViewById ( R.id.bgmreplacerfragmentTextViewInfo );
 		select = (Button)v.findViewById ( R.id.bgmreplacerSelect );
 		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
 		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
 		//更新操作说明
-		String s=infoTextView.getText().toString();
-		infoTextView.setText(new StringBuilder().append(s)
-												.append("\n")
-												.append("当前系统版本为:")
-												.append(Build.VERSION.SDK)
-												.append(".")
-												.append("禁用BGM转码支持"));
+		String s=infoTextView.getText ( ).toString ( );
+		infoTextView.setText ( new StringBuilder ( ).append ( s )
+							  .append ( "\n" )
+							  .append ( "当前系统版本为:" )
+							  .append ( Build.VERSION.SDK )
+							  .append ( "." )
+							  .append ( "禁用BGM转码支持" ) );
 		select.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
 				public void onClick ( View p1 )
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
-					intent.addCategory(intent.CATEGORY_OPENABLE);
-					startActivityForResult ( intent.createChooser(intent,"请选择文件选择器"), QUERY_CODE );
+					intent.addCategory ( intent.CATEGORY_OPENABLE );
+					startActivityForResult ( intent.createChooser ( intent, "请选择文件选择器" ), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -125,7 +125,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
 							{
-								String s=uninstallMod() ?"操作完成": "操作失败";
+								String s=uninstallMod ( ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -139,14 +139,8 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 			} );
 		update.setOnClickListener ( new OnClickListener ( ){
 
-				@Override
-				public void onClick ( View p1 )
+				private void install ( )
 				{
-					if ( null == srcfile /*|| null == fileformat || "".equals ( fileformat )*/)
-					{
-						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
-						return;
-					}
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "请稍等" )
 						.setMessage ( "正在复制文件" )
@@ -185,6 +179,39 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 
 						}
 					}.start ( );
+				}
+				@Override
+				public void onClick ( View p1 )
+				{
+					if ( null == srcfile /*|| null == fileformat || "".equals ( fileformat )*/)
+					{
+						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+						return;
+					}
+					if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BACKGROUND, ModPackageInfo.SUBTYPE_EMPTY ) )
+					{
+						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+						adb.setTitle ( "注意" )
+							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
+							.setNegativeButton ( "取消", null )
+							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+
+								@Override
+								public void onClick ( DialogInterface p1, int p2 )
+								{
+									uninstallMod ( );
+									install ( );
+									// TODO: Implement this method
+								}
+							} );
+						adb.create ( ).show ( );
+					}
+					else
+					{
+						install ( );
+					}
+
+
 					// TODO: Implement this method
 				}
 			} );
@@ -303,7 +330,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if ( resultCode==AppCompatActivity.RESULT_OK &&requestCode == QUERY_CODE )
+		if ( resultCode == AppCompatActivity.RESULT_OK && requestCode == QUERY_CODE )
 		{
 			if ( data != null )
 			{
