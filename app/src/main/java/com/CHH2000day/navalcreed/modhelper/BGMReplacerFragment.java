@@ -166,7 +166,7 @@ public class BGMReplacerFragment extends ModFragment
 						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
-					if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BACKGROUND, ModPackageInfo.SUBTYPE_EMPTY ))
+					if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY ))
 					{
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 						adb.setTitle ( "注意" )
