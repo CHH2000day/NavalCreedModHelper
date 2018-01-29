@@ -38,8 +38,8 @@ public class ModPackageManager
 			bs.close ( );
 			installedMod.put ( ModPackageInfo.MODTYPE_BACKGROUND, jo.getString ( ModPackageInfo.MODTYPE_BACKGROUND ) );
 			installedMod.put ( ModPackageInfo.MODTYPE_BGM, jo.getString ( ModPackageInfo.MODTYPE_BGM ) );
-			installedMod.put ( ModPackageInfo.MODTYPE_CREWPIC, ModPackageInfo.MODTYPE_CREWPIC );
-			installedMod.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, ModPackageInfo.MODTYPE_SOUNDEFFECT );
+			installedMod.put ( ModPackageInfo.MODTYPE_CREWPIC, jo.getString ( ModPackageInfo.MODTYPE_CREWPIC ) );
+			installedMod.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, jo.getString ( ModPackageInfo.MODTYPE_SOUNDEFFECT ) );
 			JSONObject j=jo.getJSONObject ( ModPackageInfo.MODTYPE_CV );
 			installedMod.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, j.getString ( ModPackageInfo.SUB_MODTYPE_CV_CN ) );
 			installedMod.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, j.getString ( ModPackageInfo.SUB_MODTYPE_CV_EN ) );
@@ -78,13 +78,14 @@ public class ModPackageManager
 			commit ( );
 		}
 		catch (IOException e)
-		{e.printStackTrace();}
+		{e.printStackTrace ( );}
 		catch (JSONException e)
-		{e.printStackTrace();}
+		{e.printStackTrace ( );}
 		return;
 
 	}
-	public void postInstall(String modtype,String subtype,String modname) {
+	public void postInstall (String modtype, String subtype, String modname)
+	{
 		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
 		{
 			installedMod.put ( subtype, modname );
@@ -98,9 +99,9 @@ public class ModPackageManager
 			commit ( );
 		}
 		catch (IOException e)
-		{e.printStackTrace();}
+		{e.printStackTrace ( );}
 		catch (JSONException e)
-		{e.printStackTrace();}
+		{e.printStackTrace ( );}
 
 	}
 
@@ -125,7 +126,7 @@ public class ModPackageManager
 			jo.put ( ModPackageInfo.MODTYPE_BGM, installedMod.get ( ModPackageInfo.MODTYPE_BGM ) );
 			jo.put ( ModPackageInfo.MODTYPE_BACKGROUND, installedMod.get ( ModPackageInfo.MODTYPE_BACKGROUND ) );
 			jo.put ( ModPackageInfo.MODTYPE_CREWPIC, installedMod.get ( ModPackageInfo.MODTYPE_CREWPIC ) );
-			jo.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, ModPackageInfo.MODTYPE_SOUNDEFFECT );
+			jo.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, installedMod.get ( ModPackageInfo.MODTYPE_SOUNDEFFECT ) );
 			JSONObject jcv=new JSONObject ( );
 			jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, installedMod.get ( ModPackageInfo.SUB_MODTYPE_CV_CN ) );
 			jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, installedMod.get ( ModPackageInfo.SUB_MODTYPE_CV_EN ) );
@@ -148,7 +149,7 @@ public class ModPackageManager
 		Sink s=Okio.sink ( configFile );
 		BufferedSink bs=Okio.buffer ( s );
 		bs.writeUtf8 ( jo.toString ( ) );
-		bs.close();
+		bs.close ( );
 	}
 	public HashMap<String,String> getModList ()
 	{
