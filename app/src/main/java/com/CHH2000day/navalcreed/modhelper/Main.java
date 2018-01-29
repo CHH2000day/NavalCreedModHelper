@@ -117,10 +117,12 @@ public class Main extends AppCompatActivity
 		checkVality();
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
+		//禁用测试版Mod包安装
+		/*
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
 			installModPackageBeta(getIntent().getData().getPath());	
-		}
+		}*/
 	}
 
 	@Override
@@ -140,9 +142,8 @@ public class Main extends AppCompatActivity
 		super.onResume ( );
 		checkPermission ( );
 	}
-
-
-
+//禁用测试版mod包安装
+/*
 	private void installModPackageBeta(String path){
 		String filepath;
 		if ( TextUtils.isEmpty ( path ))
@@ -221,6 +222,7 @@ public class Main extends AppCompatActivity
 			return;
 		}
 	}
+	*/
 	private void checkVality ( )
 	{
 		//进行检查
