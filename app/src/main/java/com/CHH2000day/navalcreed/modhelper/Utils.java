@@ -3,6 +3,8 @@ import java.io.*;
 import java.nio.channels.*;
 import java.util.zip.*;
 import java.util.*;
+import android.net.*;
+import android.os.*;
 
 public class Utils
 {
@@ -11,32 +13,32 @@ public class Utils
 	public static final String FORMAT_UNKNOWN="ERROR";
 	public static final byte[] HEADER_WAV={ 82, 73, 70, 70 };
 	public static final byte[] HEADER_OGG={ 79, 103, 103, 83 };
-	
-	public static String identifyFormat (InputStream in, boolean closeStream) throws IOException
+
+	public static String identifyFormat ( InputStream in, boolean closeStream ) throws IOException
 	{
 		byte[] b=new byte[4];
 		in.read ( b );
-		if (closeStream)
+		if ( closeStream )
 		{
 			in.close ( );
 		}
-		if (Arrays.equals ( b, HEADER_WAV ))
+		if ( Arrays.equals ( b, HEADER_WAV ) )
 		{
 			return FORMAT_WAV;
 		}
-		if (Arrays.equals ( b, HEADER_OGG ))
-		 {
-		 return FORMAT_OGG;
-		 }
+		if ( Arrays.equals ( b, HEADER_OGG ) )
+		{
+			return FORMAT_OGG;
+		}
 		return FORMAT_UNKNOWN;
 	}
-	
-	public static byte[] readAllbytes (InputStream in) throws IOException
+
+	public static byte[] readAllbytes ( InputStream in ) throws IOException
 	{
 		byte[] cache=new byte[1024];
 		ByteArrayOutputStream baos=new ByteArrayOutputStream ( );
 		int i;
-		while ((i = in.read ( cache )) != -1)
+		while ( ( i = in.read ( cache ) ) != -1 )
 		{
 			baos.write ( cache, 0, i );
 		}
@@ -44,26 +46,26 @@ public class Utils
 		baos.close ( );
 		return cache;
 	}
-	public static boolean delDir (File f)
+	public static boolean delDir ( File f )
 	{
-        if (f == null) return false;
-        if (!f.exists ( )) return true;
-        if (f.isDirectory ( ))
+        if ( f == null ) return false;
+        if ( !f.exists ( ) ) return true;
+        if ( f.isDirectory ( ) )
 		{
             File[] fs=f.listFiles ( );
-            if (fs != null)
+            if ( fs != null )
 			{
-                for (File e:fs)
+                for ( File e:fs )
 				{
-                    if (!delDir ( e )) return false;
+                    if ( !delDir ( e ) ) return false;
                 }
             }
         }
         return f.delete ( );
     }
-	public static void copyFile (File infile, File outfile)throws IOException
+	public static void copyFile ( File infile, File outfile )throws IOException
 	{
-		if (!outfile.getParentFile ( ).exists ( ))
+		if ( !outfile.getParentFile ( ).exists ( ) )
 		{
 			outfile.getParentFile ( ).mkdirs ( );
 		}
@@ -84,16 +86,16 @@ public class Utils
 
 	}
 
-	public static void copyFile (InputStream in, File outfile)throws IOException
+	public static void copyFile ( InputStream in, File outfile )throws IOException
 	{
-		if (!outfile.getParentFile ( ).exists ( ))
+		if ( !outfile.getParentFile ( ).exists ( ) )
 		{
 			outfile.getParentFile ( ).mkdirs ( );
 		}
 		FileOutputStream fos=new FileOutputStream ( outfile );
 		int i;
 		byte[] cache=new byte[1024];
-		while ((i = in.read ( cache )) != -1)
+		while ( ( i = in.read ( cache ) ) != -1 )
 		{
 			fos.write ( cache, 0, i );
 		}
@@ -102,7 +104,7 @@ public class Utils
 		fos.close ( );
 
 	}
-	public static void decompresssZIPFile (ZipFile srcFile, String destFilePath) throws IOException
+	public static void decompresssZIPFile ( ZipFile srcFile, String destFilePath ) throws IOException
 	{
 		ZipEntry entry = null;
 		String entryFilePath = null;
@@ -114,7 +116,7 @@ public class Utils
 		SecurityManager securityManager = new SecurityManager ( );
 		Enumeration<ZipEntry> entries = (Enumeration<ZipEntry>)srcFile.entries ( );
 		//循环对压缩包里的每一个文件进行解压		
-		while (entries.hasMoreElements ( ))
+		while ( entries.hasMoreElements ( ) )
 		{
 			entry = entries.nextElement ( );
 			System.out.println ( "Selecting file:" + entry.getName ( ) );
@@ -125,30 +127,30 @@ public class Utils
 				.append ( entry.getName ( ) )
 				.toString ( );
 			entryFile = new File ( entryFilePath );
-			if (!entryFile.getParentFile ( ).exists ( ))
+			if ( !entryFile.getParentFile ( ).exists ( ) )
 			{
 				entryFile.getParentFile ( ).mkdirs ( );
 			}
 			//判断该目标文件是否应为目录
-			if (entry.isDirectory ( ))
+			if ( entry.isDirectory ( ) )
 			{
 				//判断目标目录是否以文件方式存在
-				if (entryFile.isFile ( ))
+				if ( entryFile.isFile ( ) )
 				{
 					//检测文件是否允许删除，如果不允许删除，将会抛出SecurityException
 					securityManager.checkDelete ( entryFilePath );
 					//删除已存在的目标文件
 					entryFile.delete ( );	
 				}
-				if (!entryFile.exists ( ))
+				if ( !entryFile.exists ( ) )
 				{
 					entryFile.mkdirs ( );
 				}
 				continue;
 			}
-			else if (!entry.isDirectory ( ))
+			else if ( !entry.isDirectory ( ) )
 			{
-				if (entryFile.isDirectory ( ))
+				if ( entryFile.isDirectory ( ) )
 				{
 					System.out.println ( "Trying to Delete Dir:" + entryFilePath );
 					delDir ( entryFile );
@@ -156,7 +158,7 @@ public class Utils
 			}
 
 
-			if (entryFile.exists ( ))
+			if ( entryFile.exists ( ) )
 			{
 				//检测文件是否允许删除，如果不允许删除，将会抛出SecurityException
 				securityManager.checkDelete ( entryFilePath );
@@ -168,12 +170,32 @@ public class Utils
 			System.out.println ( "Trying to write to file:" + entryFilePath );
 			bos = new BufferedOutputStream ( new FileOutputStream ( entryFile ) );
 			bis = new BufferedInputStream ( srcFile.getInputStream ( entry ) );
-			while ((count = bis.read ( buffer, 0, bufferSize )) != -1)
+			while ( ( count = bis.read ( buffer, 0, bufferSize ) ) != -1 )
 			{
 				bos.write ( buffer, 0, count );
 			}
 			bos.flush ( );
 			bos.close ( );			
 		}
+	}
+	public static String resolveFilePath ( Uri uri )
+	{
+
+		String string =uri.toString ( );
+		String path[]=new String[2];
+		//判断文件是否在sd卡中
+		if ( string.indexOf ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) ) != -1 )
+		{
+			//对Uri进行切割
+			path = string.split ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) );
+			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
+		}
+		else if ( string.indexOf ( String.valueOf ( Environment.getDataDirectory ( ) ) ) != -1 )
+		{ //判断文件是否在手机内存中
+			//对Uri进行切割
+			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
+			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
+		}
+		return null;
 	}
 }
