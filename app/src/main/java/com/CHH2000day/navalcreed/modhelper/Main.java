@@ -42,6 +42,7 @@ public class Main extends AppCompatActivity
 	private BGMReplacerFragment mBGMReplacerFragment;
 	private CustomShipNameFragment mAntiHexieFragment;
 	private LoginMovieReplacer mLoginMovieReplacer;
+	private ModPackageInstallerFragment mModpkgInstallerFragment;
 
 
 	private static final int PERMISSION_CHECK_CODE=125;
@@ -91,11 +92,15 @@ public class Main extends AppCompatActivity
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
 		//如果系统版本为Lollipop前的旧设备，使用旧的BGM转码器
-		if(Build.VERSION_CODES.LOLLIPOP>Build.VERSION.SDK_INT){
-			mBGMReplacerFragment=new BGMReplacerFragmentSDK19B();
-		}else{
-		mBGMReplacerFragment = new BGMReplacerFragment ( );
+		if ( Build.VERSION_CODES.LOLLIPOP > Build.VERSION.SDK_INT )
+		{
+			mBGMReplacerFragment = new BGMReplacerFragmentSDK19B ( );
 		}
+		else
+		{
+			mBGMReplacerFragment = new BGMReplacerFragment ( );
+		}
+		mModpkgInstallerFragment=new ModPackageInstallerFragment();
 		//进行数据配置
 		fragments = new ArrayList<Fragment> ( );
 		fragments.add ( mBGReplacerFragment );
@@ -103,6 +108,7 @@ public class Main extends AppCompatActivity
 		fragments.add ( mCrewPicReplacerFragment );
 		fragments.add ( mAntiHexieFragment );
 		fragments.add ( mBGMReplacerFragment );
+		fragments.add ( mModpkgInstallerFragment );
 		fragments.add ( new AboutFragment ( ) );
 		titles = new ArrayList<String> ( );
 		titles.add ( "背景替换" );
@@ -110,19 +116,24 @@ public class Main extends AppCompatActivity
 		titles.add ( "船员头像修改" );
 		titles.add ( "反和谐" );
 		titles.add ( "BGM替换" );
+		titles.add ( "Mod包安装" );
 		titles.add ( "关于" );
 		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
 		mViewPager.setAdapter ( mAdapter );
 		mTabLayout.setupWithViewPager ( mViewPager );
-		checkVality();
+		checkVality ( );
 		new UpdateThread ( ).start ( );
 		new AnnouncementThread ( ).start ( );
 		//禁用测试版Mod包安装
 		/*
+		 if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
+		 {
+		 installModPackageBeta(getIntent().getData().getPath());	
+		 }*/
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
-			installModPackageBeta(getIntent().getData().getPath());	
-		}*/
+			mModpkgInstallerFragment.selectFile(new File(getIntent().getData().getPath()));
+		}
 	}
 
 	@Override
@@ -132,7 +143,7 @@ public class Main extends AppCompatActivity
 
 		super.onStart ( );
 
-		
+
 	}
 
 	@Override
@@ -143,86 +154,86 @@ public class Main extends AppCompatActivity
 		checkPermission ( );
 	}
 //禁用测试版mod包安装
-/*
-	private void installModPackageBeta(String path){
-		String filepath;
-		if ( TextUtils.isEmpty ( path ))
-		{
-			return;
-		}
-		filepath = path;
-		try
-		{
-			final ZipFile mzipfile=new ZipFile ( filepath );
-			AlertDialog ad1;
-			AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
-			adb.setTitle ( "确定要继续么" )
-				.setMessage ( new StringBuilder ( )
-							 .append ( "确定要安装mod文件:" )
-							 .append ( filepath )
-							 .append ( " " )
-							 .append ( "么？" )
-							 .append ( "\n" )
-							 .append ( "安装该mod文件可能对游戏/设备造成损坏，请确认该mod文件来自于可信渠道" )
-							 .toString ( ) )
-				.setNegativeButton ( "取消", null )
-				.setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
+	/*
+	 private void installModPackageBeta(String path){
+	 String filepath;
+	 if ( TextUtils.isEmpty ( path ))
+	 {
+	 return;
+	 }
+	 filepath = path;
+	 try
+	 {
+	 final ZipFile mzipfile=new ZipFile ( filepath );
+	 AlertDialog ad1;
+	 AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+	 adb.setTitle ( "确定要继续么" )
+	 .setMessage ( new StringBuilder ( )
+	 .append ( "确定要安装mod文件:" )
+	 .append ( filepath )
+	 .append ( " " )
+	 .append ( "么？" )
+	 .append ( "\n" )
+	 .append ( "安装该mod文件可能对游戏/设备造成损坏，请确认该mod文件来自于可信渠道" )
+	 .toString ( ) )
+	 .setNegativeButton ( "取消", null )
+	 .setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
 
-					@Override
-					public void onClick ( DialogInterface p1, int p2 )
-					{
-						AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
-						adbb.setTitle ( "正在安装mod文件，请稍等" )
-							.setMessage ( "正在安装mod，所需时间由mod文件大小及设备性能所决定" )
-							.setCancelable ( false );
-						final AlertDialog dialog=adbb.create ( );
-						dialog.setCanceledOnTouchOutside ( false );
-						dialog.show ( );
-						final Handler h=new Handler ( ){
-							public void handleMessage ( Message msg )
-							{
-								dialog.dismiss ( );
-								if ( msg.what != 0 )
-								{
-									Snackbar.make ( mViewPager, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-								}
-								else
-								{
-									Snackbar.make ( mViewPager, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+	 @Override
+	 public void onClick ( DialogInterface p1, int p2 )
+	 {
+	 AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
+	 adbb.setTitle ( "正在安装mod文件，请稍等" )
+	 .setMessage ( "正在安装mod，所需时间由mod文件大小及设备性能所决定" )
+	 .setCancelable ( false );
+	 final AlertDialog dialog=adbb.create ( );
+	 dialog.setCanceledOnTouchOutside ( false );
+	 dialog.show ( );
+	 final Handler h=new Handler ( ){
+	 public void handleMessage ( Message msg )
+	 {
+	 dialog.dismiss ( );
+	 if ( msg.what != 0 )
+	 {
+	 Snackbar.make ( mViewPager, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+	 }
+	 else
+	 {
+	 Snackbar.make ( mViewPager, "操作完成", Snackbar.LENGTH_LONG ).show ( );
 
-								}
-							}
-						};
-						new Thread ( ){
-							public void run ( )
-							{try
-								{
-									Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
-									h.sendEmptyMessage ( 0 );
-								}
-								catch (IOException e)
-								{
-									h.sendMessage ( h.obtainMessage ( 1, e ) );
-								}
-							}
-						}.start ( );
+	 }
+	 }
+	 };
+	 new Thread ( ){
+	 public void run ( )
+	 {try
+	 {
+	 Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
+	 h.sendEmptyMessage ( 0 );
+	 }
+	 catch (IOException e)
+	 {
+	 h.sendMessage ( h.obtainMessage ( 1, e ) );
+	 }
+	 }
+	 }.start ( );
 
-						// TODO: Implement this method
-					}
-				} )
-				.setCancelable ( false );
-			ad1 = adb.create ( );
-			ad1.setCanceledOnTouchOutside ( false );
-			ad1.show ( );
+	 // TODO: Implement this method
+	 }
+	 } )
+	 .setCancelable ( false );
+	 ad1 = adb.create ( );
+	 ad1.setCanceledOnTouchOutside ( false );
+	 ad1.show ( );
 
-		}
-		catch (IOException e)
-		{
-			Snackbar.make ( mViewPager, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-			return;
-		}
-	}
-	*/
+	 }
+	 catch (IOException e)
+	 {
+	 Snackbar.make ( mViewPager, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
+	 return;
+	 }
+	 }
+	 */
 	private void checkVality ( )
 	{
 		//进行检查

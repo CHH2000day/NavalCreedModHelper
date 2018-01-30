@@ -9,15 +9,17 @@
 	android:fitsSystemWindows="true"
 	tools:openDrawer="start">
 
-	<LinearLayout
+	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:orientation="vertical">
+	>
 
 		<android.support.design.widget.AppBarLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:theme="@style/AppTheme.AppBarOverlay">
+			android:theme="@style/AppTheme.AppBarOverlay"
+			android:id="@+id/modpackageinstallermainAppBarLayout1"
+			android:layout_alignParentTop="true">
 
 			<android.support.v7.widget.Toolbar
 				android:id="@+id/modinstallertoolbar"
@@ -28,61 +30,14 @@
 
 		</android.support.design.widget.AppBarLayout>
 
-		<RelativeLayout
-			android:id="@+id/modpackageinstaller_main_mainview"
+		<include
+			layout="@layout/modinfopage"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="match_parent"
+			android:layout_below="@id/modpackageinstallermainAppBarLayout1"
+		/>
 
-			<Button
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:text="取消"
-				android:layout_alignParentLeft="true"
-				android:layout_alignParentBottom="true"
-				android:id="@+id/modpackageinstallermainButton1"/>
-
-			<Button
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:text="安装"
-				android:layout_alignParentEnd="true"
-				android:layout_alignParentBottom="true"
-				android:layout_toLeftOf="@id/modpackageinstallermainButton1"
-				android:layout_toRightOf="@id/modpackageinstallermainButton1"
-				android:id="@+id/modinfopageButton2"/>
-
-			<TextView
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:text="Mod名"
-				android:id="@+id/modinfopageTextView1"
-				android:layout_alignParentTop="true"/>
-
-			<TextView
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:text="Mod类型"
-				android:layout_below="@id/modinfopageTextView1"
-				android:id="@+id/modinfopageTextView2"/>
-
-			<TextView
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:text="作者"
-				android:layout_below="@id/modinfopageTextView2"
-				android:id="@+id/modinfopageTextView3"/>
-
-			<Button
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-				android:text="查看预览图"
-				android:layout_below="@id/modinfopageTextView3"
-				android:layout_centerHorizontal="true"
-				android:id="@+id/modinfopageButton1"/>
-
-		</RelativeLayout>
-
-	</LinearLayout>
+	</RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
 

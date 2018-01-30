@@ -17,37 +17,49 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>	
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="file" />
+				<data android:host="*" />
+				<data android:mimeType="*/*" />
+				<data android:pathPattern=".*\\.ncmod" />
+			</intent-filter>
 			<!--
 			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="file" />
-				<data android:host="*" />
-				<data android:mimeType="*/*" />
-				<data android:pathPattern=".*\\.ncmod-test" />
-				
+			<action android:name="android.intent.action.VIEW" />
+			<category android:name="android.intent.category.DEFAULT" />
+			<data android:scheme="file" />
+			<data android:host="*" />
+			<data android:mimeType="*/*" />
+			<data android:pathPattern=".*\\.ncmod-test" />
+
 			</intent-filter>
 			-->
-        </activity>
-		<activity
-			android:name=".ModPackageInstallerActvity"
-			android:label="@string/modpkginstaller_name" >
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="file" />
-				<data android:host="*" />
-				<data android:mimeType="*/*" />
-				<data android:pathPattern=".*\\.ncvcp" />
-			</intent-filter>
-			<!--该intent-filter仅供测试使用-->
-			<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
 		</activity>
-			
+		<!--
+		<activity
+		android:name=".ModPackageInstallerActvity"
+		android:label="@string/modpkginstaller_name" >
+		<intent-filter>
+		<action android:name="android.intent.action.VIEW" />
+		<category android:name="android.intent.category.DEFAULT" />
+		<data android:scheme="file" />
+		<data android:host="*" />
+		<data android:mimeType="*/*" />
+		<data android:pathPattern=".*\\.ncvcp" />
+		</intent-filter>
+		<!--该intent-filter仅供测试使用-->
+		<!--
+		<intent-filter>
+		<action android:name="android.intent.action.MAIN" />
+
+		<category android:name="android.intent.category.LAUNCHER" />
+		</intent-filter>
+		</activity>-->
+
 		<provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
