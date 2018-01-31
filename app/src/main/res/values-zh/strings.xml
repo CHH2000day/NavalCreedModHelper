@@ -2,4 +2,5 @@
 <resources>
 	<string name="app_name">战舰联盟mod助手</string>
     <string name="modpkginstaller_name">战舰联盟Mod包安装器</string>
+	<string name="modpkg_info_empty">请先选择一个Mod包文件</string>
 </resources>

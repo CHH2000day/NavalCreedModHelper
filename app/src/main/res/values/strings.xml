@@ -2,10 +2,10 @@
 <resources>
 
     <string name="app_name">NavalCreedModHelper</string>
-	<string name="modpkginstaller_name">NacalCreedModPackageInstaller</string>
+	<string name="modpkginstaller_name">NavalCreedModPackageInstaller</string>
     <string name="hello_world">Hello world!</string>
 	<string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
+	<string name="modpkg_info_empty">Please select a mod package first</string>
     
 </resources>

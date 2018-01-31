@@ -13,7 +13,7 @@
 		android:text="选择文件"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
-		android:id="@+id/modinfopageButton1"/>
+		android:id="@+id/modinfopageButtonSelect"/>
 
 	<Button
 		android:layout_height="wrap_content"
@@ -21,8 +21,8 @@
 		android:text="取消"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentBottom="true"
-		android:id="@+id/modpackageinstallermainButton1"
-		android:layout_toLeftOf="@id/modinfopageButton1"/>
+		android:id="@+id/modinfopageButtonCancel"
+		android:layout_toLeftOf="@id/modinfopageButtonSelect"/>
 
 	<Button
 		android:layout_height="wrap_content"
@@ -30,23 +30,24 @@
 		android:text="安装"
 		android:layout_alignParentEnd="true"
 		android:layout_alignParentBottom="true"
-		android:layout_toLeftOf="@id/modpackageinstallermainButton1"
-		android:id="@+id/modinfopageButton2"
-		android:layout_toRightOf="@id/modinfopageButton1"/>
+		android:layout_toLeftOf="@id/modinfopageButtonCancel"
+		android:id="@+id/modinfopageButtonUpdate"
+		android:layout_toRightOf="@id/modinfopageButtonSelect"/>
 
 	<ImageView
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:src="@drawable/no_pereview_tiny"
-		android:id="@+id/modinfopageImageView1"
+		android:id="@+id/modinfopageImageView"
 		android:adjustViewBounds="true"/>
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-		android:text="请先选择一个Mod包文件"
-		android:layout_below="@id/modinfopageImageView1"
-		android:layout_above="@id/modpackageinstallermainButton1"/>
+		android:text="@string/modpkg_info_empty"
+		android:layout_below="@id/modinfopageImageView"
+		android:layout_above="@id/modinfopageButtonCancel"
+		android:id="@+id/modinfopageTextView"/>
 
 </RelativeLayout>
 

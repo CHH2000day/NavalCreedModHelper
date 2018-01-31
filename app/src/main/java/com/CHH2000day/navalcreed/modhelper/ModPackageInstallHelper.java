@@ -63,6 +63,15 @@ public class ModPackageInstallHelper
 		}
 	}
 
+	public void recycle(){
+		try
+		{
+			mpkgFile.close ( );
+				
+		}
+		catch (IOException e)
+		{}
+	}
 	private void fetch ( ) throws IOException
 	{
 		mpkgFile = new ZipFile ( msrcFile );
