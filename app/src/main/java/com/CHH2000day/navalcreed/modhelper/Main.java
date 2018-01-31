@@ -26,8 +26,11 @@ import android.content.pm.*;
 import android.support.annotation.*;
 import android.view.View.*;
 
-public class Main extends AppCompatActivity
+public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
+
+	
+	
 	private ViewPager mViewPager;
 	private TabLayout mTabLayout;
 	private FragmentPagerAdapter mAdapter;
@@ -132,8 +135,11 @@ public class Main extends AppCompatActivity
 		 }*/
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
-			mModpkgInstallerFragment.selectFile(new File(getIntent().getData().getPath()));
-		}
+			mModpkgInstallerFragment.selectFile(getIntent().getData());
+			mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
+			
+				
+			}
 	}
 
 	@Override
@@ -442,6 +448,18 @@ public class Main extends AppCompatActivity
 	 return true;
 	 }*/
 
+	@Override
+	public Uri getUri ( )
+	{
+		// TODO: Implement this method
+		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
+		{
+			return getIntent().getData();
+
+		}
+		return null;
+	}
+	
 	protected class UpdateThread extends Thread
 	{
 
@@ -547,6 +565,7 @@ public class Main extends AppCompatActivity
 		}
 
 	}
+	
 	private class AnnouncementThread extends Thread
 	{
 
