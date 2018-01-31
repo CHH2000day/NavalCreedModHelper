@@ -140,6 +140,7 @@ public class ModPackageInstallerFragment extends Fragment
 	}
 	public void selectFile ( Uri uri )
 	{
+		clear();
 		AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 		adb.setTitle ( "请稍等" )
 			.setMessage ( "正在读取文件...." )
@@ -173,12 +174,12 @@ public class ModPackageInstallerFragment extends Fragment
 		catch (IOException e)
 		{
 			ad.setCancelable ( true );
-			ad.setCanceledOnTouchOutside ( false );
+			ad.setCanceledOnTouchOutside ( true );
 			ad.setMessage ( e.getLocalizedMessage ( ) );}
 		catch (ModPackageInfo.IllegalModInfoException e)
 		{
 			ad.setCancelable ( true );
-			ad.setCanceledOnTouchOutside ( false );
+			ad.setCanceledOnTouchOutside ( true );
 			ad.setMessage ( "Mod包描述文件出错\n" + e.getLocalizedMessage ( ) );
 		}
 
