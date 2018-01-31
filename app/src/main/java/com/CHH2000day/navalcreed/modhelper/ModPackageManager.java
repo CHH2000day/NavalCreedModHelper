@@ -149,6 +149,7 @@ public class ModPackageManager
 		Sink s=Okio.sink ( configFile );
 		BufferedSink bs=Okio.buffer ( s );
 		bs.writeUtf8 ( jo.toString ( ) );
+		bs.flush();
 		bs.close ( );
 	}
 	public HashMap<String,String> getModList ()

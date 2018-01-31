@@ -94,6 +94,7 @@ public class ModPackageInstallerFragment extends Fragment
 					if ( mpih == null )
 					{
 						Snackbar.make ( v, R.string.modpkg_info_empty, Snackbar.LENGTH_LONG ).show ( );
+						return;
 					}
 					mpih.beginInstall ( );
 					// TODO: Implement this method

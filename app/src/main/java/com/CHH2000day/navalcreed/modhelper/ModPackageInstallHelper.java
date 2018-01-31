@@ -29,6 +29,7 @@ public class ModPackageInstallHelper
 	private static final int SUBTYPE_NULL=0;
 	private static final int SUBTYPE_CV_EN=1200;
 	private static final int SUBTYPE_CV_CN=1201;
+	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
 	private static final String[] CV_COUNTRY={"英语","中文"};
 
@@ -63,11 +64,12 @@ public class ModPackageInstallHelper
 		}
 	}
 
-	public void recycle(){
+	public void recycle ( )
+	{
 		try
 		{
 			mpkgFile.close ( );
-				
+
 		}
 		catch (IOException e)
 		{}
@@ -125,6 +127,7 @@ public class ModPackageInstallHelper
 		if ( mmpi.getModType ( ).equals ( mmpi.MODTYPE_CV ) )
 		{
 
+			msubtype = SUBTYPE_CV_OFFSET;
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 			adb.setTitle ( "请选择要替换的舰长语音" )
 				.setSingleChoiceItems ( CV_COUNTRY, 0, new DialogInterface.OnClickListener ( ){
@@ -132,7 +135,7 @@ public class ModPackageInstallHelper
 					@Override
 					public void onClick ( DialogInterface p1, int p2 )
 					{
-						msubtype = p2;
+						msubtype = p2 + SUBTYPE_CV_OFFSET;
 						// TODO: Implement this method
 					}
 				} )
@@ -142,7 +145,7 @@ public class ModPackageInstallHelper
 					@Override
 					public void onClick ( DialogInterface p1, int p2 ) 
 					{
-						install ( );
+						checkInstall ( );
 						// TODO: Implement this method
 					}
 				} );
@@ -151,10 +154,24 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			install ( );
+			checkInstall ( );
 		}
 
 
+	}
+	
+	private void checkInstall(){
+		ModPackageManager mpm=ModPackageManager.getInstance();
+		if(mpm.checkInstalled(mmpi.getModType(),getSubType())){
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			adb.setTitle ( "错误" )
+				.setMessage ( "当前已安装了相同类型的mod包，请先去mod管理器卸载后再安装" );
+			adb.create ( ).show ( );
+			
+		}else{
+			install();
+		}
+		
 	}
 
 	private void install ( )
@@ -169,6 +186,18 @@ public class ModPackageInstallHelper
 	{
 
 		return mmpi;
+	}
+	private String getSubType(){
+		String s=ModPackageInfo.SUBTYPE_EMPTY;
+		if ( SUBTYPE_CV_EN == msubtype )
+		{
+			s = ModPackageInfo.SUB_MODTYPE_CV_EN;
+		}
+		if ( SUBTYPE_CV_CN == msubtype )
+		{
+			s = ModPackageInfo.SUB_MODTYPE_CV_CN;
+		}
+		return s;
 	}
 
 	private String getPath ( String modeType, int subType )
@@ -343,6 +372,8 @@ public class ModPackageInstallHelper
 			if ( result )
 			{
 				stat.setText ( "操作成功" );
+				
+				ModPackageManager.getInstance ( ).postInstall ( getModPackageInfo ( ).getModType ( ), getSubType(), mmpi.getModName ( ) );
 			}
 			else
 			{
