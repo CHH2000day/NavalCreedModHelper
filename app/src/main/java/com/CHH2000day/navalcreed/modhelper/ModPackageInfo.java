@@ -90,7 +90,7 @@ public class ModPackageInfo
 	}
 
 	public boolean hasPreview(){
-		return (modPreview==null);
+		return (modPreview!=null);
 	}
 	public Bitmap getModPreview ()
 	{
