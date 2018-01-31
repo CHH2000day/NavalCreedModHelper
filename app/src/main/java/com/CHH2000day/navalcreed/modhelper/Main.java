@@ -135,7 +135,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 }*/
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
-			mModpkgInstallerFragment.selectFile(getIntent().getData());
+			
 			mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
 			
 				

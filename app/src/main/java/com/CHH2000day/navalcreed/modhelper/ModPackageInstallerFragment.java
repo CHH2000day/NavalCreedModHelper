@@ -46,16 +46,25 @@ public class ModPackageInstallerFragment extends Fragment
 	}
 
 	@Override
-	public void onActivityCreated ( Bundle savedInstanceState )
+	public void onResume ( )
 	{
-		super.onActivityCreated(savedInstanceState);
 		// TODO: Implement this method
+		super.onResume ( );
 		if ( loader != null && loader.getUri ( ) != null )
 		{
 			selectFile ( loader.getUri ( ) );
 			//注销接口防止被重复使用
 			loader = null;
 		}
+		
+	}
+
+	
+	@Override
+	public void onActivityCreated ( Bundle savedInstanceState )
+	{
+		super.onActivityCreated(savedInstanceState);
+		// TODO: Implement this method
 		select.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
