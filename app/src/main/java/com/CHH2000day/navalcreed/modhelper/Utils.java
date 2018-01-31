@@ -5,6 +5,8 @@ import java.util.zip.*;
 import java.util.*;
 import android.net.*;
 import android.os.*;
+import android.database.*;
+import android.content.*;
 
 public class Utils
 {
@@ -178,9 +180,24 @@ public class Utils
 			bos.close ( );			
 		}
 	}
-	public static String resolveFilePath ( Uri uri )
+	public static String resolveFilePath ( Uri uri ,Context ctx)
 	{
-
+		Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try {
+            cursor = ctx.getContentResolver().query(uri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+                return cursor.getString(column_index);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return null;
+		/*
 		String string =uri.toString ( );
 		String path[]=new String[2];
 		//判断文件是否在sd卡中
@@ -197,5 +214,6 @@ public class Utils
 			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
 		}
 		return null;
+		*/
 	}
 }
