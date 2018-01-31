@@ -397,6 +397,7 @@ public class ModPackageInstallHelper
 				progressbar.setMax ( totalcount );
 				progressbar.setIndeterminate ( false );
 				progressbar.setProgress ( 0, true );
+				stat.setText("正在安装mod包");
 			}
 			progressbar.setProgress ( values [ 0 ], true );
 
