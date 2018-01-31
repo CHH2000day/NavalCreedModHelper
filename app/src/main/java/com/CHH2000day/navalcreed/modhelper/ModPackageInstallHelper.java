@@ -40,7 +40,7 @@ public class ModPackageInstallHelper
 	private ZipFile mpkgFile;
 	private ModPackageInfo mmpi;
 
-	public ModPackageInstallHelper (File pkgFile, AppCompatActivity activity) throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
+	public ModPackageInstallHelper ( File pkgFile, AppCompatActivity activity ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		msrcFile = pkgFile;
 		mactivty = activity;
@@ -48,7 +48,7 @@ public class ModPackageInstallHelper
 		init ( );
 	}
 
-	private void init () throws IOException, ModPackageInfo.IllegalModInfoException
+	private void init ( ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		//创建mod文件实例
 		fetch ( );
@@ -59,21 +59,21 @@ public class ModPackageInstallHelper
 		}
 		catch (JSONException e)
 		{
-			throw new IllegalModInfoException("Failed to resolve mod manifest\n"+e.getLocalizedMessage());
+			throw new IllegalModInfoException ( "Failed to resolve mod manifest\n" + e.getLocalizedMessage ( ) );
 		}
 	}
 
-	private void fetch () throws IOException
+	private void fetch ( ) throws IOException
 	{
 		mpkgFile = new ZipFile ( msrcFile );
 	}
-	private void identify () throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
+	private void identify ( ) throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
 	{
 		ZipEntry mInfoFile=mpkgFile.getEntry ( FILE_MODINFO );
 		InputStream zi=mpkgFile.getInputStream ( mInfoFile );
 		mmpi = ModPackageInfo.Factory.createFromInputStream ( zi );
 	}
-	public void beginInstall ()
+	public void beginInstall ( )
 	{
 		checkVersion ( );
 
@@ -84,10 +84,10 @@ public class ModPackageInstallHelper
 	 {
 	 return false;
 	 }*/
-	private void checkVersion ()
+	private void checkVersion ( )
 	{
 		//检查是否能实现mod包的所有功能
-		if (!mmpi.hasAllFeature ( ))
+		if ( !mmpi.hasAllFeature ( ) )
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 			adb.setTitle ( "注意" )
@@ -96,7 +96,7 @@ public class ModPackageInstallHelper
 				.setPositiveButton ( "继续", new DialogInterface.OnClickListener ( ){
 
 					@Override
-					public void onClick (DialogInterface p1, int p2)
+					public void onClick ( DialogInterface p1, int p2 )
 					{
 						checkModType ( );
 						// TODO: Implement this method
@@ -109,11 +109,11 @@ public class ModPackageInstallHelper
 			checkModType ( );
 		}
 	}
-	private void checkModType ()
+	private void checkModType ( )
 	{
 		//检查mod包类型
 		//如果mod包类型为语音包，确认安装位置
-		if (mmpi.getModType ( ).equals ( mmpi.MODTYPE_CV ))
+		if ( mmpi.getModType ( ).equals ( mmpi.MODTYPE_CV ) )
 		{
 
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
@@ -121,7 +121,7 @@ public class ModPackageInstallHelper
 				.setSingleChoiceItems ( CV_COUNTRY, 0, new DialogInterface.OnClickListener ( ){
 
 					@Override
-					public void onClick (DialogInterface p1, int p2)
+					public void onClick ( DialogInterface p1, int p2 )
 					{
 						msubtype = p2;
 						// TODO: Implement this method
@@ -131,7 +131,7 @@ public class ModPackageInstallHelper
 				.setPositiveButton ( "确定", new DialogInterface.OnClickListener ( ){
 
 					@Override
-					public void onClick (DialogInterface p1, int p2) 
+					public void onClick ( DialogInterface p1, int p2 ) 
 					{
 						install ( );
 						// TODO: Implement this method
@@ -148,7 +148,7 @@ public class ModPackageInstallHelper
 
 	}
 
-	private void install ()
+	private void install ( )
 	{
 
 		InstallTask it=new InstallTask ( mmpi.getModType ( ), msubtype );
@@ -156,27 +156,47 @@ public class ModPackageInstallHelper
 
 
 	}
-	public ModPackageInfo getModPackageInfo ()
+	public ModPackageInfo getModPackageInfo ( )
 	{
 
 		return mmpi;
 	}
 
-	private String getPath (String modeType, int subType)
+	private String getPath ( String modeType, int subType )
 	{
 		String pth=mmha.getResFilesDirPath ( );
 
-		if (ModPackageInfo.MODTYPE_CV.equals ( modeType ))
+		if ( ModPackageInfo.MODTYPE_CV.equals ( modeType ) )
 		{
 			pth = pth + PRIMARYPATH_CV;
-			if (subType == SUBTYPE_CV_CN)
+			if ( subType == SUBTYPE_CV_CN )
 			{
 				pth = pth + SUBPATH_CV_CN;
 			}
-			else if (subType == SUBTYPE_CV_EN)
+			else if ( subType == SUBTYPE_CV_EN )
 			{
 				pth = pth + SUBPATH_CV_EN;
 			}
+		}
+		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modeType ) )
+		{
+			pth = pth + PRIMARYPATH_BACKGROUND;
+		}
+		if ( ModPackageInfo.MODTYPE_BGM.equals ( modeType ) )
+		{
+			pth = pth + PRIMARYPATH_BGM;
+		}
+		if ( ModPackageInfo.MODTYPE_CREWPIC.equals ( modeType ) )
+		{
+			pth = pth + PRIMARYPATH_CREWHEAD;
+		}
+		if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modeType ) )
+		{
+			pth = pth + PRIMARYPATH_SOUNDEFFECT;
+		}
+		if ( ModPackageInfo.MODTYPE_OTHER.equals ( modeType ) )
+		{
+			pth = pth + PRIMARYTYPE_OTHER;
 		}
 		return pth;
 	}
@@ -192,14 +212,14 @@ public class ModPackageInstallHelper
 		private TextView stat;
 		private ProgressBar progressbar;
 		private DialogMonitor dm;
-		protected InstallTask (String modType, int subType)
+		protected InstallTask ( String modType, int subType )
 		{
 			mainPath = getPath ( modType, subType );
 		}
 		@Override
-		protected Boolean doInBackground (Void[] p1)
+		protected Boolean doInBackground ( Void[] p1 )
 		{
-			if (ModPackageInfo.Versions.VER_0==mmpi.getModTargetVer())
+			if ( ModPackageInfo.Versions.VER_0 == mmpi.getModTargetVer ( ) )
 			{
 				return installModVer0 ( );}
 			else
@@ -209,7 +229,7 @@ public class ModPackageInstallHelper
 
 
 		}
-		private boolean installModVer0 ()
+		private boolean installModVer0 ( )
 		{
 			try
 			{
@@ -219,23 +239,23 @@ public class ModPackageInstallHelper
 				File targetFile;
 				ZipInputStream zis=new ZipInputStream ( new FileInputStream ( msrcFile ) );
 
-				while ((ze = zis.getNextEntry ( )) != null)
+				while ( ( ze = zis.getNextEntry ( ) ) != null )
 				{
 					//不解压mod描述文件
-					if (ze.getName ( ).equals ( FILE_MODINFO ))
+					if ( ze.getName ( ).equals ( FILE_MODINFO ) )
 					{
 						continue;
 					}
 					//判断获取到的Entry是否为目录
-					if (ze.isDirectory ( ))
+					if ( ze.isDirectory ( ) )
 					{
 						//若是，创建目录结构
 						targetFile = new File ( mainPath, ze.getName ( ) );
-						if (!targetFile.getParentFile ( ).exists ( ))
+						if ( !targetFile.getParentFile ( ).exists ( ) )
 						{
 							targetFile.getParentFile ( ).mkdirs ( );
 						}
-						if (targetFile.isFile ( ))
+						if ( targetFile.isFile ( ) )
 						{
 							targetFile.delete ( );
 						}
@@ -248,19 +268,19 @@ public class ModPackageInstallHelper
 					{
 						//写出文件
 						targetFile = new File ( mainPath, ze.getName ( ) );
-						if (!targetFile.getParentFile ( ).exists ( ))
+						if ( !targetFile.getParentFile ( ).exists ( ) )
 						{
 							targetFile.getParentFile ( ).mkdirs ( );
 						}
 						//若写出的目标文件已为目录，删除
-						if (targetFile.isDirectory ( ))
+						if ( targetFile.isDirectory ( ) )
 						{
 							Utils.delDir ( targetFile );
 						}
 						//输出文件，使用Okio
 						Sink s=Okio.sink ( targetFile );
 						BufferedSink bs=Okio.buffer ( s );
-						while ((len = zis.read ( cache )) != -1)
+						while ( ( len = zis.read ( cache ) ) != -1 )
 						{
 							bs.write ( cache, 0, len );
 						}
@@ -286,7 +306,7 @@ public class ModPackageInstallHelper
 
 
 		@Override
-		protected void onPreExecute ()
+		protected void onPreExecute ( )
 		{
 			dialogView = mactivty.getLayoutInflater ( ).inflate ( R.layout.dialog_installmodpkg, null );
 			stat = (TextView)dialogView.findViewById ( R.id.dialoginstallmodpkgStatus );
@@ -307,11 +327,11 @@ public class ModPackageInstallHelper
 		}
 
 		@Override
-		protected void onPostExecute (Boolean result)
+		protected void onPostExecute ( Boolean result )
 		{
 			progressbar.setProgress ( progressbar.getMax ( ) );
 			dm.ondone ( );
-			if (result)
+			if ( result )
 			{
 				stat.setText ( "操作成功" );
 			}
@@ -328,17 +348,17 @@ public class ModPackageInstallHelper
 		}
 
 		@Override
-		protected void onProgressUpdate (Integer[] values)
+		protected void onProgressUpdate ( Integer[] values )
 		{
 			super.onProgressUpdate ( values );
-			if (totalcount == 0)
+			if ( totalcount == 0 )
 			{
 				totalcount = mpkgFile.size ( );
 				progressbar.setMax ( totalcount );
 				progressbar.setIndeterminate ( false );
 				progressbar.setProgress ( 0, true );
 			}
-			progressbar.setProgress ( values[ 0 ], true );
+			progressbar.setProgress ( values [ 0 ], true );
 
 			// TODO: Implement this method
 
@@ -348,22 +368,22 @@ public class ModPackageInstallHelper
 			private AlertDialog alertdialog;
 			private Button button;
 			private int color;
-			public DialogMonitor (AlertDialog ad)
+			public DialogMonitor ( AlertDialog ad )
 			{
 				alertdialog = ad;
 			}
-			public void ondone ()
+			public void ondone ( )
 			{
 				button.setTextColor ( color );
 				button.setClickable ( true );
 			}
 			@Override
-			public void onShow (DialogInterface p1)
+			public void onShow ( DialogInterface p1 )
 			{	button = alertdialog.getButton ( ad.BUTTON_POSITIVE );
 				button.setOnClickListener ( new OnClickListener ( ){
 
 						@Override
-						public void onClick (View p1)
+						public void onClick ( View p1 )
 						{
 							ad.dismiss ( );
 							// TODO: Implement this method
