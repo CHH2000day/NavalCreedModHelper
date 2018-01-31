@@ -48,12 +48,19 @@ public class ModPackageInstallHelper
 		init ( );
 	}
 
-	private void init () throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
+	private void init () throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		//创建mod文件实例
 		fetch ( );
 		//识别Mod文件并读取信息
-		identify ( );
+		try
+		{
+			identify ( );
+		}
+		catch (JSONException e)
+		{
+			throw new IllegalModInfoException("Failed to resolve mod manifest\n"+e.getLocalizedMessage());
+		}
 	}
 
 	private void fetch () throws IOException
