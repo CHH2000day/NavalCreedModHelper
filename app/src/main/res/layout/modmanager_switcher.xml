@@ -11,7 +11,8 @@
 		android:textOff="NORM"
 		android:textOn="OVRD"
 		android:layout_alignParentRight="true"
-		android:id="@+id/modmanagerswitcherToggleButton1"/>
+		android:id="@+id/modmanagerswitcherToggleButton1"
+		android:textColor="@color/ovrdswitch_selector"/>
 
 	<TextView
 		android:layout_height="wrap_content"

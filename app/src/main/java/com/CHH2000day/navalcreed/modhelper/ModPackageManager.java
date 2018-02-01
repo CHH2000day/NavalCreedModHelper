@@ -9,7 +9,10 @@ public class ModPackageManager
 	//<ModType,ModName>
 	private HashMap<String,String> installedMod;
 	private File configFile;
+	private boolean isOverride=false;
+	private static final String OVRD="override";
 	private static ModPackageManager mmm;
+
 	public static ModPackageManager getInstance ()
 	{
 		if (mmm == null)
@@ -43,6 +46,9 @@ public class ModPackageManager
 			JSONObject j=jo.getJSONObject ( ModPackageInfo.MODTYPE_CV );
 			installedMod.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, j.getString ( ModPackageInfo.SUB_MODTYPE_CV_CN ) );
 			installedMod.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, j.getString ( ModPackageInfo.SUB_MODTYPE_CV_EN ) );
+			if(jo.has(OVRD)){
+				isOverride=jo.getBoolean(OVRD);
+			}
 		}
 		catch (FileNotFoundException t)
 		{try
@@ -65,6 +71,9 @@ public class ModPackageManager
 
 	public void postUninstall (String modtype, String subtype)
 	{
+		if(isOverride){
+			return;
+		}
 		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
 		{
 			installedMod.put ( subtype, "" );
@@ -86,6 +95,9 @@ public class ModPackageManager
 	}
 	public void postInstall (String modtype, String subtype, String modname)
 	{
+		if(isOverride){
+			return;
+		}
 		if (modtype.equals ( ModPackageInfo.MODTYPE_CV ))
 		{
 			installedMod.put ( subtype, modname );
@@ -131,6 +143,7 @@ public class ModPackageManager
 			jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, installedMod.get ( ModPackageInfo.SUB_MODTYPE_CV_CN ) );
 			jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, installedMod.get ( ModPackageInfo.SUB_MODTYPE_CV_EN ) );
 			jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
+			jo.put(OVRD,isOverride);
 			writeConfigFile ( jo );
 		}
 
@@ -152,6 +165,24 @@ public class ModPackageManager
 		bs.flush();
 		bs.close ( );
 	}
+	public void setIsOverride ( boolean isOverride )
+	{
+		this.isOverride = isOverride;
+		try
+		{
+			commit ( );
+		}
+		catch (IOException e)
+		{e.printStackTrace();}
+		catch (JSONException e)
+		{e.printStackTrace();}
+	}
+
+	public boolean isOverride ( )
+	{
+		return isOverride;
+	}
+	
 	public HashMap<String,String> getModList ()
 	{
 		return installedMod;
@@ -159,6 +190,9 @@ public class ModPackageManager
 
 	public boolean checkInstalled (String type, String subtype)
 	{
+		if(isOverride){
+			return false;
+		}
 		if (type.equals ( ModPackageInfo.MODTYPE_CV ))
 		{
 			return (!"".equals ( installedMod.get ( subtype ) ));
