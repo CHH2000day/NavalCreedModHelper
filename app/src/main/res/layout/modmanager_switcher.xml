@@ -2,23 +2,27 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="wrap_content"
-	android:layout_width="match_parent">
+	android:layout_width="match_parent"
+	android:layout_margin="5dp">
 
-	<Switch
+	<ToggleButton
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
+		android:textOff="NORM"
+		android:textOn="OVRD"
 		android:layout_alignParentRight="true"
-		android:id="@+id/modmanagerswitcherSwitch"/>
+		android:id="@+id/modmanagerswitcherToggleButton1"/>
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="Text"
-		android:layout_alignBottom="@id/modmanagerswitcherSwitch"
+		android:text="Mod包管理机制"
 		android:layout_alignParentTop="true"
-		android:layout_toLeftOf="@id/modmanagerswitcherSwitch"
 		android:layout_alignParentLeft="true"
-		android:id="@+id/modmanagerswitcherTextView"/>
+		android:id="@+id/modmanagerswitcherTextView"
+		android:layout_alignBottom="@id/modmanagerswitcherToggleButton1"
+		android:layout_toLeftOf="@id/modmanagerswitcherToggleButton1"
+		android:gravity="left|center_vertical"/>
 
 </RelativeLayout>
 

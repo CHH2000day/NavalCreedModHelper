@@ -29,8 +29,8 @@ import android.view.View.*;
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
 
-	
-	
+
+
 	private ViewPager mViewPager;
 	private TabLayout mTabLayout;
 	private FragmentPagerAdapter mAdapter;
@@ -46,7 +46,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	private CustomShipNameFragment mAntiHexieFragment;
 	private LoginMovieReplacer mLoginMovieReplacer;
 	private ModPackageInstallerFragment mModpkgInstallerFragment;
-
+	private ModPackageManagerFragment mModPackageManagerFragment;
 
 	private static final int PERMISSION_CHECK_CODE=125;
 	@Override
@@ -103,7 +103,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			mBGMReplacerFragment = new BGMReplacerFragment ( );
 		}
-		mModpkgInstallerFragment=new ModPackageInstallerFragment();
+		mModpkgInstallerFragment = new ModPackageInstallerFragment ( );
+		mModPackageManagerFragment = new ModPackageManagerFragment ( );
 		//进行数据配置
 		fragments = new ArrayList<Fragment> ( );
 		fragments.add ( mBGReplacerFragment );
@@ -112,6 +113,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		fragments.add ( mAntiHexieFragment );
 		fragments.add ( mBGMReplacerFragment );
 		fragments.add ( mModpkgInstallerFragment );
+		fragments.add ( mModPackageManagerFragment );
 		fragments.add ( new AboutFragment ( ) );
 		titles = new ArrayList<String> ( );
 		titles.add ( "背景替换" );
@@ -120,6 +122,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		titles.add ( "反和谐" );
 		titles.add ( "BGM替换" );
 		titles.add ( "Mod包安装" );
+		titles.add ( "Mod包管理" );
 		titles.add ( "关于" );
 		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
 		mViewPager.setAdapter ( mAdapter );
@@ -135,11 +138,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 }*/
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
-			
-			mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
-			
-				
-			}
+
+			mTabLayout.getTabAt ( fragments.indexOf ( mModpkgInstallerFragment ) ).select ( );
+
+
+		}
 	}
 
 	@Override
@@ -454,12 +457,12 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		// TODO: Implement this method
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
-			return getIntent().getData();
+			return getIntent ( ).getData ( );
 
 		}
 		return null;
 	}
-	
+
 	protected class UpdateThread extends Thread
 	{
 
@@ -565,7 +568,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		}
 
 	}
-	
+
 	private class AnnouncementThread extends Thread
 	{
 

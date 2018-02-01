@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical">
+
+	<android.support.v7.widget.CardView
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:id="@+id/cardview"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="10dp"
+		android:layout_marginLeft="6dp"
+		android:layout_marginRight="6dp"
+		android:layout_marginTop="6dp">
+
+		<include
+			layout="@layout/modmanager_switcher"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
+
+	</android.support.v7.widget.CardView>
+
+	<android.support.v7.widget.RecyclerView
+		android:layout_width="match_parent"
+		android:layout_height="fill_parent"
+		android:id="@+id/modmanagerfragmemtRecyclerView"/>
+
+</LinearLayout>
+
