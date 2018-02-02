@@ -12,6 +12,7 @@ import android.widget.*;
 import android.support.v7.app.*;
 import android.view.View.*;
 import android.support.design.widget.*;
+import android.text.method.*;
 
 public class ModPackageInstallerFragment extends Fragment
 {
@@ -42,6 +43,7 @@ public class ModPackageInstallerFragment extends Fragment
 		select = (Button)v.findViewById ( R.id.modinfopageButtonSelect );
 		update = (Button)v.findViewById ( R.id.modinfopageButtonUpdate );
 		cancel = (Button)v.findViewById ( R.id.modinfopageButtonCancel );
+		info.setMovementMethod(new ScrollingMovementMethod());
 		return v;
 	}
 
