@@ -35,7 +35,6 @@ public class ModPackageManager
 		try
 		{
 			Source s=Okio.source ( configFile );
-			updateConfig ( false );
 			BufferedSource bs=Okio.buffer ( s );
 			JSONObject jo=new JSONObject ( bs.readUtf8 ( ) );
 			bs.close ( );
