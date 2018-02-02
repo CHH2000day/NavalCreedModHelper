@@ -175,7 +175,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 				subtype=ModPackageInfo.SUBTYPE_EMPTY;
 			}
 			//如果对应mod包已安装
-			if ( !ModPackageManager.getInstance().checkInstalled(type,subtype) )
+			if ( ModPackageManager.getInstance().checkInstalled(type,subtype) )
 			{
 				info.setText ( new StringBuilder ( ).append ( "mod类型:" )
 							  .append ( ModPackageManager.resolveModType ( keys [ p2 ] ) )
