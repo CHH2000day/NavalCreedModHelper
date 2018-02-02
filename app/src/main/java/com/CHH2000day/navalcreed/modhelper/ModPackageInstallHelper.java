@@ -26,9 +26,9 @@ public class ModPackageInstallHelper
 	private static final String SUBPATH_CV_EN=File.separatorChar + "EnglishUsual";
 	private static final String SUBPATH_CV_CN=File.separatorChar + "ChineseUsual";
 
-	private static final int SUBTYPE_NULL=0;
-	private static final int SUBTYPE_CV_EN=1200;
-	private static final int SUBTYPE_CV_CN=1201;
+	public static final int SUBTYPE_NULL=0;
+	public static final int SUBTYPE_CV_EN=1200;
+	public static final int SUBTYPE_CV_CN=1201;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
 	private static final String[] CV_COUNTRY={"英语","中文"};
@@ -200,9 +200,9 @@ public class ModPackageInstallHelper
 		return s;
 	}
 
-	private String getPath ( String modeType, int subType )
+	public static String getPath ( String modeType, int subType,ModHelperApplication app )
 	{
-		String pth=mmha.getResFilesDirPath ( );
+		String pth=app.getResFilesDirPath ( );
 
 		if ( ModPackageInfo.MODTYPE_CV.equals ( modeType ) )
 		{
@@ -252,7 +252,7 @@ public class ModPackageInstallHelper
 		private DialogMonitor dm;
 		protected InstallTask ( String modType, int subType )
 		{
-			mainPath = getPath ( modType, subType );
+			mainPath = getPath ( modType, subType,(ModHelperApplication)mactivty.getApplication());
 		}
 		@Override
 		protected Boolean doInBackground ( Void[] p1 )
