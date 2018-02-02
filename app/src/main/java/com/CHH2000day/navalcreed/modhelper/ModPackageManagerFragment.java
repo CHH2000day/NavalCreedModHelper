@@ -190,6 +190,9 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		@Override
 		public int getItemCount ( )
 		{
+			if(ModPackageManager.getInstance().isOverride()){
+				return 0;
+			}
 			// TODO: Implement this method
 			return keys.length;
 		}
@@ -204,6 +207,10 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		@Override
 		public boolean onLongClick ( View p1 )
 		{
+			if(ModPackageManager.getInstance().isOverride()){
+				//OVRD时禁用管理器
+				return false;
+			}
 			int num=p1.getTag ( );
 			String key=ModPackageManager.PUBLIC_KEYS [ num ];
 			if ( key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
