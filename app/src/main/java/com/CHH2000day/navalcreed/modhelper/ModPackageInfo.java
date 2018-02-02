@@ -3,7 +3,7 @@ import java.io.*;
 import android.graphics.*;
 import org.json.*;
 import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
-import okio.*;
+import android.util.*;
 
 public class ModPackageInfo
 {
@@ -29,7 +29,7 @@ public class ModPackageInfo
 	private static final String KEY_MODINFO="modInfo";
 	private static final String KEY_MODTYPE="modType";
 	private static final String KEY_HASPREVIEW="hasPreview";
-	private static final String KEY_PREVIEW="preView";
+	private static final String KEY_PREVIEW="preview";
 
 	private String modName;
 	private String modType;
@@ -128,10 +128,8 @@ public class ModPackageInfo
 			{
 				throw new NullPointerException ( "InputStream could not be null!" );
 			}
-			//描述文件大小不会太大，因而直接read
-			byte[] cache=new byte[in.available ( )];
-			in.read ( cache );
-			in.close ( );
+			
+			byte[] cache=Utils.readAllbytes(in);
 			return createFromByteArray ( cache );
 		}
 		public static ModPackageInfo createFromByteArray (byte[]data) throws JSONException, ModPackageInfo.IllegalModInfoException
@@ -163,7 +161,7 @@ public class ModPackageInfo
 			mpi.setModTargetVer(jo.getInt(mpi.KEY_TARGETVER));
 			//检查是否有预览图并解码
 			if(jo.getBoolean(mpi.KEY_HASPREVIEW)){
-				byte[] piccache=Base64.decode(jo.getString(mpi.KEY_PREVIEW));
+				byte[] piccache=Base64.decode(jo.getString(mpi.KEY_PREVIEW),Base64.DEFAULT);
 				mpi.setModPreview(BitmapFactory.decodeByteArray(piccache,0,piccache.length));
 			}
 
