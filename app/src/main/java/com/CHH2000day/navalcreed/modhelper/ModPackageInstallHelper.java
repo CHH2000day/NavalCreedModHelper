@@ -81,6 +81,10 @@ public class ModPackageInstallHelper
 	private void identify ( ) throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
 	{
 		ZipEntry mInfoFile=mpkgFile.getEntry ( FILE_MODINFO );
+		if ( mInfoFile == null )
+		{
+			throw new IllegalModInfoException ( "Could not found mod.info from package" );
+		}
 		InputStream zi=mpkgFile.getInputStream ( mInfoFile );
 		mmpi = ModPackageInfo.Factory.createFromInputStream ( zi );
 	}
@@ -159,19 +163,23 @@ public class ModPackageInstallHelper
 
 
 	}
-	
-	private void checkInstall(){
-		ModPackageManager mpm=ModPackageManager.getInstance();
-		if(mpm.checkInstalled(mmpi.getModType(),getSubType())){
+
+	private void checkInstall ( )
+	{
+		ModPackageManager mpm=ModPackageManager.getInstance ( );
+		if ( mpm.checkInstalled ( mmpi.getModType ( ), getSubType ( ) ) )
+		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 			adb.setTitle ( "错误" )
 				.setMessage ( "当前已安装了相同类型的mod包，请先去mod管理器卸载后再安装" );
 			adb.create ( ).show ( );
-			
-		}else{
-			install();
+
 		}
-		
+		else
+		{
+			install ( );
+		}
+
 	}
 
 	private void install ( )
@@ -187,7 +195,8 @@ public class ModPackageInstallHelper
 
 		return mmpi;
 	}
-	private String getSubType(){
+	private String getSubType ( )
+	{
 		String s=ModPackageInfo.SUBTYPE_EMPTY;
 		if ( SUBTYPE_CV_EN == msubtype )
 		{
@@ -200,7 +209,7 @@ public class ModPackageInstallHelper
 		return s;
 	}
 
-	public static String getPath ( String modeType, int subType,ModHelperApplication app )
+	public static String getPath ( String modeType, int subType, ModHelperApplication app )
 	{
 		String pth=app.getResFilesDirPath ( );
 
@@ -252,7 +261,7 @@ public class ModPackageInstallHelper
 		private DialogMonitor dm;
 		protected InstallTask ( String modType, int subType )
 		{
-			mainPath = getPath ( modType, subType,(ModHelperApplication)mactivty.getApplication());
+			mainPath = getPath ( modType, subType, (ModHelperApplication)mactivty.getApplication ( ) );
 		}
 		@Override
 		protected Boolean doInBackground ( Void[] p1 )
@@ -372,8 +381,8 @@ public class ModPackageInstallHelper
 			if ( result )
 			{
 				stat.setText ( "操作成功" );
-				
-				ModPackageManager.getInstance ( ).postInstall ( getModPackageInfo ( ).getModType ( ), getSubType(), mmpi.getModName ( ) );
+
+				ModPackageManager.getInstance ( ).postInstall ( getModPackageInfo ( ).getModType ( ), getSubType ( ), mmpi.getModName ( ) );
 			}
 			else
 			{
@@ -397,7 +406,7 @@ public class ModPackageInstallHelper
 				progressbar.setMax ( totalcount );
 				progressbar.setIndeterminate ( false );
 				progressbar.setProgress ( 0, true );
-				stat.setText("正在安装mod包");
+				stat.setText ( "正在安装mod包" );
 			}
 			progressbar.setProgress ( values [ 0 ], true );
 
