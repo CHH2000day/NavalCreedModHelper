@@ -2,7 +2,8 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+	android:layout_width="match_parent"
+	android:padding="6dp">
 
 	<TextView
 		android:layout_height="wrap_content"
@@ -27,7 +28,8 @@
 		android:layout_alignBottom="@id/loginmoviereplacerfragmentButtonSelect"
 		android:gravity="center_vertical"
 		android:layout_toLeftOf="@id/loginmoviereplacerfragmentButtonSelect"
-		android:layout_alignParentLeft="true"/>
+		android:layout_alignParentLeft="true"
+		android:paddingLeft="3dp"/>
 
 	<Button
 		android:layout_height="wrap_content"

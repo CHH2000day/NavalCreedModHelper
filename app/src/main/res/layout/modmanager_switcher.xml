@@ -23,7 +23,8 @@
 		android:id="@+id/modmanagerswitcherTextView"
 		android:layout_alignBottom="@id/modmanagerswitcherToggleButton1"
 		android:layout_toLeftOf="@id/modmanagerswitcherToggleButton1"
-		android:gravity="left|center_vertical"/>
+		android:gravity="left|center_vertical"
+		android:paddingLeft="3dp"/>
 
 </RelativeLayout>
 

@@ -5,7 +5,11 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/modpackageinstaller_main_mainview"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:paddingBottom="2dp"
+	android:paddingLeft="6dp"
+	android:paddingRight="6dp"
+	android:paddingTop="6dp">
 
 	<Button
 		android:layout_height="wrap_content"

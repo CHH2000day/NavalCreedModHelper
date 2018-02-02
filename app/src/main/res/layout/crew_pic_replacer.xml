@@ -2,7 +2,8 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+	android:layout_width="match_parent"
+	android:padding="6dp">
 
 	<TextView
 		android:layout_height="wrap_content"
@@ -55,7 +56,8 @@
 		android:layout_alignParentLeft="true"
 		android:layout_alignBottom="@id/crewpicreplacerButtonSelectPic"
 		android:gravity="center_vertical"
-		android:id="@+id/crewpicreplacerSelectedFile"/>
+		android:id="@+id/crewpicreplacerSelectedFile"
+		android:paddingLeft="3dp"/>
 
 	<Button
 		android:layout_height="wrap_content"
