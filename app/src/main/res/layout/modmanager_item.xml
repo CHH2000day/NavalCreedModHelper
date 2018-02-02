@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+	<RelativeLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+	
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:padding="6dp"
+		android:id="@+id/modmanageritemRelativeLayout">
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="Mod类型及mod名"
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:id="@+id/modmanageritemTextView"
+			android:layout_alignParentRight="true"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="长按以卸载"
+			android:layout_alignParentRight="true"
+			android:layout_below="@id/modmanageritemTextView"
+			android:id="@+id/modmanageritemMemo"/>
+
+	</RelativeLayout>
+
+
+
