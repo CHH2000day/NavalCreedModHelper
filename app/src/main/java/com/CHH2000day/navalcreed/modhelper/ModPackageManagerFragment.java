@@ -163,8 +163,19 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			TextView info=(TextView)v.findViewById ( R.id.modmanageritemTextView );
 			TextView memo=(TextView)v.findViewById ( R.id.modmanageritemMemo );
 			rl.setTag ( p2 );
+			String key=keys[p2];
+			String type="";
+			String subtype="";
+			if ( key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) ){
+				type=ModPackageInfo.MODTYPE_CV;
+				subtype=key;
+			}
+			else{
+				type=key;
+				subtype=ModPackageInfo.SUBTYPE_EMPTY;
+			}
 			//如果对应mod包已安装
-			if ( !ModPackageManager.getInstance ( ).getModList ( ).get ( keys [ p2 ] ).equals ( "" ) )
+			if ( !ModPackageManager.getInstance().checkInstalled(type,subtype) )
 			{
 				info.setText ( new StringBuilder ( ).append ( "mod类型:" )
 							  .append ( ModPackageManager.resolveModType ( keys [ p2 ] ) )
