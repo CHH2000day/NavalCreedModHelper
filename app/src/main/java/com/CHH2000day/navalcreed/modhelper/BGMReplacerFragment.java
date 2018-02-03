@@ -65,7 +65,7 @@ public class BGMReplacerFragment extends ModFragment
 
 
 	@Override
-	public View onCreateView (final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
 		v = inflater.inflate ( R.layout.bgmreplacer_fragment, null );
@@ -81,14 +81,24 @@ public class BGMReplacerFragment extends ModFragment
 	}
 
 	@Override
-	public void onActivityCreated (Bundle savedInstanceState)
+	public void onActivityCreated ( Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
 		super.onActivityCreated ( savedInstanceState );
+		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
+		{
+			initview ( );
+		}
+
+	}
+
+
+	private void initview ( )
+	{
 		select.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
-				public void onClick (View p1)
+				public void onClick ( View p1 )
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory ( intent.CATEGORY_OPENABLE );
@@ -100,20 +110,20 @@ public class BGMReplacerFragment extends ModFragment
 		remove.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
-				public void onClick (View p1)
+				public void onClick ( View p1 )
 				{
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "提示" )
 						.setMessage ( new StringBuilder ( )
 									 .append ( "确定要移除对" )
-									 .append ( SCENE_TOSHOW[ curr_scene ] )
+									 .append ( SCENE_TOSHOW [ curr_scene ] )
 									 .append ( "的更改么？" )
 									 .toString ( ) )
 						.setNegativeButton ( "否", null )
 						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
 
 							@Override
-							public void onClick (DialogInterface p1, int p2)
+							public void onClick ( DialogInterface p1, int p2 )
 							{
 								//注销所有缓存文件
 								FormatHelperFactory.denyAllCaches ( );
@@ -130,7 +140,7 @@ public class BGMReplacerFragment extends ModFragment
 		remove.setOnLongClickListener ( new OnLongClickListener ( ){
 
 				@Override
-				public boolean onLongClick (View p1)
+				public boolean onLongClick ( View p1 )
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( "提示" )
 						.setMessage ( "确定要移除所有对BGM的更改么？" )
@@ -138,7 +148,7 @@ public class BGMReplacerFragment extends ModFragment
 						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
 
 							@Override
-							public void onClick (DialogInterface p1, int p2)
+							public void onClick ( DialogInterface p1, int p2 )
 							{
 								String s=uninstallMod ( ) ?"操作完成": "操作失败";
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
@@ -159,14 +169,14 @@ public class BGMReplacerFragment extends ModFragment
 				ProgressBar pb;
 				long starttime;
 				@Override
-				public void onClick (View p1)
+				public void onClick ( View p1 )
 				{
-					if (null == srcfile)
+					if ( null == srcfile )
 					{
 						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
-					if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY ))
+					if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY ) )
 					{
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 						adb.setTitle ( "注意" )
@@ -175,14 +185,14 @@ public class BGMReplacerFragment extends ModFragment
 							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
 
 								@Override
-								public void onClick (DialogInterface p1, int p2)
+								public void onClick ( DialogInterface p1, int p2 )
 								{
 									uninstallMod ( );
 									install ( );
 									// TODO: Implement this method
 								}
 							} );
-						adb.create().show();
+						adb.create ( ).show ( );
 					}
 					else
 					{
@@ -190,10 +200,10 @@ public class BGMReplacerFragment extends ModFragment
 					}
 					// TODO: Implement this method
 				}
-				private void install ()
+				private void install ( )
 				{
 					//开始创建进度对话框
-					
+
 					dialogView = LayoutInflater.from ( getActivity ( ) ).inflate ( R.layout.dialog_transcode, null );
 					progress = (TextView)dialogView.findViewById ( R.id.dialogtranscodeTextView );
 					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );
@@ -207,9 +217,9 @@ public class BGMReplacerFragment extends ModFragment
 					ad.setOnShowListener ( mon );
 					ad.setCancelable ( false );
 					final Handler h=new Handler ( ){
-						public void handleMessage (Message msg)
+						public void handleMessage ( Message msg )
 						{
-							switch (msg.what)
+							switch ( msg.what )
 							{
 								case AudioFormatHelper.STATUS_START:
 									//无异常
@@ -250,7 +260,7 @@ public class BGMReplacerFragment extends ModFragment
 					ad.show ( );
 					final AudioFormatHelper afh=FormatHelperFactory.getAudioFormatHelper ( srcfile, getActivity ( ) );
 					new Thread ( ){
-						public void run ()
+						public void run ( )
 						{
 							//try
 							//{
@@ -260,7 +270,7 @@ public class BGMReplacerFragment extends ModFragment
 							starttime = System.currentTimeMillis ( );
 							String s=afh.compressToWav ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ), h );
 							afh.recycle ( );
-							s = (AudioFormatHelper.RESULT_OK.equals ( s )) ? "操作完成": s;
+							s = ( AudioFormatHelper.RESULT_OK.equals ( s ) ) ? "操作完成": s;
 							h.sendMessage ( h.obtainMessage ( 1, s ) );
 							//}
 							/*catch (IOException e)
@@ -281,7 +291,7 @@ public class BGMReplacerFragment extends ModFragment
 		mSceneSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
-				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
+				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )
 				{
 					curr_scene = p3;
 					curr_type = p3 + 10;
@@ -290,7 +300,7 @@ public class BGMReplacerFragment extends ModFragment
 				}
 
 				@Override
-				public void onNothingSelected (AdapterView<?> p1)
+				public void onNothingSelected ( AdapterView<?> p1 )
 				{
 					// TODO: Implement this method
 				}
@@ -298,22 +308,20 @@ public class BGMReplacerFragment extends ModFragment
 		mFileNameSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
 
 				@Override
-				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
+				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )
 				{
 					curr_music = p3;
 					// TODO: Implement this method
 				}
 
 				@Override
-				public void onNothingSelected (AdapterView<?> p1)
+				public void onNothingSelected ( AdapterView<?> p1 )
 				{
 					// TODO: Implement this method
 				}
 			} );
 	}
-
-
-	private File getTargetFile (int scene, int type, int num, String format)
+	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (
 			new StringBuilder ( )
@@ -323,7 +331,7 @@ public class BGMReplacerFragment extends ModFragment
 			.append ( File.separatorChar )
 			.append ( "Music" )
 			.append ( File.separatorChar )
-			.append ( SCENE[ scene ] )
+			.append ( SCENE [ scene ] )
 			.append ( File.separatorChar )
 			.append ( getFileName ( type, num ) )
 			.append ( format )
@@ -331,38 +339,38 @@ public class BGMReplacerFragment extends ModFragment
 		);
 		return f;
 	}
-	String getFileName (int type, int num)
+	String getFileName ( int type, int num )
 	{
-		return getFileNameStrings ( type )[ num ];
+		return getFileNameStrings ( type ) [ num ];
 	}
-	protected String identifyFormat (InputStream in, boolean closeStream) throws IOException
+	protected String identifyFormat ( InputStream in, boolean closeStream ) throws IOException
 	{
 		return Utils.identifyFormat ( in, closeStream );
 	}
-	private static String[] getFileNameStringsToShow (int type)
+	private static String[] getFileNameStringsToShow ( int type )
 	{
-		if (type == TYPE_BATTLEFAIL)
+		if ( type == TYPE_BATTLEFAIL )
 		{
 			return FILENAMES_BATTLEFAIL_TOSHOW;
 		}
-		if (type == TYPE_LOADING)
+		if ( type == TYPE_LOADING )
 		{
 			return FILENAMES_LOADING_TOSHOW;
 		}
 		return getFileNameStrings ( type );
 	}
-	private static String[] getFileNameStrings (int type)
+	private static String[] getFileNameStrings ( int type )
 	{
-		if (type == TYPE_BATTLEFAIL)
+		if ( type == TYPE_BATTLEFAIL )
 		{
 			return FILENAMES_BATTLEFAIL;
 		}
-		if (type == TYPE_LOADING)
+		if ( type == TYPE_LOADING )
 		{
 			return FILENAMES_LOADING;
 		}
 		int count=0;
-		switch (type)
+		switch ( type )
 		{
 			case TYPE_HARBOR:
 				count = MUSICCOUNT_HARBOR;
@@ -383,7 +391,7 @@ public class BGMReplacerFragment extends ModFragment
 		return Arrays.copyOf ( FILENAMES_UNIVERSAL, count );
 	}
 	@Override
-	public boolean uninstallMod ()
+	public boolean uninstallMod ( )
 	{
 		//注销所有缓存
 		FormatHelperFactory.denyAllCaches ( );
@@ -395,16 +403,16 @@ public class BGMReplacerFragment extends ModFragment
 
 
 	@Override
-	public void onActivityResult (int requestCode, int resultCode, Intent data)
+	public void onActivityResult ( int requestCode, int resultCode, Intent data )
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if (requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK)
+		if ( requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK )
 		{
-			if (data != null)
+			if ( data != null )
 			{
 				String s=Utils.FORMAT_UNKNOWN;
-				if (data.getData ( ) == null)
+				if ( data.getData ( ) == null )
 				{
 					Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
 					return;
@@ -447,14 +455,14 @@ public class BGMReplacerFragment extends ModFragment
 		private static String[] data;
 		private static String[] act_data;
 		private static FileNameAdapter self;
-		public static FileNameAdapter getInstance (Context context, int textViewResId, int type)
+		public static FileNameAdapter getInstance ( Context context, int textViewResId, int type )
 		{
 			data = getFileNameStringsToShow ( type );
 			act_data = getFileNameStrings ( type );
 			self = new FileNameAdapter ( context, textViewResId, data );
 			return self;
 		}
-		private FileNameAdapter (Context context, int textViewResourceId, String[] data)
+		private FileNameAdapter ( Context context, int textViewResourceId, String[] data )
 		{
 			super ( context, textViewResourceId, data );
 		}
@@ -466,7 +474,7 @@ public class BGMReplacerFragment extends ModFragment
 		 this.act_data = getFileNameStrings ( type );
 		 this.addAll(data);
 		 }*/
-		public String[] getCurrentData ()
+		public String[] getCurrentData ( )
 		{
 			return this.act_data;
 		}
@@ -478,24 +486,24 @@ public class BGMReplacerFragment extends ModFragment
 		private Button button;
 		private AlertDialog ad;
 		private int color;
-		public Monitor (AlertDialog dialog)
+		public Monitor ( AlertDialog dialog )
 		{
 			ad = dialog;
 		}
-		public void ondone ()
+		public void ondone ( )
 		{
 			button.setTextColor ( color );
 			button.setClickable ( true );
 		}
 
 		@Override
-		public void onShow (DialogInterface p1)
+		public void onShow ( DialogInterface p1 )
 		{
 			button = ad.getButton ( ad.BUTTON_POSITIVE );
 			button.setOnClickListener ( new OnClickListener ( ){
 
 					@Override
-					public void onClick (View p1)
+					public void onClick ( View p1 )
 					{
 						ad.dismiss ( );
 						// TODO: Implement this method

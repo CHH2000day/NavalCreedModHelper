@@ -261,8 +261,9 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	{
 		// TODO: Implement this method
 		//留空;
+		super.onActivityCreated ( savedInstanceState );
 	}
-	
+
 	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (
