@@ -183,7 +183,7 @@ public class Utils
 	public static String resolveFilePath ( Uri uri ,Context ctx)
 	{
 		if(uri.getEncodedPath().startsWith("/storage")){
-			return uri.getEncodedPath();
+			return uri.getPath();
 		}
 		Cursor cursor = null;
         final String column = "_data";
