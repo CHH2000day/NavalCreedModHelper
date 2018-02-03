@@ -255,6 +255,14 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		return v;
 	}
+
+	@Override
+	public void onActivityCreated ( Bundle savedInstanceState )
+	{
+		// TODO: Implement this method
+		//留空;
+	}
+	
 	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (
