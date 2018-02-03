@@ -35,7 +35,7 @@ public class ModPackageInstallerFragment extends Fragment
 	@Override
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
-		
+
 		// TODO: Implement this method
 		v = inflater.inflate ( R.layout.modinfopage, null );
 		preview = (ImageView)v.findViewById ( R.id.modinfopageImageView );
@@ -43,7 +43,7 @@ public class ModPackageInstallerFragment extends Fragment
 		select = (Button)v.findViewById ( R.id.modinfopageButtonSelect );
 		update = (Button)v.findViewById ( R.id.modinfopageButtonUpdate );
 		cancel = (Button)v.findViewById ( R.id.modinfopageButtonCancel );
-		info.setMovementMethod(new ScrollingMovementMethod());
+		info.setMovementMethod ( new ScrollingMovementMethod ( ) );
 		return v;
 	}
 
@@ -58,14 +58,14 @@ public class ModPackageInstallerFragment extends Fragment
 			//注销接口防止被重复使用
 			loader = null;
 		}
-		
+
 	}
 
-	
+
 	@Override
 	public void onActivityCreated ( Bundle savedInstanceState )
 	{
-		super.onActivityCreated(savedInstanceState);
+		super.onActivityCreated ( savedInstanceState );
 		// TODO: Implement this method
 		select.setOnClickListener ( new OnClickListener ( ){
 
@@ -142,7 +142,7 @@ public class ModPackageInstallerFragment extends Fragment
 	}
 	public void selectFile ( Uri uri )
 	{
-		clear();
+		clear ( );
 		AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 		adb.setTitle ( "请稍等" )
 			.setMessage ( "正在读取文件...." )
@@ -150,7 +150,13 @@ public class ModPackageInstallerFragment extends Fragment
 		AlertDialog ad=adb.create ( );
 		ad.setCanceledOnTouchOutside ( false );
 		ad.show ( );
-		String filepath=Utils.resolveFilePath ( uri,getActivity() );
+		String filepath=Utils.resolveFilePath ( uri, getActivity ( ) );
+		if ( filepath == null )
+		{
+			ad.setMessage ( "解析文件真实路径失败" );
+			ad.setCancelable ( true );
+			ad.setCanceledOnTouchOutside ( true );
+		}
 		try
 		{
 			mpih = new ModPackageInstallHelper ( new File ( filepath ), (Main)getActivity ( )  );

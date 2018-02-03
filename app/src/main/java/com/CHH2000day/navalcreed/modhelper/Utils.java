@@ -199,9 +199,7 @@ public class Utils
                 cursor.close();
             }
         }
-        return null;
-		/*
-		String string =uri.toString ( );
+       String string =uri.toString ( );
 		String path[]=new String[2];
 		//判断文件是否在sd卡中
 		if ( string.indexOf ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) ) != -1 )
@@ -216,7 +214,8 @@ public class Utils
 			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
 			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
 		}
+		
 		return null;
-		*/
+		
 	}
 }
