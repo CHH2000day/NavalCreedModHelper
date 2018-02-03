@@ -183,32 +183,12 @@ public class Utils
 	}
 	public static String resolveFilePath ( Uri uri , Context ctx )
 	{
+		//如果path已为绝对路径，直接返回
 		if ( uri.getEncodedPath ( ).startsWith ( "/storage" ) )
 		{
 			return uri.getPath ( );
 		}
-		Cursor cursor = null;
-        final String column = "_data";
-        final String[] projection = {column};
-        try
-		{
-            cursor = ctx.getContentResolver ( ).query ( uri, projection, null, null, null );
-            if ( cursor != null && cursor.moveToFirst ( ) )
-			{
-                final int column_index = cursor.getColumnIndexOrThrow ( column );
-                String s=cursor.getString ( column_index );
-				if(s!=null){
-					return s;
-				}
-            }
-        }
-		finally
-		{
-            if ( cursor != null )
-			{
-                cursor.close ( );
-            }
-        }
+		//如果为SAF返回的数据，解码
 		if ( uri.getAuthority ( ).equals ( "com.android.externalstorage.documents" ) )
 		{
 			String docId=DocumentsContract.getDocumentId ( uri );
@@ -226,6 +206,39 @@ public class Utils
 				}
 			}
 		}
+		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.huawei.hidisk.fileprovider" ) )
+		{
+			String[] val=uri.getPath ( ).split ( "/root", 2 );
+			return val [ 1 ];
+		}
+		//遍历查询
+
+		Cursor cursor = null;
+        final String column = "_data";
+        final String[] projection = {column};
+        try
+		{
+            cursor = ctx.getContentResolver ( ).query ( uri, projection, null, null, null );
+            if ( cursor != null && cursor.moveToFirst ( ) )
+			{
+                final int column_index = cursor.getColumnIndexOrThrow ( column );
+                String s=cursor.getString ( column_index );
+				if ( s != null )
+				{
+					return s;
+				}
+            }
+        }
+		finally
+		{
+            if ( cursor != null )
+			{
+                cursor.close ( );
+            }
+        }
+
+
+
 		String string =uri.toString ( );
 		String path[]=new String[2];
 		//判断文件是否在sd卡中
