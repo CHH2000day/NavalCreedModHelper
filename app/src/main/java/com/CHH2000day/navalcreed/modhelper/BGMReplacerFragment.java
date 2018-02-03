@@ -407,6 +407,9 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
+		if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
+			return;
+		}
 		if ( requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK )
 		{
 			if ( data != null )
