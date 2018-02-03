@@ -7,6 +7,7 @@ import android.net.*;
 import android.os.*;
 import android.database.*;
 import android.content.*;
+import android.provider.*;
 
 public class Utils
 {
@@ -180,26 +181,49 @@ public class Utils
 			bos.close ( );			
 		}
 	}
-	public static String resolveFilePath ( Uri uri ,Context ctx)
+	public static String resolveFilePath ( Uri uri , Context ctx )
 	{
-		if(uri.getEncodedPath().startsWith("/storage")){
-			return uri.getPath();
+		if ( uri.getEncodedPath ( ).startsWith ( "/storage" ) )
+		{
+			return uri.getPath ( );
 		}
 		Cursor cursor = null;
         final String column = "_data";
         final String[] projection = {column};
-        try {
-            cursor = ctx.getContentResolver().query(uri, projection, null, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+        try
+		{
+            cursor = ctx.getContentResolver ( ).query ( uri, projection, null, null, null );
+            if ( cursor != null && cursor.moveToFirst ( ) )
+			{
+                final int column_index = cursor.getColumnIndexOrThrow ( column );
+                return cursor.getString ( column_index );
             }
         }
-       String string =uri.toString ( );
+		finally
+		{
+            if ( cursor != null )
+			{
+                cursor.close ( );
+            }
+        }
+		if ( uri.getAuthority ( ).equals ( "com.android.externalstorage.documents" ) )
+		{
+			String docId=DocumentsContract.getDocumentId ( uri );
+			String [] split = docId.split ( ":" , 2 );
+            if ( split.length >= 2 )
+			{
+                String type = split [ 0 ];
+                if ( "primary".equalsIgnoreCase ( type ) )
+				{
+                    return Environment.getExternalStorageDirectory ( ) + File.separator + split [ 1 ];
+                }
+				else if ( "secondary".equalsIgnoreCase ( type ) )
+				{
+					return System.getenv ( "SECONDARY_STORAGE" ) + File.separator + split [ 1 ];
+				}
+			}
+		}
+		String string =uri.toString ( );
 		String path[]=new String[2];
 		//判断文件是否在sd卡中
 		if ( string.indexOf ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) ) != -1 )
@@ -214,8 +238,8 @@ public class Utils
 			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
 			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
 		}
-		
+
 		return null;
-		
+
 	}
 }
