@@ -156,6 +156,7 @@ public class ModPackageInstallerFragment extends Fragment
 			ad.setMessage ( "解析文件真实路径失败" );
 			ad.setCancelable ( true );
 			ad.setCanceledOnTouchOutside ( true );
+			return;
 		}
 		try
 		{

@@ -17,7 +17,9 @@
 		android:text="选择文件"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
-		android:id="@+id/modinfopageButtonSelect"/>
+		android:id="@+id/modinfopageButtonSelect"
+		android:layout_marginLeft="6dp"
+		android:layout_marginRight="6dp"/>
 
 	<Button
 		android:layout_height="wrap_content"

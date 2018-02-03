@@ -130,6 +130,7 @@ public class ModPackageInfo
 			}
 			
 			byte[] cache=Utils.readAllbytes(in);
+			in.close();
 			return createFromByteArray ( cache );
 		}
 		public static ModPackageInfo createFromByteArray (byte[]data) throws JSONException, ModPackageInfo.IllegalModInfoException
