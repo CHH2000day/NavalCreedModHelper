@@ -408,8 +408,8 @@ public class ModPackageInstallHelper
 				progressbar.setProgress ( 0, true );
 				stat.setText ( "正在安装mod包" );
 			}
-			progressbar.setProgress ( values [ 0 ], true );
-
+			progressbar.setProgress ( values [ 0 ] );
+			
 			// TODO: Implement this method
 
 		}
