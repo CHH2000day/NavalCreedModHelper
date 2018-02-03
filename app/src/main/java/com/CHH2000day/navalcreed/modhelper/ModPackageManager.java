@@ -247,6 +247,13 @@ public class ModPackageManager
 	{
 		return installedMod;
 	}
+	public String getModName(String datatype){
+		String s=getModList().get(datatype);
+		if(s==null){
+			return "";
+		}
+		return s;
+	}
 
 	public boolean checkInstalled ( String type, String subtype )
 	{
