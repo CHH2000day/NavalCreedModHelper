@@ -405,7 +405,7 @@ public class ModPackageInstallHelper
 				totalcount = mpkgFile.size ( );
 				progressbar.setMax ( totalcount );
 				progressbar.setIndeterminate ( false );
-				progressbar.setProgress ( 0, true );
+				progressbar.setProgress ( 0 );
 				stat.setText ( "正在安装mod包" );
 			}
 			progressbar.setProgress ( values [ 0 ] );
