@@ -196,7 +196,10 @@ public class Utils
             if ( cursor != null && cursor.moveToFirst ( ) )
 			{
                 final int column_index = cursor.getColumnIndexOrThrow ( column );
-                return cursor.getString ( column_index );
+                String s=cursor.getString ( column_index );
+				if(s!=null){
+					return s;
+				}
             }
         }
 		finally
