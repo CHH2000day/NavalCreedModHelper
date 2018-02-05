@@ -13,6 +13,7 @@ import android.support.v7.app.*;
 import android.view.View.*;
 import android.support.design.widget.*;
 import android.text.method.*;
+import android.provider.*;
 
 public class ModPackageInstallerFragment extends Fragment
 {
@@ -77,6 +78,19 @@ public class ModPackageInstallerFragment extends Fragment
 					startActivityForResult ( intent.createChooser ( intent, "请选择mod包文件" ), QUERY_CODE );
 
 					// TODO: Implement this method
+				}
+			} );
+		select.setOnLongClickListener ( new OnLongClickListener ( ){
+
+				@Override
+				public boolean onLongClick ( View p1 )
+				{
+					// TODO: Implement this method
+					final String pkg="com.android.documentsui";
+					Uri packageURI=Uri.parse ( "package:" + pkg );
+					Intent intent =  new Intent ( Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI );  
+					startActivity ( intent );
+					return true;
 				}
 			} );
 		cancel.setOnClickListener ( new OnClickListener ( ){
@@ -153,7 +167,12 @@ public class ModPackageInstallerFragment extends Fragment
 		String filepath=Utils.resolveFilePath ( uri, getActivity ( ) );
 		if ( filepath == null )
 		{
-			ad.setMessage ( "解析文件真实路径失败" );
+			ad.setMessage ( new StringBuilder ( ).append ( "解析文件真实路径失败" )
+						   .append ( "\n" )
+						   .append ( "请将此界面截屏并发给开发者" )
+						   .append ( "\n" )
+						   .append ( uri.getPath ( ) )
+						   .toString ( ) );
 			ad.setCancelable ( true );
 			ad.setCanceledOnTouchOutside ( true );
 			return;
