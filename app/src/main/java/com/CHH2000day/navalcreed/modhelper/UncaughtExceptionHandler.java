@@ -58,7 +58,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 			{
 				FileInputStream fis =new FileInputStream ( tgt );
 				String testerid=ctx.getSharedPreferences ( PREF_NAME, 0 ).getString ( StaticData.KEY_TESTER_ID, "" );
-				new Bugly ( ).postBug ( new String ( testerid + "\n" + Utils.readAllbytes ( fis ) ), time, app_ver, app_ver_int ).save ( new SaveListener<String> ( ){
+				new Bugly ( ).postBug ( testerid + "\n" + new String ( Utils.readAllbytes ( fis ) ), time, app_ver, app_ver_int ).save ( new SaveListener<String> ( ){
 
 						@Override
 						public void done ( String p1, BmobException p2 )
