@@ -23,17 +23,17 @@ public class ModHelperApplication extends Application
 	private String pkg_name;
 	private boolean isMainPage=true;
 
-	public void setIsMainPage (boolean isMainPage)
+	public void setIsMainPage ( boolean isMainPage )
 	{
 		this.isMainPage = isMainPage;
 	}
 
-	public boolean isMainPage ()
+	public boolean isMainPage ( )
 	{
 		return isMainPage;
 	}
 	@Override
-	public void onCreate ()
+	public void onCreate ( )
 	{
 		Bmob.initialize ( ModHelperApplication.this, StaticData.API_KEY );
 		BmobInstallation.getCurrentInstallation ( ).save ( );
@@ -44,18 +44,31 @@ public class ModHelperApplication extends Application
 		}
 		catch (PackageManager.NameNotFoundException e)
 		{}
+
 		try
 		{
-			Signature s=getPackageManager ( ).getPackageInfo ( getPackageName ( ), getPackageManager ( ).GET_SIGNATURES ).signatures[ 0 ];
+			Class c=Class.forName ( "cc.binmt.signature" );
+			if ( c != null )
+			{
+				throw new RuntimeException ( "Hook detected.Environment is not safe." );
+			}
+		}
+		catch (ClassNotFoundException e)
+		{
+			//应当抛出异常
+		}
+		try
+		{
+			Signature s=getPackageManager ( ).getPackageInfo ( getPackageName ( ), getPackageManager ( ).GET_SIGNATURES ).signatures [ 0 ];
 			IceKeyHelper mhelper=new IceKeyHelper ( s.toByteArray ( ), 0 );
 			//pkg_name=Base64.encodeToString(mhelper.encrypt(GAME_PKGNAME.getBytes()),Base64.DEFAULT);
 			pkg_name = new String ( mhelper.decrypt ( Base64.decode ( GAME_PKGNAME, Base64.DEFAULT ) ) ).trim ( );
-			ModPackageManager.getInstance().init(new File(getResFilesDir(),STOREDFILE_NAME));
+			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
 		}
 		catch (Exception e)
 		{}
 
-		//加密部分存在问题,暂不实装
+
 		// TODO: Implement this method
 		super.onCreate ( );
 	}
@@ -63,9 +76,9 @@ public class ModHelperApplication extends Application
 	 {
 	 return merrmsghdl;
 	 }*/
-	public File getResDir ()
+	public File getResDir ( )
 	{
-		if (resDir == null)
+		if ( resDir == null )
 		{
 			sdcard = Environment.getExternalStorageDirectory ( );
 			//resfilePath: /sdcard/Android/data/$pkgname
@@ -83,19 +96,19 @@ public class ModHelperApplication extends Application
 		}
 		return resDir;
 	}
-	public String getResPath ()
+	public String getResPath ( )
 	{
 		return getResDir ( ).getAbsolutePath ( );
 	}
-	public File getResFilesDir ()
+	public File getResFilesDir ( )
 	{
-		if (resfilesdir == null)
+		if ( resfilesdir == null )
 		{
 			resfilesdir = new File ( getResDir ( ), "files" );
 		}
 		return resfilesdir;
 	}
-	public String getResFilesDirPath ()
+	public String getResFilesDirPath ( )
 	{
 		return getResFilesDir ( ).getAbsolutePath ( );
 	}
