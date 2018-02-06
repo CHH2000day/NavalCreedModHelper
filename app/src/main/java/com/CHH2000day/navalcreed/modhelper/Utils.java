@@ -198,7 +198,7 @@ public class Utils
                 String type = split [ 0 ];
                 if ( "primary".equalsIgnoreCase ( type ) )
 				{
-                    return Environment.getExternalStorageDirectory ( ) + File.separator + split [ 1 ];
+                    return Environment.getExternalStorageDirectory ( ).getAbsolutePath() + File.separator + split [ 1 ];
                 }
 				else if ( "secondary".equalsIgnoreCase ( type ) )
 				{
@@ -217,7 +217,7 @@ public class Utils
 		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.gionee.filemanager.fileprovider" ) )
 		{
 			String[] val=uri.getPath ( ).split ( "/external_path", 2 );
-			return val [ 1 ];
+			return Environment.getExternalStorageDirectory().getAbsolutePath()+val [ 1 ];
 		}
 		//遍历查询
 
