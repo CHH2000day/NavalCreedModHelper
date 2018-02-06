@@ -47,7 +47,7 @@ public class ModHelperApplication extends Application
 
 		try
 		{
-			Class c=Class.forName ( "cc.binmt.signature" );
+			Class c=Class.forName ( "cc.binmt.signature.PmsHookApplication" );
 			if ( c != null )
 			{
 				throw new RuntimeException ( "Hook detected.Environment is not safe." );
