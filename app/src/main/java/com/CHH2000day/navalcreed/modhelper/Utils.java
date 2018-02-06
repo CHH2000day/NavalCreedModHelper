@@ -206,9 +206,17 @@ public class Utils
 				}
 			}
 		}
+		//对特殊机型的Uri进行解析
+		//解析华为机型
 		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.huawei.hidisk.fileprovider" ) )
 		{
 			String[] val=uri.getPath ( ).split ( "/root", 2 );
+			return val [ 1 ];
+		}
+		//解析金立机型
+		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.gionee.filemanager.fileprovider" ) )
+		{
+			String[] val=uri.getPath ( ).split ( "/external_path", 2 );
 			return val [ 1 ];
 		}
 		//遍历查询
@@ -221,11 +229,14 @@ public class Utils
             cursor = ctx.getContentResolver ( ).query ( uri, projection, null, null, null );
             if ( cursor != null && cursor.moveToFirst ( ) )
 			{
-                final int column_index = cursor.getColumnIndexOrThrow ( column );
-                String s=cursor.getString ( column_index );
-				if ( s != null )
+                final int column_index = cursor.getColumnIndex ( column );
+				if ( column_index >= 0 )
 				{
-					return s;
+					String s=cursor.getString ( column_index );
+					if ( s != null )
+					{
+						return s;
+					}
 				}
             }
         }
