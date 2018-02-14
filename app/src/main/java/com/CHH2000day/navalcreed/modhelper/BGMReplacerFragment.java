@@ -321,7 +321,7 @@ public class BGMReplacerFragment extends ModFragment
 				}
 			} );
 	}
-	private File getTargetFile ( int scene, int type, int num, String format )
+	File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (
 			new StringBuilder ( )

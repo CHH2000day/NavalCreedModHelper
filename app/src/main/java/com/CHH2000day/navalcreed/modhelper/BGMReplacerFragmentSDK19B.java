@@ -56,14 +56,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
-		v = inflater.inflate ( R.layout.bgmreplacer_fragment, null );
-		mSceneSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerScene );
-		mFileNameSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerMusic );
-		pathTextView = (TextView)v.findViewById ( R.id.bgmreplacerText );
-		infoTextView = (TextView)v.findViewById ( R.id.bgmreplacerfragmentTextViewInfo );
-		select = (Button)v.findViewById ( R.id.bgmreplacerSelect );
-		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
-		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
+		super.onCreateView(inflater,container,savedInstanceState);
 		//更新操作说明
 		String s=infoTextView.getText ( ).toString ( );
 		infoTextView.setText ( new StringBuilder ( ).append ( s )
@@ -264,6 +257,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		super.onActivityCreated ( savedInstanceState );
 	}
 
+	/*
 	private File getTargetFile ( int scene, int type, int num, String format )
 	{
 		File f=new File (
@@ -282,6 +276,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		);
 		return f;
 	}
+	*/
 	String getFileName ( int type, int num )
 	{
 		return getFileNameStrings ( type ) [ num ];
