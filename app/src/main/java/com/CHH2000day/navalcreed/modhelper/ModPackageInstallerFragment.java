@@ -171,6 +171,10 @@ public class ModPackageInstallerFragment extends Fragment
 						   .append ( "\n" )
 						   .append ( "请将此界面截屏并发给开发者" )
 						   .append ( "\n" )
+						   .append ( "authority:" )
+						   .append ( uri.getAuthority ( ) )
+						   .append ( "\n" )
+						   .append ( "path:" )
 						   .append ( uri.getPath ( ) )
 						   .toString ( ) );
 			ad.setCancelable ( true );
