@@ -8,6 +8,7 @@ import android.os.storage.*;
 import android.os.*;
 import com.CHH2000day.*;
 import android.content.pm.PackageManager.*;
+import android.content.*;
 public class ModHelperApplication extends Application
 {
 	//never used
@@ -16,9 +17,18 @@ public class ModHelperApplication extends Application
 	private File sdcard;
 	private File resfilesdir;
 	private String resfilePath="";
+	private SharedPreferences mainpref;
 	private static final String STOREDFILE_NAME="mod.install";
 //public static final String GAME_PKGNAME="com.loong.warship.zl";
-	private static final String GAME_PKGNAME="IARJisxjM8tihdkvzU52XrgfhNLAY1FK";
+	protected static final String KEY_PKGNAME="pkgName";
+	private static final String GAME_PKGNAME_CN_SERVER="IARJisxjM8tihdkvzU52XrgfhNLAY1FK";
+	private static final String GAME_PKGNAME_EU_SERVER="";
+	private static final String GAME_PKGNAME_TW_SERVER="";
+	private static final String EU="EU";
+	private static final String CN="CN";
+	private static final String TW="TW";
+	private static String pkgnameinuse=GAME_PKGNAME_CN_SERVER;//CN EU TW
+
 
 	private String pkg_name;
 	private boolean isMainPage=true;
@@ -57,12 +67,14 @@ public class ModHelperApplication extends Application
 		{
 			//应当抛出异常
 		}
+		mainpref = getSharedPreferences ( "main", 0 );
+		mainpref.registerOnSharedPreferenceChangeListener ( new MainSharedPreferencesChangeListener ( ) );
 		try
 		{
 			Signature s=getPackageManager ( ).getPackageInfo ( getPackageName ( ), getPackageManager ( ).GET_SIGNATURES ).signatures [ 0 ];
 			IceKeyHelper mhelper=new IceKeyHelper ( s.toByteArray ( ), 0 );
 			//pkg_name=Base64.encodeToString(mhelper.encrypt(GAME_PKGNAME.getBytes()),Base64.DEFAULT);
-			pkg_name = new String ( mhelper.decrypt ( Base64.decode ( GAME_PKGNAME, Base64.DEFAULT ) ) ).trim ( );
+			pkg_name = new String ( mhelper.decrypt ( Base64.decode ( GAME_PKGNAME_CN_SERVER, Base64.DEFAULT ) ) ).trim ( );
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
 		}
 		catch (Exception e)
@@ -111,6 +123,51 @@ public class ModHelperApplication extends Application
 	public String getResFilesDirPath ( )
 	{
 		return getResFilesDir ( ).getAbsolutePath ( );
+	}
+	private void cleanPathCache ( )
+	{
+		resfilesdir = null;
+		resDir = null;
+	}
+	public SharedPreferences getMainSharedPrederences(){
+		return mainpref;
+	}
+	private void updateTargetPackageName ( String type )
+	{
+		if ( EU.equals ( type ) )
+		{
+			pkgnameinuse = GAME_PKGNAME_EU_SERVER;
+		}
+		else
+		{
+			if ( CN.equals ( type ) )
+			{
+				pkgnameinuse = GAME_PKGNAME_CN_SERVER;
+			}
+			else
+			{
+				if ( TW.equals ( GAME_PKGNAME_TW_SERVER ) )
+				{
+					pkgnameinuse = GAME_PKGNAME_TW_SERVER;
+				}
+			}
+		}
+	}
+	private class MainSharedPreferencesChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener
+	{
+
+		@Override
+		public void onSharedPreferenceChanged ( SharedPreferences p1, String key )
+		{
+			if ( KEY_PKGNAME.equals ( key ) )
+			{
+				cleanPathCache ( );
+				updateTargetPackageName ( p1.getString ( key, CN ) );
+			}
+			// TODO: Implement this method
+		}
+
+
 	}
 
 }
