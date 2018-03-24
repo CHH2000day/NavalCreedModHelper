@@ -5,7 +5,7 @@ public class TesterInfo extends BmobObject
 {
 	private String key;
 	private String model;
-	private String DeviceId;
+	private String deviceId;
 
 
 	/*
@@ -31,13 +31,13 @@ public class TesterInfo extends BmobObject
 		return model;
 	}
 
-	public void setDeviceId ( String deviceId )
+	public void setdeviceId ( String deviceId )
 	{
-		DeviceId = deviceId;
+		this.deviceId = deviceId;
 	}
 
-	public String getDeviceId ( )
+	public String getdeviceId ( )
 	{
-		return DeviceId;
+		return deviceId;
 	}
 }

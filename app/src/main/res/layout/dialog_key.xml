@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:orientation="vertical"
-	android:layout_margin="10dp">
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	android:orientation="vertical">
 
-	<TextView
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="请输入注册码:"/>
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:layout_margin="10dp">
 
-	<EditText
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:ems="24"
-		android:id="@+id/dialogkeyEditTextKey"/>
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="请输入注册码:"/>
+
+		<EditText
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:ems="24"
+			android:id="@+id/dialogkeyEditTextKey"/>
+
+	</LinearLayout>
 
 </LinearLayout>
 

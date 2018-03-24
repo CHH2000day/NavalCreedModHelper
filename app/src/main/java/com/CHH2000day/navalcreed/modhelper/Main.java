@@ -283,9 +283,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 }
 		 }
 		 };*/
-		if ( StaticData.DATAID_BETA.equals ( StaticData.getDataid ( ) ) )
-		{
-			//ad_ver.show ( );
+		//ad_ver.show ( );
 			if ( BuildConfig.DEBUG )
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
@@ -324,6 +322,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						}
 					}
 				};
+				ad.show();
 				performStartTesterPermissionCheck ( new OnCheckResultListener ( ){
 
 						@Override
@@ -336,6 +335,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						@Override
 						public void onFail ( int reason, String errorrmsh )
 						{
+							if(reason==0){
+								//如果设备不匹配，清除本地许可数据
+								((ModHelperApplication)getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID,"").apply();
+							}
 							mveronboothandler.sendEmptyMessage ( reason );
 							// TODO: Implement this method
 						}
@@ -344,7 +347,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 		}
 
-	}
+	
 	private void performkeycheck ( String key , final OnCheckResultListener listener )
 	{
 		if ( KeyUtil.checkKeyFormat ( key ) )
@@ -376,8 +379,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							if ( p1.size ( ) > 0 )
 							{
 								final TesterInfo info=p1.get ( 0 );
-								info.setDeviceId ( getDevId ( ) );
-								info.update ( new UpdateListener ( ){
+								info.setdeviceId ( getDevId ( ) );
+								info.setModel(Build.MODEL);
+								info.update ( info.getObjectId(),new UpdateListener ( ){
 
 										@Override
 										public void done ( BmobException p1 )
@@ -440,14 +444,15 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							return;
 						}
 					}
-					if ( p1.getDeviceId ( ).equals ( getDevId ( ) ) )
+					if ( p1.getdeviceId ( ).equals ( getDevId ( ) ) )
 					{
 						listener.onSuccess ( );
 						return;
 					}
 					else
 					{
-						listener.onFail ( 0, "Device mismatch" );
+						listener.onFail ( 0, "Device mismatch,please contact developer to reset your key" );
+						return;
 					}
 
 
@@ -458,7 +463,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 	private String getDevId ( )
 	{
-		return Build.SERIAL;
+		String s=Build.SERIAL;
+		return s;
 	}
 	public void checkPermission ( )
 	{
@@ -647,7 +653,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		final EditText et=(EditText)d.findViewById ( R.id.dialogkeyEditTextKey );
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 		adb.setTitle ( "请验证测试者权限" )
-			.setView ( R.layout.dialog_key )
+			.setView ( d )
 			.setPositiveButton ( "确定", null )
 			.setNegativeButton ( "退出", null )
 			.setCancelable ( false );
