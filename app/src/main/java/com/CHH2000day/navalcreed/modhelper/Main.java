@@ -25,6 +25,8 @@ import android.*;
 import android.content.pm.*;
 import android.support.annotation.*;
 import android.view.View.*;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -37,7 +39,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	private List<Fragment> fragments;
 	private List<String> titles;
 	private LayoutInflater li;
-	private Handler mupdateHandler,mvercheckHandler;
+	private Handler mupdateHandler,mvercheckHandler,mveronboothandler,mveroncerifyhandler;
 	private static final String GENERAL="general";
 	private static final String ANNOU_VER="annover";
 	private static final String KEY_OBJID="objID";
@@ -248,46 +250,102 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	private void checkVality ( )
 	{
 		//进行检查
-		AlertDialog.Builder adb_ver=new AlertDialog.Builder ( this );
-		adb_ver.setCancelable ( false );
-		adb_ver.setTitle ( "验证中...." )
-			.setMessage ( "验证测试版是否可用....\n请稍等....." );
-		final AlertDialog ad_ver=adb_ver.create ( );
-		ad_ver.setCanceledOnTouchOutside ( false );
+		/*
+		 AlertDialog.Builder adb_ver=new AlertDialog.Builder ( this );
+		 adb_ver.setCancelable ( false );
+		 adb_ver.setTitle ( "验证中...." )
+		 .setMessage ( "验证测试版是否可用....\n请稍等....." );
+		 final AlertDialog ad_ver=adb_ver.create ( );
+		 ad_ver.setCanceledOnTouchOutside ( false );
 
-		mvercheckHandler = new Handler ( ){
-			public void handleMessage ( Message msg )
-			{
-				switch ( msg.what )
-				{
-					case -1:
-						//测试版可用
-						ad_ver.dismiss ( );
-						break;
-					case 0:
-						//测试版不可用
-						Snackbar.make ( mViewPager, "测试版不可用！", Snackbar.LENGTH_INDEFINITE ).setAction ( "退出", new OnClickListener ( ){
+		 mvercheckHandler = new Handler ( ){
+		 public void handleMessage ( Message msg )
+		 {
+		 switch ( msg.what )
+		 {
+		 case -1:
+		 //测试版可用
+		 ad_ver.dismiss ( );
+		 break;
+		 case 0:
+		 //测试版不可用
+		 Snackbar.make ( mViewPager, "测试版不可用！", Snackbar.LENGTH_INDEFINITE ).setAction ( "退出", new OnClickListener ( ){
 
-								@Override
-								public void onClick ( View p1 )
-								{
-									finish ( );
-									// TODO: Implement this method
-								}
-							} ).show ( ) ;
+		 @Override
+		 public void onClick ( View p1 )
+		 {
+		 finish ( );
+		 // TODO: Implement this method
+		 }
+		 } ).show ( ) ;
 
-						break;
-				}
-			}
-		};
+		 break;
+		 }
+		 }
+		 };*/
 		if ( StaticData.DATAID_BETA.equals ( StaticData.getDataid ( ) ) )
 		{
-			ad_ver.show ( );
+			//ad_ver.show ( );
+			if ( BuildConfig.DEBUG )
+			{
+				AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+				adb.setTitle ( "正在验证测试权限" )
+					.setMessage ( "请稍等" )
+					.setCancelable ( false );
+				final AlertDialog ad=adb.create ( );
+				ad.setCanceledOnTouchOutside ( false );
+				mveronboothandler = new Handler ( ){
+					public void handleMessage ( Message msg )
+					{
+						switch ( msg.what )
+						{
+							case 9010:
+								Snackbar.make ( mViewPager, "网络出错", Snackbar.LENGTH_LONG ).show ( );
+								ad.setButton ( ad.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener ( ){
+
+										@Override
+										public void onClick ( DialogInterface p1, int p2 )
+										{
+											doExit ( );
+											// TODO: Implement this method
+										}
+									} );
+								break;
+								/*case -8:
+								 Snackbar.make(mViewPager,"权限验证成功",Sackbar.LENGTH_LONG).show();
+								 ad.dismiss();
+								 break;
+								 */
+							default:
+								Snackbar.make ( mViewPager, "权限验证失败", Snackbar.LENGTH_LONG ).show ( );
+								ad.dismiss ( );
+								showKeyDialog ( );
+								break;
+						}
+					}
+				};
+				performStartTesterPermissionCheck ( new OnCheckResultListener ( ){
+
+						@Override
+						public void onSuccess ( )
+						{
+							// TODO: Implement this method
+							ad.dismiss ( );
+						}
+
+						@Override
+						public void onFail ( int reason, String errorrmsh )
+						{
+							mveronboothandler.sendEmptyMessage ( reason );
+							// TODO: Implement this method
+						}
+					} );
+			}
 
 		}
 
 	}
-	private void performkeycheck ( String key )
+	private void performkeycheck ( String key , final OnCheckResultListener listener )
 	{
 		if ( KeyUtil.checkKeyFormat ( key ) )
 		{
@@ -328,10 +386,12 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 											if ( p1 == null )
 											{
 												( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
+												listener.onSuccess ( );
 											}
 											else
 											{
-
+												listener.onFail ( 1, p1.getMessage ( ) );
+												return;
 											}
 										}
 									} );
@@ -339,7 +399,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						}
 						else
 						{
-
+							listener.onFail ( 1, p2.getMessage ( ) );
+							return;
 						}
 						// TODO: Implement this method
 					}
@@ -347,15 +408,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		}
 		else
 		{
-			//密钥验证失败
+			//密钥格式验证失败
+			listener.onFail ( 0, "Invalid Key" );
+			return;
 		}
 	}
-	private void performStartTesterPermissionCheck ( final onCheckResultListener listener )
+	private void performStartTesterPermissionCheck ( final OnCheckResultListener listener )
 	{
 		String objid=( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).getString ( KEY_OBJID, "" );
 		if ( TextUtils.isEmpty ( objid ) )
 		{
-			listener.onFail ( 2, "未激活！" );
+			listener.onFail ( 2, "Unregistered！" );
 			return;
 		}
 		BmobQuery<TesterInfo> query=new BmobQuery<TesterInfo> ( );
@@ -493,13 +556,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 				@Override
 				public void onClick ( DialogInterface p1, int p2 )
 				{
-					android.os.Process.killProcess ( android.os.Process.myPid ( ) );
+					doExit ( );
 					// TODO: Implement this method
 				}
 			} )
 			.setNegativeButton ( "否", null )
 			.create ( )
 			.show ( );
+	}
+	private void doExit ( )
+	{
+		android.os.Process.killProcess ( android.os.Process.myPid ( ) );
 	}
 	@Override
 	public boolean onCreateOptionsMenu ( Menu menu )
@@ -574,6 +641,21 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		}
 		return null;
 	}
+	private void showKeyDialog ( )
+	{
+		View d=getLayoutInflater ( ).inflate ( R.layout.dialog_key, null );
+		final EditText et=(EditText)d.findViewById ( R.id.dialogkeyEditTextKey );
+		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
+		adb.setTitle ( "请验证测试者权限" )
+			.setView ( R.layout.dialog_key )
+			.setPositiveButton ( "确定", null )
+			.setNegativeButton ( "退出", null )
+			.setCancelable ( false );
+		final AlertDialog ad=adb.create ( );
+		KeyDialogListener listener=new KeyDialogListener ( ad, et );
+		ad.setOnShowListener ( listener );
+		ad.show ( );
+	}
 
 	protected class UpdateThread extends Thread
 	{
@@ -593,18 +675,19 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							Log.w ( "Updater", "Failed to get update data" );
 							return;
 						}
+
 						//如果为测试版，检测服务器端是否允许测试
-						if ( BuildConfig.DEBUG )
-						{
-							if ( !universalobj.isAvail ( ) )
-							{
-								mvercheckHandler.sendEmptyMessage ( 0 );
-							}
-							else
-							{
-								mvercheckHandler.sendEmptyMessage ( -1 );
-							}
-						}
+
+						/*2018/3/24 换用cd-key进行测试版权限验证
+						 if ( !universalobj.isAvail ( ) )
+						 {
+						 mvercheckHandler.sendEmptyMessage ( 0 );
+						 }
+						 else
+						 {
+						 mvercheckHandler.sendEmptyMessage ( -1 );
+						 }*/
+
 						int serverver=universalobj.getVersion ( ).intValue ( );
 						try
 						{
@@ -741,10 +824,66 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		}
 
 	}
-	private interface onCheckResultListener
+	private interface OnCheckResultListener
 	{
 		public void onSuccess ( )
-		public void onFail ( int reason, String errorrmsh )
+		public void onFail ( int reason, String errorrmsg )
+	}
+	private class KeyDialogListener implements AlertDialog.OnShowListener
+	{
+
+		private AlertDialog ad;
+		private Button btnCancel,btnEnter;
+		private EditText keyinput;
+		public KeyDialogListener ( final AlertDialog ad, final EditText input )
+		{
+			this.ad = ad;
+			keyinput = input;
+		}
+		@Override
+		public void onShow ( DialogInterface p1 )
+		{
+			btnCancel = ad.getButton ( ad.BUTTON_NEGATIVE );
+			btnEnter = ad.getButton ( ad.BUTTON_POSITIVE );
+			btnCancel.setOnClickListener ( new OnClickListener ( ){
+
+					@Override
+					public void onClick ( View p1 )
+					{
+						doExit ( );
+						// TODO: Implement this method
+					}
+				} );
+			btnEnter.setOnClickListener ( new OnClickListener ( ){
+
+					@Override
+					public void onClick ( View p1 )
+					{
+						String key=keyinput.getEditableText ( ).toString ( );
+						performkeycheck ( key, new OnCheckResultListener ( ){
+
+								@Override
+								public void onSuccess ( )
+								{
+									ad.dismiss ( );
+									// TODO: Implement this method
+								}
+
+								@Override
+								public void onFail ( int reason, String errorrmsg )
+								{
+									Snackbar.make ( mViewPager, errorrmsg, Snackbar.LENGTH_LONG ).show ( );
+									// TODO: Implement this method
+								}
+							} );
+						// TODO: Implement this method
+					}
+				} );
+
+			// TODO: Implement this method
+		}
+
+
 	}
 
 }
