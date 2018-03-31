@@ -27,6 +27,7 @@ import android.support.annotation.*;
 import android.view.View.*;
 import android.widget.Button;
 import android.widget.EditText;
+import android.view.inputmethod.*;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -284,92 +285,78 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 }
 		 };*/
 		//ad_ver.show ( );
-			if ( BuildConfig.DEBUG )
-			{
-				AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
-				adb.setTitle ( "正在验证测试权限" )
-					.setMessage ( "请稍等" )
-					.setCancelable ( false );
-				final AlertDialog ad=adb.create ( );
-				ad.setCanceledOnTouchOutside ( false );
-				mveronboothandler = new Handler ( ){
-					public void handleMessage ( Message msg )
+		if ( BuildConfig.DEBUG )
+		{
+			AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
+			adb.setTitle ( "正在验证测试权限" )
+				.setMessage ( "请稍等" )
+				.setCancelable ( false );
+			final AlertDialog ad=adb.create ( );
+			ad.setCanceledOnTouchOutside ( false );
+			mveronboothandler = new Handler ( ){
+				public void handleMessage ( Message msg )
+				{
+					switch ( msg.what )
 					{
-						switch ( msg.what )
-						{
-							case 9010:
-								Snackbar.make ( mViewPager, "网络出错", Snackbar.LENGTH_LONG ).show ( );
-								ad.setButton ( ad.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener ( ){
+						case 9010:
+							Snackbar.make ( mViewPager, "网络出错", Snackbar.LENGTH_LONG ).show ( );
+							ad.setButton ( ad.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener ( ){
 
-										@Override
-										public void onClick ( DialogInterface p1, int p2 )
-										{
-											doExit ( );
-											// TODO: Implement this method
-										}
-									} );
-								break;
-								/*case -8:
-								 Snackbar.make(mViewPager,"权限验证成功",Sackbar.LENGTH_LONG).show();
-								 ad.dismiss();
-								 break;
-								 */
-							default:
-								Snackbar.make ( mViewPager, "权限验证失败", Snackbar.LENGTH_LONG ).show ( );
-								ad.dismiss ( );
-								showKeyDialog ( );
-								break;
-						}
-					}
-				};
-				ad.show();
-				performStartTesterPermissionCheck ( new OnCheckResultListener ( ){
-
-						@Override
-						public void onSuccess ( )
-						{
-							// TODO: Implement this method
+									@Override
+									public void onClick ( DialogInterface p1, int p2 )
+									{
+										doExit ( );
+										// TODO: Implement this method
+									}
+								} );
+							break;
+							/*case -8:
+							 Snackbar.make(mViewPager,"权限验证成功",Sackbar.LENGTH_LONG).show();
+							 ad.dismiss();
+							 break;
+							 */
+						default:
+							Snackbar.make ( mViewPager, "权限验证失败", Snackbar.LENGTH_LONG ).show ( );
 							ad.dismiss ( );
-						}
+							showKeyDialog ( );
+							break;
+					}
+				}
+			};
+			ad.show ( );
+			performStartTesterPermissionCheck ( new OnCheckResultListener ( ){
 
-						@Override
-						public void onFail ( int reason, String errorrmsh )
+					@Override
+					public void onSuccess ( )
+					{
+						// TODO: Implement this method
+						ad.dismiss ( );
+					}
+
+					@Override
+					public void onFail ( int reason, String errorrmsh )
+					{
+						if ( reason == 0 )
 						{
-							if(reason==0){
-								//如果设备不匹配，清除本地许可数据
-								((ModHelperApplication)getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID,"").apply();
-							}
-							mveronboothandler.sendEmptyMessage ( reason );
-							// TODO: Implement this method
+							//如果设备不匹配，清除本地许可数据
+							( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, "" ).apply ( );
 						}
-					} );
-			}
-
+						mveronboothandler.sendEmptyMessage ( reason );
+						// TODO: Implement this method
+					}
+				} );
 		}
 
-	
+	}
+
+
 	private void performkeycheck ( String key , final OnCheckResultListener listener )
 	{
 		if ( KeyUtil.checkKeyFormat ( key ) )
 		{
 			BmobQuery<TesterInfo> query_key=new BmobQuery<TesterInfo> ( );
 			query_key.addWhereEqualTo ( "key", key );
-			BmobQuery<TesterInfo> query_emptydevice=new BmobQuery<TesterInfo> ( );
-			query_emptydevice.addWhereEqualTo ( "deviceId", "" );
-			BmobQuery<TesterInfo> query_currdevice=new BmobQuery<TesterInfo> ( );
-			query_currdevice.addWhereEqualTo ( "deviceId", getDevId ( ) );
-			List<BmobQuery<TesterInfo>> ors=new ArrayList<BmobQuery<TesterInfo>> ( );
-			ors.add ( query_emptydevice );
-			ors.add ( query_currdevice );
-			BmobQuery<TesterInfo> tmp=new BmobQuery<TesterInfo> ( );
-			BmobQuery<TesterInfo> or=tmp.or ( ors );
-			List<BmobQuery<TesterInfo>> finaldata=new ArrayList<BmobQuery<TesterInfo>> ( );
-			finaldata.add ( or );
-			finaldata.add ( query_key );
-			BmobQuery<TesterInfo> and=new BmobQuery<TesterInfo> ( );
-			BmobQuery<TesterInfo> main=and.and ( finaldata );
-			main.setLimit ( 1 );
-			main.findObjects ( new FindListener<TesterInfo> ( ){
+			query_key.findObjects ( new FindListener<TesterInfo> ( ){
 
 					@Override
 					public void done ( List<TesterInfo> p1, BmobException p2 )
@@ -379,26 +366,31 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							if ( p1.size ( ) > 0 )
 							{
 								final TesterInfo info=p1.get ( 0 );
-								info.setdeviceId ( getDevId ( ) );
-								info.setModel(Build.MODEL);
-								info.update ( info.getObjectId(),new UpdateListener ( ){
+								if ( info.getdeviceId()==null||info.getdeviceId ( ).equals ( "" ) || info.getdeviceId ( ).equals ( getDevId ( ) ) )
+								{
 
-										@Override
-										public void done ( BmobException p1 )
-										{
-											// TODO: Implement this method
-											if ( p1 == null )
+
+									info.setdeviceId ( getDevId ( ) );
+									info.setModel ( Build.MODEL );
+									info.update ( info.getObjectId ( ), new UpdateListener ( ){
+
+											@Override
+											public void done ( BmobException p1 )
 											{
-												( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
-												listener.onSuccess ( );
+												// TODO: Implement this method
+												if ( p1 == null )
+												{
+													( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
+													listener.onSuccess ( );
+												}
+												else
+												{
+													listener.onFail ( 1, p1.getMessage ( ) );
+													return;
+												}
 											}
-											else
-											{
-												listener.onFail ( 1, p1.getMessage ( ) );
-												return;
-											}
-										}
-									} );
+										} );
+								}
 							}
 						}
 						else
@@ -409,6 +401,62 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						// TODO: Implement this method
 					}
 				} );
+			/*
+			 BmobQuery<TesterInfo> query_emptydevice=new BmobQuery<TesterInfo> ( );
+			 query_emptydevice.addWhereEqualTo ( "deviceId", "" );
+			 BmobQuery<TesterInfo> query_currdevice=new BmobQuery<TesterInfo> ( );
+			 query_currdevice.addWhereEqualTo ( "deviceId", getDevId ( ) );
+			 List<BmobQuery<TesterInfo>> ors=new ArrayList<BmobQuery<TesterInfo>> ( );
+			 ors.add ( query_emptydevice );
+			 ors.add ( query_currdevice );
+			 BmobQuery<TesterInfo> tmp=new BmobQuery<TesterInfo> ( );
+			 BmobQuery<TesterInfo> or=tmp.or ( ors );
+			 List<BmobQuery<TesterInfo>> finaldata=new ArrayList<BmobQuery<TesterInfo>> ( );
+			 finaldata.add ( or );
+			 finaldata.add ( query_key );
+			 BmobQuery<TesterInfo> and=new BmobQuery<TesterInfo> ( );
+			 BmobQuery<TesterInfo> main=and.and ( finaldata );
+			 main.setLimit ( 1 );
+			 main.findObjects ( new FindListener<TesterInfo> ( ){
+
+			 @Override
+			 public void done ( List<TesterInfo> p1, BmobException p2 )
+			 {
+			 if ( p2 == null )
+			 {
+			 if ( p1.size ( ) > 0 )
+			 {
+			 final TesterInfo info=p1.get ( 0 );
+			 info.setdeviceId ( getDevId ( ) );
+			 info.setModel(Build.MODEL);
+			 info.update ( info.getObjectId(),new UpdateListener ( ){
+
+			 @Override
+			 public void done ( BmobException p1 )
+			 {
+			 // TODO: Implement this method
+			 if ( p1 == null )
+			 {
+			 ( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
+			 listener.onSuccess ( );
+			 }
+			 else
+			 {
+			 listener.onFail ( 1, p1.getMessage ( ) );
+			 return;
+			 }
+			 }
+			 } );
+			 }
+			 }
+			 else
+			 {
+			 listener.onFail ( 1, p2.getMessage ( ) );
+			 return;
+			 }
+			 // TODO: Implement this method
+			 }
+			 } );*/
 		}
 		else
 		{
@@ -865,7 +913,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					@Override
 					public void onClick ( View p1 )
 					{
-						String key=keyinput.getEditableText ( ).toString ( );
+						String key=keyinput.getEditableText ( ).toString ( ).toUpperCase ( ).trim ( );
+						InputMethodManager imm = (InputMethodManager) getSystemService ( Context.INPUT_METHOD_SERVICE ); 
+						imm.toggleSoftInput ( 0, InputMethodManager.HIDE_NOT_ALWAYS ); 
 						performkeycheck ( key, new OnCheckResultListener ( ){
 
 								@Override
