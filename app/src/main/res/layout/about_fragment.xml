@@ -17,5 +17,11 @@
 		android:text="关于开源许可证"
 		android:id="@+id/aboutfragmentLicense"/>
 
+	<Button
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="选择程序包名"
+		android:id="@+id/aboutfragmentButtonselectpkg"/>
+
 </LinearLayout>
 
