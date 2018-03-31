@@ -76,19 +76,6 @@ public class ModHelperApplication extends Application
 		}
 		mainpref = getSharedPreferences ( "main", 0 );
 		preflistener=new MainSharedPreferencesChangeListener();
-		/*try
-		{
-			Signature s=getPackageManager ( ).getPackageInfo ( getPackageName ( ), getPackageManager ( ).GET_SIGNATURES ).signatures [ 0 ];
-			helper=new IceKeyHelper ( s.toByteArray ( ), 0 );
-			//pkg_name=Base64.encodeToString(mhelper.encrypt(GAME_PKGNAME.getBytes()),Base64.DEFAULT);
-			/*ClipboardManager m=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
-			m.setText(Base64.encodeToString(helper.encrypt("hk.com.szn.zj".getBytes()),Base64.DEFAULT));*/
-			/*pkg_name = new String ( helper.decrypt ( Base64.decode ( GAME_PKGNAME_CN_SERVER, Base64.DEFAULT ) ) ).trim ( );
-			pkgnameinuse=pkg_name;
-			}
-		catch (Exception e)
-		{}
-		 */
 		try
 		{
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
