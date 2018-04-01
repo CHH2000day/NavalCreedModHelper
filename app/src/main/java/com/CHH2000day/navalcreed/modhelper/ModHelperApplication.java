@@ -176,7 +176,7 @@ public class ModHelperApplication extends Application
 			}
 			else
 			{
-				if ( TW.equals ( GAME_PKGNAME_TW_SERVER ) )
+				if ( TW.equals ( type ) )
 				{
 					pkgnameinuse = decodepkgname(GAME_PKGNAME_TW_SERVER);
 				}
