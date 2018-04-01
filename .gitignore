@@ -3,4 +3,5 @@ gen/
 obj/
 libs/*/*.so
 app/src/main/java/com/CHH2000day/navalcreed/modhelper/StaticData.java
+app/src/main/res/drawable/no_pereview*.png
 
