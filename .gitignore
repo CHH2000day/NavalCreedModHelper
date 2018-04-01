@@ -2,5 +2,5 @@ bin/
 gen/
 obj/
 libs/*/*.so
-/src/java/main/com/CHH2000day/navalcreed/modhelper/StaticData.java
+src/main/java/com/CHH2000day/navalcreed/modhelper/StaticData.java
 
