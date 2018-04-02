@@ -7,5 +7,24 @@
 	<string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 	<string name="modpkg_info_empty">Please select a mod package first</string>
-    
+    <string name="about_license">About license</string>
+	<string name="ok">OK</string>
+	<string name="cancel">Cancel</string>
+	<string name="select_target_package">SelectTargetPackage</string>
+	<string name="notice">Notice</string>
+	<string name="confirm_to_remove_changes_to_parta">Confirm to remove changes to </string>
+	<string name="confirm_to_remove_changes_to_partb"> \?</string>
+	<string name="success">Success</string>
+	<string name="failed">Failed</string>
+	<string name="close">Close</string>
+	<string name="uninstall_and_continue">Uninstall and continue</string>
+	<string name="please_wait">Please wait</string>
+	<string name="select_a_file_selector">Select a file selector</string>
+	<string name="source_file_cannot_be_empty">Source file can\'t be empty</string>
+	<string name="remove_all_bgm">Confirm to remove all changes of BGM?</string>
+	<string name="transcode_starting">Starting</string>
+	<string name="transcode_getting_audio_track">Getting audio track</string>
+	<string name="transcode_transcoding">Transcoding</string>
+	<string name="transcode_writing">Writing</string>
+	<string name="timeused">Time used:</string>
 </resources>

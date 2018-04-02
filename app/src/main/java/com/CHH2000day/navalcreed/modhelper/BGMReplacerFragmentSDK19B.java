@@ -10,6 +10,7 @@ import android.os.*;
 import android.widget.AdapterView.*;
 import java.io.*;
 import java.util.*;
+import android.content.res.*;
 
 public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 {
@@ -21,14 +22,18 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	private static final int MUSICCOUNT_BATTLEVICTORY=4;
 	private static final int MUSICCOUNT_BATTLEFAIL=2;
 	private static final String[] SCENE={"Harbor","Loading","BattleStart","BattleHeat","BattleEnd","Victory","Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/};
-	private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
+	//private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
+	private static String[] scene_toshow;
 	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
-	private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+	//private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+	private static String[] filenames_unselected;
 	private static final String[] FILENAMES_BATTLEFAIL={"Danger","Fail"};
-	private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
+	//private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
+	private static String[] filenames_battlefail_toshow;
 	private static final String[] FILENAMES_LOADING={"Loading","Login","Queuing"};
-	private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
-	private static final int TEXTVIEW_RES_ID=android.support.v7.appcompat.R.layout.support_simple_spinner_dropdown_item;
+	//private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
+	private static String[] filenames_loading_toshow;
+	private static final int TEXTVIEW_RES_ID=R.layout.support_simple_spinner_dropdown_item;
 	public static final int TYPE_HARBOR=10;
 	public static final int TYPE_LOADING=11;
 	public static final int TYPE_BATTLESTART=12;
@@ -51,6 +56,13 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 
 
 
+	private void initValues(){
+		Resources res=getResources();
+		scene_toshow=res.getStringArray(R.array.bgm_scene_toshow);
+		filenames_unselected=res.getStringArray(R.array.bgm_select_a_scene);
+		filenames_loading_toshow=res.getStringArray(R.array.bgm_loading_toshow);
+		filenames_battlefail_toshow=res.getStringArray(R.array.bgm_battlefail_toshow);
+	}
 
 	@Override
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
@@ -86,7 +98,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 					adb.setTitle ( "提示" )
 						.setMessage ( new StringBuilder ( )
 									 .append ( "确定要移除对" )
-									 .append ( SCENE_TOSHOW [ curr_scene ] )
+									 .append ( scene_toshow [ curr_scene ] )
 									 .append ( "的更改么？" )
 									 .toString ( ) )
 						.setNegativeButton ( "否", null )
@@ -209,7 +221,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				}
 			} );
 		//配置场景选择的适配器
-		mSceneSpinner.setAdapter ( new ArrayAdapter<String> ( getActivity ( ), TEXTVIEW_RES_ID, SCENE_TOSHOW ) );
+		mSceneSpinner.setAdapter ( new ArrayAdapter<String> ( getActivity ( ), TEXTVIEW_RES_ID, scene_toshow ) );
 		//初始化文件名的适配器
 		mfilenameadapter = FileNameAdapter.getInstance ( getActivity ( ), TEXTVIEW_RES_ID, TYPE_HARBOR );
 		mFileNameSpinner.setAdapter ( mfilenameadapter );
@@ -289,11 +301,11 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	{
 		if ( type == TYPE_BATTLEFAIL )
 		{
-			return FILENAMES_BATTLEFAIL_TOSHOW;
+			return filenames_battlefail_toshow;
 		}
 		if ( type == TYPE_LOADING )
 		{
-			return FILENAMES_LOADING_TOSHOW;
+			return filenames_battlefail_toshow;
 		}
 		return getFileNameStrings ( type );
 	}

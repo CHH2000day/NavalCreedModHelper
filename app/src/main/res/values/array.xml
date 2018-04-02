@@ -38,4 +38,25 @@
 		<item>pic15</item>
 		<item>pic16</item>
 	</string-array>
+	<string-array name="bgm_scene_toshow">
+		<item>Harbor</item>
+		<item>Loading</item>
+		<item>BattleStart</item>
+		<item>BattleHeat</item>
+		<item>BattleEnd</item>
+		<item>Victory</item>
+		<item>Fail</item>
+	</string-array>
+	<string-array name="bgm_battlefail_toshow">
+		<item>Danger</item>
+		<item>Fail</item>
+	</string-array>
+	<string-array name="bgm_loading_toshow">
+		<item>Loading</item>
+		<item>Login</item>
+		<item>Queuing</item>
+	</string-array>
+	<string-array name="bgm_select_a_scene">
+		<item>Select a scene</item>		
+	</string-array>
 	</resources>

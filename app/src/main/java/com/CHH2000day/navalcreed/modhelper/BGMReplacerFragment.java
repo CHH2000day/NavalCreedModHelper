@@ -19,6 +19,7 @@ import java.nio.channels.*;
 import android.net.*;
 import android.support.v7.app.AppCompatActivity;
 import android.graphics.*;
+import android.content.res.*;
 public class BGMReplacerFragment extends ModFragment
 {
 
@@ -32,13 +33,17 @@ public class BGMReplacerFragment extends ModFragment
 	private static final int MUSICCOUNT_BATTLEVICTORY=4;
 	private static final int MUSICCOUNT_BATTLEFAIL=2;
 	private static final String[] SCENE={"Harbor","Loading","BattleStart","BattleHeat","BattleEnd","Victory","Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/};
-	private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
+	//private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
+	private static String[] scene_toshow;
 	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
-	private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+	//private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+	private static String[] filenames_unselected;
 	private static final String[] FILENAMES_BATTLEFAIL={"Danger","Fail"};
-	private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
+	//private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
+	private static String[] filenames_battlefail_toshow;
 	private static final String[] FILENAMES_LOADING={"Loading","Login","Queuing"};
-	private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
+	//private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
+	private static String[] filenames_loading_toshow;
 	private static final int TEXTVIEW_RES_ID=R.layout.support_simple_spinner_dropdown_item;
 	public static final int TYPE_HARBOR=10;
 	public static final int TYPE_LOADING=11;
@@ -85,11 +90,19 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		// TODO: Implement this method
 		super.onActivityCreated ( savedInstanceState );
+		initValues();
 		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
 		{
 			initview ( );
 		}
 
+	}
+	private void initValues(){
+		Resources res=getResources();
+		scene_toshow=res.getStringArray(R.array.bgm_scene_toshow);
+		filenames_unselected=res.getStringArray(R.array.bgm_select_a_scene);
+		filenames_loading_toshow=res.getStringArray(R.array.bgm_loading_toshow);
+		filenames_battlefail_toshow=res.getStringArray(R.array.bgm_battlefail_toshow);
 	}
 
 
@@ -102,7 +115,7 @@ public class BGMReplacerFragment extends ModFragment
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory ( intent.CATEGORY_OPENABLE );
-					startActivityForResult ( intent.createChooser ( intent, "请选择文件选择器" ), QUERY_CODE );
+					startActivityForResult ( intent.createChooser ( intent, getString(R.string.select_a_file_selector) ), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -113,14 +126,14 @@ public class BGMReplacerFragment extends ModFragment
 				public void onClick ( View p1 )
 				{
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "提示" )
+					adb.setTitle ( R.string.notice )
 						.setMessage ( new StringBuilder ( )
-									 .append ( "确定要移除对" )
-									 .append ( SCENE_TOSHOW [ curr_scene ] )
-									 .append ( "的更改么？" )
+									 .append ( getString(R.string.confirm_to_remove_changes_to_parta) )
+									 .append ( scene_toshow [ curr_scene ] )
+									 .append ( getString(R.string.confirm_to_remove_changes_to_partb) )
 									 .toString ( ) )
-						.setNegativeButton ( "否", null )
-						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+						.setNegativeButton ( R.string.cancel, null )
+						.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
@@ -142,15 +155,15 @@ public class BGMReplacerFragment extends ModFragment
 				@Override
 				public boolean onLongClick ( View p1 )
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "提示" )
-						.setMessage ( "确定要移除所有对BGM的更改么？" )
-						.setNegativeButton ( "否", null )
-						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+					adb.setTitle ( R.string.notice )
+						.setMessage ( R.string.remove_all_bgm )
+						.setNegativeButton ( R.string.cancel, null )
+						.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
 							{
-								String s=uninstallMod ( ) ?"操作完成": "操作失败";
+								String s=uninstallMod ( ) ?getString(R.string.success): getString(R.string.failed);
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -173,16 +186,16 @@ public class BGMReplacerFragment extends ModFragment
 				{
 					if ( null == srcfile )
 					{
-						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
 					if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY ) )
 					{
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-						adb.setTitle ( "注意" )
+						adb.setTitle ( R.string.notice )
 							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
-							.setNegativeButton ( "取消", null )
-							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+							.setNegativeButton ( R.string.cancel, null )
+							.setPositiveButton ( R.string.uninstall_and_continue, new DialogInterface.OnClickListener ( ){
 
 								@Override
 								public void onClick ( DialogInterface p1, int p2 )
@@ -208,10 +221,10 @@ public class BGMReplacerFragment extends ModFragment
 					progress = (TextView)dialogView.findViewById ( R.id.dialogtranscodeTextView );
 					pb = (ProgressBar)dialogView.findViewById ( R.id.dialogtranscodeProgressBar );
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "请稍等" )
+					adb.setTitle ( R.string.please_wait )
 						.setView ( dialogView )
 						.setCancelable ( false )
-						.setPositiveButton ( "关闭", null );
+						.setPositiveButton ( R.string.close, null );
 					final AlertDialog ad=adb.create ( );
 					final Monitor mon=new Monitor ( ad );
 					ad.setOnShowListener ( mon );
@@ -223,29 +236,29 @@ public class BGMReplacerFragment extends ModFragment
 							{
 								case AudioFormatHelper.STATUS_START:
 									//无异常
-									progress.setText ( "正在开始......" );
+									progress.setText ( R.string.transcode_starting );
 									break;
 								case AudioFormatHelper.STATUS_LOADINGFILE:
 									//操作出现异常
-									progress.setText ( "正在从源文件获得音频轨....." );
+									progress.setText ( R.string.transcode_getting_audio_track );
 									break;
 								case AudioFormatHelper.STATUS_TRANSCODING:
-									progress.setText ( "正在转码......" );
+									progress.setText ( R.string.transcode_transcoding );
 									break;
 								case AudioFormatHelper.STATUS_WRITING:
-									progress.setText ( "正在写出文件....." );
+									progress.setText ( R.string.transcode_writing );
 									break;
 								case AudioFormatHelper.STATUS_DONE:
 									long usedtime=System.currentTimeMillis ( ) - starttime;
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
-									progress.setText ( "操作完成，共用时:" + String.valueOf ( usedtime ) + "ms" );
+									progress.setText (getString(R.string.success)+"."+getString(R.string.timeused) + String.valueOf ( usedtime ) + "ms" );
 									mon.ondone ( );
 									break;
 								case AudioFormatHelper.STATUS_ERROR:
 									String s=progress.getText ( ).toString ( );
 									Exception e=(Exception)msg.obj;
-									progress.setText ( s + "\n" + "操作出错:" + e.getMessage ( ) );
+									progress.setText ( s + "\n" + getString(R.string.failed)+":" + e.getMessage ( ) );
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
 									mon.ondone ( );
@@ -270,7 +283,7 @@ public class BGMReplacerFragment extends ModFragment
 							starttime = System.currentTimeMillis ( );
 							String s=afh.compressToWav ( getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ), h );
 							afh.recycle ( );
-							s = ( AudioFormatHelper.RESULT_OK.equals ( s ) ) ? "操作完成": s;
+							s = ( AudioFormatHelper.RESULT_OK.equals ( s ) ) ? getString(R.string.success): s;
 							h.sendMessage ( h.obtainMessage ( 1, s ) );
 							//}
 							/*catch (IOException e)
@@ -284,7 +297,7 @@ public class BGMReplacerFragment extends ModFragment
 				}
 			} );
 		//配置场景选择的适配器
-		mSceneSpinner.setAdapter ( new ArrayAdapter<String> ( getActivity ( ), TEXTVIEW_RES_ID, SCENE_TOSHOW ) );
+		mSceneSpinner.setAdapter ( new ArrayAdapter<String> ( getActivity ( ), TEXTVIEW_RES_ID, scene_toshow ) );
 		//初始化文件名的适配器
 		mfilenameadapter = FileNameAdapter.getInstance ( getActivity ( ), TEXTVIEW_RES_ID, TYPE_HARBOR );
 		mFileNameSpinner.setAdapter ( mfilenameadapter );
@@ -351,11 +364,11 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		if ( type == TYPE_BATTLEFAIL )
 		{
-			return FILENAMES_BATTLEFAIL_TOSHOW;
+			return filenames_battlefail_toshow;
 		}
 		if ( type == TYPE_LOADING )
 		{
-			return FILENAMES_LOADING_TOSHOW;
+			return filenames_loading_toshow;
 		}
 		return getFileNameStrings ( type );
 	}
@@ -417,7 +430,7 @@ public class BGMReplacerFragment extends ModFragment
 				String s=Utils.FORMAT_UNKNOWN;
 				if ( data.getData ( ) == null )
 				{
-					Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+					Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}
 				/*测试音频转码,跳过音频格式验证
@@ -445,7 +458,7 @@ public class BGMReplacerFragment extends ModFragment
 			}
 			else
 			{
-				Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+				Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 				return;
 			}
 		}

@@ -38,5 +38,25 @@
 			<item>头像15</item>
 			<item>头像16</item>
 		</string-array>
-		
+		<string-array name="bgm_scene_toshow">
+			<item>港口</item>
+			<item>加载音乐</item>
+			<item>战斗-开始</item>
+			<item>战斗-激战</item>
+			<item>战斗-结束</item>
+			<item>战斗-胜利</item>
+			<item>战斗-失败</item>
+		</string-array>
+		<string-array name="bgm_battlefail_toshow">
+			<item>即将失败</item>
+			<item>战斗失败</item>
+		</string-array>
+		<string-array name="bgm_loading_toshow">
+			<item>加载中</item>
+			<item>登录</item>
+			<item>匹配中</item>
+		</string-array>
+		<string-array name="bgm_select_a_scene">
+			<item>选择一个情景</item>		
+		</string-array>
 	</resources>

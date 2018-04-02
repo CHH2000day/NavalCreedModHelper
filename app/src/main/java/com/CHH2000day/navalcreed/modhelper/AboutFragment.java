@@ -34,9 +34,9 @@ public class AboutFragment extends Fragment
 						Source s=Okio.source ( getResources ( ).getAssets ( ).open ( "LICENSE" ) );
 						BufferedSource bs=Okio.buffer ( s );
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-						adb.setTitle ( "关于开源许可" )
+						adb.setTitle ( R.string.about_license )
 							.setMessage ( bs.readUtf8 ( ) )
-							.setPositiveButton ( "确定", null );
+							.setPositiveButton ( R.string.ok, null );
 						bs.close ( );
 						adb.create ( ).show ( );
 					}
@@ -52,7 +52,7 @@ public class AboutFragment extends Fragment
 				{
 
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "选择目标程序包名" );
+					adb.setTitle ( R.string.select_target_package );
 					adb.setSingleChoiceItems ( app.pkgnames, app.getPkgNameNum ( app.getMainSharedPrederences ( ).getString ( app.KEY_PKGNAME, app.CN ) ), new DialogInterface.OnClickListener ( ){
 
 							@Override
@@ -62,7 +62,7 @@ public class AboutFragment extends Fragment
 								// TODO: Implement this method
 							}
 						} );
-					adb.setPositiveButton ( "确定", new DialogInterface.OnClickListener ( ){  
+					adb.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){  
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
@@ -71,7 +71,7 @@ public class AboutFragment extends Fragment
 								// TODO: Implement this method
 							}
 						} );
-					adb.setNegativeButton ( "取消", null );
+					adb.setNegativeButton ( R.string.cancel, null );
 					adb.create ( ).show ( );
 
 					// TODO: Implement this method

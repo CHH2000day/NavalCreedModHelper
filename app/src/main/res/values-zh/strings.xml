@@ -3,4 +3,24 @@
 	<string name="app_name">战舰联盟mod助手</string>
     <string name="modpkginstaller_name">战舰联盟Mod包安装器</string>
 	<string name="modpkg_info_empty">请先选择一个Mod包文件</string>
+	<string name="about_license">关于许可证</string>
+	<string name="ok">确认</string>
+	<string name="cancel">取消</string>
+	<string name="select_target_package">选择目标软件包</string>
+	<string name="notice">注意</string>
+	<string name="confirm_to_remove_changes_to_parta">确定移除对</string>
+	<string name="confirm_to_remove_changes_to_partb">的更改么？</string>
+	<string name="success">操作完成</string>
+	<string name="failed">操作失败</string>
+	<string name="close">关闭</string>
+	<string name="uninstall_and_continue">卸载并继续</string>
+	<string name="please_wait">请稍等</string>
+	<string name="select_a_file_selector">选择一个文件选择器</string>
+	<string name="source_file_cannot_be_empty">源文件不能为空</string>
+	<string name="remove_all_bgm">确定要移除所有对BGM的更改么？</string>
+	<string name="transcode_starting">开始中</string>
+	<string name="transcode_getting_audio_track">正在获取音频轨</string>
+	<string name="transcode_transcoding">转码中</string>
+	<string name="transcode_writing">正在写出</string>
+	<string name="timeused">用时:</string>
 </resources>
