@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+		<string-array name="path_bg">
+			<item>加載背景</item>
+			<item>地圖加載背景</item>
+			<item>匹配背景</item>
+		</string-array>
+		<string-array name="filename_bg">
+			<item>圖片1</item>
+			<item>圖片2</item>
+			<item>圖片3</item>
+		</string-array>
+		<string-array name="country_crewpic">
+			<item>美國</item>
+			<item>日本</item>
+			<item>英國</item>
+			<item>中國</item>
+			<item>意大利</item>
+			<item>法國</item>
+			<item>蘇聯</item>
+			<item>德國</item>
+		</string-array>
+		<string-array name="crewpic_name">
+			<item>頭像1</item>
+			<item>頭像2</item>
+			<item>頭像3</item>
+			<item>頭像4</item>
+			<item>頭像5</item>
+			<item>頭像6</item>
+			<item>頭像7</item>
+			<item>頭像8</item>
+			<item>頭像9</item>
+			<item>頭像10</item>
+			<item>頭像11</item>
+			<item>頭像12</item>
+			<item>頭像13</item>
+			<item>頭像14</item>
+			<item>頭像15</item>
+			<item>頭像16</item>
+		</string-array>
+		<string-array name="bgm_scene_toshow">
+			<item>港口</item>
+			<item>加載音樂</item>
+			<item>戰鬥-開始</item>
+			<item>戰鬥-激戰</item>
+			<item>戰鬥-結束</item>
+			<item>戰鬥-勝利</item>
+			<item>戰鬥-失敗</item>
+		</string-array>
+		<string-array name="bgm_battlefail_toshow">
+			<item>危險</item>
+			<item>戰鬥失敗</item>
+		</string-array>
+		<string-array name="bgm_loading_toshow">
+			<item>加載中</item>
+			<item>登入</item>
+			<item>匹配中</item>
+		</string-array>
+		<string-array name="bgm_select_a_scene">
+			<item>選擇要改的音樂</item>		
+		</string-array>
+	</resources>

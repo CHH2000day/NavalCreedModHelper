@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">戰艦聯盟mod助手</string>
+    <string name="modpkginstaller_name">戰艦聯盟Mod包安裝器</string>
+	<string name="modpkg_info_empty">請先選擇一個Mod包文件</string>
+	<string name="about_license">關於許可證</string>
+	<string name="ok">確認</string>
+	<string name="cancel">取消</string>
+	<string name="select_target_package">選擇目標軟件包</string>
+	<string name="notice">注意</string>
+	<string name="confirm_to_remove_changes_to_parta">確定移除對</string>
+	<string name="confirm_to_remove_changes_to_partb">的更改嗎？</string>
+	<string name="success">操作完成</string>
+	<string name="failed">操作失敗</string>
+	<string name="close">關閉</string>
+	<string name="uninstall_and_continue">卸載並繼續</string>
+	<string name="please_wait">請稍等</string>
+	<string name="select_a_file_selector">選擇一個文件選擇器</string>
+	<string name="source_file_cannot_be_empty">源資料不得為空</string>
+	<string name="remove_all_bgm">確定要移除所有對BGM的更改麼？</string>
+	<string name="transcode_starting">開始中</string>
+	<string name="transcode_getting_audio_track">正在獲取音頻軌</string>
+	<string name="transcode_transcoding">轉換中</string>
+	<string name="transcode_writing">正在導出</string>
+	<string name="timeused">用時:</string>
+</resources>
