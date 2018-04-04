@@ -32,7 +32,7 @@
 	<string name="bgm_transcode_disabled">Android version is lower than 5.1(Lollipop),wav transcode diaabled.</string>
 	<string name="not_a_wavfile">Incorrect file format,it\'s NOT a wav file.</string>
 	<string name="select_a_scene">Select a scene</string>
-	<string name="select">Slect</string>
+	<string name="select">Select</string>
 	<string name="unselected">Unselected</string>
 	<string name="apply">Apply</string>
 	<string name="remove_changes">Remove changes</string>
