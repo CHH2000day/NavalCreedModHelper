@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+id/select_a_scene"
+		android:text="@+string/select_a_scene"
 		android:id="@+id/bgmreplacerTextView1"/>
 
 	<Spinner
@@ -20,7 +20,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择要替换的音乐:"
+		android:text="@+string/select_music_to_replace"
 		android:layout_below="@id/bgmreplacerScene"
 		android:id="@+id/bgmreplacerTextView2"/>
 
@@ -33,7 +33,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+id/select"
+		android:text="@+string/select"
 		android:layout_below="@id/bgmreplacerMusic"
 		android:layout_alignParentRight="true"
 		android:id="@+id/bgmreplacerSelect"/>
@@ -41,7 +41,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+id/unselected"
+		android:text="@+string/unselected"
 		android:layout_below="@id/bgmreplacerMusic"
 		android:id="@+id/bgmreplacerText"
 		android:layout_alignBottom="@id/bgmreplacerSelect"
@@ -53,14 +53,14 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+id/apply"
+		android:text="@string/apply"
 		android:id="@+id/bgmreplacerUpdate"
 		android:layout_below="@id/bgmreplacerText"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+id/remove_changes"
+		android:text="@+string/remove_changes"
 		android:layout_toRightOf="@id/bgmreplacerUpdate"
 		android:layout_below="@id/bgmreplacerText"
 		android:id="@+id/bgmreplacerRemove"/>
@@ -68,7 +68,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+id/bgmreplacer_info"
+		android:text="@+string/bgmreplacer_info"
 		android:layout_below="@id/bgmreplacerUpdate"
 		android:id="@+id/bgmreplacerfragmentTextViewInfo"/>
 
