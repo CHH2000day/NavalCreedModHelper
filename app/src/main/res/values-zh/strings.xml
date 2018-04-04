@@ -33,5 +33,5 @@
 	<string name="apply">应用</string>
 	<string name="remove_changes">移除更改</string>
 	<string name="bgmreplacer_info">使用说明:\n每个情景内有多个音乐，需要全部替换才会生效，支持主流格式的音乐。若想移除更改，单击移除删去当前情景的修改，长按移除则删去全部情景的修改</string>
-	
+	<string name="select_music_to_replace">选择要替换的音乐</string>
 </resources>

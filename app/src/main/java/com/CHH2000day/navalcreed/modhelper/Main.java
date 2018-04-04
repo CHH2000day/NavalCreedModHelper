@@ -289,7 +289,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
 			adb.setTitle ( "正在验证测试权限" )
-				.setMessage ( "请稍等" )
+				.setMessage ( R.string.please_wait )
 				.setCancelable ( false );
 			final AlertDialog ad=adb.create ( );
 			ad.setCanceledOnTouchOutside ( false );
@@ -300,7 +300,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					{
 						case 9010:
 							Snackbar.make ( mViewPager, "网络出错", Snackbar.LENGTH_LONG ).show ( );
-							ad.setButton ( ad.BUTTON_POSITIVE, "退出", new DialogInterface.OnClickListener ( ){
+							ad.setButton ( ad.BUTTON_POSITIVE, getText(R.string.exit), new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick ( DialogInterface p1, int p2 )
@@ -603,9 +603,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	public void exit ( )
 	{
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
-		adb.setTitle ( "确定" )
-			.setMessage ( "是否退出？" )
-			.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+		adb.setTitle ( R.string.notice )
+			.setMessage ( R.string.exitmsg )
+			.setPositiveButton ( R.string.exit, new DialogInterface.OnClickListener ( ){
 
 				@Override
 				public void onClick ( DialogInterface p1, int p2 )
@@ -614,7 +614,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					// TODO: Implement this method
 				}
 			} )
-			.setNegativeButton ( "否", null )
+			.setNegativeButton ( R.string.cancel, null )
 			.create ( )
 			.show ( );
 	}
@@ -702,8 +702,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 		adb.setTitle ( "请验证测试者权限" )
 			.setView ( d )
-			.setPositiveButton ( "确定", null )
-			.setNegativeButton ( "退出", null )
+			.setPositiveButton ( R.string.ok, null )
+			.setNegativeButton ( R.string.exit, null )
 			.setCancelable ( false );
 		final AlertDialog ad=adb.create ( );
 		KeyDialogListener listener=new KeyDialogListener ( ad, et );
@@ -843,7 +843,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						{
 							adb0.setTitle ( "公告" )
 								.setMessage ( bmobmsg.getMessage ( ) )
-								.setPositiveButton ( "确定", null )
+								.setPositiveButton ( R.string.ok, null )
 								.setNeutralButton  (  "不再显示该公告", new DialogInterface.OnClickListener ( ){
 
 									@Override
