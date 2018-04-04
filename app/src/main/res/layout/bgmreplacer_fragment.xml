@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择情景"
+		android:text="@+id/select_a_scene"
 		android:id="@+id/bgmreplacerTextView1"/>
 
 	<Spinner
@@ -33,7 +33,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择"
+		android:text="@+id/select"
 		android:layout_below="@id/bgmreplacerMusic"
 		android:layout_alignParentRight="true"
 		android:id="@+id/bgmreplacerSelect"/>
@@ -41,7 +41,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="未选择"
+		android:text="@+id/unselected"
 		android:layout_below="@id/bgmreplacerMusic"
 		android:id="@+id/bgmreplacerText"
 		android:layout_alignBottom="@id/bgmreplacerSelect"
@@ -53,14 +53,14 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="替换"
+		android:text="@+id/apply"
 		android:id="@+id/bgmreplacerUpdate"
 		android:layout_below="@id/bgmreplacerText"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="移除更改"
+		android:text="@+id/remove_changes"
 		android:layout_toRightOf="@id/bgmreplacerUpdate"
 		android:layout_below="@id/bgmreplacerText"
 		android:id="@+id/bgmreplacerRemove"/>
@@ -68,7 +68,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="使用说明:\n每个情景内有多个音乐，需要全部替换才会生效，支持主流格式的音乐。若想移除更改，单击移除删去当前情景的修改，长按移除则删去全部情景的修改"
+		android:text="@+id/bgmreplacer_info"
 		android:layout_below="@id/bgmreplacerUpdate"
 		android:id="@+id/bgmreplacerfragmentTextViewInfo"/>
 

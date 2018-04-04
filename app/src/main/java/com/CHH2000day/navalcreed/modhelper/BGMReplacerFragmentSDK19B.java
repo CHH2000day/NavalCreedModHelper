@@ -69,14 +69,10 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	{
 		// TODO: Implement this method
 		super.onCreateView(inflater,container,savedInstanceState);
+		initValues();
 		//更新操作说明
 		String s=infoTextView.getText ( ).toString ( );
-		infoTextView.setText ( new StringBuilder ( ).append ( s )
-							  .append ( "\n" )
-							  .append ( "当前系统版本为:" )
-							  .append ( Build.VERSION.SDK )
-							  .append ( "." )
-							  .append ( "禁用BGM转码支持" ) );
+		infoTextView.setText ( s+getText(R.string.bgm_transcode_disabled));
 		select.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
@@ -84,7 +80,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory ( intent.CATEGORY_OPENABLE );
-					startActivityForResult ( intent.createChooser ( intent, "请选择文件选择器" ), QUERY_CODE );
+					startActivityForResult ( intent.createChooser ( intent, getText(R.string.select_a_file_selector) ), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -95,14 +91,14 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				public void onClick ( View p1 )
 				{
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "提示" )
+					adb.setTitle ( R.string.notice )
 						.setMessage ( new StringBuilder ( )
-									 .append ( "确定要移除对" )
+									 .append ( getString(R.string.confirm_to_remove_changes_to_parta) )
 									 .append ( scene_toshow [ curr_scene ] )
-									 .append ( "的更改么？" )
+									 .append ( getString(R.string.confirm_to_remove_changes_to_partb) )
 									 .toString ( ) )
-						.setNegativeButton ( "否", null )
-						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+						.setNegativeButton ( R.string.cancel, null )
+						.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
@@ -122,15 +118,15 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				@Override
 				public boolean onLongClick ( View p1 )
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "提示" )
-						.setMessage ( "确定要移除所有对BGM的更改么？" )
-						.setNegativeButton ( "否", null )
-						.setPositiveButton ( "是", new DialogInterface.OnClickListener ( ){
+					adb.setTitle ( R.string.notice )
+						.setMessage ( R.string.remove_all_bgm )
+						.setNegativeButton ( R.string.cancel, null )
+						.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
 							{
-								String s=uninstallMod ( ) ?"操作完成": "操作失败";
+								String s=uninstallMod ( ) ?getString(R.string.success): getString(R.string.failed);
 								Snackbar.make ( v, s, Snackbar.LENGTH_LONG ).show ( );
 								// TODO: Implement this method
 							}
@@ -147,8 +143,8 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				private void install ( )
 				{
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "请稍等" )
-						.setMessage ( "正在复制文件" )
+					adb.setTitle ( R.string.please_wait )
+						.setMessage ( R.string.transcode_writing )
 						.setCancelable ( false );
 					final AlertDialog ad=adb.create ( );
 					ad.setCancelable ( false );
@@ -160,7 +156,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 							{
 								case 0:
 									//无异常
-									Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 									break;
 								case 1:
 									//操作出现异常
@@ -190,16 +186,16 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				{
 					if ( null == srcfile /*|| null == fileformat || "".equals ( fileformat )*/)
 					{
-						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
 					if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY ) )
 					{
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-						adb.setTitle ( "注意" )
-							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
-							.setNegativeButton ( "取消", null )
-							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+						adb.setTitle ( R.string.notice )
+							.setMessage ( R.string.modpkg_install_ovwtmsg )
+							.setNegativeButton ( R.string.cancel, null )
+							.setPositiveButton ( R.string.uninstall_and_continue, new DialogInterface.OnClickListener ( ){
 
 								@Override
 								public void onClick ( DialogInterface p1, int p2 )
@@ -353,7 +349,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				String s=Utils.FORMAT_UNKNOWN;
 				if ( data.getData ( ) == null )
 				{
-					Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+					Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}
 				try
@@ -364,7 +360,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				{Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
 				if ( !Utils.FORMAT_WAV.equals ( s ) )
 				{
-					Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
+					Snackbar.make ( v, R.string.not_a_wavfile, Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}
 				else
@@ -377,7 +373,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 			}
 			else
 			{
-				Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+				Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 				return;
 			}
 		}

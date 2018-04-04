@@ -193,7 +193,7 @@ public class BGMReplacerFragment extends ModFragment
 					{
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 						adb.setTitle ( R.string.notice )
-							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
+							.setMessage ( R.string.modpkg_install_ovwtmsg )
 							.setNegativeButton ( R.string.cancel, null )
 							.setPositiveButton ( R.string.uninstall_and_continue, new DialogInterface.OnClickListener ( ){
 
