@@ -59,4 +59,14 @@
 	<string-array name="bgm_select_a_scene">
 		<item>Select a scene</item>		
 	</string-array>
+	<string-array name="fragment_titles">
+		<item>Background</item>
+		<item>Login movie</item>
+		<item>Crew pics</item>
+		<item>反和谐</item>
+		<item>BGM</item>
+		<item>Mod package installer</item>
+		<item>Mod package manager</item>
+		<item>About</item>
+	</string-array>
 	</resources>

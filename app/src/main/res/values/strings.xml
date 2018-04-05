@@ -40,4 +40,13 @@
 	<string name="select_music_to_replace">Select the music to replace</string>
 	<string name="exit">Exit</string>
 	<string name="exitmsg">Confirm to exit?</string>
+	<string name="permission_request">Permission request</string>
+	<string name="permission_request_msg">NavalCreedModhelper needs permission \"Storage\" to run normally</string>
+	<string name="grant_permission">Grant</string>
+	<string name="cancel_and_exit">Cancel and Exit</string>
+	<string name="tester_authority_verify">Please verify your tester authority</string>
+	<string name="verifying_tester_authority">Checking authority</string>
+	<string name="failed_to_check_tester_authority">Failed to check authority</string>
+	<string name="network_err">Network error</string>
+	<string name="enter_reg_key">Show me your register key:</string>
 </resources>

@@ -59,4 +59,14 @@
 		<string-array name="bgm_select_a_scene">
 			<item>选择一个情景</item>		
 		</string-array>
+		<string-array name="fragment_titles">
+			<item>背景替换</item>
+			<item>登录动画修改</item>
+			<item>船员头像修改</item>
+			<item>反和谐</item>
+			<item>BGM替换</item>
+			<item>Mod包安装</item>
+			<item>Mod包管理</item>
+			<item>关于</item>
+		</string-array>
 	</resources>

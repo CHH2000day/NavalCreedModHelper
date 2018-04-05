@@ -14,7 +14,7 @@
 		<TextView
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:text="请输入注册码:"/>
+			android:text="@+string/enter_reg_key"/>
 
 		<EditText
 			android:layout_height="wrap_content"

@@ -36,4 +36,13 @@
 	<string name="select_music_to_replace">选择要替换的音乐</string>
 	<string name="exit">退出</string>
 	<string name="exitmsg">确认要退出么？</string>
+	<string name="permission_request">权限请求</string>
+	<string name="permission_request_msg">战舰联盟mod助手需要\"储存空间\"权限才能正常运行，是否授予权限？</string>
+	<string name="grant_permission">授予权限</string>
+	<string name="cancel_and_exit">取消并退出</string>
+	<string name="tester_authority_verify">请验证测试者授权</string>
+	<string name="verifying_tester_authority">正在验证测试者授权</string>
+	<string name="failed_to_check_tester_authority">授权检查失败</string>
+	<string name="network_err">网络出错</string>
+	<string name="enter_reg_key">请输入注册码:</string>
 </resources>
