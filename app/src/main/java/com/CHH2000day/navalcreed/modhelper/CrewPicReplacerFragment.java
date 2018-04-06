@@ -77,23 +77,23 @@ public class CrewPicReplacerFragment extends ModFragment
 				@Override
 				public void onClick (View p1)
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "确认" )
-						.setMessage ( "确认要移除更改吗？" )
-						.setPositiveButton ( "移除", new DialogInterface.OnClickListener ( ){
+					adb.setTitle ( R.string.notice )
+						.setMessage (  R.string.confirm_to_remove_changes)
+						.setPositiveButton ( R.string.remove_changes, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick (DialogInterface p1, int p2)
 							{if (getFile ( selectedcountry, selectedcrew ).delete ( ))
 								{
-									Snackbar.make ( v, "更改已移除", Snackbar.LENGTH_LONG ).show ( );
+									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 								}
 								else
-								{Snackbar.make ( v, "更改移除失败", Snackbar.LENGTH_LONG ).show ( );}
+								{Snackbar.make ( v, R.string.failed, Snackbar.LENGTH_LONG ).show ( );}
 
 								// TODO: Implement this method
 							}
 						} )
-						.setNegativeButton ( "取消", null )
+						.setNegativeButton ( R.string.cancel, null )
 						.create ( )
 						.show ( );
 					// TODO: Implement this method
@@ -104,22 +104,22 @@ public class CrewPicReplacerFragment extends ModFragment
 				@Override
 				public boolean onLongClick (View p1)
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "确认" )
-						.setMessage ( "确认要所有移除更改吗？" )
-						.setPositiveButton ( "移除", new DialogInterface.OnClickListener ( ){
+					adb.setTitle ( R.string.notice )
+						.setMessage ( R.string.confirm_to_remove_all_changes )
+						.setPositiveButton ( R.string.remove_changes, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick (DialogInterface p1, int p2)
 							{if (uninstallMod ( ))
 								{
-									Snackbar.make ( v, "所有更改已移除", Snackbar.LENGTH_LONG ).show ( );
+									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 								}
 								else
-								{Snackbar.make ( v, "更改移除失败", Snackbar.LENGTH_LONG ).show ( );}
+								{Snackbar.make ( v, R.string.failed, Snackbar.LENGTH_LONG ).show ( );}
 								// TODO: Implement this method
 							}
 						} )
-						.setNegativeButton ( "取消", null )
+						.setNegativeButton ( R.string.cancel, null )
 						.create ( )
 						.show ( );
 
@@ -139,7 +139,7 @@ public class CrewPicReplacerFragment extends ModFragment
 						ba.compress ( Bitmap.CompressFormat.PNG, 100, fos );
 						fos.flush ( );
 						fos.close ( );
-						Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 					}
 					catch (Exception e)
 					{
@@ -151,16 +151,16 @@ public class CrewPicReplacerFragment extends ModFragment
 				{
 					if (null == ba)
 					{
-						Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
 					if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CREWPIC, ModPackageInfo.SUBTYPE_EMPTY ))
 					{
 						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-						adb.setTitle ( "注意" )
-							.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
-							.setNegativeButton ( "取消", null )
-							.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+						adb.setTitle ( R.string.notice )
+							.setMessage ( R.string.modpkg_install_ovwtmsg )
+							.setNegativeButton ( R.string.cancel, null )
+							.setPositiveButton ( R.string.uninstall_and_continue, new DialogInterface.OnClickListener ( ){
 
 								@Override
 								public void onClick (DialogInterface p1, int p2)
@@ -238,7 +238,7 @@ public class CrewPicReplacerFragment extends ModFragment
 			{
 				if (data == null)
 				{
-					Snackbar.make ( v, "文件为空！", Snackbar.LENGTH_LONG ).show ( );
+					Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 					return;
 				}
 				if (ba != null)
