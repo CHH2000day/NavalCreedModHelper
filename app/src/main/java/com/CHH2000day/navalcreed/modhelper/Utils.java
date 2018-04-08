@@ -269,4 +269,8 @@ public class Utils
 		return null;
 
 	}
+	public static String getErrMsg(Throwable t){
+		Class err=t.getClass();
+		return err.getName()+"\n"+t.getMessage();
+	}
 }

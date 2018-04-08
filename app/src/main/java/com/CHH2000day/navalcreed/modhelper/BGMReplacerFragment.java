@@ -258,7 +258,7 @@ public class BGMReplacerFragment extends ModFragment
 								case AudioFormatHelper.STATUS_ERROR:
 									String s=progress.getText ( ).toString ( );
 									Exception e=(Exception)msg.obj;
-									progress.setText ( s + "\n" + getString(R.string.failed)+":" + e.getMessage ( ) );
+									progress.setText ( s + "\n" + getString(R.string.failed)+":" + Utils.getErrMsg(e) );
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
 									mon.ondone ( );
