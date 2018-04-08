@@ -235,6 +235,10 @@ public class ModPackageInstallerFragment extends Fragment
 		{
 			s = "舰长语音";
 		}
+		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
+		{
+			s = "音效";
+		}
 		else
 		{
 			s = "未知";

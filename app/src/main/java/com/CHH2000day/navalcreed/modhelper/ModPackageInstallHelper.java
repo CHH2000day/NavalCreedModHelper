@@ -266,10 +266,10 @@ public class ModPackageInstallHelper
 		@Override
 		protected Boolean doInBackground ( Void[] p1 )
 		{
-			if ( ModPackageInfo.Versions.VER_0 == mmpi.getModTargetVer ( ) )
+			if ( ModPackageInfo.Versions.VER_0 == mmpi.getModTargetVer ( ) || ModPackageInfo.Versions.VER_1 == mmpi.getModTargetVer ( ) )
 			{
 				return installModVer0 ( );}
-			else
+			else 
 			{
 				return installModVer0 ( );
 			}
@@ -409,7 +409,7 @@ public class ModPackageInstallHelper
 				stat.setText ( "正在安装mod包" );
 			}
 			progressbar.setProgress ( values [ 0 ] );
-			
+
 			// TODO: Implement this method
 
 		}

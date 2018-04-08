@@ -10,7 +10,7 @@ public class ModPackageInfo
 	//常量声明
 
 	//软件版本
-	public static final int PKGVER=Versions.VER_0;
+	public static final int PKGVER=Versions.VER_1;
 
 	public static final String MODTYPE_CV="CaptainVoice";
 	public static final String MODTYPE_SOUNDEFFECT="SoundEffect";
@@ -183,5 +183,7 @@ public class ModPackageInfo
 	}
 	public static final class Versions{
 		public static final int VER_0=0;
+		//ver0 -> ver1 enable soundeffect support
+		public static final int VER_1=1;
 	}
 }
