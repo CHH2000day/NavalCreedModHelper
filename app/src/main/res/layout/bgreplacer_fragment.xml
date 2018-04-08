@@ -36,7 +36,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择图片"
+		android:text="@+string/select"
 		android:layout_below="@id/bgreplacerTextView2"
 		android:id="@+id/bgreplacerbtn_select"
 		android:layout_alignParentRight="true"/>
@@ -44,7 +44,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="替换"
+		android:text="@+string/apply"
 		android:layout_below="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacerbtn_update"/>
 
@@ -58,7 +58,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="慎点！移除所有更改！！"
+		android:text="@+string/remove_changes"
 		android:layout_toRightOf="@id/bgreplacerbtn_update"
 		android:layout_below="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacer_remove"/>
@@ -71,7 +71,7 @@
 		android:layout_alignParentLeft="true"
 		android:layout_alignBottom="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacerPic"
-		android:text="请选择文件"
+		android:text="@+string/unselected"
 		android:gravity="left|center_vertical"
 		android:paddingLeft="3dp"/>
 

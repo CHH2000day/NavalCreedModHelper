@@ -35,7 +35,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择图片"
+		android:text="@+string/select"
 		android:layout_below="@id/crewpicreplacerSpinnerCrew"
 		android:id="@+id/crewpicreplacerButtonSelectPic"
 		android:layout_alignParentRight="true"/>
@@ -43,14 +43,14 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="替换"
+		android:text="@+string/apply"
 		android:layout_below="@id/crewpicreplacerButtonSelectPic"
 		android:id="@+id/crewpicreplacerButtonReplace"/>
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="未选择图片"
+		android:text="@+string/unselected"
 		android:layout_below="@id/crewpicreplacerSpinnerCrew"
 		android:layout_toLeftOf="@id/crewpicreplacerButtonSelectPic"
 		android:layout_alignParentLeft="true"
@@ -62,7 +62,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="清空该更改"
+		android:text="@+string/remove_changes"
 		android:layout_toRightOf="@id/crewpicreplacerButtonReplace"
 		android:layout_below="@id/crewpicreplacerSelectedFile"
 		android:id="@+id/crewpicreplacerButtonRemove"/>

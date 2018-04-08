@@ -92,9 +92,10 @@ public class BGReplacerFragment extends ModFragment
 				@Override
 				public void onClick (View p1)
 				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "确认要移除更改么？" );
-					adb.setNegativeButton ( "取消", null );
-					adb.setPositiveButton ( "确认", new DialogInterface.OnClickListener ( ){
+					adb.setTitle ( R.string.notice )
+					.setMessage(R.string.confirm_to_remove_all_changes)
+					.setNegativeButton ( R.string.cancel, null );
+					adb.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick (DialogInterface p1, int p2)
@@ -123,7 +124,7 @@ public class BGReplacerFragment extends ModFragment
 						ba.compress ( Bitmap.CompressFormat.JPEG, 100, fos );
 						fos.flush ( );
 						fos.close ( );
-						Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 					}
 					catch (Exception e)
 					{Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
@@ -133,16 +134,16 @@ public class BGReplacerFragment extends ModFragment
 				public void onClick (View p1)
 				{if (ba == null)
 					{
-						Snackbar.make ( v, "源文件不能为空！", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 					}
 					else
 					{if (ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_BACKGROUND, ModPackageInfo.SUBTYPE_EMPTY ))
 						{
 							AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-							adb.setTitle ( "注意" )
-								.setMessage ( "已安装该类型的mod包，确定要继续么？\n继续安装将卸载原mod包" )
-								.setNegativeButton ( "取消", null )
-								.setPositiveButton ( "卸载并继续", new DialogInterface.OnClickListener ( ){
+							adb.setTitle ( R.string.notice )
+								.setMessage ( R.string.modpkg_install_ovwtmsg )
+								.setNegativeButton ( R.string.cancel, null )
+								.setPositiveButton ( R.string.cancel_and_exit, new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick (DialogInterface p1, int p2)
@@ -171,7 +172,7 @@ public class BGReplacerFragment extends ModFragment
 		//防止误删船员头像
 		//Utils.delDir(new File(abs_path));
 		uninstallMod ( );
-		Snackbar.make ( v, "更改已移除", Snackbar.LENGTH_LONG ).show ( );
+		Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 	}
 	@Override
 	public boolean uninstallMod ()

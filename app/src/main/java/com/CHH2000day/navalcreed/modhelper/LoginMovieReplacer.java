@@ -42,7 +42,7 @@ public class LoginMovieReplacer extends Fragment
 					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory(intent.CATEGORY_OPENABLE);
-					startActivityForResult ( intent.createChooser(intent,"请选择文件选择器"), QUERY_CODE );
+					startActivityForResult ( intent.createChooser(intent,getText(R.string.select_a_file_selector)), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -54,12 +54,12 @@ public class LoginMovieReplacer extends Fragment
 				{
 					if ( srcfile == null )
 					{
-						Snackbar.make ( v, "请先选择文件", Snackbar.LENGTH_LONG ).show ( );
+						Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
 					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "请稍等" )
-						.setMessage ( "正在复制文件" )
+					adb.setTitle ( R.string.please_wait )
+						.setMessage ( R.string.transcode_writing )
 						.setCancelable ( false );
 					final AlertDialog ad=adb.create ( );
 					ad.setCancelable ( false );
@@ -71,7 +71,7 @@ public class LoginMovieReplacer extends Fragment
 							{
 								case 0:
 									//无异常
-									Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
 									break;
 								case 1:
 									//操作出现异常
@@ -105,7 +105,7 @@ public class LoginMovieReplacer extends Fragment
 				@Override
 				public void onClick ( View p1 )
 				{
-					String result = gettargetfile().delete()?"操作成功！":"操作失败";
+					String result =(String)( gettargetfile().delete()?getText(R.string.success):getText(R.string.failed));
 					Snackbar.make(v,result,Snackbar.LENGTH_LONG).show();
 					// TODO: Implement this method
 				}
@@ -131,7 +131,7 @@ public class LoginMovieReplacer extends Fragment
 			return;
 		}
 		if ( data == null || data.getData ( ) == null )
-		{Snackbar.make ( v, "源文件不能为空", Snackbar.LENGTH_LONG ).show ( );
+		{Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
 			return;}
 		try
 		{
@@ -141,14 +141,14 @@ public class LoginMovieReplacer extends Fragment
 			if ( !Utils.FORMAT_OGG.equals ( Utils.identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), true ) ) )
 			{
 				srcfile = null;
-				Snackbar.make ( v, "源文件不为ogv格式！操作终止！", Snackbar.LENGTH_LONG ).show ( );
+				Snackbar.make ( v, R.string.not_a_ogv_file, Snackbar.LENGTH_LONG ).show ( );
 			}
 
 		}
 		catch (IOException e)
 		{
 			srcfile = null;
-			Snackbar.make ( v, "源文件读取错误", Snackbar.LENGTH_LONG ).show ( );
+			Snackbar.make ( v, R.string.failed, Snackbar.LENGTH_LONG ).show ( );
 		}
 		if ( srcfile != null )
 		{

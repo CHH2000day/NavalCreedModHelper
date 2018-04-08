@@ -67,8 +67,8 @@ public class CustomShipNameFragment extends ModFragment
 								if (p2 != null)
 								{
 									adb.setMessage(p2.getMessage())
-										.setTitle("失败")
-										.setPositiveButton("确定", null)
+										.setTitle(R.string.failed)
+										.setPositiveButton(R.string.ok, null)
 										.create().show();
 									return;
 
@@ -82,15 +82,15 @@ public class CustomShipNameFragment extends ModFragment
 											public void done(String p1, BmobException p2)
 											{if (p2 != null)
 												{
-													adb.setTitle("错误")
+													adb.setTitle(R.string.failed)
 														.setMessage(p2.getMessage())
-														.setPositiveButton("确定", null)
+														.setPositiveButton(R.string.ok, null)
 														.create().show();
 													return;
 												}
-												adb.setMessage("操作成功")
-													.setTitle("成功")
-													.setPositiveButton("确定", null)
+												adb.setMessage(R.string.success)
+													.setTitle(R.string.success)
+													.setPositiveButton(R.string.ok, null)
 													.create().show();
 
 												// TODO: Implement this method
@@ -138,10 +138,10 @@ public class CustomShipNameFragment extends ModFragment
 				{
 				final File f=new File(path);
 				AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
-				adb.setTitle("提示")
-					.setMessage("确定要移除反和谐么？")
-					.setNegativeButton("否",null)
-						.setPositiveButton("移除", new DialogInterface.OnClickListener(){
+				adb.setTitle(R.string.notice)
+					.setMessage(R.string.confirm_to_remove_all_changes)
+					.setNegativeButton(R.string.cancel,null)
+						.setPositiveButton(R.string.remove_changes, new DialogInterface.OnClickListener(){
 
 							@Override
 							public void onClick(DialogInterface p1, int p2)
@@ -149,7 +149,7 @@ public class CustomShipNameFragment extends ModFragment
 								if(f.isFile()){
 									f.delete();
 								}
-								Snackbar.make(v,"操作成功",Snackbar.LENGTH_LONG).show();
+								Snackbar.make(v,R.string.success,Snackbar.LENGTH_LONG).show();
 								// TODO: Implement this method
 							}
 						})

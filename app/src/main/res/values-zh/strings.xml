@@ -45,4 +45,5 @@
 	<string name="failed_to_check_tester_authority">授权检查失败</string>
 	<string name="network_err">网络出错</string>
 	<string name="enter_reg_key">请输入注册码:</string>
+	<string name="not_a_ogv_file">文件格式错误！不为ogv编码！</string>
 </resources>

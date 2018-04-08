@@ -14,7 +14,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择"
+		android:text="@+string/select"
 		android:layout_below="@id/loginmoviereplacerfragmentTextViewUnused"
 		android:id="@+id/loginmoviereplacerfragmentButtonSelect"
 		android:layout_alignParentRight="true"/>
@@ -22,7 +22,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="未选择文件"
+		android:text="@+string/unselected"
 		android:layout_below="@id/loginmoviereplacerfragmentTextViewUnused"
 		android:id="@+id/loginmoviereplacerfragmentTextView"
 		android:layout_alignBottom="@id/loginmoviereplacerfragmentButtonSelect"
@@ -34,7 +34,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="移除"
+		android:text="@+string/apply"
 		android:layout_below="@id/loginmoviereplacerfragmentButtonSelect"
 		android:id="@+id/loginmoviereplacerfragmentButtonUpdate"/>
 
@@ -47,7 +47,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="移除"
+		android:text="@+string/remove_changes"
 		android:layout_below="@id/loginmoviereplacerfragmentTextView"
 		android:layout_toRightOf="@+id/loginmoviereplacerfragmentButtonUpdate"
 		android:id="@+id/loginmoviereplacerfragmentButtonRemove"/>
