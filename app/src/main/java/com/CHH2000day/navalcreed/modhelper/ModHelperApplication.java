@@ -76,6 +76,9 @@ public class ModHelperApplication extends Application
 		}
 		mainpref = getSharedPreferences ( "main", 0 );
 		preflistener=new MainSharedPreferencesChangeListener();
+		mainpref.registerOnSharedPreferenceChangeListener ( preflistener);
+		cleanPathCache();
+		updateTargetPackageName ( getMainSharedPrederences ( ).getString ( KEY_PKGNAME, CN ) );
 		try
 		{
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
@@ -84,10 +87,7 @@ public class ModHelperApplication extends Application
 		{}
 		catch (JSONException e)
 		{}
-		mainpref.registerOnSharedPreferenceChangeListener ( preflistener);
-		cleanPathCache();
-		updateTargetPackageName ( getMainSharedPrederences ( ).getString ( KEY_PKGNAME, CN ) );
-
+		
 
 		// TODO: Implement this method
 		super.onCreate ( );
