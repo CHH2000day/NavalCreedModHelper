@@ -68,7 +68,6 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
-		super.onCreateView(inflater,container,savedInstanceState);
 		initValues();
 		//更新操作说明
 		String s=infoTextView.getText ( ).toString ( );
@@ -254,6 +253,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 				}
 			} );
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
+		super.onCreateView(inflater,container,savedInstanceState);
 		return v;
 	}
 
