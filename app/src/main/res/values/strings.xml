@@ -27,7 +27,7 @@
 	<string name="transcode_transcoding">Transcoding</string>
 	<string name="transcode_writing">Writing</string>
 	<string name="timeused">Time used:</string>
-	<string name="aboutmsg">本软件依照Apache License 2.0开源协议开源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本软件的源码\n软件制作:@CHH2000day\n软件说明:@此生 @天津风\n图标提供:@猫咪要保护所有人\nQQ群:620912393\n我的邀请码:LVI73ECW,希望大佬帮帮我这个萌新(</string>
+	<string name="aboutmsg">本软件依照Apache License 2.0开源协议开源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本软件的源码\n软件制作:@CHH2000day\n软件说明:@此生 @天津风\n图标提供:@猫咪要保护所有人\nQQ群:689502322\n我的邀请码:LVI73ECW,希望大佬帮帮我这个萌新(</string>
 	<string name="modpkg_install_ovwtmsg">"Already installed a mod package with sametype，confirm to uninstall the one installed and continue</string>
 	<string name="bgm_transcode_disabled">Android version is lower than 5.1(Lollipop),wav transcode diaabled.</string>
 	<string name="not_a_wavfile">Incorrect file format,it\'s NOT a wav file.</string>

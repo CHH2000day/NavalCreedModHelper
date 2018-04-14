@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<resources>
 		<string-array name="path_bg">
-			<item>加載背景</item>
-			<item>地圖加載背景</item>
-			<item>匹配背景</item>
+			<item>載入背景圖</item>
+			<item>加載地圖背景圖</item>
+			<item>匹配背景圖</item>
 		</string-array>
 		<string-array name="filename_bg">
 			<item>圖片1</item>
@@ -40,10 +40,10 @@
 		</string-array>
 		<string-array name="bgm_scene_toshow">
 			<item>港口</item>
-			<item>加載音樂</item>
+			<item>載入音樂</item>
 			<item>戰鬥-開始</item>
-			<item>戰鬥-激戰</item>
-			<item>戰鬥-結束</item>
+			<item>戰鬥-激戰中</item>
+			<item>戰鬥-即將結束</item>
 			<item>戰鬥-勝利</item>
 			<item>戰鬥-失敗</item>
 		</string-array>
@@ -52,11 +52,21 @@
 			<item>戰鬥失敗</item>
 		</string-array>
 		<string-array name="bgm_loading_toshow">
-			<item>加載中</item>
+			<item>載入中</item>
 			<item>登入</item>
 			<item>匹配中</item>
 		</string-array>
 		<string-array name="bgm_select_a_scene">
-			<item>選擇要改的音樂</item>		
+			<item>選擇一個情景</item>		
+		</string-array>
+		<string-array name="fragment_titles">
+			<item>背景替换</item>
+			<item>登入動畫修改</item>
+			<item>船員頭像修改</item>
+			<item>反和諧</item>
+			<item>BGM替換</item>
+			<item>Mod包安裝</item>
+			<item>Mod包管理</item>
+			<item>關於</item>
 		</string-array>
 	</resources>
