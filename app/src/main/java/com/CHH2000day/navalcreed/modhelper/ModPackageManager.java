@@ -14,7 +14,7 @@ public class ModPackageManager
 	private static ModPackageManager mmm;
 	private OnDataChangedListener OnDataChangedListener;
 	private static final String[] CATEORY_BG={"loading","loadingmap","matching"};
-	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN};
+	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN};
 
 	public void setonDataChangedListener ( OnDataChangedListener odcl )
 	{
@@ -294,6 +294,9 @@ public class ModPackageManager
 		else if ( ModPackageInfo.SUB_MODTYPE_CV_EN.equals ( modtype ) )
 		{
 			s = "舰长语音-英文";
+		}
+		else if(ModPackageInfo.MODTYPE_SOUNDEFFECT.equals(modtype)){
+			s="音效";
 		}
 		else
 		{
