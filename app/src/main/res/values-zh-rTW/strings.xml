@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+	<!--
+	Traanslated by Jim Li
+	-->
 <resources>
 	<string name="app_name">戰艦聯盟mod助手</string>
     <string name="modpkginstaller_name">戰艦聯盟Mod包安裝器</string>

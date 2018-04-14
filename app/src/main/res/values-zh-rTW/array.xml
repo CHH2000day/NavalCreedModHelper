@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+Traanslated by Jim Li
+-->
 	<resources>
 		<string-array name="path_bg">
 			<item>載入背景圖</item>
