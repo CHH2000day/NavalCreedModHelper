@@ -68,7 +68,18 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
 		// TODO: Implement this method
+		super.onCreateView(inflater,container,savedInstanceState);
 		initValues();
+		v = inflater.inflate ( R.layout.bgmreplacer_fragment, null );
+		mSceneSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerScene );
+		mFileNameSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerMusic );
+		pathTextView = (TextView)v.findViewById ( R.id.bgmreplacerText );
+		infoTextView=(TextView)v.findViewById(R.id.bgmreplacerfragmentTextViewInfo);
+		select = (Button)v.findViewById ( R.id.bgmreplacerSelect );
+		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
+		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
+
+		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		//更新操作说明
 		String s=infoTextView.getText ( ).toString ( );
 		infoTextView.setText ( s+getText(R.string.bgm_transcode_disabled));
@@ -252,8 +263,6 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 					// TODO: Implement this method
 				}
 			} );
-		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
-		super.onCreateView(inflater,container,savedInstanceState);
 		return v;
 	}
 
