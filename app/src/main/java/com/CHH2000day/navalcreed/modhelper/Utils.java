@@ -198,11 +198,19 @@ public class Utils
                 String type = split [ 0 ];
                 if ( "primary".equalsIgnoreCase ( type ) )
 				{
-                    return Environment.getExternalStorageDirectory ( ).getAbsolutePath() + File.separator + split [ 1 ];
+                    return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + File.separator + split [ 1 ];
                 }
 				else if ( "secondary".equalsIgnoreCase ( type ) )
 				{
 					return System.getenv ( "SECONDARY_STORAGE" ) + File.separator + split [ 1 ];
+				}
+				else
+				{
+					String[] vol_id=split [ 0 ].split ( String.valueOf ( File.separatorChar ) );
+					String vol=vol_id[vol_id.length-1];
+					if(vol.contains("-")){
+						return new StringBuilder().append(File.separatorChar).append("storage").append(File.separatorChar).append(vol).append(File.separatorChar).append(split[1]).toString();
+					}
 				}
 			}
 		}
@@ -217,7 +225,7 @@ public class Utils
 		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.gionee.filemanager.fileprovider" ) )
 		{
 			String[] val=uri.getPath ( ).split ( "/external_path", 2 );
-			return Environment.getExternalStorageDirectory().getAbsolutePath()+val [ 1 ];
+			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + val [ 1 ];
 		}
 		//遍历查询
 
@@ -269,8 +277,9 @@ public class Utils
 		return null;
 
 	}
-	public static String getErrMsg(Throwable t){
-		Class err=t.getClass();
-		return err.getName()+"\n"+t.getMessage();
+	public static String getErrMsg ( Throwable t )
+	{
+		Class err=t.getClass ( );
+		return err.getName ( ) + "\n" + t.getMessage ( );
 	}
 }
