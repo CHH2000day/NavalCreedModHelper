@@ -777,7 +777,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										final AlertDialog d=db.create ( );
 										d.setCanceledOnTouchOutside ( false );
 										d.show ( );
-										final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
+										//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
+										final File destfile=new File ( new File ( getCacheDir ( ), "download" ), "update.apk" );
+										
 										tgtfile.download ( destfile, new DownloadFileListener ( ){
 
 												@Override
