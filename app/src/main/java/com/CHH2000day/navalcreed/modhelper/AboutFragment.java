@@ -16,6 +16,7 @@ public class AboutFragment extends Fragment
 	private Button license,pkgname;
 	private int selectedItem=0;
 	private ModHelperApplication app;
+	private TextView mtextview;
 	@Override
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{	app = (ModHelperApplication)getActivity ( ).getApplication ( );
@@ -23,6 +24,15 @@ public class AboutFragment extends Fragment
 		v = inflater.inflate ( R.layout.about_fragment, null );
 		license = (Button)v.findViewById ( R.id.aboutfragmentLicense );
 		pkgname = (Button)v.findViewById ( R.id.aboutfragmentButtonselectpkg );
+		mtextview = (Button)v.findViewById ( R.id.aboutfragmentTextView );
+		if ( BuildConfig.DEBUG )
+		{
+			mtextview.setText ( new StringBuilder ( ).append ( "Device id:" )
+							   .append ( Build.SERIAL )
+							   .append ( "\n" )
+							   .append ( mtextview.getText ( ) )
+							   .toString ( ) );
+		}
 		license.setOnClickListener ( new OnClickListener ( ){
 
 				@Override
