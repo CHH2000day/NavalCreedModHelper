@@ -185,7 +185,5 @@ public class ModPackageInfo
 		public static final int VER_0=0;
 		//ver0 -> ver1 enable soundeffect support
 		public static final int VER_1=1;
-		//ver1 -> ver2 relocate targetdir for SoundEffect
-		public static final int VER_2=2;
 	}
 }
