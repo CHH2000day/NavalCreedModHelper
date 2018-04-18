@@ -24,7 +24,7 @@ public class AboutFragment extends Fragment
 		v = inflater.inflate ( R.layout.about_fragment, null );
 		license = (Button)v.findViewById ( R.id.aboutfragmentLicense );
 		pkgname = (Button)v.findViewById ( R.id.aboutfragmentButtonselectpkg );
-		mtextview = (Button)v.findViewById ( R.id.aboutfragmentTextView );
+		mtextview = (TextView)v.findViewById ( R.id.aboutfragmentTextView );
 		if ( BuildConfig.DEBUG )
 		{
 			mtextview.setText ( new StringBuilder ( ).append ( "Device id:" )
