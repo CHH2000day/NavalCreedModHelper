@@ -725,7 +725,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject> ( );
 
-			query.getObject ( StaticData.getDataid ( ), new QueryListener<UniversalObject> ( ){
+			query.getObject ( StaticData.DATAID, new QueryListener<UniversalObject> ( ){
 
 					@Override
 					public void done (final UniversalObject universalobj, BmobException p2)
