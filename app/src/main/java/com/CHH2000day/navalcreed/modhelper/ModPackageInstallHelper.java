@@ -19,7 +19,7 @@ public class ModPackageInstallHelper
 	private static final String FILE_MODINFO="mod.info";
 	private static final String PRIMARYPATH_CV=File.separatorChar + "sound" + File.separatorChar + "Voice";
 	private static final String PRIMARYPATH_BGM=File.separatorChar + "sound" + File.separatorChar + "Music";
-	private static final String PRIMARYPATH_SOUNDEFFECT=File.separatorChar + "sound" + File.separatorChar + "soundeffect" + File.separatorChar + "ginsir";
+	private static final String PRIMARYPATH_SOUNDEFFECT=File.separatorChar + "sound" + File.separatorChar + "soundeffect";
 	private static final String PRIMARYPATH_BACKGROUND=File.separatorChar + "pic";
 	private static final String PRIMARYPATH_CREWHEAD=File.separatorChar + "pic" + File.separatorChar + "crewhead";
 	private static final String PRIMARYTYPE_OTHER="";
