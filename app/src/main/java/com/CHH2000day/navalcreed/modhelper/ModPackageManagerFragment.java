@@ -227,19 +227,19 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 				return false;
 			}
 			int num=p1.getTag ( );
-			String key=ModPackageManager.PUBLIC_KEYS [ num ];
-			if ( key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
+			String modtype=ModPackageManager.PUBLIC_KEYS [ num ];
+			if ( modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
 			{
-				if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CV, key ) )
+				if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CV, modtype ) )
 				{
-					uninstall ( key );
+					uninstall ( modtype );
 				}
 			}
 			else
 			{
-				if ( ModPackageManager.getInstance ( ).checkInstalled ( key, ModPackageInfo.SUBTYPE_EMPTY ) )
+				if ( ModPackageManager.getInstance ( ).checkInstalled ( modtype, ModPackageInfo.SUBTYPE_EMPTY ) )
 				{
-					uninstall ( key );
+					uninstall ( modtype );
 				}
 			}
 
