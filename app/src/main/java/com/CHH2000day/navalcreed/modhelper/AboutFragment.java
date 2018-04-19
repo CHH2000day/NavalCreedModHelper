@@ -9,6 +9,7 @@ import okio.*;
 import java.io.*;
 import android.support.v7.app.*;
 import android.content.*;
+import android.support.design.widget.*;
 
 public class AboutFragment extends Fragment
 {
@@ -32,6 +33,17 @@ public class AboutFragment extends Fragment
 							   .append ( "\n" )
 							   .append ( mtextview.getText ( ) )
 							   .toString ( ) );
+			mtextview.setOnClickListener ( new OnClickListener ( ){
+
+					@Override
+					public void onClick ( View p1 )
+					{
+						ClipboardManager cmb = (ClipboardManager)getActivity().getSystemService ( Context.CLIPBOARD_SERVICE );  
+						cmb.setText ( Build.SERIAL );  
+						Snackbar.make(v,"Device id has been copied",Snackbar.LENGTH_LONG).show();
+						// TODO: Implement this method
+					}
+				} );
 		}
 		license.setOnClickListener ( new OnClickListener ( ){
 
