@@ -20,6 +20,8 @@ public class ModPackageInstallHelper
 	private static final String PRIMARYPATH_CV=File.separatorChar + "sound" + File.separatorChar + "Voice";
 	private static final String PRIMARYPATH_BGM=File.separatorChar + "sound" + File.separatorChar + "Music";
 	private static final String PRIMARYPATH_SOUNDEFFECT=File.separatorChar + "sound" + File.separatorChar + "soundeffect" + File.separatorChar + "ginsir";
+	private static final String PRIMARYPATH_SOUNDEFFECT_PRIM=File.separatorChar + "sound" + File.separatorChar + "soundeffect";
+	private static final String PRIMARYPATH_SOUNDEFFECT_SEC=File.separatorChar + "sound" + File.separatorChar + "newsound";
 	private static final String PRIMARYPATH_BACKGROUND=File.separatorChar + "pic";
 	private static final String PRIMARYPATH_CREWHEAD=File.separatorChar + "pic" + File.separatorChar + "crewhead";
 	private static final String PRIMARYTYPE_OTHER="";
@@ -175,6 +177,20 @@ public class ModPackageInstallHelper
 			adb.create ( ).show ( );
 
 		}
+		else if ( mmpi.isAbandoned ( ) )
+		{
+			if ( ModPackageManager.getInstance ( ).isOverride ( ) )
+			{
+				install ( );
+			}
+			else
+			{
+				AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+				adb.setTitle ( "错误" )
+					.setMessage ( "该mod包使用了已经被弃用的接口，如需继续安装请前往超控mod包管理机制" );
+				adb.create ( ).show ( );
+			}
+		}
 		else
 		{
 			install ( );
@@ -209,11 +225,11 @@ public class ModPackageInstallHelper
 		return s;
 	}
 
-	public static String getPath ( String modeType, int subType, ModHelperApplication app )
+	public static String getPath ( String modType, int subType, ModHelperApplication app )
 	{
 		String pth=app.getResFilesDirPath ( );
 
-		if ( ModPackageInfo.MODTYPE_CV.equals ( modeType ) )
+		if ( ModPackageInfo.MODTYPE_CV.equals ( modType ) )
 		{
 			pth = pth + PRIMARYPATH_CV;
 			if ( subType == SUBTYPE_CV_CN )
@@ -225,23 +241,31 @@ public class ModPackageInstallHelper
 				pth = pth + SUBPATH_CV_EN;
 			}
 		}
-		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modeType ) )
+		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modType ) )
 		{
 			pth = pth + PRIMARYPATH_BACKGROUND;
 		}
-		if ( ModPackageInfo.MODTYPE_BGM.equals ( modeType ) )
+		if ( ModPackageInfo.MODTYPE_BGM.equals ( modType ) )
 		{
 			pth = pth + PRIMARYPATH_BGM;
 		}
-		if ( ModPackageInfo.MODTYPE_CREWPIC.equals ( modeType ) )
+		if ( ModPackageInfo.MODTYPE_CREWPIC.equals ( modType ) )
 		{
 			pth = pth + PRIMARYPATH_CREWHEAD;
 		}
-		if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modeType ) )
+		if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modType ) )
 		{
 			pth = pth + PRIMARYPATH_SOUNDEFFECT;
 		}
-		if ( ModPackageInfo.MODTYPE_OTHER.equals ( modeType ) )
+		if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC.equals ( modType ) )
+		{
+			pth = pth + PRIMARYPATH_SOUNDEFFECT_SEC;
+		}
+		if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM.equals ( modType ) )
+		{
+			pth = pth + PRIMARYPATH_SOUNDEFFECT_PRIM;
+		}
+		if ( ModPackageInfo.MODTYPE_OTHER.equals ( modType ) )
 		{
 			pth = pth + PRIMARYTYPE_OTHER;
 		}

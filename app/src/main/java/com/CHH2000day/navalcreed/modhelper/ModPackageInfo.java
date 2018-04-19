@@ -4,15 +4,18 @@ import android.graphics.*;
 import org.json.*;
 import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
 import android.util.*;
+import java.util.*;
 
 public class ModPackageInfo
 {
 	//常量声明
 
 	//软件版本
-	public static final int PKGVER=Versions.VER_1;
+	public static final int PKGVER=Versions.VER_2;
 
 	public static final String MODTYPE_CV="CaptainVoice";
+	public static final String MODTYPE_SOUNDEFFECT_PRIM="SoundEffect_PRIM";
+	public static final String MODTYPE_SOUNDEFFECT_SEC="SoundEffect_SEC";
 	public static final String MODTYPE_SOUNDEFFECT="SoundEffect";
 	public static final String MODTYPE_BGM="BackgroundMusic";
 	public static final String MODTYPE_BACKGROUND="Background";
@@ -21,6 +24,8 @@ public class ModPackageInfo
 	public static final String SUBTYPE_EMPTY="";
 	public static final String SUB_MODTYPE_CV_CN="CV_CN";
 	public static final String SUB_MODTYPE_CV_EN="CV_EN";
+	
+	private static ArrayList<String> abandoned_types;
 	//mod信息相关
 	private static final String KEY_MINSUPPORTVER="minSupportVer";
 	private static final String KEY_TARGETVER="targetVer";
@@ -39,11 +44,19 @@ public class ModPackageInfo
 	private int modTargetVer;
 
 
+	static{
+		abandoned_types=new ArrayList<String>();
+		abandoned_types.add(MODTYPE_SOUNDEFFECT);
+	}
 	private ModPackageInfo ()
 	{
 
 	}
 
+	public static boolean checkIsAbandoned(String modtype){
+		return abandoned_types.contains(modtype);
+	}
+	
 	private void setModName (String modName)
 	{
 		this.modName = modName;
@@ -109,7 +122,9 @@ public class ModPackageInfo
 	public boolean hasAllFeature(){
 		return (PKGVER>=modTargetVer);
 	}
-
+	public boolean isAbandoned(){
+		return checkIsAbandoned(getModType());
+	}
 
 
 
@@ -185,5 +200,7 @@ public class ModPackageInfo
 		public static final int VER_0=0;
 		//ver0 -> ver1 enable soundeffect support
 		public static final int VER_1=1;
+		//ver1 -> ver2 abandon old soudeffect interface and use a new one.
+		public static final int VER_2=2;
 	}
 }

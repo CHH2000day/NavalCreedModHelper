@@ -14,7 +14,7 @@ public class ModPackageManager
 	private static ModPackageManager mmm;
 	private OnDataChangedListener OnDataChangedListener;
 	private static final String[] CATEORY_BG={"loading","loadingmap","matching"};
-	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN};
+	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN};
 
 	public void setonDataChangedListener ( OnDataChangedListener odcl )
 	{
@@ -88,7 +88,7 @@ public class ModPackageManager
 	{
 		boolean b=performUninstall ( modtype, subtype, app );
 		postUninstall ( modtype, subtype );
-		
+
 		return b;
 	}
 
@@ -121,7 +121,8 @@ public class ModPackageManager
 			return true;
 		}
 		//Category Other can't be uninstalled due to path definition
-		if(modtype.equals(ModPackageInfo.MODTYPE_OTHER)){
+		if ( modtype.equals ( ModPackageInfo.MODTYPE_OTHER ) )
+		{
 			return false;
 		}
 		else
@@ -251,9 +252,11 @@ public class ModPackageManager
 	{
 		return installedMod;
 	}
-	public String getModName(String datatype){
-		String s=getModList().get(datatype);
-		if(s==null){
+	public String getModName ( String datatype )
+	{
+		String s=getModList ( ).get ( datatype );
+		if ( s == null )
+		{
 			return "";
 		}
 		return s;
@@ -299,8 +302,17 @@ public class ModPackageManager
 		{
 			s = "舰长语音-英文";
 		}
-		else if(ModPackageInfo.MODTYPE_SOUNDEFFECT.equals(modtype)){
-			s="音效";
+		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
+		{
+			s = "音效";
+		}
+		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM.equals ( modtype ) )
+		{
+			s = "主音效";
+		}
+		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC.equals ( modtype ) )
+		{
+			s = "副音效";
 		}
 		else
 		{
