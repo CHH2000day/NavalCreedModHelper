@@ -120,6 +120,10 @@ public class ModPackageManager
 			}
 			return true;
 		}
+		//Category Other can't be uninstalled due to path definition
+		if(modtype.equals(ModPackageInfo.MODTYPE_OTHER)){
+			return false;
+		}
 		else
 		{
 			return Utils.delDir ( new File ( path ) );

@@ -228,6 +228,9 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			}
 			int num=p1.getTag ( );
 			String modtype=ModPackageManager.PUBLIC_KEYS [ num ];
+			if(modtype.equals(ModPackageInfo.MODTYPE_OTHER)){
+				Snackbar.make(v,"This category of mod package can't be uninstalled",Snackbar.LENGTH_LONG).show();
+			}
 			if ( modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
 			{
 				if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CV, modtype ) )

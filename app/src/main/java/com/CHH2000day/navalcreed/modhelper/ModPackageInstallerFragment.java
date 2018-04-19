@@ -185,18 +185,24 @@ public class ModPackageInstallerFragment extends Fragment
 		{
 			mpih = new ModPackageInstallHelper ( new File ( filepath ), (Main)getActivity ( )  );
 			ModPackageInfo mpi=mpih.getModPackageInfo ( );
-			info.setText ( new StringBuilder ( ).append ( "mod名:" )
-						  .append ( mpi.getModName ( ) )
-						  .append ( "\n" )
-						  .append ( "mod类型:" )
-						  .append ( resolveModType ( mpi.getModType ( ) ) )
-						  .append ( "\n" )
-						  .append ( "mod作者:" )
-						  .append ( mpi.getModAuthor ( ) )
-						  .append ( "\n" )
-						  .append ( "简介:" )
-						  .append ( mpi.getModInfo ( ) )
-						  .toString ( ) );
+			StringBuilder sb=new StringBuilder ( );
+			sb.append ( "mod名:" )
+				.append ( mpi.getModName ( ) )
+				.append ( "\n" )
+				.append ( "mod类型:" )
+				.append ( resolveModType ( mpi.getModType ( ) ) )
+				.append ( "\n" )
+				.append ( "mod作者:" )
+				.append ( mpi.getModAuthor ( ) )
+				.append ( "\n" )
+				.append ( "简介:" )
+				.append ( mpi.getModInfo ( ) );
+			if ( mpi.getModType ( ).equals ( ModPackageInfo.MODTYPE_OTHER ) )
+			{
+				sb.append ( "\n" )
+					.append ( "该mod包在安装后将不可被卸载" );
+			}
+			info.setText ( sb.toString ( ) );
 			if ( mpi.hasPreview ( ) )
 			{
 				preview.setImageBitmap ( mpi.getModPreview ( ) );
