@@ -28,6 +28,7 @@ import android.view.View.*;
 import android.widget.Button;
 import android.widget.EditText;
 import android.view.inputmethod.*;
+import org.json.*;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -55,14 +56,14 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 	private static final int PERMISSION_CHECK_CODE=125;
 	@Override
-	protected void onCreate (Bundle savedInstanceState)
+	protected void onCreate ( Bundle savedInstanceState )
 	{
 		super.onCreate ( savedInstanceState );
 		setContentView ( R.layout.main );
 		Toolbar toolbar = (Toolbar) findViewById ( R.id.toolbar );
 		setSupportActionBar ( toolbar );
 		mupdateHandler = new Handler ( ){
-			public void handleMessage (final Message msg)
+			public void handleMessage ( final Message msg )
 			{
 
 				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
@@ -71,6 +72,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 			}
 		};
+
 		/*禁用FloatingActionButton
 		 FloatingActionButton fab = (FloatingActionButton) findViewById ( R.id.fab );
 		 fab.setOnClickListener ( new View.OnClickListener ( ) {
@@ -100,7 +102,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
 		//如果系统版本为Lollipop前的旧设备，使用旧的BGM转码器
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)
+		if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT )
 		{
 			mBGMReplacerFragment = new BGMReplacerFragmentSDK19B ( );
 		}
@@ -131,7 +133,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 titles.add ( "Mod包管理" );
 		 titles.add ( "关于" );*/
 		String[] fragment_titles=getResources ( ).getStringArray ( R.array.fragment_titles );
-		for (String title:fragment_titles)
+		for ( String title:fragment_titles )
 		{
 			titles.add ( title );
 		}
@@ -147,7 +149,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 {
 		 installModPackageBeta(getIntent().getData().getPath());	
 		 }*/
-		if (Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ))
+		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
 
 			mTabLayout.getTabAt ( fragments.indexOf ( mModpkgInstallerFragment ) ).select ( );
@@ -157,17 +159,18 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 
 	@Override
-	protected void onStart ()
+	protected void onStart ( )
 	{
 		// TODO: Implement this method
 
 		super.onStart ( );
 
 
+
 	}
 
 	@Override
-	protected void onResume ()
+	protected void onResume ( )
 	{
 		// TODO: Implement this method
 		super.onResume ( );
@@ -254,7 +257,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	 }
 	 }
 	 */
-	private void checkVality ()
+	private void checkVality ( )
 	{
 		//进行检查
 		/*
@@ -291,7 +294,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 }
 		 };*/
 		//ad_ver.show ( );
-		if (BuildConfig.DEBUG)
+		if ( BuildConfig.DEBUG )
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
 			adb.setTitle ( R.string.verifying_tester_authority )
@@ -300,16 +303,16 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			final AlertDialog ad=adb.create ( );
 			ad.setCanceledOnTouchOutside ( false );
 			mveronboothandler = new Handler ( ){
-				public void handleMessage (Message msg)
+				public void handleMessage ( Message msg )
 				{
-					switch (msg.what)
+					switch ( msg.what )
 					{
 						case 9010:
 							Snackbar.make ( mViewPager, R.string.network_err, Snackbar.LENGTH_LONG ).show ( );
 							ad.setButton ( ad.BUTTON_POSITIVE, getText ( R.string.exit ), new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{
 										doExit ( );
 										// TODO: Implement this method
@@ -333,19 +336,19 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			performStartTesterPermissionCheck ( new OnCheckResultListener ( ){
 
 					@Override
-					public void onSuccess ()
+					public void onSuccess ( )
 					{
 						// TODO: Implement this method
 						ad.dismiss ( );
 					}
 
 					@Override
-					public void onFail (int reason, String errorrmsh)
+					public void onFail ( int reason, String errorrmsh )
 					{
-						if (reason == 0)
+						if ( reason == 0 )
 						{
 							//如果设备不匹配，清除本地许可数据
-							((ModHelperApplication)getApplication ( )).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, "" ).apply ( );
+							( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, "" ).apply ( );
 						}
 						mveronboothandler.sendEmptyMessage ( reason );
 						// TODO: Implement this method
@@ -356,23 +359,23 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 
 
-	private void performkeycheck (String key , final OnCheckResultListener listener)
+	private void performkeycheck ( String key , final OnCheckResultListener listener )
 	{
-		if (KeyUtil.checkKeyFormat ( key ))
+		if ( KeyUtil.checkKeyFormat ( key ) )
 		{
 			BmobQuery<TesterInfo> query_key=new BmobQuery<TesterInfo> ( );
 			query_key.addWhereEqualTo ( "key", key );
 			query_key.findObjects ( new FindListener<TesterInfo> ( ){
 
 					@Override
-					public void done (List<TesterInfo> p1, BmobException p2)
+					public void done ( List<TesterInfo> p1, BmobException p2 )
 					{
-						if (p2 == null)
+						if ( p2 == null )
 						{
-							if (p1.size ( ) > 0)
+							if ( p1.size ( ) > 0 )
 							{
 								final TesterInfo info=p1.get ( 0 );
-								if (info.getdeviceId ( ) == null || info.getdeviceId ( ).equals ( "" ) || info.getdeviceId ( ).equals ( getDevId ( ) ))
+								if ( info.getdeviceId ( ) == null || info.getdeviceId ( ).equals ( "" ) || info.getdeviceId ( ).equals ( getDevId ( ) ) )
 								{
 
 
@@ -381,12 +384,12 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 									info.update ( info.getObjectId ( ), new UpdateListener ( ){
 
 											@Override
-											public void done (BmobException p1)
+											public void done ( BmobException p1 )
 											{
 												// TODO: Implement this method
-												if (p1 == null)
+												if ( p1 == null )
 												{
-													((ModHelperApplication)getApplication ( )).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
+													( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
 													listener.onSuccess ( );
 												}
 												else
@@ -471,10 +474,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			return;
 		}
 	}
-	private void performStartTesterPermissionCheck (final OnCheckResultListener listener)
+	private void performStartTesterPermissionCheck ( final OnCheckResultListener listener )
 	{
-		String objid=((ModHelperApplication)getApplication ( )).getMainSharedPrederences ( ).getString ( KEY_OBJID, "" );
-		if (TextUtils.isEmpty ( objid ))
+		String objid=( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).getString ( KEY_OBJID, "" );
+		if ( TextUtils.isEmpty ( objid ) )
 		{
 			listener.onFail ( 2, "Unregistered！" );
 			return;
@@ -483,11 +486,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		query.getObject ( objid, new QueryListener<TesterInfo> ( ){
 
 				@Override
-				public void done (TesterInfo p1, BmobException p2)
+				public void done ( TesterInfo p1, BmobException p2 )
 				{
-					if (p2 != null)
+					if ( p2 != null )
 					{
-						if (p2.getErrorCode ( ) == 9010 || p2.getErrorCode ( ) == 9016)
+						if ( p2.getErrorCode ( ) == 9010 || p2.getErrorCode ( ) == 9016 )
 						{
 							listener.onFail ( 9010, "Network error" );
 							return;
@@ -498,7 +501,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							return;
 						}
 					}
-					if (p1.getdeviceId ( ).equals ( getDevId ( ) ))
+					if ( p1.getdeviceId ( ).equals ( getDevId ( ) ) )
 					{
 						listener.onSuccess ( );
 						return;
@@ -515,16 +518,16 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			} );
 		;
 	}
-	private String getDevId ()
+	private String getDevId ( )
 	{
 		String s=Build.SERIAL;
 		return s;
 	}
-	public void checkPermission ()
+	public void checkPermission ( )
 	{
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
 		{
-			if (PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.READ_EXTERNAL_STORAGE ) || PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.WRITE_EXTERNAL_STORAGE ))
+			if ( PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.READ_EXTERNAL_STORAGE ) || PackageManager.PERMISSION_GRANTED != ContextCompat.checkSelfPermission ( this, Manifest.permission.WRITE_EXTERNAL_STORAGE ) )
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 				adb.setTitle ( R.string.permission_request )
@@ -532,7 +535,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					.setNegativeButton ( R.string.cancel_and_exit, new DialogInterface.OnClickListener ( ){
 
 						@Override
-						public void onClick (DialogInterface p1, int p2)
+						public void onClick ( DialogInterface p1, int p2 )
 						{
 							finish ( );
 							// TODO: Implement this method
@@ -541,7 +544,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					.setPositiveButton ( R.string.grant_permission, new DialogInterface.OnClickListener ( ){
 
 						@Override
-						public void onClick (DialogInterface p1, int p2)
+						public void onClick ( DialogInterface p1, int p2 )
 						{
 							ActivityCompat.requestPermissions ( Main.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CHECK_CODE );
 							// TODO: Implement this method
@@ -557,30 +560,34 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 
 	@Override
-	public void onRequestPermissionsResult (int requestCode, String[] permissions, @NonNull int[] grantResults)
+	public void onRequestPermissionsResult ( int requestCode, String[] permissions, @NonNull int[] grantResults )
 	{
 		// TODO: Implement this method
 		super.onRequestPermissionsResult ( requestCode, permissions, grantResults );
-		if (PERMISSION_CHECK_CODE == requestCode)
+		if ( PERMISSION_CHECK_CODE == requestCode )
 		{
 
 
-			if (grantResults.length <= 0 || PackageManager.PERMISSION_GRANTED != grantResults[ 0 ])
+			if ( grantResults.length <= 0 || PackageManager.PERMISSION_GRANTED != grantResults [ 0 ] )
 			{
 				checkPermission ( );
+			}
+			else
+			{
+				( (ModHelperApplication)getApplication ( ) ).reconfigModPackageManager ( );
 			}
 		}
 	}
 
 
-	public ModHelperApplication getModHelperApplication ()
+	public ModHelperApplication getModHelperApplication ( )
 	{
 		return(ModHelperApplication)getApplication ( );
 	}
 	@Override
-	public void onBackPressed ()
+	public void onBackPressed ( )
 	{
-		if (!((ModHelperApplication)getApplication ( )).isMainPage ( ))
+		if ( !( (ModHelperApplication)getApplication ( ) ).isMainPage ( ) )
 		{
 			super.onBackPressed ( );
 		}
@@ -589,24 +596,24 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			exit ( );
 		}
 	}
-	public BGReplacerFragment getBGReplacerFragment ()
+	public BGReplacerFragment getBGReplacerFragment ( )
 	{
 		return mBGReplacerFragment;
 	}
-	public BGMReplacerFragment getBGMReplacerFragment ()
+	public BGMReplacerFragment getBGMReplacerFragment ( )
 	{
 		return mBGMReplacerFragment;
 	}
-	public CrewPicReplacerFragment getCrewPicReplacerFragment ()
+	public CrewPicReplacerFragment getCrewPicReplacerFragment ( )
 	{
 		return mCrewPicReplacerFragment;
 	}
-	public CustomShipNameFragment getCustomShipNameFragment ()
+	public CustomShipNameFragment getCustomShipNameFragment ( )
 	{
 		return mAntiHexieFragment;
 	}
 
-	public void exit ()
+	public void exit ( )
 	{
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 		adb.setTitle ( R.string.notice )
@@ -614,7 +621,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			.setPositiveButton ( R.string.exit, new DialogInterface.OnClickListener ( ){
 
 				@Override
-				public void onClick (DialogInterface p1, int p2)
+				public void onClick ( DialogInterface p1, int p2 )
 				{
 					doExit ( );
 					// TODO: Implement this method
@@ -624,12 +631,12 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			.create ( )
 			.show ( );
 	}
-	private void doExit ()
+	private void doExit ( )
 	{
 		android.os.Process.killProcess ( android.os.Process.myPid ( ) );
 	}
 	@Override
-	public boolean onCreateOptionsMenu (Menu menu)
+	public boolean onCreateOptionsMenu ( Menu menu )
 	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater ( ).inflate ( R.menu.main, menu );
@@ -637,7 +644,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 
 	@Override
-	public boolean onOptionsItemSelected (MenuItem item)
+	public boolean onOptionsItemSelected ( MenuItem item )
 	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -645,7 +652,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		int id = item.getItemId ( );
 
 		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_exit)
+		if ( id == R.id.action_exit )
 		{
 			exit ( );
 		}
@@ -691,17 +698,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	 }*/
 
 	@Override
-	public Uri getUri ()
+	public Uri getUri ( )
 	{
 		// TODO: Implement this method
-		if (Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ))
+		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
 			return getIntent ( ).getData ( );
 
 		}
 		return null;
 	}
-	private void showKeyDialog ()
+	private void showKeyDialog ( )
 	{
 		View d=getLayoutInflater ( ).inflate ( R.layout.dialog_key, null );
 		final EditText et=(EditText)d.findViewById ( R.id.dialogkeyEditTextKey );
@@ -721,16 +728,16 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	{
 
 		@Override
-		public void run ()
+		public void run ( )
 		{
 			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject> ( );
 
 			query.getObject ( StaticData.DATAID, new QueryListener<UniversalObject> ( ){
 
 					@Override
-					public void done (final UniversalObject universalobj, BmobException p2)
+					public void done ( final UniversalObject universalobj, BmobException p2 )
 					{
-						if (p2 != null)
+						if ( p2 != null )
 						{
 							Log.w ( "Updater", "Failed to get update data" );
 							return;
@@ -752,7 +759,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						try
 						{
 							int currver=getPackageManager ( ).getPackageInfo ( getPackageName ( ), 0 ).versionCode;
-							if (serverver <= currver)
+							if ( serverver <= currver )
 							{
 								return;
 							}
@@ -763,9 +770,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								.setPositiveButton ( "更新", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{BmobFile tgtfile=universalobj.getPackagefile ( );
-										if (tgtfile == null)
+										if ( tgtfile == null )
 										{
 											return;
 										}
@@ -779,18 +786,18 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										d.show ( );
 										//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
 										final File destfile=new File ( new File ( getCacheDir ( ), "download" ), "update.apk" );
-										
+
 										tgtfile.download ( destfile, new DownloadFileListener ( ){
 
 												@Override
-												public void done (String p1, BmobException p2)
+												public void done ( String p1, BmobException p2 )
 												{
 													d.dismiss ( );
 													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
 													Intent i=new Intent ( Intent.ACTION_VIEW );
 													Uri data;
 													i.setFlags ( Intent.FLAG_ACTIVITY_NEW_TASK );
-													if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+													if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N )
 													{
 														data = FileProvider.getUriForFile ( Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", destfile );
 														i.addFlags ( i.FLAG_GRANT_READ_URI_PERMISSION );
@@ -805,7 +812,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 												}
 
 												@Override
-												public void onProgress (Integer p1, long p2)
+												public void onProgress ( Integer p1, long p2 )
 												{
 													// TODO: Implement this method
 												}
@@ -830,15 +837,15 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	{
 
 		@Override
-		public void run ()
+		public void run ( )
 		{
 			BmobQuery<BmobMessage> query=new BmobQuery<BmobMessage> ( );
 			query.getObject ( StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage> ( ){
 
 					@Override
-					public void done (final BmobMessage bmobmsg, BmobException p2)
+					public void done ( final BmobMessage bmobmsg, BmobException p2 )
 					{
-						if (p2 != null)
+						if ( p2 != null )
 						{
 							p2.printStackTrace ( );
 							return;
@@ -847,7 +854,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						int currid=getSharedPreferences ( GENERAL, 0 ).getInt ( ANNOU_VER, -1 );
 						AlertDialog.Builder adb0=new AlertDialog.Builder ( Main.this );
 
-						if (id > currid)
+						if ( id > currid )
 						{
 							adb0.setTitle ( "公告" )
 								.setMessage ( bmobmsg.getMessage ( ) )
@@ -855,7 +862,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								.setNeutralButton  (  "不再显示该公告", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{
 										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
 
@@ -865,7 +872,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								.setNegativeButton ( "复制", new DialogInterface.OnClickListener ( ){
 
 									@Override
-									public void onClick (DialogInterface p1, int p2)
+									public void onClick ( DialogInterface p1, int p2 )
 									{
 										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );  
 										cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  
@@ -888,8 +895,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 	private interface OnCheckResultListener
 	{
-		public void onSuccess ()
-		public void onFail (int reason, String errorrmsg)
+		public void onSuccess ( )
+		public void onFail ( int reason, String errorrmsg )
 	}
 	private class KeyDialogListener implements AlertDialog.OnShowListener
 	{
@@ -897,20 +904,20 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		private AlertDialog ad;
 		private Button btnCancel,btnEnter;
 		private EditText keyinput;
-		public KeyDialogListener (final AlertDialog ad, final EditText input)
+		public KeyDialogListener ( final AlertDialog ad, final EditText input )
 		{
 			this.ad = ad;
 			keyinput = input;
 		}
 		@Override
-		public void onShow (DialogInterface p1)
+		public void onShow ( DialogInterface p1 )
 		{
 			btnCancel = ad.getButton ( ad.BUTTON_NEGATIVE );
 			btnEnter = ad.getButton ( ad.BUTTON_POSITIVE );
 			btnCancel.setOnClickListener ( new OnClickListener ( ){
 
 					@Override
-					public void onClick (View p1)
+					public void onClick ( View p1 )
 					{
 						doExit ( );
 						// TODO: Implement this method
@@ -919,7 +926,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			btnEnter.setOnClickListener ( new OnClickListener ( ){
 
 					@Override
-					public void onClick (View p1)
+					public void onClick ( View p1 )
 					{
 						String key=keyinput.getEditableText ( ).toString ( ).toUpperCase ( ).trim ( );
 						InputMethodManager imm = (InputMethodManager) getSystemService ( Context.INPUT_METHOD_SERVICE ); 
@@ -927,14 +934,14 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						performkeycheck ( key, new OnCheckResultListener ( ){
 
 								@Override
-								public void onSuccess ()
+								public void onSuccess ( )
 								{
 									ad.dismiss ( );
 									// TODO: Implement this method
 								}
 
 								@Override
-								public void onFail (int reason, String errorrmsg)
+								public void onFail ( int reason, String errorrmsg )
 								{
 									Snackbar.make ( mViewPager, errorrmsg, Snackbar.LENGTH_LONG ).show ( );
 									// TODO: Implement this method

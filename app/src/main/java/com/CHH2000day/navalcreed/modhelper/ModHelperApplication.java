@@ -79,16 +79,17 @@ public class ModHelperApplication extends Application
 		mainpref.registerOnSharedPreferenceChangeListener ( preflistener);
 		cleanPathCache();
 		updateTargetPackageName ( getMainSharedPrederences ( ).getString ( KEY_PKGNAME, CN ) );
-		try
+		/*try
 		{
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
 		}
 		catch (IOException e)
-		{}
+		{e.printStackTrace();}
 		catch (JSONException e)
-		{}
+		{e.printStackTrace();}
+		*/
+		reconfigModPackageManager();
 		
-
 		// TODO: Implement this method
 		super.onCreate ( );
 	}
@@ -106,7 +107,17 @@ public class ModHelperApplication extends Application
 		super.onTerminate ( );
 		mainpref.unregisterOnSharedPreferenceChangeListener(preflistener);
 	}
-	
+	public void reconfigModPackageManager(){
+		try
+		{
+			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
+		}
+		catch (IOException e)
+		{e.printStackTrace();}
+		catch (JSONException e)
+		{e.printStackTrace();}
+		
+	}
 	public File getResDir ( )
 	{
 		if ( resDir == null )
@@ -196,6 +207,7 @@ public class ModHelperApplication extends Application
 			{
 				cleanPathCache ( );
 				updateTargetPackageName ( p1.getString ( KEY_PKGNAME, key ) );
+				reconfigModPackageManager();
 			}
 			// TODO: Implement this method
 		}
