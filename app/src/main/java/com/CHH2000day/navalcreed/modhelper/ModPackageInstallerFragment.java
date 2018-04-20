@@ -190,7 +190,7 @@ public class ModPackageInstallerFragment extends Fragment
 				.append ( mpi.getModName ( ) )
 				.append ( "\n" )
 				.append ( "mod类型:" )
-				.append ( resolveModType ( mpi.getModType ( ) ) )
+				.append ( ModPackageManager.getInstance(). resolveModType ( mpi.getModType ( ) ) )
 				.append ( "\n" )
 				.append ( "mod作者:" )
 				.append ( mpi.getModAuthor ( ) )
@@ -222,35 +222,7 @@ public class ModPackageInstallerFragment extends Fragment
 		}
 
 	}
-	private String resolveModType ( String modtype )
-	{
-		String s="";
-		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modtype ) )
-		{
-			s = "背景图片";
-		}
-		else if ( ModPackageInfo.MODTYPE_BGM.equals ( modtype ) )
-		{
-			s = "背景音乐";
-		}
-		else if ( ModPackageInfo.MODTYPE_CREWPIC.equals ( modtype ) )
-		{
-			s = "船员头像";
-		}
-		else if ( ModPackageInfo.MODTYPE_CV.equals ( modtype ) )
-		{
-			s = "舰长语音";
-		}
-		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
-		{
-			s = "音效";
-		}
-		else
-		{
-			s = "未知";
-		}
-		return s;
-	}
+	
 	public static interface UriLoader
 	{
 		public Uri getUri ( );
