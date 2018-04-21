@@ -874,10 +874,12 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 									@Override
 									public void onClick ( DialogInterface p1, int p2 )
 									{
-										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );  
-										cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  
+										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE ); 
 										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
-
+										if ( !TextUtils.isEmpty ( bmobmsg.tocopy ( ) ) )
+										{
+											cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  
+										}
 										// TODO: Implement this method
 									}
 								} );
