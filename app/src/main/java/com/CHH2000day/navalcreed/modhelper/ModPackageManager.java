@@ -239,20 +239,16 @@ public class ModPackageManager
 			 writeConfigFile ( jo );*/
 			for ( String type:used_prim_keys )
 			{
-				if ( type.equals ( ModPackageInfo.MODTYPE_CV ) )
-				{
-					JSONObject jcv=new JSONObject ( );
-					for ( String subc:used_sec_keys )
-					{
-						jcv.put ( subc, "" );
-					}
-					jo.put ( type, jcv );
-				}
-				else
-				{
+				
 					jo.put ( type, "" );
-				}
+				
 			}
+			JSONObject jcv=new JSONObject ( );
+			for ( String subc:used_sec_keys )
+			{
+				jcv.put ( subc, "" );
+			}
+			jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
 			writeConfigFile ( jo );
 			return;			
 		}
@@ -272,24 +268,18 @@ public class ModPackageManager
 			 */
 			for ( String type:used_prim_keys )
 			{
-				if ( type.equals ( ModPackageInfo.MODTYPE_CV ) )
-				{
-					JSONObject jcv=new JSONObject ( );
-					for ( String subc:used_sec_keys )
-					{
-						jcv.put ( subc, getValue ( subc ) );
-					}
-					jo.put ( type, jcv );
-					continue;
-				}
-				else
-				{
+				
 					jo.put ( type, getValue ( type ) );
-				}
+				
 			}
+			JSONObject jcv=new JSONObject ( );
+			for ( String subc:used_sec_keys )
+			{
+				jcv.put ( subc, getValue ( subc ) );
+			}
+			jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
 			jo.put ( OVRD, isOverride );
 			writeConfigFile ( jo );
-			reflesh();
 		}
 
 
