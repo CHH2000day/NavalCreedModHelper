@@ -97,10 +97,12 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 					}
 				}
 			} );
+		
 		if ( !ModPackageManager.getInstance ( ).isOverride ( ) )
 		{
 			recyclerview.setLayoutManager ( new LinearLayoutManager ( getActivity ( ), LinearLayoutManager.VERTICAL, false ) );
 			recyclerview.setAdapter ( adapter );
+			ModPackageManager.getInstance ( ).setonDataChangedListener ( this );
 		}
 	}
 
@@ -109,7 +111,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	{
 		// TODO: Implement this method
 		super.onResume ( );
-		ModPackageManager.getInstance ( ).setonDataChangedListener ( this );
+		
 		onChange ( );
 	}
 
@@ -118,9 +120,18 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	{
 		// TODO: Implement this method
 		super.onPause ( );
-		ModPackageManager.getInstance ( ).unregistDataChangeListener ( );
+		
 	}
 
+	@Override
+	public void onDestroyView ( )
+	{
+		// TODO: Implement this method
+		super.onDestroyView ( );
+		ModPackageManager.getInstance ( ).unregistDataChangeListener ( );
+	}
+	
+	
 	@Override
 	public void onChange ( )
 	{	if ( adapter != null && recyclerview != null )
@@ -263,8 +274,9 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 					{
 						String type=	key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) ?ModPackageInfo.MODTYPE_CV: key;
 						String subType=type.equals ( ModPackageInfo.MODTYPE_CV ) ?key: ModPackageInfo.SUBTYPE_EMPTY;
-						ModPackageManager.getInstance ( ).requestUninstall ( type, subType , (ModHelperApplication)getActivity ( ).getApplication ( ) );
-						Snackbar.make ( v, "操作完成", Snackbar.LENGTH_LONG ).show ( );
+						boolean b=ModPackageManager.getInstance ( ).requestUninstall ( type, subType , (ModHelperApplication)getActivity ( ).getApplication ( ) );
+						String str=b?"操作成功":"操作失败";
+						Snackbar.make ( v, str, Snackbar.LENGTH_LONG ).show ( );
 						// TODO: Implement this method
 					}
 				} );
