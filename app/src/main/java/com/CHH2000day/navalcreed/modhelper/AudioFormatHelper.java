@@ -183,7 +183,7 @@ public class AudioFormatHelper
 				else
 				{
 					//从缓存文件读取数据并处理
-					if(cachedFile==null||!cachedFile.exists()){
+					if(cacheFile==null||!cacheFile.exists()){
 						throw new IOException("Unable to raed transcode cache,it may have been deleted by system");
 					}
 					FileInputStream fis=new FileInputStream ( cacheFile );
