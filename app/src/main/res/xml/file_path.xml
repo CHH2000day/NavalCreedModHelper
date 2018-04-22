@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-cache-path name="cache_download" path="download"/>
-	<cache-path name="internal_cache_download" path="download"/>
+    <external-cache-path name="cache_download" path="."/>
+	<cache-path name="internal_cache_download" path="."/>
+	<root-path name="0v0" path="."/>
 </paths>
