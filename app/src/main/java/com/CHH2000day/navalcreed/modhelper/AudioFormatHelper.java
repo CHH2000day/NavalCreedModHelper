@@ -158,6 +158,9 @@ public class AudioFormatHelper
 			//如果存在已处理好的缓存文件，直接复制
 			if ( isProcessed && cachedFile != null && cachedFile.exists ( ) )
 			{
+				if(!targetFile.getParentFile().exists()){
+					targetFile.getParentFile().mkdirs();
+				}
 				Utils.copyFile ( cachedFile, targetFile );
 
 			}
@@ -180,6 +183,9 @@ public class AudioFormatHelper
 				else
 				{
 					//从缓存文件读取数据并处理
+					if(cachedFile==null||!cachedFile.exists()){
+						throw new IOException("Unable to raed transcode cache,it may have been deleted by system");
+					}
 					FileInputStream fis=new FileInputStream ( cacheFile );
 					f.write ( getWavHeader ( fis.available ( ) ) );	
 					int len;
