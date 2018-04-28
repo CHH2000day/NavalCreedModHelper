@@ -18,11 +18,11 @@ public class ModPackageManager
 	private static String[] used_prim_keys;
 	private static String[] used_sec_keys;
 	private static final int SEC_KEY_COUNTS=6;
-	
+
 	static{
 		used_prim_keys = Arrays.copyOf ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS );
 		used_sec_keys = Arrays.copyOfRange ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS, PUBLIC_KEYS.length );
-		
+
 	}
 	public void setonDataChangedListener ( OnDataChangedListener odcl )
 	{
@@ -240,9 +240,9 @@ public class ModPackageManager
 			 writeConfigFile ( jo );*/
 			for ( String type:used_prim_keys )
 			{
-				
-					jo.put ( type, "" );
-				
+
+				jo.put ( type, "" );
+
 			}
 			JSONObject jcv=new JSONObject ( );
 			for ( String subc:used_sec_keys )
@@ -269,9 +269,9 @@ public class ModPackageManager
 			 */
 			for ( String type:used_prim_keys )
 			{
-				
-					jo.put ( type, getValue ( type ) );
-				
+
+				jo.put ( type, getValue ( type ) );
+
 			}
 			JSONObject jcv=new JSONObject ( );
 			for ( String subc:used_sec_keys )
@@ -371,7 +371,23 @@ public class ModPackageManager
 		}
 		else if ( ModPackageInfo.SUB_MODTYPE_CV_EN.equals ( modtype ) )
 		{
-			s = "舰长语音-英文";
+			s = "舰长语音-英语";
+		}
+		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV.equals ( modtype ) )
+		{
+			s = "舰长语音-日语-航母";
+		}
+		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB.equals ( modtype ) )
+		{
+			s = "舰长语音-日语-战列舰";
+		}
+		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA.equals ( modtype ) )
+		{
+			s = "舰长语音-日语-巡洋舰";
+		}
+		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD.equals ( modtype ) )
+		{
+			s = "舰长语音-日语-巡洋舰";
 		}
 		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
 		{
