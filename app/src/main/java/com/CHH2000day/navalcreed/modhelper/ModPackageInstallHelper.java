@@ -27,13 +27,22 @@ public class ModPackageInstallHelper
 	private static final String PRIMARYTYPE_OTHER="";
 	private static final String SUBPATH_CV_EN=File.separatorChar + "EnglishUsual";
 	private static final String SUBPATH_CV_CN=File.separatorChar + "ChineseUsual";
+	private static final String SUBPATH_CV_JP=File.separatorChar + "Japanesemoe";
+	private static final String SUBPATH_CV_JP_CV=SUBPATH_CV_JP + File.separatorChar + "AirCarrier";
+	private static final String SUBPATH_CV_JP_BB=SUBPATH_CV_JP + File.separatorChar + "Battleship";
+	private static final String SUBPATH_CV_JP_CA=SUBPATH_CV_JP + File.separatorChar + "Crusier";
+	private static final String SUBPATH_CV_JP_DD=SUBPATH_CV_JP + File.separatorChar + "Destroyer";
 
 	public static final int SUBTYPE_NULL=0;
 	public static final int SUBTYPE_CV_EN=1200;
 	public static final int SUBTYPE_CV_CN=1201;
+	public static final int SUBTYPE_CV_JP_CV=1202;
+	public static final int SUBTYPE_CV_JP_BB=1203;
+	public static final int SUBTYPE_CV_JP_CA=1204;
+	public static final int SUBTYPE_CV_JP_DD=1205;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
-	private static final String[] CV_COUNTRY={"英语","中文"};
+	private static String[] CV_COUNTRY={};
 
 
 	private int msubtype=SUBTYPE_NULL;
@@ -43,15 +52,19 @@ public class ModPackageInstallHelper
 	private ZipFile mpkgFile;
 	private ModPackageInfo mmpi;
 
+	public static void init ( Context ctx )
+	{
+		CV_COUNTRY = ctx.getResources ( ).getStringArray ( R.array.cv_types );
+	}
 	public ModPackageInstallHelper ( File pkgFile, AppCompatActivity activity ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		msrcFile = pkgFile;
 		mactivty = activity;
 		mmha = (ModHelperApplication)mactivty.getApplication ( );
-		init ( );
+		load ( );
 	}
 
-	private void init ( ) throws IOException, ModPackageInfo.IllegalModInfoException
+	private void load ( ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		//创建mod文件实例
 		fetch ( );
@@ -239,6 +252,22 @@ public class ModPackageInstallHelper
 			else if ( subType == SUBTYPE_CV_EN )
 			{
 				pth = pth + SUBPATH_CV_EN;
+			}
+			else if ( subType == SUBTYPE_CV_JP_CV )
+			{
+				pth = pth + SUBPATH_CV_JP_CV;
+			}
+			else if ( subType == SUBTYPE_CV_JP_BB )
+			{
+				pth = pth + SUBPATH_CV_JP_BB;
+			}
+			else if ( subType == SUBTYPE_CV_JP_CA )
+			{
+				pth = pth + SUBPATH_CV_JP_CA;
+			}
+			else if ( subType == SUBTYPE_CV_JP_DD )
+			{
+				pth = pth + SUBPATH_CV_JP_DD;
 			}
 		}
 		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modType ) )

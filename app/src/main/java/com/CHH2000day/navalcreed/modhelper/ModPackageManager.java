@@ -14,12 +14,15 @@ public class ModPackageManager
 	private static ModPackageManager mmm;
 	private OnDataChangedListener OnDataChangedListener;
 	private static final String[] CATEORY_BG={"loading","loadingmap","matching"};
-	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN};
-	private String[] used_prim_keys;
-	private  String[] used_sec_keys;
-
+	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN,ModPackageInfo.SUB_MODTYPE_CV_JP_CV,ModPackageInfo.SUB_MODTYPE_CV_JP_BB,ModPackageInfo.SUB_MODTYPE_CV_JP_CA,ModPackageInfo.SUB_MODTYPE_CV_JP_DD};
+	private static String[] used_prim_keys;
+	private static String[] used_sec_keys;
+	private static final int SEC_KEY_COUNTS=6;
+	
 	static{
-
+		used_prim_keys = Arrays.copyOf ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS );
+		used_sec_keys = Arrays.copyOfRange ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS, PUBLIC_KEYS.length );
+		
 	}
 	public void setonDataChangedListener ( OnDataChangedListener odcl )
 	{
@@ -42,8 +45,6 @@ public class ModPackageManager
 	{}
 	public void init ( File storedFile ) throws  IOException, JSONException
 	{
-		used_prim_keys = Arrays.copyOf ( PUBLIC_KEYS, PUBLIC_KEYS.length - 2 );
-		used_sec_keys = Arrays.copyOfRange ( PUBLIC_KEYS, PUBLIC_KEYS.length - 2, PUBLIC_KEYS.length );
 		configFile = storedFile;
 		installedMod = new HashMap<String,String> ( );
 		reflesh ( );

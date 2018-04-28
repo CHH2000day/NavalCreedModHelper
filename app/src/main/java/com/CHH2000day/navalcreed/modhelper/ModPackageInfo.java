@@ -11,7 +11,7 @@ public class ModPackageInfo
 	//常量声明
 
 	//软件版本
-	public static final int PKGVER=Versions.VER_2;
+	public static final int PKGVER=Versions.VER_3;
 
 	public static final String MODTYPE_CV="CaptainVoice";
 	public static final String MODTYPE_SOUNDEFFECT_PRIM="SoundEffect_PRIM";
@@ -24,7 +24,10 @@ public class ModPackageInfo
 	public static final String SUBTYPE_EMPTY="";
 	public static final String SUB_MODTYPE_CV_CN="CV_CN";
 	public static final String SUB_MODTYPE_CV_EN="CV_EN";
-	
+	public static final String SUB_MODTYPE_CV_JP_CV="CV_JP_CV";
+	public static final String SUB_MODTYPE_CV_JP_BB="CV_JP_BB";
+	public static final String SUB_MODTYPE_CV_JP_CA="CV_JP_CA";
+	public static final String SUB_MODTYPE_CV_JP_DD="CV_JP_DD";
 	private static ArrayList<String> abandoned_types;
 	//mod信息相关
 	private static final String KEY_MINSUPPORTVER="minSupportVer";
@@ -202,5 +205,7 @@ public class ModPackageInfo
 		public static final int VER_1=1;
 		//ver1 -> ver2 abandon old soudeffect interface and use a new one.
 		public static final int VER_2=2;
+		//ver2 -> ver3 add support for replacing Japanese Captain Voice.
+		public static final int VER_3=3;
 	}
 }
