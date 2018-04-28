@@ -387,7 +387,7 @@ public class ModPackageManager
 		}
 		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD.equals ( modtype ) )
 		{
-			s = "舰长语音-日语-巡洋舰";
+			s = "舰长语音-日语-驱逐舰";
 		}
 		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
 		{
