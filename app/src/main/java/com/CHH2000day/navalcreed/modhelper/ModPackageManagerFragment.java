@@ -97,7 +97,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 					}
 				}
 			} );
-		
+
 		if ( !ModPackageManager.getInstance ( ).isOverride ( ) )
 		{
 			recyclerview.setLayoutManager ( new LinearLayoutManager ( getActivity ( ), LinearLayoutManager.VERTICAL, false ) );
@@ -111,7 +111,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	{
 		// TODO: Implement this method
 		super.onResume ( );
-		
+
 		onChange ( );
 	}
 
@@ -120,7 +120,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	{
 		// TODO: Implement this method
 		super.onPause ( );
-		
+
 	}
 
 	@Override
@@ -130,8 +130,8 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		super.onDestroyView ( );
 		ModPackageManager.getInstance ( ).unregistDataChangeListener ( );
 	}
-	
-	
+
+
 	@Override
 	public void onChange ( )
 	{	if ( adapter != null && recyclerview != null )
@@ -177,7 +177,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			String key=keys [ p2 ];
 			String type="";
 			String subtype="";
-			if ( key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
+			if ( key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD ) )
 			{
 				type = ModPackageInfo.MODTYPE_CV;
 				subtype = key;
@@ -195,7 +195,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 							  .append ( "\n" )
 							  .append ( ModPackageManager.getInstance ( ).getModName ( keys [ p2 ] ) ) );
 				rl.setOnLongClickListener ( listener );
-
+				memo.setText("长按以卸载");
 
 			}
 			else
@@ -239,8 +239,9 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			}
 			int num=p1.getTag ( );
 			String modtype=ModPackageManager.PUBLIC_KEYS [ num ];
-			if(modtype.equals(ModPackageInfo.MODTYPE_OTHER)){
-				Snackbar.make(v,"This category of mod package can't be uninstalled",Snackbar.LENGTH_LONG).show();
+			if ( modtype.equals ( ModPackageInfo.MODTYPE_OTHER ) )
+			{
+				Snackbar.make ( v, "This category of mod package can't be uninstalled", Snackbar.LENGTH_LONG ).show ( );
 			}
 			if ( modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
 			{
@@ -275,7 +276,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 						String type=	key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) ?ModPackageInfo.MODTYPE_CV: key;
 						String subType=type.equals ( ModPackageInfo.MODTYPE_CV ) ?key: ModPackageInfo.SUBTYPE_EMPTY;
 						boolean b=ModPackageManager.getInstance ( ).requestUninstall ( type, subType , (ModHelperApplication)getActivity ( ).getApplication ( ) );
-						String str=b?"操作成功":"操作失败";
+						String str=b ?"操作成功": "操作失败";
 						Snackbar.make ( v, str, Snackbar.LENGTH_LONG ).show ( );
 						// TODO: Implement this method
 					}

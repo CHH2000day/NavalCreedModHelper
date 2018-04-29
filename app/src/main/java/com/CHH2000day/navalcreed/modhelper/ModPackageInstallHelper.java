@@ -42,7 +42,7 @@ public class ModPackageInstallHelper
 	public static final int SUBTYPE_CV_JP_DD=1205;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
-	private static String[] CV_COUNTRY={};
+	//private static String[] CV_COUNTRY={};
 
 
 	private int msubtype=SUBTYPE_NULL;
@@ -52,10 +52,10 @@ public class ModPackageInstallHelper
 	private ZipFile mpkgFile;
 	private ModPackageInfo mmpi;
 
-	public static void init ( Context ctx )
-	{
-		CV_COUNTRY = ctx.getResources ( ).getStringArray ( R.array.cv_types );
-	}
+	/*public static void init ( Context ctx )
+	 {
+	 //CV_COUNTRY = ctx.getResources ( ).getStringArray ( R.array.cv_types );
+	 }*/
 	public ModPackageInstallHelper ( File pkgFile, AppCompatActivity activity ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		msrcFile = pkgFile;
@@ -149,7 +149,7 @@ public class ModPackageInstallHelper
 			msubtype = SUBTYPE_CV_OFFSET;
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 			adb.setTitle ( "请选择要替换的舰长语音" )
-				.setSingleChoiceItems ( CV_COUNTRY, 0, new DialogInterface.OnClickListener ( ){
+				.setSingleChoiceItems ( R.array.cv_types, 0, new DialogInterface.OnClickListener ( ){
 
 					@Override
 					public void onClick ( DialogInterface p1, int p2 )
@@ -231,9 +231,25 @@ public class ModPackageInstallHelper
 		{
 			s = ModPackageInfo.SUB_MODTYPE_CV_EN;
 		}
-		if ( SUBTYPE_CV_CN == msubtype )
+		else if ( SUBTYPE_CV_CN == msubtype )
 		{
 			s = ModPackageInfo.SUB_MODTYPE_CV_CN;
+		}
+		else if ( SUBTYPE_CV_JP_CV == msubtype )
+		{
+			s = ModPackageInfo.SUB_MODTYPE_CV_JP_CV;
+		}
+		else if ( SUBTYPE_CV_JP_BB == msubtype )
+		{
+			s = ModPackageInfo.SUB_MODTYPE_CV_JP_BB;
+		}
+		else if ( SUBTYPE_CV_JP_CA == msubtype )
+		{
+			s = ModPackageInfo.SUB_MODTYPE_CV_JP_CA;
+		}
+		else if ( SUBTYPE_CV_JP_DD == msubtype )
+		{
+			s = ModPackageInfo.SUB_MODTYPE_CV_JP_DD;
 		}
 		return s;
 	}

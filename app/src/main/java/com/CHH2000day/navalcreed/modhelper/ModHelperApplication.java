@@ -87,6 +87,7 @@ public class ModHelperApplication extends Application
 		catch (JSONException e)
 		{e.printStackTrace();}
 		*/
+		//ModPackageInstallHelper.init(this);
 		reconfigModPackageManager();
 		
 		// TODO: Implement this method
