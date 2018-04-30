@@ -59,4 +59,24 @@
 	<string name="cont">continue</string>
 	<string name="error">ERROR</string>
 	<string name="installing">installing...</string>
+	<string name="long_click_to_uninstall">Touch and hold to uninstall</string>
+	
+	<!--
+	strings for mod package types
+	-->
+	<string name="modtype">mod type:</string>
+	<string name="modtype_background">Background</string>
+	<string name="modtype_backgroundmusic">Background Music</string>
+	<string name="modtype_crewpic">Crew pic</string>
+	<string name="modtype_soundeffect">Soundeffect(abandoned)</string>
+	<string name="modtype_soundeffect_prim">Sounde ffect(PRIM)</string>
+	<string name="modtype_soundeffect_sec">Sound effect(SEC)</string>
+	<string name="modtype_unknown">Unknown</string>
+	<string name="modtype_captainvoice">Captain voice</string>
+	<string name="modtype_captainvoice_cn">Captain voice(Chinese)</string>
+	<string name="modtype_captainvoice_en">Captain voice(English)</string>
+	<string name="modtype_captainvoice_ja_cv">Captain voice(Japanese-CV)</string>
+	<string name="modtype_captainvoice_ja_bb">Captain voice(Japanese-BB)</string>
+	<string name="modtype_captainvoice_ja_ca">Captain voice(Japanese-CA)</string>
+	<string name="modtype_captainvoice_ja_dd">Captain voice(Japanese-DD)</string>
 </resources>

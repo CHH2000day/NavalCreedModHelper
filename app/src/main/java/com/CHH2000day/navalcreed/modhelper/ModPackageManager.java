@@ -3,6 +3,8 @@ import java.util.*;
 import java.io.*;
 import okio.*;
 import org.json.*;
+import android.content.*;
+import android.content.res.*;
 
 public class ModPackageManager
 {
@@ -18,7 +20,8 @@ public class ModPackageManager
 	private static String[] used_prim_keys;
 	private static String[] used_sec_keys;
 	private static final int SEC_KEY_COUNTS=6;
-
+	private HashMap<String,String> modType;
+	private static final String UNKNOWN="unknown";
 	static{
 		used_prim_keys = Arrays.copyOf ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS );
 		used_sec_keys = Arrays.copyOfRange ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS, PUBLIC_KEYS.length );
@@ -43,12 +46,29 @@ public class ModPackageManager
 	}
 	private ModPackageManager ( )
 	{}
-	public void init ( File storedFile ) throws  IOException, JSONException
+	public void init(Context context){
+		Resources res=context.getResources();
+		modType=new HashMap<String,String>();
+		modType.put(UNKNOWN,res.getString(R.string.modtype_unknown));
+		modType.put(ModPackageInfo.MODTYPE_BACKGROUND,res.getString(R.string.modtype_background));
+		modType.put(ModPackageInfo.MODTYPE_BGM,res.getString(R.string.modtype_backgroundmusic));
+		modType.put(ModPackageInfo.MODTYPE_CREWPIC,res.getString(R.string.modtype_crewpic));
+		modType.put(ModPackageInfo.MODTYPE_SOUNDEFFECT,res.getString(R.string.modtype_soundeffect));
+		modType.put(ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,res.getString(R.string.modtype_soundeffect_prim));
+		modType.put(ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,res.getString(R.string.modtype_soundeffect_sec));
+		modType.put(ModPackageInfo.MODTYPE_CV,res.getString(R.string.modtype_captainvoice));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_CN,res.getString(R.string.modtype_captainvoice_cn));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_EN,res.getString(R.string.modtype_captainvoice_en));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_CV,res.getString(R.string.modtype_captainvoice_ja_cv));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_BB,res.getString(R.string.modtype_captainvoice_ja_bb));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_CA,res.getString(R.string.modtype_captainvoice_ja_ca));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_DD,res.getString(R.string.modtype_captainvoice_ja_dd));
+	}
+	public void config ( File storedFile ) throws  IOException, JSONException
 	{
 		configFile = storedFile;
 		installedMod = new HashMap<String,String> ( );
 		reflesh ( );
-
 	}
 	private void reflesh ( ) throws JSONException, IOException
 	{
@@ -346,9 +366,11 @@ public class ModPackageManager
 		return ( !"".equals ( getValue ( type ) ) );
 	}
 
-	public static String resolveModType ( String modtype )
+	public String resolveModType ( String modtype )
 	{
+		/*
 		String s="";
+		
 		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modtype ) )
 		{
 			s = "背景图片";
@@ -404,8 +426,8 @@ public class ModPackageManager
 		else
 		{
 			s = "未知";
-		}
-		return s;
+		}*/
+		return modType.containsKey(modtype)?modType.get(modtype):modType.get(UNKNOWN);
 	}
 	public static interface OnDataChangedListener
 	{

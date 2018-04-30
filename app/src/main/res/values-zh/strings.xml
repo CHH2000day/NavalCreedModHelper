@@ -53,4 +53,25 @@
 	<string name="cont">继续</string>
 	<string name="error">错误</string>
 	<string name="installing">安装中..</string>
+	<string name="long_click_to_uninstall">长按以卸载</string>
+	
+	<!--
+		strings for mod package types
+	-->
+	<string name="modtype">mod类型:</string>
+	<string name="modtype_background">背景图片</string>
+	<string name="modtype_backgroundmusic">背景音乐</string>
+	<string name="modtype_crewpic">船员头像</string>
+	<string name="modtype_soundeffect">音效(已弃用)</string>
+	<string name="modtype_soundeffect_prim">主音效</string>
+	<string name="modtype_soundeffect_sec">副音效</string>
+	<string name="modtype_unknown">未知</string>
+	<string name="modtype_captainvoice">舰长语音</string>
+	<string name="modtype_captainvoice_cn">舰长语音-中文</string>
+	<string name="modtype_captainvoice_en">舰长语音-英语</string>
+	<string name="modtype_captainvoice_ja_cv">舰长语音-日语-航母</string>
+	<string name="modtype_captainvoice_ja_bb">舰长语音-日语-战列舰</string>
+	<string name="modtype_captainvoice_ja_ca">舰长语音-日语-巡洋舰</string>
+	<string name="modtype_captainvoice_ja_dd">舰长语音-日语-驱逐舰</string>
+	
 </resources>

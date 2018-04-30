@@ -191,7 +191,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			if ( ModPackageManager.getInstance ( ).checkInstalled ( type, subtype ) )
 			{
 				info.setText ( new StringBuilder ( ).append ( "mod类型:" )
-							  .append ( ModPackageManager.resolveModType ( keys [ p2 ] ) )
+							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
 							  .append ( ModPackageManager.getInstance ( ).getModName ( keys [ p2 ] ) ) );
 				rl.setOnLongClickListener ( listener );
@@ -202,7 +202,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			{
 				memo.setText ( "" );
 				info.setText ( new StringBuilder ( ).append ( "mod类型:" )
-							  .append ( ModPackageManager.resolveModType ( keys [ p2 ] ) )
+							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
 							  .append ( "mod未安装" ).toString ( ) );
 			}
@@ -266,7 +266,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 			adb.setTitle ( "注意" )
-				.setMessage ( "确定要卸载" + ModPackageManager.resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + "么?" )
+				.setMessage ( "确定要卸载" + ModPackageManager.getInstance().resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + "?" )
 				.setNegativeButton ( "取消", null )
 				.setPositiveButton ( "确定", new DialogInterface.OnClickListener ( ){
 

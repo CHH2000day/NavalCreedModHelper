@@ -88,6 +88,7 @@ public class ModHelperApplication extends Application
 		{e.printStackTrace();}
 		*/
 		//ModPackageInstallHelper.init(this);
+		ModPackageManager.getInstance().init(this);
 		reconfigModPackageManager();
 		
 		// TODO: Implement this method
@@ -110,7 +111,7 @@ public class ModHelperApplication extends Application
 	public void reconfigModPackageManager(){
 		try
 		{
-			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
+			ModPackageManager.getInstance ( ).config ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
 		}
 		catch (IOException e)
 		{e.printStackTrace();}
