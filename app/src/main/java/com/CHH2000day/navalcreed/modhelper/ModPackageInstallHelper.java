@@ -30,7 +30,7 @@ public class ModPackageInstallHelper
 	private static final String SUBPATH_CV_JP=File.separatorChar + "Japanesemoe";
 	private static final String SUBPATH_CV_JP_CV=SUBPATH_CV_JP + File.separatorChar + "AirCarrier";
 	private static final String SUBPATH_CV_JP_BB=SUBPATH_CV_JP + File.separatorChar + "Battleship";
-	private static final String SUBPATH_CV_JP_CA=SUBPATH_CV_JP + File.separatorChar + "Crusier";
+	private static final String SUBPATH_CV_JP_CA=SUBPATH_CV_JP + File.separatorChar + "Cruiser";
 	private static final String SUBPATH_CV_JP_DD=SUBPATH_CV_JP + File.separatorChar + "Destroyer";
 
 	public static final int SUBTYPE_NULL=0;
