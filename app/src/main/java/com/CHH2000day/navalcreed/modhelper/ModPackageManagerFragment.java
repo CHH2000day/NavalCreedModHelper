@@ -58,7 +58,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 					}
 					AlertDialog.Builder adb= new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( R.string.notice )
-						.setMessage ( "超控mod管理机制将使mod管理器失效，是否继续？" )
+						.setMessage ( R.string.ovrd_warning )
 						.setNegativeButton ( R.string.cancel, new DialogInterface.OnClickListener ( ){
 
 							@Override
@@ -204,7 +204,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 				info.setText ( new StringBuilder ( ).append ( getString(R.string.modtype))
 							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
-							  .append ( "mod未安装" ).toString ( ) );
+							  .append ( getString(R.string.mod_not_installed) ).toString ( ) );
 			}
 
 
@@ -241,7 +241,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			String modtype=ModPackageManager.PUBLIC_KEYS [ num ];
 			if ( modtype.equals ( ModPackageInfo.MODTYPE_OTHER ) )
 			{
-				Snackbar.make ( v, "This category of mod package can't be uninstalled", Snackbar.LENGTH_LONG ).show ( );
+				Snackbar.make ( v, "This type of mod package can't be uninstalled", Snackbar.LENGTH_LONG ).show ( );
 			}
 			if ( modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
 			{

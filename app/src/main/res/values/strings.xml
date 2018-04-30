@@ -27,7 +27,7 @@
 	<string name="transcode_transcoding">Transcoding</string>
 	<string name="transcode_writing">Writing</string>
 	<string name="timeused">Time used:</string>
-	<string name="aboutmsg">本软件依照Apache License 2.0开源协议开源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本软件的源码\n软件制作:@CHH2000day\n软件说明:@此生 @天津风\n图标提供:@猫咪要保护所有人\nQQ群:689502322\nThanks LOONG Entertainment(CN) for providing interfaces</string>
+	<string name="aboutmsg">This app according to Apache License 2.0 Open Source Agreement open source，you can go to this website:https://github.com/CHH2000day/NavalCreedModHelper to get the source code of this app\nMaker:CHH2000day\nInstruction author:此生 天津风\nIcon provided:猫咪要保护所有人\nTranslator:CHH2000day JimLi\nQQ group:689502322\nThanks ZLOONG Entertainment(CN) for providing interfaces</string>
 	<string name="modpkg_install_ovwtmsg">"Already installed a mod package with sametype，confirm to uninstall the one installed and continue</string>
 	<string name="bgm_transcode_disabled">Android version is lower than 5.1(Lollipop),wav transcode diaabled.</string>
 	<string name="not_a_wavfile">Incorrect file format,it\'s NOT a wav file.</string>
@@ -36,7 +36,7 @@
 	<string name="unselected">Unselected</string>
 	<string name="apply">Apply</string>
 	<string name="remove_changes">Remove changes</string>
-	<string name="bgmreplacer_info">使用说明:\n每个情景内有多个音乐，需要全部替换才会生效，支持主流格式的音乐。若想移除更改，单击移除删去当前情景的修改，长按移除则删去全部情景的修改</string>
+	<string name="bgmreplacer_info">Instructions:\nthere are some music in each scene,you have to change ALL the music in this scene,the change will be effective,Mainstream format music supported.If you want to remove one of the music,press Remove changes to delete the music what you have chosen in this scene,Press longer to remove all the music in each scene.</string>
 	<string name="select_music_to_replace">Select the music to replace</string>
 	<string name="exit">Exit</string>
 	<string name="exitmsg">Confirm to exit?</string>
@@ -62,10 +62,25 @@
 	<string name="long_click_to_uninstall">Touch and hold to uninstall</string>
 	<string name="mod_not_installed">mod not installed</string>
 	<string name="install">Install</string>
+	<string name="bgfrag_intro">Instructions:\nloading picture,loadingmap picture,matching picture each scene have to change ALL pictures to effective,select what scene,picture and press Apply</string>
+	<string name="crewpicfrag_intro">Instructions:\nEach country has 15 to 16 pictures to change you can change only one of these pictures,doesn\'t need to change all，you can find the picture what you have changed in crew file\nWhat to do:Choose what country and picture number,then choose what picture you want to change and press to change Apply\nPress RemoveChange to remove the picture what you chose,press longer to remove ALL the picture in which country you chose</string>
+	<string name="modpkg_ver_warning">The current software version may not be able to implement all the functions in the mod package. Continue?</string>
+	<string name="modpkg_interface_warning">An abandoned interface was used by the mod package.You need to override the "mod package management system" to install it if you want.</string>
+	<string name="modpkg_already_installed_warning">A mod paakage which is the same type of this package was already installed.You need to uninstall it in mod package manager to install this package.</string>
+	<string name="modpkg_cv_to_replace">Select the captain voice to replace</string>
+	<string name="invalid_mod_info">Invalid mod description file </string>
+	<string name="failed_to_resolve_pth">Filed to resolve actual path of the selected file.\nTake a screenshot and send it to the developer please.</string>
+	<string name="ovrd_warning">Mod package management system would not work after overriding it,continue? </string>
+	<string name="mod_pkg_management_sys">Mod package management system</string>
+	<string name="loginmovie_intro">Introduction:\nLogin movie can only be replaced with a fllowing format video:\nFile format:ogv\nVideo encoding:theora\nWe recommend that you transcode it on a PC and then send it to your device.\nNotice that the audio in the video would not be played,custom it in BGM page.</string>
 	<!--
 	strings for mod package types
 	-->
-	<string name="modtype">mod type:</string>
+	<string name="modtype">Mod type:</string>
+	<string name="modname">Mod name:</string>
+	<string name="modauthor">Mod author:</string>
+	<string name="modinfo">Mod info:</string>
+	<string name="ununinstallable_modpkg_warning">This mod package will not be able to uninstall after installed.</string>
 	<string name="modtype_background">Background</string>
 	<string name="modtype_backgroundmusic">Background Music</string>
 	<string name="modtype_crewpic">Crew pic</string>

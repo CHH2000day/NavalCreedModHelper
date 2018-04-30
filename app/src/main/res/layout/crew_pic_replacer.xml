@@ -70,7 +70,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="使用说明:\n每个国家有15-16个头像可供替换，替换部分即可生效，不必全部替换，替换后可通过修改成员名字选择所替换的头像\n流程：选择所替换国家和头像序号后选择图片然后点击替换\n点击清空更改清空该船员头像更改，长按清空更改清空该国家所有船员头像更改"
+		android:text="@+string/crewpicfrag_intro"
 		android:layout_below="@id/crewpicreplacerButtonReplace"/>
 
 </RelativeLayout>

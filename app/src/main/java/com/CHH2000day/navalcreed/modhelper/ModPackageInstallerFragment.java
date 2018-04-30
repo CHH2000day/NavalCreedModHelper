@@ -75,7 +75,7 @@ public class ModPackageInstallerFragment extends Fragment
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory ( intent.CATEGORY_OPENABLE );
-					startActivityForResult ( intent.createChooser ( intent, "请选择mod包文件" ), QUERY_CODE );
+					startActivityForResult ( intent.createChooser ( intent,getString( R.string.select_file) ), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -158,8 +158,8 @@ public class ModPackageInstallerFragment extends Fragment
 	{
 		clear ( );
 		AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-		adb.setTitle ( "请稍等" )
-			.setMessage ( "正在读取文件...." )
+		adb.setTitle ( R.string.please_wait )
+			.setMessage ( R.string.please_wait )
 			.setCancelable ( false );
 		AlertDialog ad=adb.create ( );
 		ad.setCanceledOnTouchOutside ( false );
@@ -167,10 +167,10 @@ public class ModPackageInstallerFragment extends Fragment
 		String filepath=Utils.resolveFilePath ( uri, getActivity ( ) );
 		if ( filepath == null )
 		{
-			ad.setMessage ( new StringBuilder ( ).append ( "解析文件真实路径失败" )
+			ad.setMessage ( new StringBuilder ( ).append ( getString(R.string.failed_to_resolve_pth) )
 						   .append ( "\n" )
-						   .append ( "请将此界面截屏并发给开发者" )
-						   .append ( "\n" )
+						   /*.append ( "请将此界面截屏并发给开发者" )
+						   .append ( "\n" )*/
 						   .append ( "authority:" )
 						   .append ( uri.getAuthority ( ) )
 						   .append ( "\n" )
@@ -186,21 +186,21 @@ public class ModPackageInstallerFragment extends Fragment
 			mpih = new ModPackageInstallHelper ( new File ( filepath ), (Main)getActivity ( )  );
 			ModPackageInfo mpi=mpih.getModPackageInfo ( );
 			StringBuilder sb=new StringBuilder ( );
-			sb.append ( "mod名:" )
+			sb.append ( getString(R.string.modname) )
 				.append ( mpi.getModName ( ) )
 				.append ( "\n" )
-				.append ( "mod类型:" )
+				.append ( getString(R.string.modtype) )
 				.append ( ModPackageManager.getInstance(). resolveModType ( mpi.getModType ( ) ) )
 				.append ( "\n" )
-				.append ( "mod作者:" )
+				.append ( R.string.modauthor )
 				.append ( mpi.getModAuthor ( ) )
 				.append ( "\n" )
-				.append ( "简介:" )
+				.append ( getString(R.string.modinfo) )
 				.append ( mpi.getModInfo ( ) );
 			if ( mpi.getModType ( ).equals ( ModPackageInfo.MODTYPE_OTHER ) )
 			{
 				sb.append ( "\n" )
-					.append ( "该mod包在安装后将不可被卸载" );
+					.append ( getString(R.string.ununinstallable_modpkg_warning) );
 			}
 			info.setText ( sb.toString ( ) );
 			if ( mpi.hasPreview ( ) )
@@ -218,7 +218,7 @@ public class ModPackageInstallerFragment extends Fragment
 		{
 			ad.setCancelable ( true );
 			ad.setCanceledOnTouchOutside ( true );
-			ad.setMessage ( "Mod包描述文件出错\n" + e.getLocalizedMessage ( ) );
+			ad.setMessage ( getString(-R.string.invalid_mod_info)+"\n" + e.getLocalizedMessage ( ) );
 		}
 
 	}

@@ -121,7 +121,7 @@ public class ModPackageInstallHelper
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 			adb.setTitle ( R.string.notice )
-				.setMessage ( "目前软件版本可能无法实现mod包里所有功能，是否继续？" )
+				.setMessage ( R.string.modpkg_ver_warning )
 				.setNegativeButton ( R.string.cancel, null )
 				.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
 
@@ -148,7 +148,7 @@ public class ModPackageInstallHelper
 
 			msubtype = SUBTYPE_CV_OFFSET;
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
-			adb.setTitle ( "请选择要替换的舰长语音" )
+			adb.setTitle ( R.string.modpkg_cv_to_replace )
 				.setSingleChoiceItems ( R.array.cv_types, 0, new DialogInterface.OnClickListener ( ){
 
 					@Override
@@ -186,7 +186,7 @@ public class ModPackageInstallHelper
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 			adb.setTitle ( R.string.error )
-				.setMessage ( "当前已安装了相同类型的mod包，请先去mod管理器卸载后再安装" );
+				.setMessage ( R.string.modpkg_already_installed_warning );
 			adb.create ( ).show ( );
 
 		}
@@ -200,7 +200,7 @@ public class ModPackageInstallHelper
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
 				adb.setTitle ( R.string.error )
-					.setMessage ( "该mod包使用了已经被弃用的接口，如需继续安装请前往超控mod包管理机制" );
+					.setMessage ( R.string.modpkg_interface_warning );
 				adb.create ( ).show ( );
 			}
 		}

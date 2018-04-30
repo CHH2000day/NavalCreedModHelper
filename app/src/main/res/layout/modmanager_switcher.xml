@@ -17,7 +17,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="Mod包管理机制"
+		android:text="@+string/mod_pkg_management_sys"
 		android:layout_alignParentTop="true"
 		android:layout_alignParentLeft="true"
 		android:id="@+id/modmanagerswitcherTextView"
