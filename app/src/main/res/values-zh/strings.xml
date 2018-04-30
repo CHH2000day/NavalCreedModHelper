@@ -46,4 +46,8 @@
 	<string name="network_err">网络出错</string>
 	<string name="enter_reg_key">请输入注册码:</string>
 	<string name="not_a_ogv_file">文件格式错误！不为ogv编码！</string>
+	<string name="select_pic">选择图片</string>
+	<string name="select_country">选择国家</string>
+	<string name="select_target_pic">选择目标图像</string>
+	<string name="select_file">选择文件</string>
 </resources>

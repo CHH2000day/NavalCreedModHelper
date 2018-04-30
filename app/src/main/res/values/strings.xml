@@ -49,7 +49,11 @@
 	<string name="failed_to_check_tester_authority">Failed to check authority</string>
 	<string name="network_err">Network error</string>
 	<string name="enter_reg_key">Show me your register key:</string>
-	<string name="confirm_to_remove_changes">确定要移除更改么？</string>
-	<string name="confirm_to_remove_all_changes">确定要移除所有更改么？</string>
+	<string name="confirm_to_remove_changes">Comfirm to remove changes?</string>
+	<string name="confirm_to_remove_all_changes">Confirm to remove all changes？</string>
 	<string name="not_a_ogv_file">Incorrect file format,it\'s NOT a ogv file</string>
+	<string name="select_pic">select a pictire</string>
+	<string name="select_country">select the country</string>
+	<string name="select_target_pic">select target picture</string>
+	<string name="select_file">select a file</string>
 </resources>

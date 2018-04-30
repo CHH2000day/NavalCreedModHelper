@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择要处理的内容(目标文件):"
+		android:text="@+string/select_a_scene"
 		android:id="@+id/bgreplacerTextView1"/>
 
 	<Spinner
@@ -29,7 +29,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择图片:"
+		android:text="@+string/select_pic"
 		android:layout_below="@id/bgreplacerSpinner1"
 		android:id="@+id/bgreplacerTextView2"/>
 
