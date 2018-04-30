@@ -117,7 +117,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		fragments.add ( mBGReplacerFragment );
 		fragments.add ( mLoginMovieReplacer );
 		fragments.add ( mCrewPicReplacerFragment );
-		if(getResources().getConfiguration().locale==Locale.CHINESE){
+		if(getResources().getConfiguration().locale.getLanguage().contains("zh")){
 			fragments.add ( mAntiHexieFragment );
 		}
 		fragments.add ( mBGMReplacerFragment );
