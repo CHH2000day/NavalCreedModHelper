@@ -14,7 +14,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="选择文件"
+		android:text="@+string/select_file"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
 		android:id="@+id/modinfopageButtonSelect"
@@ -24,7 +24,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="取消"
+		android:text="@+string/cancel"
 		android:layout_alignParentLeft="true"
 		android:layout_alignParentBottom="true"
 		android:id="@+id/modinfopageButtonCancel"
@@ -33,7 +33,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="安装"
+		android:text="@+string/install"
 		android:layout_alignParentEnd="true"
 		android:layout_alignParentBottom="true"
 		android:layout_toLeftOf="@id/modinfopageButtonCancel"

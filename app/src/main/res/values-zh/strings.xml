@@ -54,7 +54,8 @@
 	<string name="error">错误</string>
 	<string name="installing">安装中..</string>
 	<string name="long_click_to_uninstall">长按以卸载</string>
-	
+	<string name="mod_not_installed">mod未安装</string>
+	<string name="install">安装</string>
 	<!--
 		strings for mod package types
 	-->

@@ -60,7 +60,8 @@
 	<string name="error">ERROR</string>
 	<string name="installing">installing...</string>
 	<string name="long_click_to_uninstall">Touch and hold to uninstall</string>
-	
+	<string name="mod_not_installed">mod not installed</string>
+	<string name="install">Install</string>
 	<!--
 	strings for mod package types
 	-->

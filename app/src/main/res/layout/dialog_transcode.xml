@@ -9,7 +9,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="正在开始...."
+		android:text="@+string/please_wait"
 		android:id="@+id/dialogtranscodeTextView"
 		android:layout_marginLeft="20dp"
 		android:textSize="16sp"/>

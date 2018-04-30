@@ -57,9 +57,9 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 						return;
 					}
 					AlertDialog.Builder adb= new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( "注意" )
+					adb.setTitle ( R.string.notice )
 						.setMessage ( "超控mod管理机制将使mod管理器失效，是否继续？" )
-						.setNegativeButton ( "取消", new DialogInterface.OnClickListener ( ){
+						.setNegativeButton ( R.string.cancel, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
@@ -68,7 +68,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 								cancel ( );
 							}
 						} )
-						.setPositiveButton ( "继续", new DialogInterface.OnClickListener ( ){
+						.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
 
 							@Override
 							public void onClick ( DialogInterface p1, int p2 )
@@ -190,18 +190,18 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			//如果对应mod包已安装
 			if ( ModPackageManager.getInstance ( ).checkInstalled ( type, subtype ) )
 			{
-				info.setText ( new StringBuilder ( ).append ( "mod类型:" )
+				info.setText ( new StringBuilder ( ).append ( getString(R.string.modtype) )
 							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
 							  .append ( ModPackageManager.getInstance ( ).getModName ( keys [ p2 ] ) ) );
 				rl.setOnLongClickListener ( listener );
-				memo.setText("长按以卸载");
+				memo.setText(R.string.long_click_to_uninstall);
 
 			}
 			else
 			{
 				memo.setText ( "" );
-				info.setText ( new StringBuilder ( ).append ( "mod类型:" )
+				info.setText ( new StringBuilder ( ).append ( getString(R.string.modtype))
 							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
 							  .append ( "mod未安装" ).toString ( ) );
@@ -265,10 +265,10 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		private void uninstall ( final String key )
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-			adb.setTitle ( "注意" )
-				.setMessage ( "确定要卸载" + ModPackageManager.getInstance().resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + "?" )
-				.setNegativeButton ( "取消", null )
-				.setPositiveButton ( "确定", new DialogInterface.OnClickListener ( ){
+			adb.setTitle ( R.string.notice )
+				.setMessage ( getString(R.string.confirm_to_remove_changes_to_parta) + ModPackageManager.getInstance().resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + getString(R.string.confirm_to_remove_changes_to_partb) )
+				.setNegativeButton ( R.string.cancel, null )
+				.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
 
 					@Override
 					public void onClick ( DialogInterface p1, int p2 )
@@ -276,7 +276,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 						String type=	key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) ?ModPackageInfo.MODTYPE_CV: key;
 						String subType=type.equals ( ModPackageInfo.MODTYPE_CV ) ?key: ModPackageInfo.SUBTYPE_EMPTY;
 						boolean b=ModPackageManager.getInstance ( ).requestUninstall ( type, subType , (ModHelperApplication)getActivity ( ).getApplication ( ) );
-						String str=b ?"操作成功": "操作失败";
+						String str=b ?getString(R.string.success): getString(R.string.failed);
 						Snackbar.make ( v, str, Snackbar.LENGTH_LONG ).show ( );
 						// TODO: Implement this method
 					}
