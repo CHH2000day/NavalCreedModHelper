@@ -56,4 +56,7 @@
 	<string name="select_country">select the country</string>
 	<string name="select_target_pic">select target picture</string>
 	<string name="select_file">select a file</string>
+	<string name="cont">continue</string>
+	<string name="error">ERROR</string>
+	<string name="installing">installing...</string>
 </resources>

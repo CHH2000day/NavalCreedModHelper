@@ -50,4 +50,7 @@
 	<string name="select_country">选择国家</string>
 	<string name="select_target_pic">选择目标图像</string>
 	<string name="select_file">选择文件</string>
+	<string name="cont">继续</string>
+	<string name="error">错误</string>
+	<string name="installing">安装中..</string>
 </resources>

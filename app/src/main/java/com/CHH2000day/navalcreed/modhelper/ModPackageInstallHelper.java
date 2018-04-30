@@ -120,10 +120,10 @@ public class ModPackageInstallHelper
 		if ( !mmpi.hasAllFeature ( ) )
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
-			adb.setTitle ( "注意" )
+			adb.setTitle ( R.string.notice )
 				.setMessage ( "目前软件版本可能无法实现mod包里所有功能，是否继续？" )
-				.setNegativeButton ( "取消", null )
-				.setPositiveButton ( "继续", new DialogInterface.OnClickListener ( ){
+				.setNegativeButton ( R.string.cancel, null )
+				.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
 
 					@Override
 					public void onClick ( DialogInterface p1, int p2 )
@@ -158,8 +158,8 @@ public class ModPackageInstallHelper
 						// TODO: Implement this method
 					}
 				} )
-				.setNegativeButton ( "取消", null )
-				.setPositiveButton ( "确定", new DialogInterface.OnClickListener ( ){
+				.setNegativeButton ( R.string.cancel, null )
+				.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
 
 					@Override
 					public void onClick ( DialogInterface p1, int p2 ) 
@@ -185,7 +185,7 @@ public class ModPackageInstallHelper
 		if ( mpm.checkInstalled ( mmpi.getModType ( ), getSubType ( ) ) )
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
-			adb.setTitle ( "错误" )
+			adb.setTitle ( R.string.error )
 				.setMessage ( "当前已安装了相同类型的mod包，请先去mod管理器卸载后再安装" );
 			adb.create ( ).show ( );
 
@@ -199,7 +199,7 @@ public class ModPackageInstallHelper
 			else
 			{
 				AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
-				adb.setTitle ( "错误" )
+				adb.setTitle ( R.string.error )
 					.setMessage ( "该mod包使用了已经被弃用的接口，如需继续安装请前往超控mod包管理机制" );
 				adb.create ( ).show ( );
 			}
@@ -429,9 +429,9 @@ public class ModPackageInstallHelper
 			progressbar = (ProgressBar)dialogView.findViewById ( R.id.dialoginstallmodpkgProgress );
 			// TODO: Implement this method
 			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
-			adb.setTitle ( "正在安装mod包" )
+			adb.setTitle ( R.string.please_wait )
 				.setView ( dialogView )
-				.setPositiveButton ( "关闭", null )
+				.setPositiveButton ( R.string.close, null )
 				.setCancelable ( false );
 
 			ad = adb.create ( );
@@ -449,13 +449,15 @@ public class ModPackageInstallHelper
 			dm.ondone ( );
 			if ( result )
 			{
-				stat.setText ( "操作成功" );
+				stat.setText ( R.string.success );
 
 				ModPackageManager.getInstance ( ).postInstall ( getModPackageInfo ( ).getModType ( ), getSubType ( ), mmpi.getModName ( ) );
 			}
 			else
 			{
-				String s=new StringBuilder ( ).append ( "操作失败:" )
+				ad.setTitle(R.string.error);
+				String s=new StringBuilder ( ).append ( mactivty.getText(R.string.failed))
+					.append(":")
 					.append ( "\n" )
 					.append ( e.getMessage ( ) ).toString ( );
 				stat.setText ( s );
@@ -475,7 +477,7 @@ public class ModPackageInstallHelper
 				progressbar.setMax ( totalcount );
 				progressbar.setIndeterminate ( false );
 				progressbar.setProgress ( 0 );
-				stat.setText ( "正在安装mod包" );
+				stat.setText ( R.string.installing );
 			}
 			progressbar.setProgress ( values [ 0 ] );
 
