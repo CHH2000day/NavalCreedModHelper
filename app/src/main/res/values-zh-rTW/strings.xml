@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<!--
-	Traanslated by Jim Li
+		Translated by Jim Li
 	-->
 <resources>
 	<string name="app_name">戰艦聯盟mod助手</string>
     <string name="modpkginstaller_name">戰艦聯盟Mod包安裝器</string>
-	<string name="modpkg_info_empty">請選擇一個Mod包</string>
+	<string name="modpkg_info_empty">請先選擇一個Mod包文件</string>
 	<string name="about_license">原始碼授權</string>
 	<string name="ok">確認</string>
 	<string name="cancel">取消</string>
@@ -19,34 +19,79 @@
 	<string name="uninstall_and_continue">卸載並繼續</string>
 	<string name="please_wait">請稍候</string>
 	<string name="select_a_file_selector">選擇一個文件選擇器</string>
-	<string name="source_file_cannot_be_empty">源文件不能為空</string>
+	<string name="source_file_cannot_be_empty">源文件不得為空</string>
 	<string name="remove_all_bgm">確定要移除所有對BGM的更改嗎？</string>
 	<string name="transcode_starting">開始中</string>
-	<string name="transcode_getting_audio_track">正在獲取音軌</string>
+	<string name="transcode_getting_audio_track">正在獲取音頻軌</string>
 	<string name="transcode_transcoding">轉換中</string>
 	<string name="transcode_writing">正在導出</string>
 	<string name="timeused">用時:</string>
-	<string name="aboutmsg">本程式依照Apache License 2.0開源協議開源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本程式的源碼\n製作:@CHH2000day\n說明:@此生 @天津风\n圖標提供:@猫咪要保护所有人\n翻譯(繁體):@JimLi\nQQ群:689502322\n我的邀請碼(國服):LVI73ECW,希望大佬幫幫我這個萌新(\n感謝祖龍提供接口</string>
+	<string name="aboutmsg">本應用依照Apache License 2.0開源協議開源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本應用的源碼\n制作:@CHH2000day\n說明:@此生 @天津风\n圖標提供:@猫咪要保护所有人\n翻譯:@Jim Li\nQQ群:689502322\n感謝祖龍提供修改接口</string>
 	<string name="modpkg_install_ovwtmsg">"已安裝同類型的mod包，確定要繼續嗎？\n繼續安裝將卸載原mod包"</string>
-	<string name="bgm_transcode_disabled">系統版本低於5.1，無法使用bgm轉檔</string>
+	<string name="bgm_transcode_disabled">系统版本低於5.1，無法使用bgm轉檔功能</string>
 	<string name="not_a_wavfile">文件格式錯誤！文件不為wav編碼</string>
 	<string name="select_a_scene">選擇情景</string>
 	<string name="select">選擇</string>
 	<string name="unselected">未選擇</string>
 	<string name="apply">套用</string>
 	<string name="remove_changes">移除更改</string>
-	<string name="bgmreplacer_info">使用說明:\n每個情景内有多個音樂，需要全部替換才會生效，支持主流格式的音樂。若想移除更改，點擊移除删去當前情景的修改，長按移除則删去全部情景的修改</string>
-	<string name="select_music_to_replace">選擇要替换的音樂</string>
+	<string name="bgmreplacer_info">使用說明:\n每個情景内有多個音樂，需全部替換才會生效，支持主流格式的音樂。若想移除更改，點擊移除删去當前情景的修改，長按移除則删去全部情景的修改</string>
+	<string name="select_music_to_replace">選擇要替換的音樂</string>
 	<string name="exit">退出</string>
-	<string name="exitmsg">確定要退出嗎？(ಥ_ಥ)</string>
-	<string name="permission_request">權限要求</string>
-	<string name="permission_request_msg">戰艦聯盟mod助手需要\"儲存空間\"權限才能正常運作，是否授與權限？</string>
-	<string name="grant_permission">授予</string>
+	<string name="exitmsg">確定要退出嗎?(ಥ_ಥ)</string>
+	<string name="permission_request">權限請求</string>
+	<string name="permission_request_msg">戰艦聯盟mod助手需要\"儲存空間\"權限才能正常運行，是否授予該權限？</string>
+	<string name="grant_permission">授予權限</string>
 	<string name="cancel_and_exit">取消並退出</string>
-	<string name="tester_authority_verify">需要驗證測試者授權</string>
-	<string name="verifying_tester_authority">正在驗證中</string>
+	<string name="tester_authority_verify">請驗證測試者授權</string>
+	<string name="verifying_tester_authority">驗證中</string>
 	<string name="failed_to_check_tester_authority">授權檢查失敗</string>
 	<string name="network_err">網路出錯</string>
-	<string name="enter_reg_key">請輸入註冊碼？:</string>
-	<string name="not_a_ogv_file">文件格式錯誤！不是ogv編碼！</string>
+	<string name="enter_reg_key">請輸入注冊碼:</string>
+	<string name="not_a_ogv_file">文件格式錯誤！不為ogv編碼！</string>
+	<string name="select_pic">選擇圖片</string>
+	<string name="select_country">選擇國家</string>
+	<string name="select_target_pic">選擇目標圖像</string>
+	<string name="select_file">選擇文件</string>
+	<string name="cont">繼續</string>
+	<string name="error">錯誤</string>
+	<string name="installing">安裝中..</string>
+	<string name="long_click_to_uninstall">長按以卸載</string>
+	<string name="mod_not_installed">mod未安裝</string>
+	<string name="install">安裝</string>
+	<string name="bgfrag_intro">使用說明:\n加載背景，地圖加載背景，匹配背景三個選項下都必須放入1,2,3三張圖片才能生效，選擇替換内容和圖片後點擊套用即可</string>
+	<string name="crewpicfrag_intro">使用說明:\n每個國家有15-16個頭像可供替換，替換部分即可生效，不必全部替換，替換後可通過修改成員檔案選擇所替換的頭像\n流程：選擇所替換國家和頭像序號後選擇圖片然後點擊套用\n點擊清空更改清空該船員頭像更改，長按清空更改清空該國家所有船員頭像更改</string>
+	<string name="modpkg_ver_warning">目前應用版本可能無法實現mod包裡所有功能，是否繼續？</string>
+	<string name="modplg_interface_warning">該mod包使用了已经被棄用的接口，如需繼續安裝請前往超控mod包管理機制</string>
+	<string name="modpkg_already_installed_warning">當前已安裝了相同類型的mod包，請先去mod管理器卸載後再安裝</string>
+	<string name="modpkg_cv_to_replace">選擇要替換的艦長語音</string>
+	<string name="invalid_mod_info">無效的mod描述文件</string>
+	<string name="failed_to_resolve_pth">解析文件真實路徑失敗,請將此界面截圖並發送给開發者</string>
+	<string name="ovrd_warning">超控mod管理系統將使mod管理器失效，是否繼續？</string>
+	<string name="mod_pkg_management_sys">mod包管理系統</string>
+	<string name="loginmovie_intro">使用說明:\n登入動畫只支持使用以下格式替換:\n文件格式:ogv\n視頻編碼:theora\n建議在電腦轉碼後再放到手機裡\n注意，視頻裡的音頻不會被播放，請在BGM替換器裡替換</string>
+	<!--
+		strings for mod package types
+	-->
+	<string name="modsize">mod大小:</string>
+	<string name="modtype">mod類型:</string>
+	<string name="modname">mod名:</string>
+	<string name="modauthor">mod作者:</string>
+	<string name="modinfo">mod信息:</string>
+	<string name="ununinstallable_modpkg_warning">該mod包在安裝後將無法卸載，繼續？</string>
+	<string name="modtype_background">背景圖片</string>
+	<string name="modtype_backgroundmusic">背景音樂</string>
+	<string name="modtype_crewpic">船員頭像</string>
+	<string name="modtype_soundeffect">音效(已棄用)</string>
+	<string name="modtype_soundeffect_prim">主音效</string>
+	<string name="modtype_soundeffect_sec">副音效</string>
+	<string name="modtype_unknown">未知</string>
+	<string name="modtype_captainvoice">艦長語音</string>
+	<string name="modtype_captainvoice_cn">艦長語音-中文</string>
+	<string name="modtype_captainvoice_en">艦長語音-英語</string>
+	<string name="modtype_captainvoice_ja_cv">艦長語音-日語-航母</string>
+	<string name="modtype_captainvoice_ja_bb">艦長語音-日語-戰列艦</string>
+	<string name="modtype_captainvoice_ja_ca">艦長語音-日語-巡洋艦</string>
+	<string name="modtype_captainvoice_ja_dd">艦長語音-日語-驅逐艦</string>
+	
 </resources>

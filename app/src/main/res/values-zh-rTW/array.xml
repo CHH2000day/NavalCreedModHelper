@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-Traanslated by Jim Li
--->
+	<!--
+		Translated by Jim Li
+	-->
 	<resources>
 		<string-array name="path_bg">
-			<item>載入背景圖</item>
-			<item>加載地圖背景圖</item>
-			<item>匹配背景圖</item>
+			<item>加載背景</item>
+			<item>地圖加載背景</item>
+			<item>匹配背景</item>
 		</string-array>
 		<string-array name="filename_bg">
 			<item>圖片1</item>
@@ -17,7 +17,7 @@ Traanslated by Jim Li
 			<item>美國</item>
 			<item>日本</item>
 			<item>英國</item>
-			<item>中國</item>
+			<item>中國(臺灣)</item>
 			<item>意大利</item>
 			<item>法國</item>
 			<item>蘇聯</item>
@@ -43,7 +43,7 @@ Traanslated by Jim Li
 		</string-array>
 		<string-array name="bgm_scene_toshow">
 			<item>港口</item>
-			<item>載入音樂</item>
+			<item>加載音樂</item>
 			<item>戰鬥-開始</item>
 			<item>戰鬥-激戰中</item>
 			<item>戰鬥-即將結束</item>
@@ -51,11 +51,11 @@ Traanslated by Jim Li
 			<item>戰鬥-失敗</item>
 		</string-array>
 		<string-array name="bgm_battlefail_toshow">
-			<item>危險</item>
+			<item>即將失敗</item>
 			<item>戰鬥失敗</item>
 		</string-array>
 		<string-array name="bgm_loading_toshow">
-			<item>載入中</item>
+			<item>加載中</item>
 			<item>登入</item>
 			<item>匹配中</item>
 		</string-array>
@@ -63,7 +63,7 @@ Traanslated by Jim Li
 			<item>選擇一個情景</item>		
 		</string-array>
 		<string-array name="fragment_titles">
-			<item>背景替换</item>
+			<item>背景替換</item>
 			<item>登入動畫修改</item>
 			<item>船員頭像修改</item>
 			<item>反和諧</item>
@@ -71,5 +71,13 @@ Traanslated by Jim Li
 			<item>Mod包安裝</item>
 			<item>Mod包管理</item>
 			<item>關於</item>
+		</string-array>
+		<string-array name="cv_types">
+			<item>英語</item>
+			<item>中文</item>
+			<item>日語-航母</item>
+			<item>日語-戰列艦</item>
+			<item>日語-巡洋艦</item>
+			<item>日語-驅逐艦</item>
 		</string-array>
 	</resources>

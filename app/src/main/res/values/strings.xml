@@ -76,6 +76,7 @@
 	<!--
 	strings for mod package types
 	-->
+	<string name="modsize">mod size:</string>
 	<string name="modtype">Mod type:</string>
 	<string name="modname">Mod name:</string>
 	<string name="modauthor">Mod author:</string>
