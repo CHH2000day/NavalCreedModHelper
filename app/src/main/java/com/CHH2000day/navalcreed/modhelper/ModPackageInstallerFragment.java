@@ -75,7 +75,7 @@ public class ModPackageInstallerFragment extends Fragment
 				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory ( intent.CATEGORY_OPENABLE );
-					startActivityForResult ( intent.createChooser ( intent,getString( R.string.select_file) ), QUERY_CODE );
+					startActivityForResult ( intent.createChooser ( intent, getString ( R.string.select_file ) ), QUERY_CODE );
 
 					// TODO: Implement this method
 				}
@@ -161,16 +161,16 @@ public class ModPackageInstallerFragment extends Fragment
 		adb.setTitle ( R.string.please_wait )
 			.setMessage ( R.string.please_wait )
 			.setCancelable ( false );
-		AlertDialog ad=adb.create ( );
+		final AlertDialog ad=adb.create ( );
 		ad.setCanceledOnTouchOutside ( false );
 		ad.show ( );
 		String filepath=Utils.resolveFilePath ( uri, getActivity ( ) );
 		if ( filepath == null )
 		{
-			ad.setMessage ( new StringBuilder ( ).append ( getString(R.string.failed_to_resolve_pth) )
+			ad.setMessage ( new StringBuilder ( ).append ( getString ( R.string.failed_to_resolve_pth ) )
 						   .append ( "\n" )
 						   /*.append ( "请将此界面截屏并发给开发者" )
-						   .append ( "\n" )*/
+							.append ( "\n" )*/
 						   .append ( "authority:" )
 						   .append ( uri.getAuthority ( ) )
 						   .append ( "\n" )
@@ -181,48 +181,77 @@ public class ModPackageInstallerFragment extends Fragment
 			ad.setCanceledOnTouchOutside ( true );
 			return;
 		}
-		try
-		{
-			mpih = new ModPackageInstallHelper ( new File ( filepath ), (Main)getActivity ( )  );
-			ModPackageInfo mpi=mpih.getModPackageInfo ( );
-			StringBuilder sb=new StringBuilder ( );
-			sb.append ( getString(R.string.modname) )
-				.append ( mpi.getModName ( ) )
-				.append ( "\n" )
-				.append ( getString(R.string.modtype) )
-				.append ( ModPackageManager.getInstance(). resolveModType ( mpi.getModType ( ) ) )
-				.append ( "\n" )
-				.append ( R.string.modauthor )
-				.append ( mpi.getModAuthor ( ) )
-				.append ( "\n" )
-				.append ( getString(R.string.modinfo) )
-				.append ( mpi.getModInfo ( ) );
-			if ( mpi.getModType ( ).equals ( ModPackageInfo.MODTYPE_OTHER ) )
-			{
-				sb.append ( "\n" )
-					.append ( getString(R.string.ununinstallable_modpkg_warning) );
-			}
-			info.setText ( sb.toString ( ) );
-			if ( mpi.hasPreview ( ) )
-			{
-				preview.setImageBitmap ( mpi.getModPreview ( ) );
-			}
-			ad.dismiss ( );
-		}
-		catch (IOException e)
-		{
-			ad.setCancelable ( true );
-			ad.setCanceledOnTouchOutside ( true );
-			ad.setMessage ( e.getLocalizedMessage ( ) );}
-		catch (ModPackageInfo.IllegalModInfoException e)
-		{
-			ad.setCancelable ( true );
-			ad.setCanceledOnTouchOutside ( true );
-			ad.setMessage ( getString(-R.string.invalid_mod_info)+"\n" + e.getLocalizedMessage ( ) );
-		}
+
+		mpih = new ModPackageInstallHelper ( new File ( filepath ) );
+		final AppCompatActivity act=(Main)getActivity();
+		mpih.load ( new ModPackageInstallHelper.onModPackageLoadDoneListener ( ){
+
+				@Override
+				public void onSuccess ( )
+				{	ModPackageInfo mpi=mpih.getModPackageInfo ( );
+					long modsize=mpih.getTotalSize();
+					StringBuilder sb=new StringBuilder ( );
+					sb.append ( getString ( R.string.modname ) )
+						.append ( mpi.getModName ( ) )
+						.append ( "\n" )
+						/*
+						This part of untranslated text is for DEBUG only
+						*/
+						.append("Mod size:")
+						.append(modsize)
+						.append("bytes")
+						.append("\n")
+						.append ( getString ( R.string.modtype ) )
+						.append ( ModPackageManager.getInstance ( ). resolveModType ( mpi.getModType ( ) ) )
+						.append ( "\n" )
+						.append ( R.string.modauthor )
+						.append ( mpi.getModAuthor ( ) )
+						.append ( "\n" )
+						.append ( getString ( R.string.modinfo ) )
+						.append ( mpi.getModInfo ( ) );
+					if ( mpi.getModType ( ).equals ( ModPackageInfo.MODTYPE_OTHER ) )
+					{
+						sb.append ( "\n" )
+							.append ( getString ( R.string.ununinstallable_modpkg_warning ) );
+					}
+					info.setText ( sb.toString ( ) );
+					if ( mpi.hasPreview ( ) )
+					{
+						preview.setImageBitmap ( mpi.getModPreview ( ) );
+					}
+					ad.dismiss ( );
+					// TODO: Implement this method
+				}
+
+				@Override
+				public void onFail ( Throwable t )
+				{
+					ad.setCancelable ( true );
+					ad.setCanceledOnTouchOutside ( true );
+					if ( t instanceof ModPackageInfo.IllegalModInfoException )
+					{
+						ad.setMessage ( getString ( -R.string.invalid_mod_info ) + "\n" + t.getLocalizedMessage ( ) );
+					}
+					else
+					{
+						ad.setMessage ( Utils.getErrMsg ( t ) );
+					}
+					// TODO: Implement this method
+				}
+
+				@Override
+				public AppCompatActivity getActivity ( )
+				{
+					// TODO: Implement this method
+					return act;
+				}
+			} );
 
 	}
+
+
 	
+
 	public static interface UriLoader
 	{
 		public Uri getUri ( );

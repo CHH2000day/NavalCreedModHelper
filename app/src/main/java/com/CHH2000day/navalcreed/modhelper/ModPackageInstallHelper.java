@@ -12,6 +12,7 @@ import android.view.*;
 import android.widget.*;
 import android.graphics.*;
 import android.view.View.*;
+import android.support.annotation.*;
 
 public class ModPackageInstallHelper
 {
@@ -42,12 +43,14 @@ public class ModPackageInstallHelper
 	public static final int SUBTYPE_CV_JP_DD=1205;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
+	private onModPackageLoadDoneListener mlistener;
+	private long totalFileSize;
+	private Handler mHandler;
 	//private static String[] CV_COUNTRY={};
 
 
 	private int msubtype=SUBTYPE_NULL;
 	private ModHelperApplication mmha;
-	private AppCompatActivity mactivty;
 	private File msrcFile;
 	private ZipFile mpkgFile;
 	private ModPackageInfo mmpi;
@@ -56,14 +59,55 @@ public class ModPackageInstallHelper
 	 {
 	 //CV_COUNTRY = ctx.getResources ( ).getStringArray ( R.array.cv_types );
 	 }*/
-	public ModPackageInstallHelper ( File pkgFile, AppCompatActivity activity ) throws IOException, ModPackageInfo.IllegalModInfoException
+	public ModPackageInstallHelper ( File pkgFile )
 	{
 		msrcFile = pkgFile;
-		mactivty = activity;
-		mmha = (ModHelperApplication)mactivty.getApplication ( );
-		load ( );
+
+
 	}
 
+
+	public void load ( @NonNull onModPackageLoadDoneListener listener )
+	{
+		mlistener = listener;
+		mHandler = new Handler ( ){
+			public void handleMessage ( Message msg )
+			{
+				switch ( msg.what )
+				{
+					case 0:
+						mlistener.onSuccess ( );
+						break;
+					case -1:
+						mlistener.onFail ( (Throwable)msg.obj );
+						break;
+				}
+			}
+		};
+		mmha = (ModHelperApplication)mlistener.getActivity ( ).getApplication ( );
+		new Thread ( new Runnable ( ){
+
+				public void run ( )
+				{
+					try
+					{
+						load ( );
+						totalFileSize = calculateTatalSize ( );
+						mHandler.sendEmptyMessage ( 0 );
+					}
+					catch (IOException e)
+					{
+						mHandler.sendMessage ( mHandler.obtainMessage ( -1, e ) );
+					}
+					catch (ModPackageInfo.IllegalModInfoException e)
+					{
+						mHandler.sendMessage ( mHandler.obtainMessage ( -1, e ) );
+					}
+				}
+
+
+			} ).start ( );
+	}
 	private void load ( ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		//创建mod文件实例
@@ -84,10 +128,12 @@ public class ModPackageInstallHelper
 		try
 		{
 			mpkgFile.close ( );
-
+			mlistener = null;
 		}
 		catch (IOException e)
-		{}
+		{
+			e.printStackTrace ( );
+		}
 	}
 	private void fetch ( ) throws IOException
 	{
@@ -106,8 +152,22 @@ public class ModPackageInstallHelper
 	public void beginInstall ( )
 	{
 		checkVersion ( );
-
-
+	}
+	private long calculateTatalSize ( )
+	{
+		Enumeration<? extends ZipEntry> en=mpkgFile.entries ( );
+		long totalsize=0;
+		while ( en.hasMoreElements ( ) )
+		{
+			ZipEntry entry=en.nextElement ( );
+			totalsize += entry.getSize ( );
+		}
+		en = null;
+		return totalsize;
+	}
+	public long getTotalSize ( )
+	{
+		return totalFileSize;
 	}
 	/*文件有效性改为由作者验证，此处不再验证
 	 public boolean checkCVpackageValidity ()
@@ -119,7 +179,7 @@ public class ModPackageInstallHelper
 		//检查是否能实现mod包的所有功能
 		if ( !mmpi.hasAllFeature ( ) )
 		{
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
 			adb.setTitle ( R.string.notice )
 				.setMessage ( R.string.modpkg_ver_warning )
 				.setNegativeButton ( R.string.cancel, null )
@@ -136,6 +196,30 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
+			checkAvailSpace ( );
+		}
+	}
+	private void checkAvailSpace ( )
+	{
+		StatFs fs=new StatFs ( mmha.getResFilesDirPath ( ) );
+		long avail=fs.getAvailableBytes ( );
+		if ( getTotalSize ( ) > avail )
+		{
+			{
+				AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+				adb.setTitle ( R.string.notice )
+					.setMessage ( new StringBuilder ( ).append ( "No enough space left on device,this mod package requires " )
+								 .append ( getTotalSize ( ) )
+								 .append ( "bytes.However,there's only" )
+								 .append ( avail )
+								 .append ( "bytes left on this device" )
+								 .toString ( ) )
+					.setPositiveButton ( R.string.cancel, null );
+				adb.create ( ).show ( );
+			}
+		}
+		else
+		{
 			checkModType ( );
 		}
 	}
@@ -147,7 +231,7 @@ public class ModPackageInstallHelper
 		{
 
 			msubtype = SUBTYPE_CV_OFFSET;
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
 			adb.setTitle ( R.string.modpkg_cv_to_replace )
 				.setSingleChoiceItems ( R.array.cv_types, 0, new DialogInterface.OnClickListener ( ){
 
@@ -184,7 +268,7 @@ public class ModPackageInstallHelper
 		ModPackageManager mpm=ModPackageManager.getInstance ( );
 		if ( mpm.checkInstalled ( mmpi.getModType ( ), getSubType ( ) ) )
 		{
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
 			adb.setTitle ( R.string.error )
 				.setMessage ( R.string.modpkg_already_installed_warning );
 			adb.create ( ).show ( );
@@ -198,7 +282,7 @@ public class ModPackageInstallHelper
 			}
 			else
 			{
-				AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+				AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
 				adb.setTitle ( R.string.error )
 					.setMessage ( R.string.modpkg_interface_warning );
 				adb.create ( ).show ( );
@@ -316,6 +400,14 @@ public class ModPackageInstallHelper
 		}
 		return pth;
 	}
+
+	public static interface onModPackageLoadDoneListener
+	{
+		public void onSuccess ( );
+		public void onFail ( Throwable t );
+
+		public AppCompatActivity getActivity ( );
+	}
 	private class InstallTask extends AsyncTask<Void,Integer,Boolean>
 	{
 
@@ -330,7 +422,7 @@ public class ModPackageInstallHelper
 		private DialogMonitor dm;
 		protected InstallTask ( String modType, int subType )
 		{
-			mainPath = getPath ( modType, subType, (ModHelperApplication)mactivty.getApplication ( ) );
+			mainPath = getPath ( modType, subType, (ModHelperApplication)mlistener.getActivity ( ).getApplication ( ) );
 		}
 		@Override
 		protected Boolean doInBackground ( Void[] p1 )
@@ -424,11 +516,11 @@ public class ModPackageInstallHelper
 		@Override
 		protected void onPreExecute ( )
 		{
-			dialogView = mactivty.getLayoutInflater ( ).inflate ( R.layout.dialog_installmodpkg, null );
+			dialogView = mlistener.getActivity ( ).getLayoutInflater ( ).inflate ( R.layout.dialog_installmodpkg, null );
 			stat = (TextView)dialogView.findViewById ( R.id.dialoginstallmodpkgStatus );
 			progressbar = (ProgressBar)dialogView.findViewById ( R.id.dialoginstallmodpkgProgress );
 			// TODO: Implement this method
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mactivty );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
 			adb.setTitle ( R.string.please_wait )
 				.setView ( dialogView )
 				.setPositiveButton ( R.string.close, null )
@@ -455,9 +547,9 @@ public class ModPackageInstallHelper
 			}
 			else
 			{
-				ad.setTitle(R.string.error);
-				String s=new StringBuilder ( ).append ( mactivty.getText(R.string.failed))
-					.append(":")
+				ad.setTitle ( R.string.error );
+				String s=new StringBuilder ( ).append ( mlistener.getActivity ( ).getText ( R.string.failed ) )
+					.append ( ":" )
 					.append ( "\n" )
 					.append ( e.getMessage ( ) ).toString ( );
 				stat.setText ( s );
