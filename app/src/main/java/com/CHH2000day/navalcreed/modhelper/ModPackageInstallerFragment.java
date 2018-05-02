@@ -183,28 +183,28 @@ public class ModPackageInstallerFragment extends Fragment
 		}
 
 		mpih = new ModPackageInstallHelper ( new File ( filepath ) );
-		final AppCompatActivity act=(Main)getActivity();
+		final AppCompatActivity act=(Main)getActivity ( );
 		mpih.load ( new ModPackageInstallHelper.onModPackageLoadDoneListener ( ){
 
 				@Override
 				public void onSuccess ( )
 				{	ModPackageInfo mpi=mpih.getModPackageInfo ( );
-					long modsize=mpih.getTotalSize();
+					long modsize=mpih.getTotalSize ( );
 					StringBuilder sb=new StringBuilder ( );
 					sb.append ( getString ( R.string.modname ) )
 						.append ( mpi.getModName ( ) )
 						.append ( "\n" )
 						/*
-						This part of untranslated text is for DEBUG only
-						*/
-						.append("Mod size:")
-						.append(modsize)
-						.append("bytes")
-						.append("\n")
+						 This part of untranslated text is for DEBUG only
+						 */
+						.append ( "Mod size:" )
+						.append ( modsize )
+						.append ( "bytes" )
+						.append ( "\n" )
 						.append ( getString ( R.string.modtype ) )
 						.append ( ModPackageManager.getInstance ( ). resolveModType ( mpi.getModType ( ) ) )
 						.append ( "\n" )
-						.append ( R.string.modauthor )
+						.append ( getText ( R.string.modauthor ) )
 						.append ( mpi.getModAuthor ( ) )
 						.append ( "\n" )
 						.append ( getString ( R.string.modinfo ) )
@@ -250,7 +250,7 @@ public class ModPackageInstallerFragment extends Fragment
 	}
 
 
-	
+
 
 	public static interface UriLoader
 	{
