@@ -207,9 +207,10 @@ public class Utils
 				else
 				{
 					String[] vol_id=split [ 0 ].split ( String.valueOf ( File.separatorChar ) );
-					String vol=vol_id[vol_id.length-1];
-					if(vol.contains("-")){
-						return new StringBuilder().append(File.separatorChar).append("storage").append(File.separatorChar).append(vol).append(File.separatorChar).append(split[1]).toString();
+					String vol=vol_id [ vol_id.length - 1 ];
+					if ( vol.contains ( "-" ) )
+					{
+						return new StringBuilder ( ).append ( File.separatorChar ).append ( "storage" ).append ( File.separatorChar ).append ( vol ).append ( File.separatorChar ).append ( split [ 1 ] ).toString ( );
 					}
 				}
 			}
@@ -281,5 +282,26 @@ public class Utils
 	{
 		Class err=t.getClass ( );
 		return err.getName ( ) + "\n" + t.getMessage ( );
+	}
+	public static final String convertFileSize ( long origsize )
+	{
+		float size=origsize;
+		StringBuilder sb=new StringBuilder ( );
+		if ( origsize <= 1024 )
+		{
+			sb.append ( size ).append ( "B" );
+		}
+		else if ( origsize < 1024 * 1024 )
+		{
+			sb.append ( (float)( Math.round ( ( size / 1024 ) * 100 ) ) / 100 ).append ( "KB" );
+		}
+		else 
+		{
+			sb.append ( (float)( Math.round ( ( ( size / (1024*1024) ) * 100 ) ) ) / 100 ).append ( "MB" );
+		}
+		
+
+
+		return sb.toString();
 	}
 }

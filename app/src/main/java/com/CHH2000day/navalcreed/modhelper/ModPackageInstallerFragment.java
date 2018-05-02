@@ -194,12 +194,8 @@ public class ModPackageInstallerFragment extends Fragment
 					sb.append ( getString ( R.string.modname ) )
 						.append ( mpi.getModName ( ) )
 						.append ( "\n" )
-						/*
-						 This part of untranslated text is for DEBUG only
-						 */
-						.append ( "Mod size:" )
-						.append ( modsize )
-						.append ( "bytes" )
+						.append ( getString ( R.string.modsize ) )
+						.append ( Utils.convertFileSize ( modsize ) )
 						.append ( "\n" )
 						.append ( getString ( R.string.modtype ) )
 						.append ( ModPackageManager.getInstance ( ). resolveModType ( mpi.getModType ( ) ) )
