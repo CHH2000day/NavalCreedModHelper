@@ -766,10 +766,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								return;
 							}
 							AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
-							adb.setTitle ( "发现更新" )
+							adb.setTitle ( R.string.update )
 								.setMessage ( universalobj.getChangelog ( ) )
-								.setNegativeButton ( "取消", null )
-								.setPositiveButton ( "更新", new DialogInterface.OnClickListener ( ){
+								.setNegativeButton ( R.string.cancel, null )
+								.setPositiveButton ( R.string.update, new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick ( DialogInterface p1, int p2 )
@@ -781,7 +781,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										Snackbar.make ( mViewPager, "开始下载", Snackbar.LENGTH_LONG ).show ( );
 										AlertDialog.Builder db=new AlertDialog.Builder ( Main.this );
 										db.setTitle ( "正在下载" )
-											.setMessage ( "请稍等" )
+											.setMessage ( R.string.please_wait )
 											.setCancelable ( false );
 										final AlertDialog d=db.create ( );
 										d.setCanceledOnTouchOutside ( false );
@@ -858,10 +858,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 						if ( id > currid )
 						{
-							adb0.setTitle ( "公告" )
+							adb0.setTitle (R.string.announcement)
 								.setMessage ( bmobmsg.getMessage ( ) )
 								.setPositiveButton ( R.string.ok, null )
-								.setNeutralButton  (  "不再显示该公告", new DialogInterface.OnClickListener ( ){
+								.setNeutralButton  (  R.string.dont_show, new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick ( DialogInterface p1, int p2 )

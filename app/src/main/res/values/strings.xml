@@ -73,6 +73,9 @@
 	<string name="ovrd_warning">Mod package management system would not work after overriding it,continue? </string>
 	<string name="mod_pkg_management_sys">Mod package management system</string>
 	<string name="loginmovie_intro">Introduction:\nLogin movie can only be replaced with a fllowing format video:\nFile format:ogv\nVideo encoding:theora\nWe recommend that you transcode it on a PC and then send it to your device.\nNotice that the audio in the video would not be played,custom it in BGM page.</string>
+	<string name="dont_show">Don\'t show</string>
+	<string name="update">Update</string>
+	<string name="announcement">Announcement</string>
 	<!--
 	strings for mod package types
 	-->

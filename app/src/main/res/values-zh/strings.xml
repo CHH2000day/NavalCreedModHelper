@@ -67,6 +67,9 @@
 	<string name="ovrd_warning">超控mod管理系统将使mod管理器失效，是否继续？</string>
 	<string name="mod_pkg_management_sys">mod包管理系统</string>
 	<string name="loginmovie_intro">使用说明:\n登录动画只支持使用以下格式替换:\n文件格式:ogv\n视频编码:theora\n建议在电脑端使用ffmpeg2theora转码后再放到手机里\n注意，视频里的音频不会被播放，请在BGM替换器里替换</string>
+	<string name="dont_show">不再显示</string>
+	<string name="update">更新</string>
+	<string name="announcement">公告</string>
 	<!--
 		strings for mod package types
 	-->
