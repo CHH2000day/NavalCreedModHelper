@@ -71,6 +71,9 @@
 	<string name="update">更新</string>
 	<string name="announcement">公告</string>
 	<string name="altn_install">备用安装</string>
+	<string name="downloading">下载中</string>
+	<string name="downloaded">下载完成</string>
+	<string name="copy">复制</string>
 	<!--
 		strings for mod package types
 	-->

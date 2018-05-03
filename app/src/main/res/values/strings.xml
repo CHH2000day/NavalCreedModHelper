@@ -77,6 +77,9 @@
 	<string name="update">Update</string>
 	<string name="announcement">Announcement</string>
 	<string name="altn_install">ALTN install</string>
+	<string name="downloading">Downloading</string>
+	<string name="downloaded">Downloaded</string>
+	<string name="copy">Copy</string>
 	<!--
 	strings for mod package types
 	-->

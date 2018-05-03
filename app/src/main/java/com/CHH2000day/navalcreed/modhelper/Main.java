@@ -778,10 +778,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										{
 											return;
 										}
-										Snackbar.make ( mViewPager, "开始下载", Snackbar.LENGTH_LONG ).show ( );
+										Snackbar.make ( mViewPager,R.string.downloading, Snackbar.LENGTH_LONG ).show ( );
 										AlertDialog.Builder db=new AlertDialog.Builder ( Main.this );
-										db.setTitle ( "正在下载" )
-											.setMessage ( R.string.please_wait )
+										db.setTitle ( R.string.please_wait )
+											.setMessage ( R.string.downloading )
 											.setCancelable ( false );
 										final AlertDialog d=db.create ( );
 										d.setCanceledOnTouchOutside ( false );
@@ -795,7 +795,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 												public void done ( String p1, BmobException p2 )
 												{
 													d.dismiss ( );
-													Snackbar.make ( mViewPager, "下载完成", Snackbar.LENGTH_LONG ).show ( );
+													Snackbar.make ( mViewPager, R.string.downloaded, Snackbar.LENGTH_LONG ).show ( );
 													Intent i=new Intent ( Intent.ACTION_VIEW );
 													Uri data;
 													i.setFlags ( Intent.FLAG_ACTIVITY_NEW_TASK );
@@ -871,7 +871,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										// TODO: Implement this method
 									}
 								} )
-								.setNegativeButton ( "复制", new DialogInterface.OnClickListener ( ){
+								.setNegativeButton ( R.string.copy, new DialogInterface.OnClickListener ( ){
 
 									@Override
 									public void onClick ( DialogInterface p1, int p2 )
