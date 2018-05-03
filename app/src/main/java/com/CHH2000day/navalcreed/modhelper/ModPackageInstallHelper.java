@@ -160,6 +160,9 @@ public class ModPackageInstallHelper
 		while ( en.hasMoreElements ( ) )
 		{
 			ZipEntry entry=en.nextElement ( );
+			if(entry.getName().equals(FILE_MODINFO)){
+				continue;
+			}
 			totalsize += entry.getSize ( );
 		}
 		en = null;

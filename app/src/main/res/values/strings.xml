@@ -76,6 +76,7 @@
 	<string name="dont_show">Don\'t show</string>
 	<string name="update">Update</string>
 	<string name="announcement">Announcement</string>
+	<string name="altn_install">ALTN install</string>
 	<!--
 	strings for mod package types
 	-->

@@ -14,6 +14,7 @@ import android.view.View.*;
 import android.support.design.widget.*;
 import android.text.method.*;
 import android.provider.*;
+import okio.*;
 
 public class ModPackageInstallerFragment extends Fragment
 {
@@ -154,9 +155,136 @@ public class ModPackageInstallerFragment extends Fragment
 		info.setText ( R.string.modpkg_info_empty );
 		mpih = null;
 	}
-	public void selectFile ( Uri uri )
+	public void selectFile ( final Uri uri )
 	{
 		clear ( );
+		String filepath=Utils.resolveFilePath ( uri, getActivity ( ) );
+		if ( filepath == null )
+		{
+			AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+			adb.setTitle ( R.string.please_wait )
+				.setCancelable ( false )
+				.setMessage ( new StringBuilder ( ).append ( getString ( R.string.failed_to_resolve_pth ) )
+							 .append ( "\n" )
+							 /*.append ( "请将此界面截屏并发给开发者" )
+							  .append ( "\n" )*/
+							 .append ( "authority:" )
+							 .append ( uri.getAuthority ( ) )
+							 .append ( "\n" )
+							 .append ( "path:" )
+							 .append ( uri.getPath ( ) )
+							 .toString ( ) )
+				.setNegativeButton ( R.string.cancel, null )
+				.setPositiveButton ( R.string.altn_install, new DialogInterface.OnClickListener ( ){
+
+					@Override
+					public void onClick ( DialogInterface p1, int p2 )
+					{
+						final Handler h=new Handler ( ){
+							public void handleMessage ( Message msg )
+							{
+								if ( msg.what == 0 )
+								{
+									load ( (File)msg.obj , true );
+								}
+								else
+								{
+									AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+									adb.setTitle ( R.string.error )
+										.setMessage ( Utils.getErrMsg ( (Throwable)msg.obj ) )
+										.setPositiveButton ( R.string.ok, null )
+										.create ( ).show ( );
+								}
+							}
+						};
+						new Thread ( ){
+
+							@Override
+							public void run ( )
+							{
+								File f=new File ( getActivity ( ).getExternalCacheDir ( ), "cachedmodfile.ncmod" );
+								InputStream is=null;
+								Sink s=null;
+								BufferedSink bs=null;
+								try
+								{
+									if ( !f.getParentFile ( ).exists ( ) )
+									{
+										f.getParentFile ( ).mkdirs ( );
+									}
+									if ( f.isDirectory ( ) )
+									{
+										Utils.delDir ( f );
+									}
+									is = getActivity ( ).getContentResolver ( ).openInputStream ( uri );
+									s = Okio.sink ( f );
+									bs = Okio.buffer ( s );
+
+									byte[]cache=new byte[1024 * 16];
+									int len;
+									while ( ( len = is.read ( cache ) ) != -1 )
+									{
+										bs.write ( cache, 0, len );
+									}
+									bs.flush ( );
+									h.sendMessage ( h.obtainMessage ( 0, f ) );
+
+								}
+								catch (Throwable t)
+								{
+									h.sendMessage ( h.obtainMessage ( -1, t ) );
+								}
+								finally
+								{
+									if ( bs != null )
+									{
+										try
+										{
+											bs.close ( );
+										}
+										catch (IOException e)
+										{}
+									}
+									if ( s != null )
+									{
+										try
+										{
+											s.close ( );
+										}
+										catch (IOException e)
+										{}
+									}
+									if ( is != null )
+									{
+										try
+										{
+											is.close ( );
+										}
+										catch (IOException e)
+										{}
+									}
+								}
+
+								// TODO: Implement this method
+							}
+						}.start ( );
+						// TODO: Implement this method
+					}
+				} );
+			adb.create ( ).show ( );
+			return;
+		}
+		else
+		{
+			load ( new File ( filepath ), false );
+		}
+
+	}
+
+
+
+	private void load ( final File source , final  boolean isCache )
+	{
 		AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 		adb.setTitle ( R.string.please_wait )
 			.setMessage ( R.string.please_wait )
@@ -164,25 +292,9 @@ public class ModPackageInstallerFragment extends Fragment
 		final AlertDialog ad=adb.create ( );
 		ad.setCanceledOnTouchOutside ( false );
 		ad.show ( );
-		String filepath=Utils.resolveFilePath ( uri, getActivity ( ) );
-		if ( filepath == null )
-		{
-			ad.setMessage ( new StringBuilder ( ).append ( getString ( R.string.failed_to_resolve_pth ) )
-						   .append ( "\n" )
-						   /*.append ( "请将此界面截屏并发给开发者" )
-							.append ( "\n" )*/
-						   .append ( "authority:" )
-						   .append ( uri.getAuthority ( ) )
-						   .append ( "\n" )
-						   .append ( "path:" )
-						   .append ( uri.getPath ( ) )
-						   .toString ( ) );
-			ad.setCancelable ( true );
-			ad.setCanceledOnTouchOutside ( true );
-			return;
-		}
 
-		mpih = new ModPackageInstallHelper ( new File ( filepath ) );
+
+		mpih = new ModPackageInstallHelper ( source );
 		final AppCompatActivity act=(Main)getActivity ( );
 		mpih.load ( new ModPackageInstallHelper.onModPackageLoadDoneListener ( ){
 
@@ -216,6 +328,11 @@ public class ModPackageInstallerFragment extends Fragment
 						preview.setImageBitmap ( mpi.getModPreview ( ) );
 					}
 					ad.dismiss ( );
+					mpih.recycle ( );
+					if ( isCache )
+					{
+						Utils.delDir ( source );
+					}
 					// TODO: Implement this method
 				}
 
@@ -232,6 +349,10 @@ public class ModPackageInstallerFragment extends Fragment
 					{
 						ad.setMessage ( Utils.getErrMsg ( t ) );
 					}
+					if ( isCache )
+					{
+						Utils.delDir ( source );
+					}
 					// TODO: Implement this method
 				}
 
@@ -244,9 +365,6 @@ public class ModPackageInstallerFragment extends Fragment
 			} );
 
 	}
-
-
-
 
 	public static interface UriLoader
 	{

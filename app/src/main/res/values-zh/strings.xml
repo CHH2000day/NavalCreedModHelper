@@ -70,6 +70,7 @@
 	<string name="dont_show">不再显示</string>
 	<string name="update">更新</string>
 	<string name="announcement">公告</string>
+	<string name="altn_install">备用安装</string>
 	<!--
 		strings for mod package types
 	-->
