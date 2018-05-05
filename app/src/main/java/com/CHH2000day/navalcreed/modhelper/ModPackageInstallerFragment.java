@@ -25,6 +25,7 @@ public class ModPackageInstallerFragment extends Fragment
 	private TextView info;
 	private Button update,select,cancel;
 	private ModPackageInstallHelper mpih;
+	private boolean isCache;
 
 	private static final int QUERY_CODE=6;
 	@Override
@@ -113,7 +114,7 @@ public class ModPackageInstallerFragment extends Fragment
 						Snackbar.make ( v, R.string.modpkg_info_empty, Snackbar.LENGTH_LONG ).show ( );
 						return;
 					}
-					mpih.beginInstall ( );
+					mpih.beginInstall ( (Main)getActivity ( ) );
 					// TODO: Implement this method
 				}
 			} );
@@ -151,6 +152,12 @@ public class ModPackageInstallerFragment extends Fragment
 		{
 			mpih.recycle ( );
 		}
+		if ( isCache )
+		{
+			Utils.delDir ( mpih.getSourceFile ( ) );
+			isCache=false;
+		}
+
 		preview.setImageResource ( R.drawable.no_pereview_tiny );
 		info.setText ( R.string.modpkg_info_empty );
 		mpih = null;
@@ -185,7 +192,8 @@ public class ModPackageInstallerFragment extends Fragment
 							{
 								if ( msg.what == 0 )
 								{
-									load ( (File)msg.obj , true );
+									isCache=true;
+									load ( (File)msg.obj  );
 								}
 								else
 								{
@@ -276,14 +284,15 @@ public class ModPackageInstallerFragment extends Fragment
 		}
 		else
 		{
-			load ( new File ( filepath ), false );
+			isCache=false;
+			load ( new File ( filepath ) );
 		}
 
 	}
 
 
 
-	private void load ( final File source , final  boolean isCache )
+	private void load ( final File source)
 	{
 		AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 		adb.setTitle ( R.string.please_wait )
@@ -328,11 +337,6 @@ public class ModPackageInstallerFragment extends Fragment
 						preview.setImageBitmap ( mpi.getModPreview ( ) );
 					}
 					ad.dismiss ( );
-					mpih.recycle ( );
-					if ( isCache )
-					{
-						Utils.delDir ( source );
-					}
 					// TODO: Implement this method
 				}
 

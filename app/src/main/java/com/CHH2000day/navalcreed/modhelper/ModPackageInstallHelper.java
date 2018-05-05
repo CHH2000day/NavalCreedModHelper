@@ -84,7 +84,7 @@ public class ModPackageInstallHelper
 				}
 			}
 		};
-		mmha = (ModHelperApplication)mlistener.getActivity ( ).getApplication ( );
+		mmha = (ModHelperApplication)listener.getActivity ( ).getApplication ( );
 		new Thread ( new Runnable ( ){
 
 				public void run ( )
@@ -149,9 +149,9 @@ public class ModPackageInstallHelper
 		InputStream zi=mpkgFile.getInputStream ( mInfoFile );
 		mmpi = ModPackageInfo.Factory.createFromInputStream ( zi );
 	}
-	public void beginInstall ( )
+	public void beginInstall ( final AppCompatActivity activity )
 	{
-		checkVersion ( );
+		checkVersion ( activity );
 	}
 	private long calculateTatalSize ( )
 	{
@@ -160,7 +160,8 @@ public class ModPackageInstallHelper
 		while ( en.hasMoreElements ( ) )
 		{
 			ZipEntry entry=en.nextElement ( );
-			if(entry.getName().equals(FILE_MODINFO)){
+			if ( entry.getName ( ).equals ( FILE_MODINFO ) )
+			{
 				continue;
 			}
 			totalsize += entry.getSize ( );
@@ -177,12 +178,12 @@ public class ModPackageInstallHelper
 	 {
 	 return false;
 	 }*/
-	private void checkVersion ( )
+	private void checkVersion ( final AppCompatActivity activity )
 	{
 		//检查是否能实现mod包的所有功能
 		if ( !mmpi.hasAllFeature ( ) )
 		{
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( activity );
 			adb.setTitle ( R.string.notice )
 				.setMessage ( R.string.modpkg_ver_warning )
 				.setNegativeButton ( R.string.cancel, null )
@@ -191,7 +192,7 @@ public class ModPackageInstallHelper
 					@Override
 					public void onClick ( DialogInterface p1, int p2 )
 					{
-						checkModType ( );
+						checkModType ( activity );
 						// TODO: Implement this method
 					}
 				} );
@@ -199,17 +200,17 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			checkAvailSpace ( );
+			checkAvailSpace ( activity );
 		}
 	}
-	private void checkAvailSpace ( )
+	private void checkAvailSpace ( final AppCompatActivity activity )
 	{
 		StatFs fs=new StatFs ( mmha.getResFilesDirPath ( ) );
 		long avail=fs.getAvailableBytes ( );
 		if ( getTotalSize ( ) > avail )
 		{
 			{
-				AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+				AlertDialog.Builder adb=new AlertDialog.Builder ( activity );
 				adb.setTitle ( R.string.notice )
 					.setMessage ( new StringBuilder ( ).append ( "No enough space left on device,this mod package requires " )
 								 .append ( getTotalSize ( ) )
@@ -223,10 +224,10 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			checkModType ( );
+			checkModType ( activity );
 		}
 	}
-	private void checkModType ( )
+	private void checkModType ( final AppCompatActivity activity )
 	{
 		//检查mod包类型
 		//如果mod包类型为语音包，确认安装位置
@@ -234,7 +235,7 @@ public class ModPackageInstallHelper
 		{
 
 			msubtype = SUBTYPE_CV_OFFSET;
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( activity );
 			adb.setTitle ( R.string.modpkg_cv_to_replace )
 				.setSingleChoiceItems ( R.array.cv_types, 0, new DialogInterface.OnClickListener ( ){
 
@@ -251,7 +252,7 @@ public class ModPackageInstallHelper
 					@Override
 					public void onClick ( DialogInterface p1, int p2 ) 
 					{
-						checkInstall ( );
+						checkInstall ( activity );
 						// TODO: Implement this method
 					}
 				} );
@@ -260,18 +261,18 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			checkInstall ( );
+			checkInstall ( activity );
 		}
 
 
 	}
 
-	private void checkInstall ( )
+	private void checkInstall ( final AppCompatActivity activity )
 	{
 		ModPackageManager mpm=ModPackageManager.getInstance ( );
 		if ( mpm.checkInstalled ( mmpi.getModType ( ), getSubType ( ) ) )
 		{
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( activity );
 			adb.setTitle ( R.string.error )
 				.setMessage ( R.string.modpkg_already_installed_warning );
 			adb.create ( ).show ( );
@@ -281,11 +282,11 @@ public class ModPackageInstallHelper
 		{
 			if ( ModPackageManager.getInstance ( ).isOverride ( ) )
 			{
-				install ( );
+				install ( activity );
 			}
 			else
 			{
-				AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+				AlertDialog.Builder adb=new AlertDialog.Builder ( activity );
 				adb.setTitle ( R.string.error )
 					.setMessage ( R.string.modpkg_interface_warning );
 				adb.create ( ).show ( );
@@ -293,15 +294,15 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			install ( );
+			install ( activity );
 		}
 
 	}
 
-	private void install ( )
+	private void install ( final AppCompatActivity activity )
 	{
 
-		InstallTask it=new InstallTask ( mmpi.getModType ( ), msubtype );
+		InstallTask it=new InstallTask ( mmpi.getModType ( ), msubtype, activity );
 		it.execute ( );
 
 
@@ -403,6 +404,9 @@ public class ModPackageInstallHelper
 		}
 		return pth;
 	}
+	public File getSourceFile(){
+		return msrcFile;
+	}
 
 	public static interface onModPackageLoadDoneListener
 	{
@@ -423,9 +427,11 @@ public class ModPackageInstallHelper
 		private TextView stat;
 		private ProgressBar progressbar;
 		private DialogMonitor dm;
-		protected InstallTask ( String modType, int subType )
+		private AppCompatActivity activity;
+		protected InstallTask ( String modType, int subType, final AppCompatActivity activity )
 		{
-			mainPath = getPath ( modType, subType, (ModHelperApplication)mlistener.getActivity ( ).getApplication ( ) );
+			mainPath = getPath ( modType, subType, (ModHelperApplication)activity.getApplication ( ) );
+			this.activity = activity;
 		}
 		@Override
 		protected Boolean doInBackground ( Void[] p1 )
@@ -519,11 +525,11 @@ public class ModPackageInstallHelper
 		@Override
 		protected void onPreExecute ( )
 		{
-			dialogView = mlistener.getActivity ( ).getLayoutInflater ( ).inflate ( R.layout.dialog_installmodpkg, null );
+			dialogView = activity.getLayoutInflater ( ).inflate ( R.layout.dialog_installmodpkg, null );
 			stat = (TextView)dialogView.findViewById ( R.id.dialoginstallmodpkgStatus );
 			progressbar = (ProgressBar)dialogView.findViewById ( R.id.dialoginstallmodpkgProgress );
 			// TODO: Implement this method
-			AlertDialog.Builder adb=new AlertDialog.Builder ( mlistener.getActivity ( ) );
+			AlertDialog.Builder adb=new AlertDialog.Builder ( activity );
 			adb.setTitle ( R.string.please_wait )
 				.setView ( dialogView )
 				.setPositiveButton ( R.string.close, null )
@@ -551,7 +557,7 @@ public class ModPackageInstallHelper
 			else
 			{
 				ad.setTitle ( R.string.error );
-				String s=new StringBuilder ( ).append ( mlistener.getActivity ( ).getText ( R.string.failed ) )
+				String s=new StringBuilder ( ).append ( activity.getText ( R.string.failed ) )
 					.append ( ":" )
 					.append ( "\n" )
 					.append ( e.getMessage ( ) ).toString ( );
