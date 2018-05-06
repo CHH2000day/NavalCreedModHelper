@@ -137,6 +137,9 @@ public class ModPackageInstallHelper
 	}
 	private void fetch ( ) throws IOException
 	{
+		if(!msrcFile.exists()||!msrcFile.isFile()){
+			throw new IOException("File :"+msrcFile.getAbsolutePath()+" not exists");
+		}
 		mpkgFile = new ZipFile ( msrcFile );
 	}
 	private void identify ( ) throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
