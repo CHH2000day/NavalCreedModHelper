@@ -158,7 +158,7 @@ public class ModPackageInstallerFragment extends Fragment
 			isCache=false;
 		}
 
-		preview.setImageResource ( R.drawable.no_pereview_tiny );
+		preview.setImageResource ( R.drawable.no_preview );
 		info.setText ( R.string.modpkg_info_empty );
 		mpih = null;
 	}

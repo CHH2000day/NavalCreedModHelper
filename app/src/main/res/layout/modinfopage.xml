@@ -43,7 +43,7 @@
 	<ImageView
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-		android:src="@drawable/no_pereview_tiny"
+		android:src="@drawable/no_preview"
 		android:id="@+id/modinfopageImageView"
 		android:adjustViewBounds="true"/>
 
