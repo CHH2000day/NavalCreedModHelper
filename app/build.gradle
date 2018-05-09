@@ -10,7 +10,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 62
-        versionName "Alpha-build2018050600"
+        versionName "3.0.0-beta1"
     }
     buildTypes {
         release {
