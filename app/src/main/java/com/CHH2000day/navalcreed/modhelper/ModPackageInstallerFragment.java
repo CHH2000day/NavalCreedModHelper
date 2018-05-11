@@ -357,6 +357,7 @@ public class ModPackageInstallerFragment extends Fragment
 					{
 						Utils.delDir ( source );
 					}
+					mpih=null;
 					// TODO: Implement this method
 				}
 
