@@ -8,6 +8,7 @@ import android.os.*;
 import android.database.*;
 import android.content.*;
 import android.provider.*;
+import java.security.*;
 
 public class Utils
 {
@@ -297,11 +298,55 @@ public class Utils
 		}
 		else 
 		{
-			sb.append ( (float)( Math.round ( ( ( size / (1024*1024) ) * 100 ) ) ) / 100 ).append ( "MB" );
+			sb.append ( (float)( Math.round ( ( ( size / ( 1024 * 1024 ) ) * 100 ) ) ) / 100 ).append ( "MB" );
 		}
-		
-
-
-		return sb.toString();
+		return sb.toString ( );
 	}
+	private static final String ALGORITHM_MD5="MD5";
+	public static String getMD5 ( InputStream in, boolean closeStream ) throws IOException
+	{
+		String s="";
+		try
+		{
+			MessageDigest md=MessageDigest.getInstance ( ALGORITHM_MD5 );
+			byte[] buffer=new byte[1024];
+			int len;
+			while ( ( len = in.read ( buffer ) ) != -1 )
+			{
+				md.update ( buffer, 0, len );
+			}
+			s = bytesToString ( md.digest ( ) );
+		}
+		catch (NoSuchAlgorithmException e)
+		{}
+		finally
+		{
+			if ( closeStream )
+			{
+				if ( in != null )
+				{
+					in.close ( );
+				}
+			}
+		}
+
+		return s;
+	}
+	public static String getMD5 ( InputStream in ) throws IOException
+	{
+		return getMD5 ( in, true );
+	}
+	private static String bytesToString ( byte[] data )
+	{
+        char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd',
+			'e', 'f'};
+        char[] temp = new char[data.length * 2];
+        for ( int i = 0; i < data.length; i++ )
+		{
+            byte b = data [ i ];
+            temp [ i * 2 ] = hexDigits [ b >>> 4 & 0x0f ];
+            temp [ i * 2 + 1 ] = hexDigits [ b & 0x0f ];
+        }
+        return new String ( temp );
+    }
 }
