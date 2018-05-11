@@ -46,23 +46,24 @@ public class ModPackageManager
 	}
 	private ModPackageManager ( )
 	{}
-	public void init(Context context){
-		Resources res=context.getResources();
-		modType=new HashMap<String,String>();
-		modType.put(UNKNOWN,res.getString(R.string.modtype_unknown));
-		modType.put(ModPackageInfo.MODTYPE_BACKGROUND,res.getString(R.string.modtype_background));
-		modType.put(ModPackageInfo.MODTYPE_BGM,res.getString(R.string.modtype_backgroundmusic));
-		modType.put(ModPackageInfo.MODTYPE_CREWPIC,res.getString(R.string.modtype_crewpic));
-		modType.put(ModPackageInfo.MODTYPE_SOUNDEFFECT,res.getString(R.string.modtype_soundeffect));
-		modType.put(ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,res.getString(R.string.modtype_soundeffect_prim));
-		modType.put(ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,res.getString(R.string.modtype_soundeffect_sec));
-		modType.put(ModPackageInfo.MODTYPE_CV,res.getString(R.string.modtype_captainvoice));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_CN,res.getString(R.string.modtype_captainvoice_cn));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_EN,res.getString(R.string.modtype_captainvoice_en));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_CV,res.getString(R.string.modtype_captainvoice_ja_cv));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_BB,res.getString(R.string.modtype_captainvoice_ja_bb));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_CA,res.getString(R.string.modtype_captainvoice_ja_ca));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_DD,res.getString(R.string.modtype_captainvoice_ja_dd));
+	public void init ( Context context )
+	{
+		Resources res=context.getResources ( );
+		modType = new HashMap<String,String> ( );
+		modType.put ( UNKNOWN, res.getString ( R.string.modtype_unknown ) );
+		modType.put ( ModPackageInfo.MODTYPE_BACKGROUND, res.getString ( R.string.modtype_background ) );
+		modType.put ( ModPackageInfo.MODTYPE_BGM, res.getString ( R.string.modtype_backgroundmusic ) );
+		modType.put ( ModPackageInfo.MODTYPE_CREWPIC, res.getString ( R.string.modtype_crewpic ) );
+		modType.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, res.getString ( R.string.modtype_soundeffect ) );
+		modType.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM, res.getString ( R.string.modtype_soundeffect_prim ) );
+		modType.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC, res.getString ( R.string.modtype_soundeffect_sec ) );
+		modType.put ( ModPackageInfo.MODTYPE_CV, res.getString ( R.string.modtype_captainvoice ) );
+		modType.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, res.getString ( R.string.modtype_captainvoice_cn ) );
+		modType.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, res.getString ( R.string.modtype_captainvoice_en ) );
+		modType.put ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV, res.getString ( R.string.modtype_captainvoice_ja_cv ) );
+		modType.put ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB, res.getString ( R.string.modtype_captainvoice_ja_bb ) );
+		modType.put ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA, res.getString ( R.string.modtype_captainvoice_ja_ca ) );
+		modType.put ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD, res.getString ( R.string.modtype_captainvoice_ja_dd ) );
 	}
 	public void config ( File storedFile ) throws  IOException, JSONException
 	{
@@ -163,8 +164,25 @@ public class ModPackageManager
 		{
 			subt = ModPackageInstallHelper.SUBTYPE_CV_EN;
 		}
+		if ( subtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB ) )
+		{
+			subt = ModPackageInstallHelper.SUBTYPE_CV_JP_BB;
+		}
+		if ( subtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV ) )
+		{
+			subt = ModPackageInstallHelper.SUBTYPE_CV_JP_CV;
+		}
+		if ( subtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA ) )
+		{
+			subt = ModPackageInstallHelper.SUBTYPE_CV_JP_CA;
+		}
+		if ( subtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD ) )
+		{
+			subt = ModPackageInstallHelper.SUBTYPE_CV_JP_DD;
+		}
 		String path=ModPackageInstallHelper.getPath ( modtype, subt, app );
-		if ( path.equals ( "" ) )
+		if ( path.equals ( "" ) || path.equals ( app.getResFilesDirPath ( ) ) || path.equals ( app.getResPath ( ) ))
+
 		{
 			return false;
 		}
@@ -369,65 +387,65 @@ public class ModPackageManager
 	public String resolveModType ( String modtype )
 	{
 		/*
-		String s="";
-		
-		if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modtype ) )
-		{
-			s = "背景图片";
-		}
-		else if ( ModPackageInfo.MODTYPE_BGM.equals ( modtype ) )
-		{
-			s = "背景音乐";
-		}
-		else if ( ModPackageInfo.MODTYPE_CREWPIC.equals ( modtype ) )
-		{
-			s = "船员头像";
-		}
-		else if ( ModPackageInfo.MODTYPE_CV.equals ( modtype ) )
-		{
-			s = "舰长语音";
-		}
-		else if ( ModPackageInfo.SUB_MODTYPE_CV_CN.equals ( modtype ) )
-		{
-			s = "舰长语音-中文";
-		}
-		else if ( ModPackageInfo.SUB_MODTYPE_CV_EN.equals ( modtype ) )
-		{
-			s = "舰长语音-英语";
-		}
-		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV.equals ( modtype ) )
-		{
-			s = "舰长语音-日语-航母";
-		}
-		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB.equals ( modtype ) )
-		{
-			s = "舰长语音-日语-战列舰";
-		}
-		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA.equals ( modtype ) )
-		{
-			s = "舰长语音-日语-巡洋舰";
-		}
-		else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD.equals ( modtype ) )
-		{
-			s = "舰长语音-日语-驱逐舰";
-		}
-		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
-		{
-			s = "音效(已弃用)";
-		}
-		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM.equals ( modtype ) )
-		{
-			s = "主音效";
-		}
-		else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC.equals ( modtype ) )
-		{
-			s = "副音效";
-		}
-		else
-		{
-			s = "未知";
-		}*/
-		return modType.containsKey(modtype)?modType.get(modtype):modType.get(UNKNOWN);
+		 String s="";
+
+		 if ( ModPackageInfo.MODTYPE_BACKGROUND.equals ( modtype ) )
+		 {
+		 s = "背景图片";
+		 }
+		 else if ( ModPackageInfo.MODTYPE_BGM.equals ( modtype ) )
+		 {
+		 s = "背景音乐";
+		 }
+		 else if ( ModPackageInfo.MODTYPE_CREWPIC.equals ( modtype ) )
+		 {
+		 s = "船员头像";
+		 }
+		 else if ( ModPackageInfo.MODTYPE_CV.equals ( modtype ) )
+		 {
+		 s = "舰长语音";
+		 }
+		 else if ( ModPackageInfo.SUB_MODTYPE_CV_CN.equals ( modtype ) )
+		 {
+		 s = "舰长语音-中文";
+		 }
+		 else if ( ModPackageInfo.SUB_MODTYPE_CV_EN.equals ( modtype ) )
+		 {
+		 s = "舰长语音-英语";
+		 }
+		 else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV.equals ( modtype ) )
+		 {
+		 s = "舰长语音-日语-航母";
+		 }
+		 else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB.equals ( modtype ) )
+		 {
+		 s = "舰长语音-日语-战列舰";
+		 }
+		 else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA.equals ( modtype ) )
+		 {
+		 s = "舰长语音-日语-巡洋舰";
+		 }
+		 else if ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD.equals ( modtype ) )
+		 {
+		 s = "舰长语音-日语-驱逐舰";
+		 }
+		 else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT.equals ( modtype ) )
+		 {
+		 s = "音效(已弃用)";
+		 }
+		 else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM.equals ( modtype ) )
+		 {
+		 s = "主音效";
+		 }
+		 else if ( ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC.equals ( modtype ) )
+		 {
+		 s = "副音效";
+		 }
+		 else
+		 {
+		 s = "未知";
+		 }*/
+		return modType.containsKey ( modtype ) ?modType.get ( modtype ): modType.get ( UNKNOWN );
 	}
 	public static interface OnDataChangedListener
 	{

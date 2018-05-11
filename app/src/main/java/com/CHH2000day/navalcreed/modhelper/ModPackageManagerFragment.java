@@ -190,21 +190,21 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			//如果对应mod包已安装
 			if ( ModPackageManager.getInstance ( ).checkInstalled ( type, subtype ) )
 			{
-				info.setText ( new StringBuilder ( ).append ( getString(R.string.modtype) )
-							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
+				info.setText ( new StringBuilder ( ).append ( getString ( R.string.modtype ) )
+							  .append ( ModPackageManager.getInstance ( ).resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
 							  .append ( ModPackageManager.getInstance ( ).getModName ( keys [ p2 ] ) ) );
 				rl.setOnLongClickListener ( listener );
-				memo.setText(R.string.long_click_to_uninstall);
+				memo.setText ( R.string.long_click_to_uninstall );
 
 			}
 			else
 			{
 				memo.setText ( "" );
-				info.setText ( new StringBuilder ( ).append ( getString(R.string.modtype))
-							  .append ( ModPackageManager.getInstance().resolveModType ( keys [ p2 ] ) )
+				info.setText ( new StringBuilder ( ).append ( getString ( R.string.modtype ) )
+							  .append ( ModPackageManager.getInstance ( ).resolveModType ( keys [ p2 ] ) )
 							  .append ( "\n" )
-							  .append ( getString(R.string.mod_not_installed) ).toString ( ) );
+							  .append ( getString ( R.string.mod_not_installed ) ).toString ( ) );
 			}
 
 
@@ -266,17 +266,17 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 			adb.setTitle ( R.string.notice )
-				.setMessage ( getString(R.string.confirm_to_remove_changes_to_parta) + ModPackageManager.getInstance().resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + getString(R.string.confirm_to_remove_changes_to_partb) )
+				.setMessage ( getString ( R.string.confirm_to_remove_changes_to_parta ) + ModPackageManager.getInstance ( ).resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + getString ( R.string.confirm_to_remove_changes_to_partb ) )
 				.setNegativeButton ( R.string.cancel, null )
 				.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
 
 					@Override
 					public void onClick ( DialogInterface p1, int p2 )
 					{
-						String type=	key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) ?ModPackageInfo.MODTYPE_CV: key;
+						String type=	key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD ) ?ModPackageInfo.MODTYPE_CV: key;
 						String subType=type.equals ( ModPackageInfo.MODTYPE_CV ) ?key: ModPackageInfo.SUBTYPE_EMPTY;
 						boolean b=ModPackageManager.getInstance ( ).requestUninstall ( type, subType , (ModHelperApplication)getActivity ( ).getApplication ( ) );
-						String str=b ?getString(R.string.success): getString(R.string.failed);
+						String str=b ?getString ( R.string.success ): getString ( R.string.failed );
 						Snackbar.make ( v, str, Snackbar.LENGTH_LONG ).show ( );
 						// TODO: Implement this method
 					}
