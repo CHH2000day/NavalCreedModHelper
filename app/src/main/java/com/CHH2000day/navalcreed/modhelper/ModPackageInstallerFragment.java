@@ -347,7 +347,7 @@ public class ModPackageInstallerFragment extends Fragment
 					ad.setCanceledOnTouchOutside ( true );
 					if ( t instanceof ModPackageInfo.IllegalModInfoException )
 					{
-						ad.setMessage ( getString ( -R.string.invalid_mod_info ) + "\n" + t.getLocalizedMessage ( ) );
+						ad.setMessage ( getString ( R.string.invalid_mod_info ) + "\n" + Utils.getErrMsg(t) );
 					}
 					else
 					{
