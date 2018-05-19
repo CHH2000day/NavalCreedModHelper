@@ -73,6 +73,9 @@ public class ModPackageInstallHelper
 		mHandler = new Handler ( ){
 			public void handleMessage ( Message msg )
 			{
+				if(listener==null){
+					return;
+				}
 				switch ( msg.what )
 				{
 					case 0:
