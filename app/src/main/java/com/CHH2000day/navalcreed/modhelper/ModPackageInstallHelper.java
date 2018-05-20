@@ -73,7 +73,7 @@ public class ModPackageInstallHelper
 		mHandler = new Handler ( ){
 			public void handleMessage ( Message msg )
 			{
-				if(listener==null){
+				if(mlistener==null){
 					return;
 				}
 				switch ( msg.what )
