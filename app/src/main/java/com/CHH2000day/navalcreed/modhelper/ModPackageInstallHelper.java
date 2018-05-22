@@ -18,6 +18,7 @@ public class ModPackageInstallHelper
 {
 	//常量声明
 	private static final String FILE_MODINFO="mod.info";
+	private static final String FILE_MODPREVIEW="mod.preview";
 	private static final String PRIMARYPATH_CV=File.separatorChar + "sound" + File.separatorChar + "Voice";
 	private static final String PRIMARYPATH_BGM=File.separatorChar + "sound" + File.separatorChar + "Music";
 	private static final String PRIMARYPATH_SOUNDEFFECT=File.separatorChar + "sound" + File.separatorChar + "soundeffect" + File.separatorChar + "ginsir";
@@ -73,7 +74,8 @@ public class ModPackageInstallHelper
 		mHandler = new Handler ( ){
 			public void handleMessage ( Message msg )
 			{
-				if(mlistener==null){
+				if ( mlistener == null )
+				{
 					return;
 				}
 				switch ( msg.what )
@@ -116,14 +118,7 @@ public class ModPackageInstallHelper
 		//创建mod文件实例
 		fetch ( );
 		//识别Mod文件并读取信息
-		try
-		{
-			identify ( );
-		}
-		catch (JSONException e)
-		{
-			throw new IllegalModInfoException ( "Failed to resolve mod manifest\n" + e.getLocalizedMessage ( ) );
-		}
+		identify ( );
 	}
 
 	public void recycle ( )
@@ -150,7 +145,7 @@ public class ModPackageInstallHelper
 		}
 		mpkgFile = new ZipFile ( msrcFile );
 	}
-	private void identify ( ) throws IOException, ModPackageInfo.IllegalModInfoException, JSONException
+	private void identify ( ) throws IOException, ModPackageInfo.IllegalModInfoException
 	{
 		ZipEntry mInfoFile=mpkgFile.getEntry ( FILE_MODINFO );
 		if ( mInfoFile == null )
@@ -158,7 +153,16 @@ public class ModPackageInstallHelper
 			throw new IllegalModInfoException ( "Could not found mod.info from package" );
 		}
 		InputStream zi=mpkgFile.getInputStream ( mInfoFile );
-		mmpi = ModPackageInfo.Factory.createFromInputStream ( zi );
+		ZipEntry mpicEntry;
+		if ( ( mpicEntry = mpkgFile.getEntry ( FILE_MODPREVIEW ) ) != null )
+		{
+			mmpi = ModPackageInfo.Factory.createFromInputStreamWithExternalPic ( zi, mpkgFile.getInputStream ( mpicEntry ) );
+		}
+		else
+		{
+			mmpi = ModPackageInfo.Factory.createFromInputStream ( zi );
+
+		}
 	}
 	public void beginInstall ( final AppCompatActivity activity )
 	{

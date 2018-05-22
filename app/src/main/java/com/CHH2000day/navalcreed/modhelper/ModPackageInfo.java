@@ -5,13 +5,14 @@ import org.json.*;
 import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
 import android.util.*;
 import java.util.*;
+import android.support.annotation.*;
 
 public class ModPackageInfo
 {
 	//常量声明
 
 	//软件版本
-	public static final int PKGVER=Versions.VER_3;
+	public static final int PKGVER=Versions.VER_4;
 
 	public static final String MODTYPE_CV="CaptainVoice";
 	public static final String MODTYPE_SOUNDEFFECT_PRIM="SoundEffect_PRIM";
@@ -48,85 +49,89 @@ public class ModPackageInfo
 
 
 	static{
-		abandoned_types=new ArrayList<String>();
-		abandoned_types.add(MODTYPE_SOUNDEFFECT);
+		abandoned_types = new ArrayList<String> ( );
+		abandoned_types.add ( MODTYPE_SOUNDEFFECT );
 	}
-	private ModPackageInfo ()
+	private ModPackageInfo ( )
 	{
 
 	}
 
-	public static boolean checkIsAbandoned(String modtype){
-		return abandoned_types.contains(modtype);
+	public static boolean checkIsAbandoned ( String modtype )
+	{
+		return abandoned_types.contains ( modtype );
 	}
-	
-	private void setModName (String modName)
+
+	private void setModName ( String modName )
 	{
 		this.modName = modName;
 	}
 
-	public String getModName ()
+	public String getModName ( )
 	{
 		return modName;
 	}
 
-	private void setModType (String modType)
+	private void setModType ( String modType )
 	{
 		this.modType = modType;
 	}
 
-	public String getModType ()
+	public String getModType ( )
 	{
 		return modType;
 	}
 
-	private void setModAuthor (String modAuthor)
+	private void setModAuthor ( String modAuthor )
 	{
 		this.modAuthor = modAuthor;
 	}
 
-	public String getModAuthor ()
+	public String getModAuthor ( )
 	{
 		return modAuthor;
 	}
 
-	private void setModInfo (String modInfo)
+	private void setModInfo ( String modInfo )
 	{
 		this.modInfo = modInfo;
 	}
 
-	public String getModInfo ()
+	public String getModInfo ( )
 	{
 		return modInfo;
 	}
 
-	private void setModPreview (Bitmap modPreview)
+	private void setModPreview ( Bitmap modPreview )
 	{
 		this.modPreview = modPreview;
 	}
 
-	public boolean hasPreview(){
-		return (modPreview!=null);
+	public boolean hasPreview ( )
+	{
+		return ( modPreview != null );
 	}
-	public Bitmap getModPreview ()
+	public Bitmap getModPreview ( )
 	{
 		return modPreview;
 	}
 
-	private void setModTargetVer (int modTargetVer)
+	private void setModTargetVer ( int modTargetVer )
 	{
 		this.modTargetVer = modTargetVer;
 	}
 
-	public int getModTargetVer ()
+	public int getModTargetVer ( )
 	{
 		return modTargetVer;
 	}
-	public boolean hasAllFeature(){
-		return (PKGVER>=modTargetVer);
+	public boolean hasAllFeature ( )
+	{
+		return ( PKGVER >= modTargetVer );
 	}
-	public boolean isAbandoned(){
-		return checkIsAbandoned(getModType());
+	public boolean isAbandoned ( )
+	{
+		return checkIsAbandoned ( getModType ( ) );
 	}
 
 
@@ -140,51 +145,78 @@ public class ModPackageInfo
 	//使用Factory模式构造该实例
 	public static class Factory
 	{
-		public static ModPackageInfo createFromInputStream (InputStream in) throws IOException, JSONException, ModPackageInfo.IllegalModInfoException
+		public static ModPackageInfo createFromInputStream ( InputStream in ) throws IOException, ModPackageInfo.IllegalModInfoException
 		{
-			if (in == null)
+			if ( in == null )
 			{
 				throw new NullPointerException ( "InputStream could not be null!" );
 			}
-			
-			byte[] cache=Utils.readAllbytes(in);
-			in.close();
+
+			byte[] cache=Utils.readAllbytes ( in );
+			in.close ( );
 			return createFromByteArray ( cache );
 		}
-		public static ModPackageInfo createFromByteArray (byte[]data) throws JSONException, ModPackageInfo.IllegalModInfoException
+		public static ModPackageInfo createFromByteArray ( byte[]data ) throws ModPackageInfo.IllegalModInfoException
 		{
-			if (data == null)
+			if ( data == null )
 			{
 				throw new NullPointerException ( "Data could not be null" );
 			}
-			JSONObject jo=new JSONObject ( new String ( data ) );
-			ModPackageInfo mpi=new ModPackageInfo ( );
-			//检查最低兼容版本
-			if (mpi.PKGVER < jo.getInt ( mpi.KEY_MINSUPPORTVER ))
+			try
 			{
-				throw new IllegalModInfoException ( new StringBuilder ( ).append ( "Installer version is too low.This mod package requires a minimum version of " )
-												   .append ( " " )
-												   .append ( jo.getInt ( mpi.KEY_MINSUPPORTVER ) )
-												   .append ( "." )
-												   .append ( "But mod has a installer version of " )
-												   .append ( " " )
-												   .append ( mpi.PKGVER )
-												   .append ( "." )
-												   .toString ( )
-												   );
-			}
-			mpi.setModName(jo.getString(mpi.KEY_MODNANE));
-			mpi.setModType(jo.getString(mpi.KEY_MODTYPE));
-			mpi.setModAuthor(jo.getString(mpi.KEY_MODAUTHOR));
-			mpi.setModInfo(jo.getString(mpi.KEY_MODINFO));
-			mpi.setModTargetVer(jo.getInt(mpi.KEY_TARGETVER));
-			//检查是否有预览图并解码
-			if(jo.getBoolean(mpi.KEY_HASPREVIEW)){
-				byte[] piccache=android.util.Base64.decode(jo.getString(mpi.KEY_PREVIEW),android.util.Base64.DEFAULT);
-				mpi.setModPreview(BitmapFactory.decodeByteArray(piccache,0,piccache.length));
-			}
+				JSONObject jo=new JSONObject ( new String ( data ) );
+				ModPackageInfo mpi=new ModPackageInfo ( );
+				//检查最低兼容版本
+				if ( mpi.PKGVER < jo.getInt ( mpi.KEY_MINSUPPORTVER ) )
+				{
+					throw new IllegalModInfoException ( new StringBuilder ( ).append ( "Installer version is too low.This mod package requires a minimum version of " )
+													   .append ( " " )
+													   .append ( jo.getInt ( mpi.KEY_MINSUPPORTVER ) )
+													   .append ( "." )
+													   .append ( "But mod has a installer version of " )
+													   .append ( " " )
+													   .append ( mpi.PKGVER )
+													   .append ( "." )
+													   .toString ( )
+													   );
+				}
+				mpi.setModName ( jo.getString ( mpi.KEY_MODNANE ) );
+				mpi.setModType ( jo.getString ( mpi.KEY_MODTYPE ) );
+				mpi.setModAuthor ( jo.getString ( mpi.KEY_MODAUTHOR ) );
+				mpi.setModInfo ( jo.getString ( mpi.KEY_MODINFO ) );
+				mpi.setModTargetVer ( jo.getInt ( mpi.KEY_TARGETVER ) );
+				//检查是否有预览图并解码
+				String b64pic=jo.getString ( mpi.KEY_PREVIEW );
+				//Not to laod pic in mod.info if it's smaller than 40 bytes
+				//If external preview is used keep the value empty(recommended) or less than 60 bytes long
+				//NO preview pic can be shortrer than 40 bytes(60 bytes after encoded into base64)
+				if ( jo.getBoolean ( mpi.KEY_HASPREVIEW ) && b64pic != null && b64pic.length ( ) >= 60 )
+				{
+					byte[] piccache=android.util.Base64.decode ( jo.getString ( mpi.KEY_PREVIEW ), android.util.Base64.DEFAULT );
+					mpi.setModPreview ( BitmapFactory.decodeByteArray ( piccache, 0, piccache.length ) );
+				}
+				return mpi;
 
-			return mpi;
+			}
+			catch (JSONException e)
+			{
+				throw new IllegalModInfoException ( "Invalid mod.info" );
+			}
+		}
+		public static ModPackageInfo createFromInputStreamWithExternalPic ( InputStream in, @NonNull InputStream picStream ) throws IOException, ModPackageInfo.IllegalModInfoException
+		{
+			ModPackageInfo info=createFromInputStream ( in );
+			if ( info.hasPreview ( ) )
+			{
+				info.setModPreview ( BitmapFactory.decodeStream ( picStream ) );
+			}
+			return info;
+		}
+		public static ModPackageInfo createFromInputstreamWIthExternalPic ( InputStream in, @NonNull Bitmap pic ) throws IOException, ModPackageInfo.IllegalModInfoException
+		{
+			ModPackageInfo info=createFromInputStream ( in );
+			info.setModPreview ( pic );
+			return info;
 		}
 	}
 
@@ -194,12 +226,13 @@ public class ModPackageInfo
 
 	public static class IllegalModInfoException extends Exception
 	{
-		public IllegalModInfoException (String info)
+		public IllegalModInfoException ( String info )
 		{
 			super ( info );
 		}
 	}
-	public static final class Versions{
+	public static final class Versions
+	{
 		public static final int VER_0=0;
 		//ver0 -> ver1 enable soundeffect support
 		public static final int VER_1=1;
@@ -207,5 +240,7 @@ public class ModPackageInfo
 		public static final int VER_2=2;
 		//ver2 -> ver3 add support for replacing Japanese Captain Voice.
 		public static final int VER_3=3;
+		//ver3 -> ver4 support for external mod preview
+		public static final int VER_4=4;
 	}
 }
