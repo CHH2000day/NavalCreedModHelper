@@ -206,10 +206,7 @@ public class ModPackageInfo
 		public static ModPackageInfo createFromInputStreamWithExternalPic ( InputStream in, @NonNull InputStream picStream ) throws IOException, ModPackageInfo.IllegalModInfoException
 		{
 			ModPackageInfo info=createFromInputStream ( in );
-			if ( info.hasPreview ( ) )
-			{
-				info.setModPreview ( BitmapFactory.decodeStream ( picStream ) );
-			}
+			info.setModPreview ( BitmapFactory.decodeStream ( picStream ) );
 			return info;
 		}
 		public static ModPackageInfo createFromInputstreamWIthExternalPic ( InputStream in, @NonNull Bitmap pic ) throws IOException, ModPackageInfo.IllegalModInfoException
