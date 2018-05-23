@@ -6,6 +6,7 @@ import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
 import android.util.*;
 import java.util.*;
 import android.support.annotation.*;
+import java.lang.ref.*;
 
 public class ModPackageInfo
 {
@@ -44,8 +45,9 @@ public class ModPackageInfo
 	private String modType;
 	private String modAuthor;
 	private String modInfo;
-	private Bitmap modPreview;
+	private SoftReference<Bitmap> modPreview;
 	private int modTargetVer;
+	private byte[] byteizedPic;
 
 
 	static{
@@ -102,18 +104,21 @@ public class ModPackageInfo
 		return modInfo;
 	}
 
-	private void setModPreview ( Bitmap modPreview )
+	private void setModPreview ( byte[] data )
 	{
-		this.modPreview = modPreview;
+		byteizedPic = data;
+		data = null;
+		performPreviewLoad ( );
 	}
+
 
 	public boolean hasPreview ( )
 	{
-		return ( modPreview != null );
+		return ( getModPreview ( ) != null );
 	}
 	public Bitmap getModPreview ( )
 	{
-		return modPreview;
+		return doGetModPreview ( );
 	}
 
 	private void setModTargetVer ( int modTargetVer )
@@ -133,10 +138,44 @@ public class ModPackageInfo
 	{
 		return checkIsAbandoned ( getModType ( ) );
 	}
+	private Bitmap doGetModPreview ( )
+	{
+		if ( modPreview.get ( ) != null )
+		{
+			return modPreview.get ( );
+		}
+		if ( performPreviewLoad ( ) )
+		{
+			return modPreview.get ( );
+		}
+		else
+		{
+			return null;
+		}
+	}
+	private boolean performPreviewLoad ( )
+	{
+		if ( byteizedPic == null || byteizedPic.length == 0 )
+		{
+			return false;
+		}
+		modPreview = new SoftReference<Bitmap> ( BitmapFactory.decodeByteArray ( byteizedPic, 0, byteizedPic.length ) );
+		return ( modPreview.get ( ) != null );
+	}
+	private void setModPreview ( Bitmap bitmap )
+	{
+		modPreview = new SoftReference<Bitmap> ( bitmap );
+	}
 
-
-
-
+	@Override
+	public void finalize ( ) throws Throwable
+	{
+		// TODO: Implement this method
+		super.finalize ( );
+		if(modPreview!=null&&modPreview.get()!=null){
+			modPreview.get().recycle();
+		}
+	}
 
 
 
@@ -193,7 +232,7 @@ public class ModPackageInfo
 				if ( jo.getBoolean ( mpi.KEY_HASPREVIEW ) && b64pic != null && b64pic.length ( ) >= 60 )
 				{
 					byte[] piccache=android.util.Base64.decode ( jo.getString ( mpi.KEY_PREVIEW ), android.util.Base64.DEFAULT );
-					mpi.setModPreview ( BitmapFactory.decodeByteArray ( piccache, 0, piccache.length ) );
+					mpi.setModPreview ( piccache  );
 				}
 				return mpi;
 
@@ -206,15 +245,17 @@ public class ModPackageInfo
 		public static ModPackageInfo createFromInputStreamWithExternalPic ( InputStream in, @NonNull InputStream picStream ) throws IOException, ModPackageInfo.IllegalModInfoException
 		{
 			ModPackageInfo info=createFromInputStream ( in );
-			 info.setModPreview ( BitmapFactory.decodeStream ( picStream ) );
+			info.setModPreview ( Utils.readAllbytes ( picStream ) );
 			return info;
 		}
+
 		public static ModPackageInfo createFromInputstreamWIthExternalPic ( InputStream in, @NonNull Bitmap pic ) throws IOException, ModPackageInfo.IllegalModInfoException
 		{
 			ModPackageInfo info=createFromInputStream ( in );
 			info.setModPreview ( pic );
 			return info;
 		}
+		
 	}
 
 
