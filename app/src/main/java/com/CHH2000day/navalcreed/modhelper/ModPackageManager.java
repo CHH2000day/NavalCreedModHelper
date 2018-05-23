@@ -5,11 +5,12 @@ import okio.*;
 import org.json.*;
 import android.content.*;
 import android.content.res.*;
+import java.util.concurrent.*;
 
 public class ModPackageManager
 {
 	//<ModType,ModName>
-	private HashMap<String,String> installedMod;
+	private ConcurrentHashMap<String,String> installedMod;
 	private File configFile;
 	private boolean isOverride=false;
 	private static final String OVRD="override";
@@ -25,7 +26,6 @@ public class ModPackageManager
 	static{
 		used_prim_keys = Arrays.copyOf ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS );
 		used_sec_keys = Arrays.copyOfRange ( PUBLIC_KEYS, PUBLIC_KEYS.length - SEC_KEY_COUNTS, PUBLIC_KEYS.length );
-
 	}
 	public void setonDataChangedListener ( OnDataChangedListener odcl )
 	{
@@ -68,7 +68,7 @@ public class ModPackageManager
 	public void config ( File storedFile ) throws  IOException, JSONException
 	{
 		configFile = storedFile;
-		installedMod = new HashMap<String,String> ( );
+		installedMod = new ConcurrentHashMap<String,String> ( );
 		reflesh ( );
 	}
 	private void reflesh ( ) throws JSONException, IOException
@@ -181,7 +181,7 @@ public class ModPackageManager
 			subt = ModPackageInstallHelper.SUBTYPE_CV_JP_DD;
 		}
 		String path=ModPackageInstallHelper.getPath ( modtype, subt, app );
-		if ( path.equals ( "" ) || path.equals ( app.getResFilesDirPath ( ) ) || path.equals ( app.getResPath ( ) ))
+		if ( path.equals ( "" ) || path.equals ( app.getResFilesDirPath ( ) ) || path.equals ( app.getResPath ( ) ) )
 
 		{
 			return false;
@@ -262,63 +262,65 @@ public class ModPackageManager
 
 	private void updateConfig ( boolean isNew ) throws JSONException, IOException
 	{
-		JSONObject jo=new JSONObject ( );
-		if ( isNew || installedMod.isEmpty ( ) )
-		{
-			/*
-			 jo.put ( ModPackageInfo.MODTYPE_BGM, "" );
-			 jo.put ( ModPackageInfo.MODTYPE_BACKGROUND, "" );
-			 jo.put ( ModPackageInfo.MODTYPE_CREWPIC, "" );
-			 jo.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, "" );
-
-			 JSONObject jcv=new JSONObject ( );
-			 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, "" );
-			 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, "" );
-			 jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
-			 writeConfigFile ( jo );*/
-			for ( String type:used_prim_keys )
+		synchronized(installedMod){
+			JSONObject jo=new JSONObject ( );
+			if ( isNew || installedMod.isEmpty ( ) )
 			{
+				/*
+				 jo.put ( ModPackageInfo.MODTYPE_BGM, "" );
+				 jo.put ( ModPackageInfo.MODTYPE_BACKGROUND, "" );
+				 jo.put ( ModPackageInfo.MODTYPE_CREWPIC, "" );
+				 jo.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, "" );
 
-				jo.put ( type, "" );
+				 JSONObject jcv=new JSONObject ( );
+				 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, "" );
+				 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, "" );
+				 jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
+				 writeConfigFile ( jo );*/
+				for ( String type:used_prim_keys )
+				{
 
+					jo.put ( type, "" );
+
+				}
+				JSONObject jcv=new JSONObject ( );
+				for ( String subc:used_sec_keys )
+				{
+					jcv.put ( subc, "" );
+				}
+				jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
+				writeConfigFile ( jo );
+				return;			
 			}
-			JSONObject jcv=new JSONObject ( );
-			for ( String subc:used_sec_keys )
+			else
 			{
-				jcv.put ( subc, "" );
-			}
-			jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
-			writeConfigFile ( jo );
-			return;			
-		}
-		else
-		{
-			/*
-			 jo.put ( ModPackageInfo.MODTYPE_BGM, getValue ( ModPackageInfo.MODTYPE_BGM ) );
-			 jo.put ( ModPackageInfo.MODTYPE_BACKGROUND, getValue ( ModPackageInfo.MODTYPE_BACKGROUND ) );
-			 jo.put ( ModPackageInfo.MODTYPE_CREWPIC, getValue ( ModPackageInfo.MODTYPE_CREWPIC ) );
-			 jo.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, getValue ( ModPackageInfo.MODTYPE_SOUNDEFFECT ) );
-			 JSONObject jcv=new JSONObject ( );
-			 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, getValue ( ModPackageInfo.SUB_MODTYPE_CV_CN ) );
-			 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, getValue ( ModPackageInfo.SUB_MODTYPE_CV_EN ) );
-			 jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
-			 jo.put ( OVRD, isOverride );
-			 writeConfigFile ( jo );
-			 */
-			for ( String type:used_prim_keys )
-			{
+				/*
+				 jo.put ( ModPackageInfo.MODTYPE_BGM, getValue ( ModPackageInfo.MODTYPE_BGM ) );
+				 jo.put ( ModPackageInfo.MODTYPE_BACKGROUND, getValue ( ModPackageInfo.MODTYPE_BACKGROUND ) );
+				 jo.put ( ModPackageInfo.MODTYPE_CREWPIC, getValue ( ModPackageInfo.MODTYPE_CREWPIC ) );
+				 jo.put ( ModPackageInfo.MODTYPE_SOUNDEFFECT, getValue ( ModPackageInfo.MODTYPE_SOUNDEFFECT ) );
+				 JSONObject jcv=new JSONObject ( );
+				 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_CN, getValue ( ModPackageInfo.SUB_MODTYPE_CV_CN ) );
+				 jcv.put ( ModPackageInfo.SUB_MODTYPE_CV_EN, getValue ( ModPackageInfo.SUB_MODTYPE_CV_EN ) );
+				 jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
+				 jo.put ( OVRD, isOverride );
+				 writeConfigFile ( jo );
+				 */
+				for ( String type:used_prim_keys )
+				{
 
-				jo.put ( type, getValue ( type ) );
+					jo.put ( type, getValue ( type ) );
 
+				}
+				JSONObject jcv=new JSONObject ( );
+				for ( String subc:used_sec_keys )
+				{
+					jcv.put ( subc, getValue ( subc ) );
+				}
+				jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
+				jo.put ( OVRD, isOverride );
+				writeConfigFile ( jo );
 			}
-			JSONObject jcv=new JSONObject ( );
-			for ( String subc:used_sec_keys )
-			{
-				jcv.put ( subc, getValue ( subc ) );
-			}
-			jo.put ( ModPackageInfo.MODTYPE_CV, jcv );
-			jo.put ( OVRD, isOverride );
-			writeConfigFile ( jo );
 		}
 
 
@@ -357,7 +359,7 @@ public class ModPackageManager
 		return isOverride;
 	}
 
-	public HashMap<String,String> getModList ( )
+	public ConcurrentHashMap<String,String> getModList ( )
 	{
 		return installedMod;
 	}
