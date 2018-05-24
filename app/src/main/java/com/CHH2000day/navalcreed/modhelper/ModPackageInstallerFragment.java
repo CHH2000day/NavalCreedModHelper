@@ -155,7 +155,7 @@ public class ModPackageInstallerFragment extends Fragment
 		if ( isCache )
 		{
 			Utils.delDir ( mpih.getSourceFile ( ) );
-			isCache=false;
+			isCache = false;
 		}
 
 		preview.setImageResource ( R.drawable.no_preview );
@@ -192,7 +192,7 @@ public class ModPackageInstallerFragment extends Fragment
 							{
 								if ( msg.what == 0 )
 								{
-									isCache=true;
+									isCache = true;
 									load ( (File)msg.obj  );
 								}
 								else
@@ -284,7 +284,7 @@ public class ModPackageInstallerFragment extends Fragment
 		}
 		else
 		{
-			isCache=false;
+			isCache = false;
 			load ( new File ( filepath ) );
 		}
 
@@ -292,7 +292,7 @@ public class ModPackageInstallerFragment extends Fragment
 
 
 
-	private void load ( final File source)
+	private void load ( final File source )
 	{
 		AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 		adb.setTitle ( R.string.please_wait )
@@ -345,9 +345,10 @@ public class ModPackageInstallerFragment extends Fragment
 				{
 					ad.setCancelable ( true );
 					ad.setCanceledOnTouchOutside ( true );
+					ad.setTitle ( getString ( R.string.error ) );
 					if ( t instanceof ModPackageInfo.IllegalModInfoException )
 					{
-						ad.setMessage ( getString ( R.string.invalid_mod_info ) + "\n" + Utils.getErrMsg(t) );
+						ad.setMessage ( getString ( R.string.invalid_mod_info ) + "\n" + Utils.getErrMsg ( t ) );
 					}
 					else
 					{
@@ -357,7 +358,7 @@ public class ModPackageInstallerFragment extends Fragment
 					{
 						Utils.delDir ( source );
 					}
-					mpih=null;
+					mpih = null;
 					// TODO: Implement this method
 				}
 
