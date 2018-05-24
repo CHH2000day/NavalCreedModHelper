@@ -9,6 +9,7 @@ import java.io.*;
 import android.widget.*;
 import android.os.*;
 import android.support.v7.app.*;
+import okio.*;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 {
@@ -93,15 +94,30 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 		final long time=System.currentTimeMillis ( );
 
 		String filename=String.valueOf ( time ) + ".log";
-		final File file=new File ( parent, filename );try
+		final File file=new File ( parent, filename );
+		try
 		{
-			FileOutputStream fos=new FileOutputStream ( file );
-			fos.write ( stringWriter.toString ( ).getBytes ( ) );
-			fos.close ( );
+			/*
+			 FileOutputStream fos=new FileOutputStream ( file );
+			 fos.write ( stringWriter.toString ( ).getBytes ( ) );
+			 fos.close ( );
+			 */
+			Sink s=Okio.sink ( file );
+			BufferedSink bs=Okio.buffer ( s );
+			bs.writeUtf8 ( String.format ( "Device:%s %n", Build.DEVICE ) );
+			bs.writeUtf8 ( String.format ( "App ver:%s %n", app_ver ) );
+			bs.writeUtf8 ( String.format ( "App ver_int:%d %n", app_ver_int ) );
+			bs.writeUtf8 ( stringWriter.toString ( ) );
+			bs.flush ( );
+			bs.close ( );
+			s.close ( );
+
 
 		}
 		catch (Exception e)
-		{e.printStackTrace ( );}
+		{
+			e.printStackTrace ( );
+		}
 		ctx.getSharedPreferences ( PREF_NAME, 0 ).edit ( ).putLong ( ERRTIME, time ).commit ( );
 		android.os.Process.killProcess ( android.os.Process.myPid ( ) );
 		/*F
