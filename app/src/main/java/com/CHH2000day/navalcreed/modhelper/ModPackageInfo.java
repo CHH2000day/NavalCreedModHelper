@@ -140,6 +140,10 @@ public class ModPackageInfo
 	}
 	private Bitmap doGetModPreview ( )
 	{
+		if ( modPreview == null )
+		{
+			return null;
+		}
 		if ( modPreview.get ( ) != null )
 		{
 			return modPreview.get ( );
@@ -172,8 +176,9 @@ public class ModPackageInfo
 	{
 		// TODO: Implement this method
 		super.finalize ( );
-		if(modPreview!=null&&modPreview.get()!=null){
-			modPreview.get().recycle();
+		if ( modPreview != null && modPreview.get ( ) != null )
+		{
+			modPreview.get ( ).recycle ( );
 		}
 	}
 
@@ -255,7 +260,7 @@ public class ModPackageInfo
 			info.setModPreview ( pic );
 			return info;
 		}
-		
+
 	}
 
 
