@@ -117,7 +117,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		fragments.add ( mBGReplacerFragment );
 		fragments.add ( mLoginMovieReplacer );
 		fragments.add ( mCrewPicReplacerFragment );
-		if(getResources().getConfiguration().locale.getLanguage().contains("zh")){
+		if ( getResources ( ).getConfiguration ( ).locale.getLanguage ( ).contains ( "zh" ) )
+		{
 			fragments.add ( mAntiHexieFragment );
 		}
 		fragments.add ( mBGMReplacerFragment );
@@ -778,7 +779,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										{
 											return;
 										}
-										Snackbar.make ( mViewPager,R.string.downloading, Snackbar.LENGTH_LONG ).show ( );
+										Snackbar.make ( mViewPager, R.string.downloading, Snackbar.LENGTH_LONG ).show ( );
 										AlertDialog.Builder db=new AlertDialog.Builder ( Main.this );
 										db.setTitle ( R.string.please_wait )
 											.setMessage ( R.string.downloading )
@@ -858,7 +859,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 						if ( id > currid )
 						{
-							adb0.setTitle (R.string.announcement)
+							adb0.setTitle ( R.string.announcement )
 								.setMessage ( bmobmsg.getMessage ( ) )
 								.setPositiveButton ( R.string.ok, null )
 								.setNeutralButton  (  R.string.dont_show, new DialogInterface.OnClickListener ( ){
@@ -954,7 +955,20 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						// TODO: Implement this method
 					}
 				} );
+			btnEnter.setOnLongClickListener ( new OnLongClickListener ( ){
 
+					@Override
+					public boolean onLongClick ( View p1 )
+					{
+						ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );
+						cmb.setText(getDevId());
+						// TODO: Implement this method
+						return true;
+					}
+
+
+
+				} );
 			// TODO: Implement this method
 		}
 
