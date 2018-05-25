@@ -10,22 +10,94 @@ import java.io.*;
 import android.support.v7.app.*;
 import android.content.*;
 import android.support.design.widget.*;
+import android.graphics.drawable.*;
+import android.graphics.*;
 
 public class AboutFragment extends Fragment
 {
 	private View v;
-	private Button license,pkgname;
+	private Button license,pkgname,donate;
 	private int selectedItem=0;
 	private ModHelperApplication app;
 	private TextView mtextview;
 	@Override
-	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
+	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{	app = (ModHelperApplication)getActivity ( ).getApplication ( );
 		app.getPkgNameNum ( app.getMainSharedPrederences ( ).getString ( app.KEY_PKGNAME, app.CN ) );
 		v = inflater.inflate ( R.layout.about_fragment, null );
 		license = (Button)v.findViewById ( R.id.aboutfragmentLicense );
 		pkgname = (Button)v.findViewById ( R.id.aboutfragmentButtonselectpkg );
 		mtextview = (TextView)v.findViewById ( R.id.aboutfragmentTextView );
+		donate = v.findViewById ( R.id.aboutfragmentButtonDonate );
+		if ( !isChineseEnvironment ( ) )
+		{
+			donate.setVisibility ( View.GONE );
+		}
+		else
+		{
+			donate.setOnClickListener ( new OnClickListener ( ){
+
+					@Override
+					public void onClick ( View p1 )
+					{
+						AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+						View diaView=inflater.inflate ( R.layout.dialog_donate, null );
+						final ImageView ali=diaView.findViewById ( R.id.dialogdonateImageAlipay );
+						final ImageView wechat=diaView.findViewById ( R.id.dialogdonateImageWeChat );
+						OnLongClickListener listener=new OnLongClickListener ( ){
+
+							@Override
+							public boolean onLongClick ( View p1 )
+							{
+								Snackbar sb=Snackbar.make ( v, "二维码已保存到本地文件夹", Snackbar.LENGTH_LONG );
+								switch ( p1.getId ( ) )
+								{
+									case R.id.dialogdonateImageAlipay:
+										try
+										{
+											BitmapDrawable bd=(BitmapDrawable)ali.getDrawable ( );
+											Bitmap b=bd.getBitmap ( );
+											FileOutputStream fos=new FileOutputStream ( new File ( getContext ( ).getExternalFilesDir ( Environment.DIRECTORY_PICTURES ), "donat_alipay.jpg" ) );
+											b.compress ( Bitmap.CompressFormat.JPEG, 100, fos );
+											fos.flush ( );
+											fos.close ( );
+											sb.show ( );
+										}
+										catch (IOException e)
+										{}
+										break;
+									case R.id.dialogdonateImageWeChat:
+										try
+										{
+											BitmapDrawable bd=(BitmapDrawable)wechat.getDrawable ( );
+											Bitmap b=bd.getBitmap ( );
+											FileOutputStream fos=new FileOutputStream ( new File ( getContext ( ).getExternalFilesDir ( Environment.DIRECTORY_PICTURES ), "donat_wechat.jpg" ) );
+											b.compress ( Bitmap.CompressFormat.JPEG, 100, fos );
+											fos.flush ( );
+											fos.close ( );
+											sb.show ( );
+										}
+										catch (IOException e)
+										{}
+										break;
+									default:
+										break;
+								}
+								// TODO: Implement this method
+								return true;
+							}
+						};
+						ali.setOnLongClickListener ( listener );
+						wechat.setOnLongClickListener ( listener );
+						adb.setTitle ( "捐赠" )
+							.setView ( diaView )
+							.setPositiveButton ( R.string.ok, null );
+						adb.create ( ).show ( );
+						// TODO: Implement this method
+					}
+				} );
+			
+		}
 		if ( BuildConfig.DEBUG )
 		{
 			mtextview.setText ( new StringBuilder ( ).append ( "Device id:" )
@@ -38,9 +110,9 @@ public class AboutFragment extends Fragment
 					@Override
 					public void onClick ( View p1 )
 					{
-						ClipboardManager cmb = (ClipboardManager)getActivity().getSystemService ( Context.CLIPBOARD_SERVICE );  
+						ClipboardManager cmb = (ClipboardManager)getActivity ( ).getSystemService ( Context.CLIPBOARD_SERVICE );  
 						cmb.setText ( Build.SERIAL );  
-						Snackbar.make(v,"Device id has been copied",Snackbar.LENGTH_LONG).show();
+						Snackbar.make ( v, "Device id has been copied", Snackbar.LENGTH_LONG ).show ( );
 						// TODO: Implement this method
 					}
 				} );
@@ -104,6 +176,10 @@ public class AboutFragment extends Fragment
 		return v;
 	}
 
+	private boolean isChineseEnvironment ( )
+	{
+		return getResources ( ).getConfiguration ( ).locale.getLanguage ( ).contains ( "zh" );
+	}
 	@Override
 	public void onResume ( )
 	{
