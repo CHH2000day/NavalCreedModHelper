@@ -97,7 +97,7 @@ public class ModPackageInstallHelper
 					try
 					{
 						load ( );
-						totalFileSize = calculateTatalSize ( );
+						totalFileSize = calculateTotalSize ( );
 						mHandler.sendEmptyMessage ( 0 );
 					}
 					catch (IOException e)
@@ -168,14 +168,14 @@ public class ModPackageInstallHelper
 	{
 		checkVersion ( activity );
 	}
-	private long calculateTatalSize ( )
+	private long calculateTotalSize ( )
 	{
 		Enumeration<? extends ZipEntry> en=mpkgFile.entries ( );
 		long totalsize=0;
 		while ( en.hasMoreElements ( ) )
 		{
 			ZipEntry entry=en.nextElement ( );
-			if ( entry.getName ( ).equals ( FILE_MODINFO ) )
+			if ( entry.getName ( ).equals ( FILE_MODINFO ) || entry.getName ( ).equals ( FILE_MODPREVIEW ) )
 			{
 				continue;
 			}
