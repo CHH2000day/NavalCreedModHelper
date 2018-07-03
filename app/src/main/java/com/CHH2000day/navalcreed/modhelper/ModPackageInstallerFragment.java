@@ -382,8 +382,11 @@ public class ModPackageInstallerFragment extends Fragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if ( QUERY_CODE == requestCode && AppCompatActivity.RESULT_OK == resultCode && data != null )
+		if ( QUERY_CODE == requestCode && AppCompatActivity.RESULT_OK == resultCode && data != null)
 		{
+			if(data.getData()==null){
+				Snackbar.make(v,R.string.source_file_cannot_be_empty,Snackbar.LENGTH_LONG).show();
+			}
 			selectFile ( data.getData ( ) );
 		}
 	}
