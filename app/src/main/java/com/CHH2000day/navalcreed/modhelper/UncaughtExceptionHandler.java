@@ -18,6 +18,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 	private File parent;
 	private static final String PREF_NAME="bugly";
 	private static final String ERRTIME="errtime";
+	private String type="unknown";
 	private static UncaughtExceptionHandler exceptionHandler;
 	private UncaughtExceptionHandler()
 	{}
@@ -40,7 +41,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
 		app_ver_int = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionCode;
 		parent = ctx.getExternalFilesDir("err-log");
-
+		type = ctx.getString(R.string.buildtype);
 		checkUnpostedBug();
 
 	}
@@ -52,7 +53,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 		{return;}
 		else
 		{
-			Log.d("Bugly", "Post unposted log");
+			Log.d("Bugly", "Posting unposted log");
 			Toast.makeText(ctx, "提交之前错误日志中", Toast.LENGTH_LONG).show();
 			final File tgt=new File(parent, new StringBuilder().append(time).append(".log").toString());
 			try
@@ -107,6 +108,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 			bs.writeUtf8(String.format("Device:%s (%s)%n", Build.MODEL, Build.DEVICE));
 			bs.writeUtf8(String.format("App ver:%s %n", app_ver));
 			bs.writeUtf8(String.format("App ver_int:%d %n", app_ver_int));
+			bs.writeUtf8(String.format("Build type:%s %n", type));
 			bs.writeUtf8(stringWriter.toString());
 			bs.flush();
 			bs.close();

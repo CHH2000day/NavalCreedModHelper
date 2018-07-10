@@ -26,3 +26,9 @@ https://github.com/square/okhttp
 Copyright(C) 2013,Square,Inc,
  Licensed under the Apache License, Version 2.0 (the "License");
 http://www.apache.org/licenses/LICENSE-2.0
+
+**ffmpeg-android
+lib:com.writingminds:FFmpegAndroid:0.3.2
+from:https://github.com/WritingMinds/ffmpeg-android-java
+Licensed under the GNU General Public License v3.0
+license:http://www.gnu.org/licenses
