@@ -3,10 +3,10 @@ apply plugin: 'com.android.application'
 android {
 	productFlavors {
 		common {
-
+			versionNameSuffix "-common"
 		}
 		ffmpeg {
-			
+			versionNameSuffix "-ffmpeg"
 		}
 	}
 
@@ -18,8 +18,8 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 68
-        versionName "Alpha-build2018070700"
+        versionCode 70
+        versionName "Alpha-build2018071100"
     }
     buildTypes {
         release {
@@ -39,7 +39,7 @@ dependencies {
 	compile 'com.android.support:appcompat-v7:25.4.0'
 	compile 'com.android.support:recyclerview-v7:25.4.0'
 	compile 'com.android.support:cardview-v7:25.4.0'
-	compile "com.writingminds:FFmpegAndroid:0.3.2"
-
+	ffmpegCompile "com.writingminds:FFmpegAndroid:0.3.2"
+	compile 'com.squareup.okio:okio:1.14.1'
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 }
