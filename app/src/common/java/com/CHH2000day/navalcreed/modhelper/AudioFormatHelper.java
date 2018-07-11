@@ -95,13 +95,10 @@ public class AudioFormatHelper
 	}
 	public String compressToWav(final File targetFile, final Handler UIHandler)
 	{
-		if (!targetFile.getParentFile().exists())
-		{
-			targetFile.getParentFile().mkdirs();
-		}
+		Utils.ensureFileParent(targetFile);
 		String errorcode="";
 		UIHandler.sendEmptyMessage(STATUS_START);
-		InputStream in=null;
+		BufferedSource bsource=null;
 		File cachedFile=getValidCacheFile();
 		if (!isProcessed || cachedFile == null)
 		{	try
@@ -109,14 +106,14 @@ public class AudioFormatHelper
 				//验证源文件是否已为wav格式
 				if (srcFile != null)
 				{
-					in = new FileInputStream(srcFile);
+					bsource = Okio.buffer(Okio.source(srcFile));
 				}
 				else
 				{
-					in = mcontext.getContentResolver().openInputStream(srcFileUri);
+					bsource = Okio.buffer(Okio.source(mcontext.getContentResolver().openInputStream(srcFileUri)));
 				}
 				byte[] b=new byte[4];
-				in.read(b);
+				bsource.read(b);
 				if (Arrays.equals(b, HEADER_WAV))
 				{
 
@@ -158,10 +155,6 @@ public class AudioFormatHelper
 			//如果存在已处理好的缓存文件，直接复制
 			if (isProcessed && cachedFile != null && cachedFile.exists())
 			{
-				if (!targetFile.getParentFile().exists())
-				{
-					targetFile.getParentFile().mkdirs();
-				}
 				Utils.copyFile(cachedFile, targetFile);
 
 			}
@@ -174,12 +167,7 @@ public class AudioFormatHelper
 				if (isUnneededtocompress)
 				{
 					f.write(HEADER_WAV);
-					byte[] cache=new byte[2048];
-					int len;
-					while ((len = in.read(cache)) != -1)
-					{
-						f.write(cache, 0, len);
-					}
+					f.writeAll(bsource);
 				}
 				else
 				{
@@ -189,20 +177,17 @@ public class AudioFormatHelper
 						throw new IOException("Unable to raed transcode cache,it may have been deleted by system");
 					}
 					FileInputStream fis=new FileInputStream(cacheFile);
+					BufferedSource bs=Okio.buffer(Okio.source(fis));
 					f.write(getWavHeader(fis.available()));	
-					int len;
-					byte[] cache=new byte[2048];
-					while ((len = fis.read(cache)) != -1)
-					{
-						f.write(cache, 0, len);
-					}
-					fis.close();
+					f.writeAll(bs);
+					bs.close();
 				}
 				f.flush();
 				f.close();
-				if (in != null)
+				if (bsource != null)
 				{
-					in.close();}
+					bsource.close();
+				}
 				activeCache(targetFile);
 			}
 
@@ -289,11 +274,8 @@ public class AudioFormatHelper
 		UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
 
 		//创建缓存文件的输出流
-		if (!cacheFile.getParentFile().exists())
-		{
-			cacheFile.getParentFile().mkdirs();
-		}
-		final FileOutputStream fos=new FileOutputStream(cacheFile);
+		Utils.ensureFileParent(cacheFile);
+		final BufferedSink bs=Okio.buffer(Okio.sink((cacheFile)));
 		mc.setCallback(new MediaCodec.Callback(){
 
 				int role=0;
@@ -327,7 +309,7 @@ public class AudioFormatHelper
 					{//如果解码器提示数据读完，停止输入数据，关闭输出流，通知主线程
 						try
 						{
-							fos.close();
+							bs.close();
 						}
 						catch (IOException e)
 						{//忽略
@@ -349,7 +331,7 @@ public class AudioFormatHelper
 						//将解码后数据写入本地缓存
 						try
 						{
-							fos.write(b, 0, b.length);
+							bs.write(b, 0, b.length);
 						}
 						catch (IOException e)
 						{
