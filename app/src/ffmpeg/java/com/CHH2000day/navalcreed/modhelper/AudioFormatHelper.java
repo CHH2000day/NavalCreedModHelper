@@ -29,6 +29,7 @@ public class AudioFormatHelper
 	 private ByteArrayOutputStream decodeddata;
 	 */
 	private boolean isdecoded=false;
+	private boolean isProcessed=false;
 	private boolean useCacheFile=false;
 	//需要用到的UI操作的部分
 	private Handler mEmptyHandler;
@@ -106,104 +107,119 @@ public class AudioFormatHelper
 		UIHandler.sendEmptyMessage(STATUS_START);
 		useCacheFile = (srcFileUri != null);
 		hasError = false;
+
 		try
 		{
-			if (useCacheFile)
+			File cachedFile=getValidCacheFile();
+			if (isProcessed && cachedFile != null && cachedFile.exists())
 			{
-				srcFile = new File(mcontext.getCacheDir(), "cache.audio");
-				Source source=Okio.source(mcontext.getContentResolver().openInputStream(srcFileUri));
-				Sink sink=Okio.sink(srcFile);
-				BufferedSink bs=Okio.buffer(sink);
-				bs.writeAll(source);
-				bs.flush();
-				bs.close();
-				source.close();
-
+				UIHandler.sendEmptyMessage(STATUS_WRITING);
+				Utils.copyFile(cachedFile, targetFile);
+				UIHandler.sendEmptyMessage(STATUS_DONE);
+				isDone = true;
 			}
-			
-			final FFmpeg ffmpeg=FFmpeg.getInstance(mcontext);
-			ffmpeg.loadBinary(new FFmpegLoadBinaryResponseHandler(){
+			else
+			{
+				if (useCacheFile)
+				{
+					srcFile = new File(mcontext.getCacheDir(), "cache.audio");
+					Source source=Okio.source(mcontext.getContentResolver().openInputStream(srcFileUri));
+					Sink sink=Okio.sink(srcFile);
+					BufferedSink bs=Okio.buffer(sink);
+					bs.writeAll(source);
+					bs.flush();
+					bs.close();
+					source.close();
 
-					@Override
-					public void onFailure()
-					{
-						throw new RuntimeException("Failed to load ffmpeg lib");
+				}
 
-						// TODO: Implement this method
-					}
+				final FFmpeg ffmpeg=FFmpeg.getInstance(mcontext);
+				ffmpeg.loadBinary(new FFmpegLoadBinaryResponseHandler(){
 
-					@Override
-					public void onSuccess()
-					{
-						try
+						@Override
+						public void onFailure()
 						{
-							UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
-							if(!targetFile.getParentFile().exists()){
-								targetFile.getParentFile().mkdirs();
-							}
-							ffmpeg.execute(new String[]{"-y","-i",srcFile.getAbsolutePath(),targetFile.getAbsolutePath()}, new FFmpegExecuteResponseHandler(){
+							throw new RuntimeException("Failed to load ffmpeg lib");
 
-									@Override
-									public void onSuccess(String p1)
-									{
-										UIHandler.sendEmptyMessage(STATUS_DONE);
-										// TODO: Implement this method
-									}
+							// TODO: Implement this method
+						}
 
-									@Override
-									public void onProgress(String p1)
-									{
-										// TODO: Implement this method
-									}
+						@Override
+						public void onSuccess()
+						{
+							try
+							{
+								UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
+								if (!targetFile.getParentFile().exists())
+								{
+									targetFile.getParentFile().mkdirs();
+								}
+								ffmpeg.execute(new String[]{"-y","-i",srcFile.getAbsolutePath(),targetFile.getAbsolutePath()}, new FFmpegExecuteResponseHandler(){
 
-									@Override
-									public void onFailure(String p1)
-									{
-										hasError = true;
-										throw  new RuntimeException(p1);
-										// TODO: Implement this method
-									}
-
-									@Override
-									public void onStart()
-									{
-										// TODO: Implement this method
-									}
-
-									@Override
-									public void onFinish()
-									{
-										isDone = true;
-										if (useCacheFile && srcFile != null)
+										@Override
+										public void onSuccess(String p1)
 										{
-											Utils.delDir(srcFile);
+											UIHandler.sendEmptyMessage(STATUS_DONE);
+											activeCache(targetFile);
+											isProcessed = true;
+											// TODO: Implement this method
 										}
-										
-										// TODO: Implement this method
-									}
-								});
+
+										@Override
+										public void onProgress(String p1)
+										{
+											// TODO: Implement this method
+										}
+
+										@Override
+										public void onFailure(String p1)
+										{
+											hasError = true;
+											throw  new RuntimeException(p1);
+											// TODO: Implement this method
+										}
+
+										@Override
+										public void onStart()
+										{
+											// TODO: Implement this method
+										}
+
+										@Override
+										public void onFinish()
+										{
+											isDone = true;
+											if (useCacheFile && srcFile != null)
+											{
+												Utils.delDir(srcFile);
+											}
+
+											// TODO: Implement this method
+										}
+									});
+							}
+							catch (FFmpegCommandAlreadyRunningException e)
+							{
+								hasError = true;
+								throw new RuntimeException(e);
+							}
+							// TODO: Implement this method
 						}
-						catch (FFmpegCommandAlreadyRunningException e)
+
+						@Override
+						public void onStart()
 						{
-							hasError = true;
-							throw new RuntimeException(e);
+							// TODO: Implement this method
 						}
-						// TODO: Implement this method
-					}
 
-					@Override
-					public void onStart()
-					{
-						// TODO: Implement this method
-					}
-
-					@Override
-					public void onFinish()
-					{
-						isDone = true;
-						// TODO: Implement this method
-					}
-				});
+						@Override
+						public void onFinish()
+						{
+							isDone = true;
+							// TODO: Implement this method
+						}
+					});
+			}
 		}
 		catch (Throwable e)
 		{
@@ -216,7 +232,7 @@ public class AudioFormatHelper
 				Utils.delDir(srcFile);
 			}
 		}
-		
+
 		while (!isDone)
 		{
 			try
