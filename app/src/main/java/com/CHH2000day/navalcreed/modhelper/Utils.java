@@ -9,6 +9,7 @@ import android.database.*;
 import android.content.*;
 import android.provider.*;
 import java.security.*;
+import okio.*;
 
 public class Utils
 {
@@ -67,7 +68,7 @@ public class Utils
         }
         return f.delete ( );
     }
-	public static void copyFile ( File infile, File outfile )throws IOException
+	public static void copyFileUsingChannel ( File infile, File outfile )throws IOException
 	{
 		if ( !outfile.getParentFile ( ).exists ( ) )
 		{
@@ -89,7 +90,23 @@ public class Utils
 		}
 
 	}
-
+	public static void copyFile(File srcFile,File destFile) throws IOException{
+		ensureFileParent(destFile);
+		Source src=Okio.source(srcFile);
+		Sink sk=Okio.sink(destFile);
+		BufferedSink bs=Okio.buffer(sk);
+		bs.writeAll(src);
+		bs.flush();
+		bs.close();
+		src.close();
+		
+	}
+	
+	public static void ensureFileParent(File f){
+		if(!f.getParentFile().exists()){
+			f.getParentFile().mkdirs();
+		}
+	}
 	public static void copyFile ( InputStream in, File outfile )throws IOException
 	{
 		if ( !outfile.getParentFile ( ).exists ( ) )
