@@ -40,16 +40,11 @@ public class Utils
 
 	public static byte[] readAllbytes ( InputStream in ) throws IOException
 	{
-		byte[] cache=new byte[1024];
-		ByteArrayOutputStream baos=new ByteArrayOutputStream ( );
-		int i;
-		while ( ( i = in.read ( cache ) ) != -1 )
-		{
-			baos.write ( cache, 0, i );
-		}
-		cache = baos.toByteArray ( );
-		baos.close ( );
-		return cache;
+		BufferedSource s=Okio.buffer(Okio.source(in));
+		byte[] b=s.readByteArray();
+		s.close();
+		return b;
+		
 	}
 	public static boolean delDir ( File f )
 	{
@@ -93,15 +88,20 @@ public class Utils
 	public static void copyFile(File srcFile,File destFile) throws IOException{
 		ensureFileParent(destFile);
 		Source src=Okio.source(srcFile);
+		writeToFile(src,destFile);
+		}
+	public static void writeToFile(Source source,File destFile) throws IOException{
 		Sink sk=Okio.sink(destFile);
 		BufferedSink bs=Okio.buffer(sk);
-		bs.writeAll(src);
+		bs.writeAll(source);
 		bs.flush();
 		bs.close();
-		src.close();
-		
+		source.close();
 	}
-	
+	public static void writeToFile(InputStream inStream,File destFile) throws IOException{
+		Source s=Okio.source(inStream);
+		writeToFile(s,destFile);
+	}
 	public static void ensureFileParent(File f){
 		if(!f.getParentFile().exists()){
 			f.getParentFile().mkdirs();
@@ -109,22 +109,9 @@ public class Utils
 	}
 	public static void copyFile ( InputStream in, File outfile )throws IOException
 	{
-		if ( !outfile.getParentFile ( ).exists ( ) )
-		{
-			outfile.getParentFile ( ).mkdirs ( );
-		}
-		FileOutputStream fos=new FileOutputStream ( outfile );
-		int i;
-		byte[] cache=new byte[1024];
-		while ( ( i = in.read ( cache ) ) != -1 )
-		{
-			fos.write ( cache, 0, i );
-		}
-		fos.flush ( );
-		in.close ( );
-		fos.close ( );
-
+		writeToFile(in,outfile);
 	}
+		
 	public static void decompresssZIPFile ( ZipFile srcFile, String destFilePath ) throws IOException
 	{
 		ZipEntry entry = null;
