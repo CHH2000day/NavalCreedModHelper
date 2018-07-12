@@ -92,11 +92,8 @@ public class BGMReplacerFragment extends ModFragment
 		super.onActivityCreated ( savedInstanceState );
 		FormatHelperFactory.loadFFmpeg(getContext());
 		initValues();
-		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
-		{
-			initview ( );
-		}
-
+		initview ( );
+		
 	}
 	private void initValues(){
 		Resources res=getResources();
@@ -422,9 +419,6 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult ( requestCode, resultCode, data );
-		if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP){
-			return;
-		}
 		if ( requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK )
 		{
 			if ( data != null )
