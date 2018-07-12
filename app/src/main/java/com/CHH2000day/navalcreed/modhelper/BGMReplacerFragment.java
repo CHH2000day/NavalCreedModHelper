@@ -90,6 +90,7 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		// TODO: Implement this method
 		super.onActivityCreated ( savedInstanceState );
+		FormatHelperFactory.loadFFmpeg(getContext());
 		initValues();
 		if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
 		{
@@ -112,7 +113,8 @@ public class BGMReplacerFragment extends ModFragment
 
 				@Override
 				public void onClick ( View p1 )
-				{Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
+				{
+					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
 					intent.setType ( "*/*" );
 					intent.addCategory ( intent.CATEGORY_OPENABLE );
 					startActivityForResult ( intent.createChooser ( intent, getString(R.string.select_a_file_selector) ), QUERY_CODE );
@@ -427,7 +429,6 @@ public class BGMReplacerFragment extends ModFragment
 		{
 			if ( data != null )
 			{
-				String s=Utils.FORMAT_UNKNOWN;
 				if ( data.getData ( ) == null )
 				{
 					Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );

@@ -135,7 +135,63 @@ public class AudioFormatHelper
 				}
 
 				final FFmpeg ffmpeg=FFmpeg.getInstance(mcontext);
-				ffmpeg.loadBinary(new FFmpegLoadBinaryResponseHandler(){
+				try
+				{
+					UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
+					if (!targetFile.getParentFile().exists())
+					{
+						targetFile.getParentFile().mkdirs();
+					}
+					ffmpeg.execute(new String[]{"-y","-i",srcFile.getAbsolutePath(),targetFile.getAbsolutePath()}, new FFmpegExecuteResponseHandler(){
+
+							@Override
+							public void onSuccess(String p1)
+							{
+								UIHandler.sendEmptyMessage(STATUS_DONE);
+								activeCache(targetFile);
+								isProcessed = true;
+								// TODO: Implement this method
+							}
+
+							@Override
+							public void onProgress(String p1)
+							{
+								// TODO: Implement this method
+							}
+
+							@Override
+							public void onFailure(String p1)
+							{
+								hasError = true;
+								throw  new RuntimeException(p1);
+								// TODO: Implement this method
+							}
+
+							@Override
+							public void onStart()
+							{
+								// TODO: Implement this method
+							}
+
+							@Override
+							public void onFinish()
+							{
+								isDone = true;
+								if (useCacheFile && srcFile != null)
+								{
+									Utils.delDir(srcFile);
+								}
+
+								// TODO: Implement this method
+							}
+						});
+				}
+				catch (FFmpegCommandAlreadyRunningException e)
+				{
+					hasError = true;
+					throw new RuntimeException(e);
+				}
+				/*ffmpeg.loadBinary(new FFmpegLoadBinaryResponseHandler(){
 
 						@Override
 						public void onFailure()
@@ -148,62 +204,7 @@ public class AudioFormatHelper
 						@Override
 						public void onSuccess()
 						{
-							try
-							{
-								UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
-								if (!targetFile.getParentFile().exists())
-								{
-									targetFile.getParentFile().mkdirs();
-								}
-								ffmpeg.execute(new String[]{"-y","-i",srcFile.getAbsolutePath(),targetFile.getAbsolutePath()}, new FFmpegExecuteResponseHandler(){
-
-										@Override
-										public void onSuccess(String p1)
-										{
-											UIHandler.sendEmptyMessage(STATUS_DONE);
-											activeCache(targetFile);
-											isProcessed = true;
-											// TODO: Implement this method
-										}
-
-										@Override
-										public void onProgress(String p1)
-										{
-											// TODO: Implement this method
-										}
-
-										@Override
-										public void onFailure(String p1)
-										{
-											hasError = true;
-											throw  new RuntimeException(p1);
-											// TODO: Implement this method
-										}
-
-										@Override
-										public void onStart()
-										{
-											// TODO: Implement this method
-										}
-
-										@Override
-										public void onFinish()
-										{
-											isDone = true;
-											if (useCacheFile && srcFile != null)
-											{
-												Utils.delDir(srcFile);
-											}
-
-											// TODO: Implement this method
-										}
-									});
-							}
-							catch (FFmpegCommandAlreadyRunningException e)
-							{
-								hasError = true;
-								throw new RuntimeException(e);
-							}
+							
 							// TODO: Implement this method
 						}
 
@@ -219,7 +220,7 @@ public class AudioFormatHelper
 							isDone = true;
 							// TODO: Implement this method
 						}
-					});
+					});*/
 			}
 		}
 		catch (Throwable e)
