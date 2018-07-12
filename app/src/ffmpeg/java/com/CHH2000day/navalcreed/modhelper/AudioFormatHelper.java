@@ -111,6 +111,7 @@ public class AudioFormatHelper
 		try
 		{
 			File cachedFile=getValidCacheFile();
+			FormatHelperFactory.refreshCache(targetFile);
 			if (isProcessed && cachedFile != null && cachedFile.exists())
 			{
 				UIHandler.sendEmptyMessage(STATUS_WRITING);
