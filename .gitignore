@@ -2,7 +2,3 @@ bin/
 gen/
 obj/
 libs/*/*.so
-app/src/main/java/com/CHH2000day/navalcreed/modhelper/StaticData.java
-app/src/main/res/drawable/no_preview*.png
-app/src/main/res/drawable-zh/no_preview*.png
-
