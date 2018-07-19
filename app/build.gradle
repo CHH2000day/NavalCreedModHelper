@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
 //flavorDimensions("common","ffmpeg")
-    compileSdkVersion 25
+    compileSdkVersion 27
     buildToolsVersion "27.0.3"
 	useLibrary 'org.apache.http.legacy'
 	lintOptions{ abortOnError false }
