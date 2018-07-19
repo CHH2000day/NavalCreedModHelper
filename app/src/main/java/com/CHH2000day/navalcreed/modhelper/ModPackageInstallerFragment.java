@@ -218,7 +218,7 @@ public class ModPackageInstallerFragment extends Fragment
 								try
 								{
 									InputStream in = getActivity().getContentResolver().openInputStream(uri);
-									Utils.writeToFile(in,f);
+									Utils.writeToFile(in, f);
 									h.sendMessage(h.obtainMessage(0, f));
 
 								}
@@ -226,7 +226,7 @@ public class ModPackageInstallerFragment extends Fragment
 								{
 									h.sendMessage(h.obtainMessage(-1, t));
 								}
-								
+
 								// TODO: Implement this method
 							}
 						}.start();
@@ -263,7 +263,12 @@ public class ModPackageInstallerFragment extends Fragment
 
 				@Override
 				public void onSuccess()
-				{	ModPackageInfo mpi=mpih.getModPackageInfo();
+				{	if (!isAdded())
+					{
+						return;
+					}
+
+					ModPackageInfo mpi=mpih.getModPackageInfo();
 					long modsize=mpih.getTotalSize();
 					StringBuilder sb=new StringBuilder();
 					sb.append(getString(R.string.modname))

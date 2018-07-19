@@ -254,8 +254,11 @@ public class BGMReplacerFragment extends ModFragment
 									long usedtime=System.currentTimeMillis() - starttime;
 									pb.setIndeterminate(false);
 									pb.setProgress(100);
-									progress.setText(getString(R.string.success) + "." + getString(R.string.timeused) + String.valueOf(usedtime) + "ms");
-									mon.ondone();
+									if (isAdded())
+									{
+										progress.setText(getString(R.string.success) + "." + getString(R.string.timeused) + String.valueOf(usedtime) + "ms");
+										mon.ondone();
+									}
 									break;
 								case AudioFormatHelper.STATUS_ERROR:
 									String s=progress.getText().toString();
@@ -422,7 +425,7 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		// TODO: Implement this method
 		super.onActivityResult(requestCode, resultCode, data);
-		if(Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT)return;
+		if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT)return;
 		if (requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK)
 		{
 			if (data != null)
