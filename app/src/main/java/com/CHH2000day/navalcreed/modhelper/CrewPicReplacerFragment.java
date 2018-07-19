@@ -59,7 +59,7 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 			} );
 		selpic = (Button)v.findViewById ( R.id.crewpicreplacerButtonSelectPic );
-		selpic.setOnClickListener ( new OnClickListener ( ){
+		selpic.setOnClickListener ( new View.OnClickListener ( ){
 
 				@Override
 				public void onClick (View p1)
@@ -72,7 +72,7 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 			} );
 		removepic = (Button)v.findViewById ( R.id.crewpicreplacerButtonRemove );
-		removepic.setOnClickListener ( new OnClickListener ( ){
+		removepic.setOnClickListener ( new View.OnClickListener ( ){
 
 				@Override
 				public void onClick (View p1)
@@ -99,7 +99,7 @@ public class CrewPicReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		removepic.setOnLongClickListener ( new OnLongClickListener ( ){
+		removepic.setOnLongClickListener ( new View.OnLongClickListener ( ){
 
 				@Override
 				public boolean onLongClick (View p1)
@@ -128,7 +128,7 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 			} );
 		updatepic = (Button)v.findViewById ( R.id.crewpicreplacerButtonReplace );
-		updatepic.setOnClickListener ( new OnClickListener ( ){
+		updatepic.setOnClickListener ( new View.OnClickListener ( ){
 				private void install ()
 				{
 					try

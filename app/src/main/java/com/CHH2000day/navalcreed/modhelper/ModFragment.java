@@ -10,6 +10,6 @@ public abstract class ModFragment extends Fragment
 	//num:在Installation.manifest中的文件名
 	//返回值:true为成功
 	*/
-	public abstract boolean uninstallMod()
+	public abstract boolean uninstallMod();
 	
 }

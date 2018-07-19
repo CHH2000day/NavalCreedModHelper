@@ -2,3 +2,7 @@ bin/
 gen/
 obj/
 libs/*/*.so
+*.properties
+/.gradle/
+/build/
+CHH2000day.keystore

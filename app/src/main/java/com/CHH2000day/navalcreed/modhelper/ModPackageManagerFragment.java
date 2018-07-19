@@ -150,7 +150,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		private Context context;
 		private LayoutInflater li;
 		private String[] keys;
-		private OnLongClickListener listener;
+		private View.OnLongClickListener listener;
 		public MyAdapter ( Context ctx )
 		{
 			context = ctx;
@@ -226,7 +226,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 
 
 	}
-	private class UninstallListener implements OnLongClickListener
+	private class UninstallListener implements View.OnLongClickListener
 	{
 
 		@Override
@@ -237,7 +237,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 				//OVRD时禁用管理器
 				return false;
 			}
-			int num=p1.getTag ( );
+			int num=(int)p1.getTag ( );
 			String modtype=ModPackageManager.PUBLIC_KEYS [ num ];
 			if ( modtype.equals ( ModPackageInfo.MODTYPE_OTHER ) )
 			{

@@ -900,8 +900,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 	private interface OnCheckResultListener
 	{
-		public void onSuccess ( )
-		public void onFail ( int reason, String errorrmsg )
+		public void onSuccess ( );
+		public void onFail ( int reason, String errorrmsg );
 	}
 	private class KeyDialogListener implements AlertDialog.OnShowListener
 	{
