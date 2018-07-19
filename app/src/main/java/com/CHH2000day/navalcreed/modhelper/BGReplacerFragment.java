@@ -91,7 +91,8 @@ public class BGReplacerFragment extends ModFragment
 
 				@Override
 				public void onClick (View p1)
-				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
+				{
+					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( R.string.notice )
 					.setMessage(R.string.confirm_to_remove_all_changes)
 					.setNegativeButton ( R.string.cancel, null );

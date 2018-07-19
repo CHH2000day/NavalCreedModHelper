@@ -74,6 +74,9 @@
 	<string name="downloading">下载中</string>
 	<string name="downloaded">下载完成</string>
 	<string name="copy">复制</string>
+	<string name="confirm_to_remove_changes">确认要移除更改吗?</string>
+	<string name="confirm_to_remove_all_changes">确认要移除全部更改吗？？</string>
+	
 	<!--
 		strings for mod package types
 	-->
