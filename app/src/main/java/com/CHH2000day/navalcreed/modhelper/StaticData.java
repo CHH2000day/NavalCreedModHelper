@@ -2,14 +2,14 @@ package com.CHH2000day.navalcreed.modhelper;
 
 public class StaticData
 {
-	public static final String API_KEY="c6e9ff72dba67952e2da6ba65474cb34";
-	public static final String DATAID_ALPHA="NpDx111F";
-	public static final String DATAID_RELEASE="vae3AAAP";
+	public static final String API_KEY="1aea5425cdef9a5a7a17cafcd8df925b";
+	public static final String DATAID_ALPHA="dc1311a323";
+	public static final String DATAID_RELEASE="fb087fb234";
 	public static final String DATAID=BuildConfig.DEBUG?DATAID_ALPHA:DATAID_RELEASE;
-	public static final String DATA_ID_ANTIHEXIE="NkYO888W";
+	public static final String DATA_ID_ANTIHEXIE="945119b17f";
 	//public static final String DATA_ID_ANNOUNCEMENT="ZeHyBBBP";
-	private static final String DATA_ID_ANNOUNCEMENT_ALPHA="aujE666H";
-	private static final String DATA_ID_ANNOUNCEMENT_RELEASE="ZeHyBBBP";
+	private static final String DATA_ID_ANNOUNCEMENT_ALPHA="fb6aec3eec";
+	private static final String DATA_ID_ANNOUNCEMENT_RELEASE="6aff9eb4d9";
 	public static final String DATA_ID_ANNOUNCEMENT=BuildConfig.DEBUG ? DATA_ID_ANNOUNCEMENT_ALPHA: DATA_ID_ANNOUNCEMENT_RELEASE;
 	public static final String KEY_TESTER_ID="Testet_id";
 	/*public static final String getDataid ( )
