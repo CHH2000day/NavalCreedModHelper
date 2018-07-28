@@ -217,7 +217,7 @@ public class ModPackageInfo
 													   .append ( " " )
 													   .append ( jo.getInt ( mpi.KEY_MINSUPPORTVER ) )
 													   .append ( "." )
-													   .append ( "But mod has a installer version of " )
+													   .append ( "But this mod requires a installer version of " )
 													   .append ( " " )
 													   .append ( mpi.PKGVER )
 													   .append ( "." )

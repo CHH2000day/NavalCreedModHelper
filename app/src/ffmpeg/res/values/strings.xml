@@ -2,6 +2,6 @@
 <resources>
 
     <!-- Put flavor specific strings here -->
-	<string name="buildtype">ffmpeg</string>
+	<string name="buildtype" translatable="false">ffmpeg</string>
 	<string name="app_name">NavalCreedModHelper(FFmpeg)</string>
 </resources>

@@ -3,10 +3,7 @@
 
     <string name="app_name">NavalCreedModHelper</string>
 	<string name="modpkginstaller_name">NavalCreedModPackageInstaller</string>
-    <string name="hello_world">Hello world!</string>
-	<string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-	<string name="modpkg_info_empty">Please select a mod package first</string>
+    <string name="modpkg_info_empty">Please select a mod package first</string>
     <string name="about_license">About license</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
@@ -80,7 +77,9 @@
 	<string name="downloading">Downloading</string>
 	<string name="downloaded">Downloaded</string>
 	<string name="copy">Copy</string>
-	<string name="buildtype">common</string>
+	<string name="buildtype" translatable="false">common</string>
+	<string name="transcode_success">Succeed in %1$dms.</string>
+	<string name="transcode_failed">%1$s.\nFailed in %2$dms.\n%3$s</string>
 	<!--
 	strings for mod package types
 	-->

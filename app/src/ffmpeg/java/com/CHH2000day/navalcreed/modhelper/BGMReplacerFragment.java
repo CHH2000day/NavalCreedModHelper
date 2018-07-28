@@ -251,15 +251,18 @@ public class BGMReplacerFragment extends ModFragment
 									long usedtime=System.currentTimeMillis ( ) - starttime;
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
-									progress.setText (getString(R.string.success)+"."+getString(R.string.timeused) + String.valueOf ( usedtime ) + "ms" );
+									progress.setText (getString(R.string.transcode_success,usedtime));
+									ad.setTitle(R.string.success);
 									mon.ondone ( );
 									break;
 								case AudioFormatHelper.STATUS_ERROR:
 									String s=progress.getText ( ).toString ( );
+									long l=System.currentTimeMillis() - starttime;
 									Exception e=(Exception)msg.obj;
-									progress.setText ( s + "\n" + getString(R.string.failed)+":" + Utils.getErrMsg(e) );
+									progress.setText(getString(R.string.transcode_failed,s,l,Utils.getErrMsg(e)));
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
+									ad.setTitle(R.string.failed);
 									mon.ondone ( );
 									break;
 								case 1:

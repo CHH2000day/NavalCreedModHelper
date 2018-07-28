@@ -141,7 +141,7 @@ public class ModPackageInstallHelper
 	{
 		if (!msrcFile.exists() || !msrcFile.isFile())
 		{
-			throw new IOException("File :" + msrcFile.getAbsolutePath() + " not exists");
+			throw new IOException("File :" + msrcFile.getAbsolutePath() + " does not exists");
 		}
 		mpkgFile = new ZipFile(msrcFile);
 	}
@@ -150,7 +150,7 @@ public class ModPackageInstallHelper
 		ZipEntry mInfoFile=mpkgFile.getEntry(FILE_MODINFO);
 		if (mInfoFile == null)
 		{
-			throw new IllegalModInfoException("Could not found mod.info from package");
+			throw new IllegalModInfoException("Could not load mod.info from package");
 		}
 		InputStream zi=mpkgFile.getInputStream(mInfoFile);
 		ZipEntry mpicEntry;

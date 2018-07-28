@@ -76,6 +76,8 @@
 	<string name="copy">复制</string>
 	<string name="confirm_to_remove_changes">确认要移除更改吗?</string>
 	<string name="confirm_to_remove_all_changes">确认要移除全部更改吗？？</string>
+	<string name="transcode_success">完成，耗时%1$dms</string>
+	<string name="transcode_failed">%1$s.\n耗时%2$dms后失败.\n%3$s</string>
 	
 	<!--
 		strings for mod package types

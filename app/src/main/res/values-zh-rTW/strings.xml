@@ -70,6 +70,8 @@
 	<string name="ovrd_warning">超控mod管理系統將使mod管理器失效，是否繼續？</string>
 	<string name="mod_pkg_management_sys">mod包管理系統</string>
 	<string name="loginmovie_intro">使用說明:\n登入動畫只支持使用以下格式替換:\n文件格式:ogv\n視頻編碼:theora\n建議在電腦轉碼後再放到手機裡\n注意，視頻裡的音頻不會被播放，請在BGM替換器裡替換</string>
+	<string name="transcode_success">完成，耗時%1$dms</string>
+	<string name="transcode_failed">%1$s.\n耗時%2$dms后失敗.\n%3$s</string>
 	<!--
 		strings for mod package types
 	-->
