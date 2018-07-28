@@ -431,7 +431,7 @@ public class ModPackageInstallHelper
 
 		public AppCompatActivity getActivity();
 	}
-	private class InstallTask extends AsyncTask<Void,Integer,Boolean>
+	private static class InstallTask extends AsyncTask<Void,Integer,Boolean>
 	{
 
 		private Exception e;

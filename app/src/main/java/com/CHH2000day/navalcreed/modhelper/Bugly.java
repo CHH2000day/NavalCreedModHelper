@@ -13,7 +13,7 @@ public class Bugly extends BmobObject
 	private String Data;
 	private String APP_VER;
 	public Bugly postBug(String data,long time,String appver,int appver_int){
-		TIME=new Long(time);
+		TIME=Long.valueOf(time);
 		MODEL=Build.MODEL;
 		ANDROID_SDK_VER=Build.VERSION.SDK;
 		SYSTEM_VER=Build.VERSION.RELEASE;

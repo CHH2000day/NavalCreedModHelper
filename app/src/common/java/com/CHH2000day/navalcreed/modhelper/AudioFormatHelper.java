@@ -8,6 +8,7 @@ import android.content.*;
 import android.media.MediaCodec.*;
 import java.nio.*;
 import okio.*;
+import android.annotation.*;
 
 public class AudioFormatHelper
 {
@@ -203,6 +204,7 @@ public class AudioFormatHelper
 		return errorcode;
 
 	}
+	@TargetApi(19)
 	private boolean decodeAudio(final Handler UIHandler) throws Exception
 	{
 
@@ -461,7 +463,7 @@ public class AudioFormatHelper
 			{
 				if (cachedFiles.contains(file))
 				{
-					valids.put(file, new Boolean(false));
+					valids.put(file, Boolean.valueOf(false));
 				}
 			}
 		}
@@ -478,7 +480,7 @@ public class AudioFormatHelper
 		{
 			cachedFiles.add(file);
 		}
-		valids.put(file, new Boolean(true));
+		valids.put(file, Boolean.valueOf(true));
 	}
 	private synchronized File getValidCacheFile()
 	{
