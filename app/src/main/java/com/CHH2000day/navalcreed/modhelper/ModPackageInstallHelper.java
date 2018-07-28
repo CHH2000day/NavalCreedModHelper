@@ -285,7 +285,7 @@ public class ModPackageInstallHelper
 	private void checkInstall(final AppCompatActivity activity)
 	{
 		ModPackageManager mpm=ModPackageManager.getInstance();
-		if (mpm.checkInstalled(mmpi.getModType(), getSubType()))
+		if (mpm.checkInstalled(mmpi.getModType(), getSubType(msubtype)))
 		{
 			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
 			adb.setTitle(R.string.error)
@@ -317,7 +317,7 @@ public class ModPackageInstallHelper
 	private void install(final AppCompatActivity activity)
 	{
 
-		InstallTask it=new InstallTask(mmpi.getModType(), msubtype, activity);
+		InstallTask it=new InstallTask( msubtype, activity,mmpi);
 		it.execute();
 
 
@@ -327,7 +327,7 @@ public class ModPackageInstallHelper
 
 		return mmpi;
 	}
-	private String getSubType()
+	private static String getSubType(int msubtype)
 	{
 		String s=ModPackageInfo.SUBTYPE_EMPTY;
 		if (SUBTYPE_CV_EN == msubtype)
@@ -444,10 +444,16 @@ public class ModPackageInstallHelper
 		private ProgressBar progressbar;
 		private DialogMonitor dm;
 		private AppCompatActivity activity;
-		protected InstallTask(String modType, int subType, final AppCompatActivity activity)
+		private ModPackageInfo mmpi;
+		private File msrcFile;
+		private ZipFile mpkgFile;
+		private int mSubType;
+		protected InstallTask(int subType, final AppCompatActivity activity,ModPackageInfo mmpi)
 		{
-			mainPath = getPath(modType, subType, (ModHelperApplication)activity.getApplication());
+			mainPath = getPath(mmpi.getModType(), subType, (ModHelperApplication)activity.getApplication());
+			mSubType=subType;
 			this.activity = activity;
+			this.mmpi=mmpi;
 		}
 		@Override
 		protected Boolean doInBackground(Void[] p1)
@@ -559,7 +565,7 @@ public class ModPackageInstallHelper
 			{
 				stat.setText(R.string.success);
 
-				ModPackageManager.getInstance().postInstall(getModPackageInfo().getModType(), getSubType(), mmpi.getModName());
+				ModPackageManager.getInstance().postInstall(mmpi.getModType(), getSubType(mSubType), mmpi.getModName());
 			}
 			else
 			{
