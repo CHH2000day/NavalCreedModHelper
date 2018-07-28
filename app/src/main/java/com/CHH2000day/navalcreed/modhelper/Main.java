@@ -867,7 +867,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 									@Override
 									public void onClick ( DialogInterface p1, int p2 )
 									{
-										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
+										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).apply ( );
 
 										// TODO: Implement this method
 									}
@@ -878,7 +878,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 									public void onClick ( DialogInterface p1, int p2 )
 									{
 										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE ); 
-										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).commit ( );
+										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).apply ( );
 										if ( !TextUtils.isEmpty ( bmobmsg.tocopy ( ) ) )
 										{
 											cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  

@@ -67,7 +67,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 						{
 							if (p2 == null)
 							{
-								ctx.getSharedPreferences(PREF_NAME, 0).edit().putLong(ERRTIME, -1).commit();
+								ctx.getSharedPreferences(PREF_NAME, 0).edit().putLong(ERRTIME, -1).apply();
 							}
 							else
 							{p2.printStackTrace();}
@@ -120,7 +120,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 		{
 			e.printStackTrace();
 		}
-		ctx.getSharedPreferences(PREF_NAME, 0).edit().putLong(ERRTIME, time).commit();
+		ctx.getSharedPreferences(PREF_NAME, 0).edit().putLong(ERRTIME, time).apply();
 		android.os.Process.killProcess(android.os.Process.myPid());
 		/*F
 		 Disabled for satble reason.
