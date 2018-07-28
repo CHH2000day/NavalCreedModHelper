@@ -207,7 +207,7 @@ public class ModPackageInstallHelper
 					@Override
 					public void onClick(DialogInterface p1, int p2)
 					{
-						checkModType(activity);
+						checkAvailSpace(activity);
 						// TODO: Implement this method
 					}
 				});
@@ -317,14 +317,13 @@ public class ModPackageInstallHelper
 	private void install(final AppCompatActivity activity)
 	{
 
-		InstallTask it=new InstallTask( msubtype, activity,mmpi);
+		InstallTask it=new InstallTask(msubtype, activity, getModPackageInfo(), msrcFile, mpkgFile);
 		it.execute();
 
 
 	}
 	public ModPackageInfo getModPackageInfo()
 	{
-
 		return mmpi;
 	}
 	private static String getSubType(int msubtype)
@@ -443,17 +442,19 @@ public class ModPackageInstallHelper
 		private TextView stat;
 		private ProgressBar progressbar;
 		private DialogMonitor dm;
-		private AppCompatActivity activity;
+		private AppCompatActivity mactivity;
 		private ModPackageInfo mmpi;
 		private File msrcFile;
 		private ZipFile mpkgFile;
 		private int mSubType;
-		protected InstallTask(int subType, final AppCompatActivity activity,ModPackageInfo mmpi)
+		protected InstallTask(int subType, final AppCompatActivity activity, ModPackageInfo mpi, File srcFile, ZipFile pkgFile)
 		{
+			mSubType = subType;
+			mactivity = activity;
+			mmpi = mpi;
+			msrcFile = srcFile;
+			mpkgFile = pkgFile;
 			mainPath = getPath(mmpi.getModType(), subType, (ModHelperApplication)activity.getApplication());
-			mSubType=subType;
-			this.activity = activity;
-			this.mmpi=mmpi;
 		}
 		@Override
 		protected Boolean doInBackground(Void[] p1)
@@ -538,11 +539,11 @@ public class ModPackageInstallHelper
 		@Override
 		protected void onPreExecute()
 		{
-			dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_installmodpkg, null);
+			dialogView = mactivity.getLayoutInflater().inflate(R.layout.dialog_installmodpkg, null);
 			stat = (TextView)dialogView.findViewById(R.id.dialoginstallmodpkgStatus);
 			progressbar = (ProgressBar)dialogView.findViewById(R.id.dialoginstallmodpkgProgress);
 			// TODO: Implement this method
-			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
+			AlertDialog.Builder adb=new AlertDialog.Builder(mactivity);
 			adb.setTitle(R.string.please_wait)
 				.setView(dialogView)
 				.setPositiveButton(R.string.close, null)
@@ -563,14 +564,14 @@ public class ModPackageInstallHelper
 			dm.ondone();
 			if (result)
 			{
+				ad.setTitle(R.string.success);
 				stat.setText(R.string.success);
-
 				ModPackageManager.getInstance().postInstall(mmpi.getModType(), getSubType(mSubType), mmpi.getModName());
 			}
 			else
 			{
 				ad.setTitle(R.string.error);
-				String s=new StringBuilder().append(activity.getText(R.string.failed))
+				String s=new StringBuilder().append(mactivity.getText(R.string.failed))
 					.append(":")
 					.append("\n")
 					.append(e.getMessage()).toString();
