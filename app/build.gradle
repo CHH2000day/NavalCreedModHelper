@@ -60,6 +60,7 @@ dependencies {
 	implementation 'com.squareup.okio:okio:2.1.0'
 	implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 	implementation 'io.reactivex.rxjava2:rxjava:2.2.4'
+	implementation 'com.google.code.gson:gson:2.8.5'
 	ffmpegImplementation "com.writingminds:FFmpegAndroid:0.3.2"
 
 	//compile 'com.squareup.okio:okio:1.14.1'
