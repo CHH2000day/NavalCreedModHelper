@@ -18,8 +18,8 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 75
-        versionName "3.2.3-release"
+        versionCode 76
+        versionName "3.2.4-release"
         flavorDimensions "versionCode"
 		
     }
@@ -53,7 +53,7 @@ android {
 
 dependencies {
 	implementation 'com.android.support:design:27.1.1'
-	implementation 'cn.bmob.android:bmob-sdk:3.6.4'
+	implementation 'cn.bmob.android:bmob-sdk:3.6.8-rc3'
 	implementation 'com.android.support:appcompat-v7:27.1.1'
 	implementation 'com.android.support:recyclerview-v7:27.1.1'
 	implementation 'com.android.support:cardview-v7:27.1.1'
