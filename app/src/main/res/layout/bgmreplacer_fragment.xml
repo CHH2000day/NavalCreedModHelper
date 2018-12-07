@@ -39,16 +39,16 @@
 		android:id="@+id/bgmreplacerSelect"/>
 
 	<TextView
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="@+string/unselected"
-		android:layout_below="@id/bgmreplacerMusic"
-		android:id="@+id/bgmreplacerText"
-		android:layout_alignBottom="@id/bgmreplacerSelect"
-		android:gravity="center_vertical"
-		android:layout_toLeftOf="@id/bgmreplacerSelect"
-		android:layout_alignParentLeft="true"
-		android:paddingLeft="3dp"/>
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="@+string/unselected"
+			android:layout_below="@id/bgmreplacerMusic"
+			android:id="@+id/bgmreplacerText"
+			android:layout_alignBottom="@id/bgmreplacerSelect"
+			android:gravity="center_vertical"
+			android:layout_toStartOf="@id/bgmreplacerSelect"
+			android:layout_alignParentLeft="true"
+			android:paddingStart="3dp"/>
 
 	<Button
 		android:layout_height="wrap_content"

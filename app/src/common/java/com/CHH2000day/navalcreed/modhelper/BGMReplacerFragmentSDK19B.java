@@ -25,15 +25,11 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	//private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
 	private static String[] scene_toshow;
 	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
-	//private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
-	private static String[] filenames_unselected;
-	private static final String[] FILENAMES_BATTLEFAIL={"Danger","Fail"};
+    private static final String[] FILENAMES_BATTLEFAIL = {"Danger", "Fail"};
 	//private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
 	private static String[] filenames_battlefail_toshow;
 	private static final String[] FILENAMES_LOADING={"Loading","Login","Queuing"};
-	//private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
-	private static String[] filenames_loading_toshow;
-	private static final int TEXTVIEW_RES_ID=R.layout.support_simple_spinner_dropdown_item;
+    private static final int TEXTVIEW_RES_ID = R.layout.support_simple_spinner_dropdown_item;
 	public static final int TYPE_HARBOR=10;
 	public static final int TYPE_LOADING=11;
 	public static final int TYPE_BATTLESTART=12;
@@ -44,14 +40,11 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 
 	private static final int QUERY_CODE=2;
 
-	private ModHelperApplication mapplication;
-	private FileNameAdapter mfilenameadapter;
-	private View v;
-	private Spinner mSceneSpinner,mFileNameSpinner;
+    private View v;
+    private Spinner mFileNameSpinner;
 	private int curr_scene,curr_type,curr_music;
-	private Button select,remove,update;
-	private TextView pathTextView,infoTextView;
-	//private String fileformat;
+    private TextView pathTextView;
+    //private String fileformat;
 	private Uri srcfile;
 
 
@@ -59,8 +52,10 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	private void initValues(){
 		Resources res=getResources();
 		scene_toshow=res.getStringArray(R.array.bgm_scene_toshow);
-		filenames_unselected=res.getStringArray(R.array.bgm_select_a_scene);
-		filenames_loading_toshow=res.getStringArray(R.array.bgm_loading_toshow);
+        //private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+        String[] filenames_unselected = res.getStringArray(R.array.bgm_select_a_scene);
+        //private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
+        String[] filenames_loading_toshow = res.getStringArray(R.array.bgm_loading_toshow);
 		filenames_battlefail_toshow=res.getStringArray(R.array.bgm_battlefail_toshow);
 	}
 
@@ -71,19 +66,19 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		super.onCreateView(inflater,container,savedInstanceState);
 		initValues();
 		v = inflater.inflate ( R.layout.bgmreplacer_fragment, null );
-		mSceneSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerScene );
+        Spinner mSceneSpinner = (Spinner) v.findViewById(R.id.bgmreplacerScene);
 		mFileNameSpinner = (Spinner)v.findViewById ( R.id.bgmreplacerMusic );
 		pathTextView = (TextView)v.findViewById ( R.id.bgmreplacerText );
-		infoTextView=(TextView)v.findViewById(R.id.bgmreplacerfragmentTextViewInfo);
-		select = (Button)v.findViewById ( R.id.bgmreplacerSelect );
-		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
-		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
+        TextView infoTextView = (TextView) v.findViewById(R.id.bgmreplacerfragmentTextViewInfo);
+        Button select = (Button) v.findViewById(R.id.bgmreplacerSelect);
+        Button remove = (Button) v.findViewById(R.id.bgmreplacerRemove);
+        Button update = (Button) v.findViewById(R.id.bgmreplacerUpdate);
 
-		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
+        ModHelperApplication mapplication = (ModHelperApplication) getActivity().getApplication();
 		//更新操作说明
-		String s=infoTextView.getText ( ).toString ( );
+        String s = infoTextView.getText().toString();
 		infoTextView.setText ( s+getText(R.string.bgm_transcode_disabled));
-		select.setOnClickListener ( new OnClickListener ( ){
+        select.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )
@@ -95,7 +90,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 					// TODO: Implement this method
 				}
 			} );
-		remove.setOnClickListener ( new OnClickListener ( ){
+        remove.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )
@@ -123,7 +118,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 					// TODO: Implement this method
 				}
 			} );
-		remove.setOnLongClickListener ( new OnLongClickListener ( ){
+        remove.setOnLongClickListener(new OnLongClickListener() {
 
 				@Override
 				public boolean onLongClick ( View p1 )
@@ -148,7 +143,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 					return true;
 				}
 			} );
-		update.setOnClickListener ( new OnClickListener ( ){
+        update.setOnClickListener(new OnClickListener() {
 
 				private void install ( )
 				{
@@ -229,9 +224,9 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 		//配置场景选择的适配器
 		mSceneSpinner.setAdapter ( new ArrayAdapter<String> ( getActivity ( ), TEXTVIEW_RES_ID, scene_toshow ) );
 		//初始化文件名的适配器
-		mfilenameadapter = FileNameAdapter.getInstance ( getActivity ( ), TEXTVIEW_RES_ID, TYPE_HARBOR );
-		mFileNameSpinner.setAdapter ( mfilenameadapter );
-		mSceneSpinner.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+        FileNameAdapter mfilenameadapter = FileNameAdapter.getInstance(getActivity(), TEXTVIEW_RES_ID, TYPE_HARBOR);
+        mFileNameSpinner.setAdapter(mfilenameadapter);
+        mSceneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
 				public void onItemSelected ( AdapterView<?> p1, View p2, int p3, long p4 )

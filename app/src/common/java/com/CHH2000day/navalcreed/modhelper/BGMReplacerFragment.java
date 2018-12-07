@@ -36,8 +36,6 @@ public class BGMReplacerFragment extends ModFragment
 	//private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
 	private static String[] scene_toshow;
 	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
-	//private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
-	private static String[] filenames_unselected;
 	private static final String[] FILENAMES_BATTLEFAIL={"Danger","Fail"};
 	//private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
 	private static String[] filenames_battlefail_toshow;
@@ -56,7 +54,6 @@ public class BGMReplacerFragment extends ModFragment
 	private static final int QUERY_CODE=2;
 
 	private ModHelperApplication mapplication;
-	private FileNameAdapter mfilenameadapter;
 	private View v;
 	private Spinner mSceneSpinner,mFileNameSpinner;
 	private int curr_scene,curr_type,curr_music;
@@ -101,7 +98,8 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		Resources res=getResources();
 		scene_toshow = res.getStringArray(R.array.bgm_scene_toshow);
-		filenames_unselected = res.getStringArray(R.array.bgm_select_a_scene);
+        //private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+        String[] filenames_unselected = res.getStringArray(R.array.bgm_select_a_scene);
 		filenames_loading_toshow = res.getStringArray(R.array.bgm_loading_toshow);
 		filenames_battlefail_toshow = res.getStringArray(R.array.bgm_battlefail_toshow);
 	}
@@ -309,7 +307,7 @@ public class BGMReplacerFragment extends ModFragment
 		//配置场景选择的适配器
 		mSceneSpinner.setAdapter(new ArrayAdapter<String>(getActivity(), TEXTVIEW_RES_ID, scene_toshow));
 		//初始化文件名的适配器
-		mfilenameadapter = FileNameAdapter.getInstance(getActivity(), TEXTVIEW_RES_ID, TYPE_HARBOR);
+        FileNameAdapter mfilenameadapter = FileNameAdapter.getInstance(getActivity(), TEXTVIEW_RES_ID, TYPE_HARBOR);
 		mFileNameSpinner.setAdapter(mfilenameadapter);
 		mSceneSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
 
@@ -346,7 +344,7 @@ public class BGMReplacerFragment extends ModFragment
 	}
 	File getTargetFile(int scene, int type, int num, String format)
 	{
-		File f=new File(
+        return new File(
 			new StringBuilder()
 			.append(mapplication.getResFilesDirPath())
 			.append(File.separatorChar)
@@ -360,7 +358,6 @@ public class BGMReplacerFragment extends ModFragment
 			.append(format)
 			.toString()
 		);
-		return f;
 	}
 	String getFileName(int type, int num)
 	{

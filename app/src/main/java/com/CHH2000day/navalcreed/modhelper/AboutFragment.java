@@ -16,26 +16,25 @@ import android.graphics.*;
 public class AboutFragment extends Fragment
 {
 	private View v;
-	private Button license,pkgname,donate;
 	private int selectedItem=0;
 	private ModHelperApplication app;
-	private TextView mtextview;
+
 	@Override
 	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{	app = (ModHelperApplication)getActivity ( ).getApplication ( );
 		app.getPkgNameNum ( app.getMainSharedPrederences ( ).getString ( app.KEY_PKGNAME, app.CN ) );
 		v = inflater.inflate ( R.layout.about_fragment, null );
-		license = (Button)v.findViewById ( R.id.aboutfragmentLicense );
-		pkgname = (Button)v.findViewById ( R.id.aboutfragmentButtonselectpkg );
-		mtextview = (TextView)v.findViewById ( R.id.aboutfragmentTextView );
-		donate = v.findViewById ( R.id.aboutfragmentButtonDonate );
+		Button license = (Button) v.findViewById(R.id.aboutfragmentLicense);
+		Button pkgname = (Button) v.findViewById(R.id.aboutfragmentButtonselectpkg);
+		TextView mtextview = (TextView) v.findViewById(R.id.aboutfragmentTextView);
+		Button donate = v.findViewById(R.id.aboutfragmentButtonDonate);
 		if ( !isChineseEnvironment ( ) )
 		{
 			donate.setVisibility ( View.GONE );
 		}
 		else
 		{
-			donate.setOnClickListener ( new OnClickListener ( ){
+			donate.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick ( View p1 )
@@ -105,7 +104,7 @@ public class AboutFragment extends Fragment
 							   .append ( "\n" )
 							   .append ( mtextview.getText ( ) )
 							   .toString ( ) );
-			mtextview.setOnClickListener ( new OnClickListener ( ){
+			mtextview.setOnClickListener(new OnClickListener() {
 
 					@Override
 					public void onClick ( View p1 )
@@ -117,7 +116,7 @@ public class AboutFragment extends Fragment
 					}
 				} );
 		}
-		license.setOnClickListener ( new OnClickListener ( ){
+		license.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )
@@ -139,7 +138,7 @@ public class AboutFragment extends Fragment
 					// TODO: Implement this method
 				}
 			} );
-		pkgname.setOnClickListener ( new OnClickListener ( ){
+		pkgname.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )

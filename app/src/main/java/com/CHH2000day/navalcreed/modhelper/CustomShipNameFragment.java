@@ -26,8 +26,7 @@ public class CustomShipNameFragment extends ModFragment
 
 	
 	private View v;
-	private Button exec;
-	private String path;
+    private String path;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -38,8 +37,8 @@ public class CustomShipNameFragment extends ModFragment
 			.append("datas")
 			.append(File.separatorChar)
 			.append("customnames.lua").toString();
-		
-		exec = (Button)v.findViewById(R.id.antihexiefragmentButtonExec);
+
+        Button exec = (Button) v.findViewById(R.id.antihexiefragmentButtonExec);
 
 		exec.setOnClickListener(new OnClickListener(){
 

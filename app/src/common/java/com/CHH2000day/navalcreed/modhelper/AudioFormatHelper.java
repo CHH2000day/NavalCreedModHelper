@@ -37,12 +37,9 @@ public class AudioFormatHelper
 	public static final int STATUS_WRITING=1003;
 	public static final int STATUS_DONE=1004;
 	public static final int STATUS_ERROR=1024;
-	//转码配置
-	private int mBufferSize=256 * 1024; //缓存的音频大小
 	//private int mSampleRate = 16000; //采样率，使用8000减少内存占用
 	private int mSampleRate = 8000;
 	private int mChannel = AudioFormat.CHANNEL_IN_STEREO; //立体声
-	private int mEncoding = AudioFormat.ENCODING_PCM_16BIT;
 
 	public static final int MODE_DENY_ALL_CACHE=-15;
 
@@ -77,7 +74,9 @@ public class AudioFormatHelper
 	{
 		cachedFiles = new ArrayList<File>();
 		valids = new HashMap<File,Boolean>();
-		mBufferSize = AudioRecord.getMinBufferSize(mSampleRate, mChannel, mEncoding);
+        int mEncoding = AudioFormat.ENCODING_PCM_16BIT;//转码配置
+//缓存的音频大小
+        int mBufferSize = AudioRecord.getMinBufferSize(mSampleRate, mChannel, mEncoding);
 		mEmptyHandler = new Handler(){
 
 			@Override
@@ -204,7 +203,8 @@ public class AudioFormatHelper
 		return errorcode;
 
 	}
-	@TargetApi(19)
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	private boolean decodeAudio(final Handler UIHandler) throws Exception
 	{
 

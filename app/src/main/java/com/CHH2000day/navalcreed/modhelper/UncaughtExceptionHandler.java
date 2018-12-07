@@ -28,14 +28,15 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 			exceptionHandler = new UncaughtExceptionHandler();
 		return exceptionHandler;
 	}
-	private boolean inited=false;
-	private Context ctx,ce;
-	private Thread.UncaughtExceptionHandler defaultHandler;
-	public void init(Context ctx) throws PackageManager.NameNotFoundException
-	{   ce = ctx;
-		if (inited)return;
+
+	private Context ctx;
+
+	public void init(Context ctx) throws PackageManager.NameNotFoundException {
+		Context ce = ctx;
+		boolean inited = false;
+		if (inited) return;
 		this.ctx = ctx;
-		defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
+		Thread.UncaughtExceptionHandler defaultHandler = Thread.getDefaultUncaughtExceptionHandler();
 		Thread.setDefaultUncaughtExceptionHandler(this);
 		app_ver = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionName;
 

@@ -23,9 +23,7 @@ public class BGReplacerFragment extends ModFragment
 	private static final String[] filename={"loadingbg1.jpg","loadingbg2.jpg","loadingbg3.jpg"};
 	private static final String[] cateoty={"loading","loadingmap","matching"};
 	private String abs_path/*="/sdcard/Android/data/com.tencent.navalcreed/files/pic"*/;
-	private Spinner cateory,file;
 	private TextView picname;
-	private Button btnrm,update,selpic;
 	private Bitmap ba;
 	private int cat=0,filepos=0;
 	private View v;
@@ -38,8 +36,8 @@ public class BGReplacerFragment extends ModFragment
 			.append ( "pic" )
 			.toString ( );
 		v = inflater.inflate ( R.layout.bgreplacer_fragment, null );
-		cateory = (Spinner)v.findViewById ( R.id.bgreplacerSpinner1 );
-		cateory.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+        Spinner cateory = (Spinner) v.findViewById(R.id.bgreplacerSpinner1);
+        cateory.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
 				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
@@ -54,9 +52,9 @@ public class BGReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		file = (Spinner)v.findViewById ( R.id.bgreplacerSpinner2 );
+        Spinner file = (Spinner) v.findViewById(R.id.bgreplacerSpinner2);
 
-		file.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+        file.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
 				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
@@ -72,10 +70,10 @@ public class BGReplacerFragment extends ModFragment
 				}
 			} );
 		picname = (TextView)v.findViewById ( R.id.bgreplacerPic );
-		btnrm = (Button)v.findViewById ( R.id.bgreplacer_remove );
-		update = (Button)v.findViewById ( R.id.bgreplacerbtn_update );
-		selpic = (Button)v.findViewById ( R.id.bgreplacerbtn_select );
-		selpic.setOnClickListener ( new OnClickListener ( ){
+        Button btnrm = (Button) v.findViewById(R.id.bgreplacer_remove);
+        Button update = (Button) v.findViewById(R.id.bgreplacerbtn_update);
+        Button selpic = (Button) v.findViewById(R.id.bgreplacerbtn_select);
+        selpic.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick (View p1)
@@ -87,7 +85,7 @@ public class BGReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		btnrm.setOnClickListener ( new OnClickListener ( ){
+        btnrm.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick (View p1)
@@ -110,7 +108,7 @@ public class BGReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		update.setOnClickListener ( new OnClickListener ( ){
+        update.setOnClickListener(new OnClickListener() {
 
 				private void install ()
 				{File parent=new File ( abs_path, cateoty[ cat ] );

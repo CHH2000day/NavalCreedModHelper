@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.CHH2000day.navalcreed.modhelper" >
+		  xmlns:tools="http://schemas.android.com/tools" package="com.CHH2000day.navalcreed.modhelper">
 
     <application
-        android:allowBackup="true"
-        android:icon="@drawable/icon"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme.NoActionBar"
-		android:name=".ModHelperApplication"
-		android:resizeableActivity = "true">
+			android:allowBackup="true"
+			android:icon="@drawable/icon"
+			android:label="@string/app_name"
+			android:theme="@style/AppTheme.NoActionBar"
+			android:name=".ModHelperApplication"
+			android:resizeableActivity="true" tools:targetApi="n">
         <activity
             android:name=".Main"
             android:label="@string/app_name" >
@@ -62,5 +62,5 @@
 	<!--允许读取手机状态 用于创建BmobInstallation--> 
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<!--并不知道这权限到底干啥的，不加会有莫名其妙的SecurityException-->
-	<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"/>
+	<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" tools:ignore="ProtectedPermissions"/>
 </manifest>

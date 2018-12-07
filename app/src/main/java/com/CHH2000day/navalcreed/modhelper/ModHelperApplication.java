@@ -16,8 +16,7 @@ public class ModHelperApplication extends Application
 	//never used
 	//private android.os.Handler merrmsghdl;
 	private File resDir;
-	private File sdcard;
-	private File resfilesdir;
+    private File resfilesdir;
 	private String resfilePath="";
 	private SharedPreferences mainpref;
 	private static final String STOREDFILE_NAME="mod.install";
@@ -123,7 +122,7 @@ public class ModHelperApplication extends Application
 	{
 		if ( resDir == null )
 		{
-			sdcard = Environment.getExternalStorageDirectory ( );
+            File sdcard = Environment.getExternalStorageDirectory();
 			//resfilePath: /sdcard/Android/data/$pkgname
 			resfilePath = new StringBuilder ( )
 				.append ( sdcard.getAbsolutePath ( ) )

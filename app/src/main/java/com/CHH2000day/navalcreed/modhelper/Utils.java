@@ -288,7 +288,8 @@ public class Utils
 		Class err=t.getClass ( );
 		return err.getName ( ) + "\n" + t.getMessage ( );
 	}
-	public static final String convertFileSize ( long origsize )
+
+    public static String convertFileSize(long origsize)
 	{
 		float size=origsize;
 		StringBuilder sb=new StringBuilder ( );

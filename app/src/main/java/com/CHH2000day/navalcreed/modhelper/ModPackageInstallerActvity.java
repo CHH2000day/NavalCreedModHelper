@@ -10,9 +10,7 @@ import android.support.design.widget.*;
 
 public class ModPackageInstallerActvity extends AppCompatActivity
 {
-	private Toolbar mtoolbar;
-	private RelativeLayout mrl;
-	private String mPkgPath;
+    private String mPkgPath;
 	private static final int ID_MAINVIEW=R.id.modpackageinstaller_main_mainview;
 
 	@Override
@@ -22,9 +20,9 @@ public class ModPackageInstallerActvity extends AppCompatActivity
 		super.onCreate ( savedInstanceState );
 		//初始化UI
 		setContentView(R.layout.modpackageinstaller_main);
-		mtoolbar=(Toolbar)findViewById(R.id.modinstallertoolbar);
+        Toolbar mtoolbar = (Toolbar) findViewById(R.id.modinstallertoolbar);
 		setSupportActionBar(mtoolbar);
-		mrl=(RelativeLayout)findViewById(ID_MAINVIEW);
+        RelativeLayout mrl = (RelativeLayout) findViewById(ID_MAINVIEW);
 		if(getIntent().getData()!=null){
 		    mPkgPath=getIntent().getData().getPath();
 		}

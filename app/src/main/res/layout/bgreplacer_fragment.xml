@@ -64,16 +64,16 @@
 		android:id="@+id/bgreplacer_remove"/>
 
 	<TextView
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:layout_below="@id/bgreplacerTextView2"
-		android:layout_toLeftOf="@id/bgreplacerbtn_select"
-		android:layout_alignParentLeft="true"
-		android:layout_alignBottom="@id/bgreplacerbtn_select"
-		android:id="@+id/bgreplacerPic"
-		android:text="@+string/unselected"
-		android:gravity="left|center_vertical"
-		android:paddingLeft="3dp"/>
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:layout_below="@id/bgreplacerTextView2"
+			android:layout_toLeftOf="@id/bgreplacerbtn_select"
+			android:layout_alignParentLeft="true"
+			android:layout_alignBottom="@id/bgreplacerbtn_select"
+			android:id="@+id/bgreplacerPic"
+			android:text="@+string/unselected"
+			android:gravity="left|center_vertical"
+			android:paddingStart="3dp"/>
 
 </RelativeLayout>
 

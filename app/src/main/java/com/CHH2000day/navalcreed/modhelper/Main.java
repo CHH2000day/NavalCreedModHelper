@@ -36,12 +36,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 
 	private ViewPager mViewPager;
-	private TabLayout mTabLayout;
-	private FragmentPagerAdapter mAdapter;
-	private List<Fragment> fragments;
-	private List<String> titles;
-	private LayoutInflater li;
-	private Handler mupdateHandler,mvercheckHandler,mveronboothandler,mveroncerifyhandler;
+	private Handler mupdateHandler, mvercheckHandler, mveronboothandler, mveroncerifyhandler;
 	private static final String GENERAL="general";
 	private static final String ANNOU_VER="annover";
 	private static final String KEY_OBJID="objID";
@@ -49,12 +44,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	private BGReplacerFragment mBGReplacerFragment;
 	private BGMReplacerFragment mBGMReplacerFragment;
 	private CustomShipNameFragment mAntiHexieFragment;
-	private LoginMovieReplacer mLoginMovieReplacer;
-	private ModPackageInstallerFragment mModpkgInstallerFragment;
-	private ModPackageManagerFragment mModPackageManagerFragment;
 
 
-	private static final int PERMISSION_CHECK_CODE=125;
+	private static final int PERMISSION_CHECK_CODE = 125;
 	@Override
 	protected void onCreate ( Bundle savedInstanceState )
 	{
@@ -89,16 +81,16 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
 		 toggle.syncState ( );
 		 drawer.setDrawerListener ( toggle );*/
-		li = LayoutInflater.from ( this );
+		LayoutInflater li = LayoutInflater.from(this);
 		/*禁用NavigationView
 		 NavigationView navigationView = (NavigationView) findViewById ( R.id.nav_view );
 		 navigationView.setNavigationItemSelectedListener ( this );*/
 		//配置ViewPager与TabLayout
 		mViewPager = (ViewPager)findViewById ( R.id.viewPager );
-		mTabLayout = (TabLayout)findViewById ( R.id.tabLayout );
+		TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
 		//构造Fragment实例
 		mBGReplacerFragment = new BGReplacerFragment ( );
-		mLoginMovieReplacer = new LoginMovieReplacer ( );
+		LoginMovieReplacer mLoginMovieReplacer = new LoginMovieReplacer();
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
 		//如果系统版本为Lollipop前的旧设备，使用旧的BGM转码器
@@ -110,22 +102,22 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			mBGMReplacerFragment = new BGMReplacerFragment ( );
 		}
-		mModpkgInstallerFragment = new ModPackageInstallerFragment ( );
-		mModPackageManagerFragment = new ModPackageManagerFragment ( );
+		ModPackageInstallerFragment mModpkgInstallerFragment = new ModPackageInstallerFragment();
+		ModPackageManagerFragment mModPackageManagerFragment = new ModPackageManagerFragment();
 		//进行数据配置
-		fragments = new ArrayList<Fragment> ( );
+		List<Fragment> fragments = new ArrayList<Fragment>();
 		fragments.add ( mBGReplacerFragment );
-		fragments.add ( mLoginMovieReplacer );
+		fragments.add(mLoginMovieReplacer);
 		fragments.add ( mCrewPicReplacerFragment );
 		if ( getResources ( ).getConfiguration ( ).locale.getLanguage ( ).contains ( "zh" ) )
 		{
 			fragments.add ( mAntiHexieFragment );
 		}
 		fragments.add ( mBGMReplacerFragment );
-		fragments.add ( mModpkgInstallerFragment );
-		fragments.add ( mModPackageManagerFragment );
+		fragments.add(mModpkgInstallerFragment);
+		fragments.add(mModPackageManagerFragment);
 		fragments.add ( new AboutFragment ( ) );
-		titles = new ArrayList<String> ( );
+		List<String> titles = new ArrayList<String>();
 		/*
 		 titles.add ( "背景替换" );
 		 titles.add ( "登录动画修改" );
@@ -140,8 +132,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			titles.add ( title );
 		}
-		mAdapter = new ViewPagerAdapter ( getSupportFragmentManager ( ), fragments, titles );
-		mViewPager.setAdapter ( mAdapter );
+		FragmentPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
+		mViewPager.setAdapter(mAdapter);
 		mTabLayout.setupWithViewPager ( mViewPager );
 		checkVality ( );
 		new UpdateThread ( ).start ( );
@@ -155,7 +147,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
 		{
 
-			mTabLayout.getTabAt ( fragments.indexOf ( mModpkgInstallerFragment ) ).select ( );
+			mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
 
 
 		}
@@ -523,8 +515,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 	private String getDevId ( )
 	{
-		String s=Build.SERIAL;
-		return s;
+		return Build.SERIAL;
 	}
 	public void checkPermission ( )
 	{
@@ -881,7 +872,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).apply ( );
 										if ( !TextUtils.isEmpty ( bmobmsg.tocopy ( ) ) )
 										{
-											cmb.setText ( bmobmsg.tocopy ( ).trim ( ) );  
+											cmb.setText(bmobmsg.tocopy().trim());
 										}
 										// TODO: Implement this method
 									}

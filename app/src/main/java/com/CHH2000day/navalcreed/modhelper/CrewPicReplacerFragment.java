@@ -16,15 +16,13 @@ public class CrewPicReplacerFragment extends ModFragment
 	private View v;
 	private Bitmap ba;
 	private int selectedcountry=0,selectedcrew=0;
-	private Spinner country,num;
-	private Button selpic,updatepic,removepic;
 	private TextView selectedpic;
 	private String[] countrys={"usa","japan","uk","china","italy","france","ussr","german"};
 	@Override
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{v = inflater.inflate ( R.layout.crew_pic_replacer, null );
-		country = (Spinner)v.findViewById ( R.id.crewpicreplacerSpinnerCountry );
-		country.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+        Spinner country = (Spinner) v.findViewById(R.id.crewpicreplacerSpinnerCountry);
+        country.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
 				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
@@ -43,8 +41,8 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 			} );
 
-		num = (Spinner)v.findViewById ( R.id.crewpicreplacerSpinnerCrew );
-		num.setOnItemSelectedListener ( new OnItemSelectedListener ( ){
+        Spinner num = (Spinner) v.findViewById(R.id.crewpicreplacerSpinnerCrew);
+        num.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
 				public void onItemSelected (AdapterView<?> p1, View p2, int p3, long p4)
@@ -58,8 +56,8 @@ public class CrewPicReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		selpic = (Button)v.findViewById ( R.id.crewpicreplacerButtonSelectPic );
-		selpic.setOnClickListener ( new View.OnClickListener ( ){
+        Button selpic = (Button) v.findViewById(R.id.crewpicreplacerButtonSelectPic);
+        selpic.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick (View p1)
@@ -71,8 +69,8 @@ public class CrewPicReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		removepic = (Button)v.findViewById ( R.id.crewpicreplacerButtonRemove );
-		removepic.setOnClickListener ( new View.OnClickListener ( ){
+        Button removepic = (Button) v.findViewById(R.id.crewpicreplacerButtonRemove);
+        removepic.setOnClickListener(new View.OnClickListener() {
 
 				@Override
 				public void onClick (View p1)
@@ -99,7 +97,7 @@ public class CrewPicReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		removepic.setOnLongClickListener ( new View.OnLongClickListener ( ){
+        removepic.setOnLongClickListener(new View.OnLongClickListener() {
 
 				@Override
 				public boolean onLongClick (View p1)
@@ -127,8 +125,8 @@ public class CrewPicReplacerFragment extends ModFragment
 					return true;
 				}
 			} );
-		updatepic = (Button)v.findViewById ( R.id.crewpicreplacerButtonReplace );
-		updatepic.setOnClickListener ( new View.OnClickListener ( ){
+        Button updatepic = (Button) v.findViewById(R.id.crewpicreplacerButtonReplace);
+        updatepic.setOnClickListener(new View.OnClickListener() {
 				private void install ()
 				{
 					try

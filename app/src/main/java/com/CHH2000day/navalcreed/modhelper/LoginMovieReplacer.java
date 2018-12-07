@@ -16,9 +16,8 @@ public class LoginMovieReplacer extends Fragment
 	private ModHelperApplication mapplication;
 	private View v;
 	private TextView file;
-	private Button select,remove,update;
 
-	private Uri srcfile;
+    private Uri srcfile;
 	private File target;
 
 	private static int QUERY_CODE=2;
@@ -29,12 +28,12 @@ public class LoginMovieReplacer extends Fragment
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		v = inflater.inflate ( R.layout.loginmoviereplacer_fragment, null );
 		file = (TextView)v.findViewById ( R.id.loginmoviereplacerfragmentTextView );
-		select = (Button)v.findViewById ( R.id.loginmoviereplacerfragmentButtonSelect );
-		update = (Button)v.findViewById ( R.id.loginmoviereplacerfragmentButtonUpdate );
-		remove = (Button)v.findViewById ( R.id.loginmoviereplacerfragmentButtonRemove );
+        Button select = (Button) v.findViewById(R.id.loginmoviereplacerfragmentButtonSelect);
+        Button update = (Button) v.findViewById(R.id.loginmoviereplacerfragmentButtonUpdate);
+        Button remove = (Button) v.findViewById(R.id.loginmoviereplacerfragmentButtonRemove);
 		// TODO: Implement this method
 
-		select.setOnClickListener ( new OnClickListener ( ){
+        select.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )
@@ -47,7 +46,7 @@ public class LoginMovieReplacer extends Fragment
 					// TODO: Implement this method
 				}
 			} );
-		update.setOnClickListener ( new OnClickListener ( ){
+        update.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )
@@ -99,8 +98,8 @@ public class LoginMovieReplacer extends Fragment
 					// TODO: Implement this method
 				}
 			} );
-			
-		remove.setOnClickListener ( new OnClickListener ( ){
+
+        remove.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick ( View p1 )
