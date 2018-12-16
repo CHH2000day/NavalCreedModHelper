@@ -17,7 +17,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 76
-        versionName "3.2.4-release"
+        versionName "build-2018121600-alpha"
         flavorDimensions "versionCode"
 		
     }
