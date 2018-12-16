@@ -4,11 +4,9 @@ import android.view.*;
 import android.support.v7.widget.*;
 import android.widget.*;
 import android.os.*;
-import android.content.res.*;
 import android.widget.CompoundButton.*;
 import android.support.v7.app.*;
 import android.content.*;
-import java.util.*;
 import android.support.design.widget.*;
 
 public class ModPackageManagerFragment extends Fragment implements ModPackageManager.OnDataChangedListener
@@ -59,24 +57,14 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 					AlertDialog.Builder adb= new AlertDialog.Builder ( getActivity ( ) );
 					adb.setTitle ( R.string.notice )
 						.setMessage ( R.string.ovrd_warning )
-						.setNegativeButton ( R.string.cancel, new DialogInterface.OnClickListener ( ){
-
-							@Override
-							public void onClick ( DialogInterface p1, int p2 )
-							{
+							.setNegativeButton(R.string.cancel, (p112, p2) -> {
 								// TODO: Implement this method
-								cancel ( );
-							}
-						} )
-						.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
-
-							@Override
-							public void onClick ( DialogInterface p1, int p2 )
-							{
-								override ( );
+								cancel();
+							})
+							.setPositiveButton(R.string.cont, (p11, p2) -> {
+								override();
 								// TODO: Implement this method
-							}
-						} )
+							})
 						.setCancelable ( false );
 					AlertDialog ad=adb.create ( );
 					ad.setCanceledOnTouchOutside ( false );
@@ -147,10 +135,10 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	private class MyAdapter extends RecyclerView.Adapter
 	{
 
-		private Context context;
-		private LayoutInflater li;
-		private String[] keys;
-		private View.OnLongClickListener listener;
+		private final Context context;
+		private final LayoutInflater li;
+		private final String[] keys;
+		private final View.OnLongClickListener listener;
 		public MyAdapter ( Context ctx )
 		{
 			context = ctx;
@@ -268,19 +256,14 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			adb.setTitle ( R.string.notice )
 				.setMessage ( getString ( R.string.confirm_to_remove_changes_to_parta ) + ModPackageManager.getInstance ( ).resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + getString ( R.string.confirm_to_remove_changes_to_partb ) )
 				.setNegativeButton ( R.string.cancel, null )
-				.setPositiveButton ( R.string.cont, new DialogInterface.OnClickListener ( ){
-
-					@Override
-					public void onClick ( DialogInterface p1, int p2 )
-					{
-						String type=	key.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_BB ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CV ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_CA ) || key.equals ( ModPackageInfo.SUB_MODTYPE_CV_JP_DD ) ?ModPackageInfo.MODTYPE_CV: key;
-						String subType=type.equals ( ModPackageInfo.MODTYPE_CV ) ?key: ModPackageInfo.SUBTYPE_EMPTY;
-						boolean b=ModPackageManager.getInstance ( ).requestUninstall ( type, subType , (ModHelperApplication)getActivity ( ).getApplication ( ) );
-						String str=b ?getString ( R.string.success ): getString ( R.string.failed );
-						Snackbar.make ( v, str, Snackbar.LENGTH_LONG ).show ( );
+					.setPositiveButton(R.string.cont, (p1, p2) -> {
+						String type = key.equals(ModPackageInfo.SUB_MODTYPE_CV_CN) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_EN) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_BB) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_CV) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_CA) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_DD) ? ModPackageInfo.MODTYPE_CV : key;
+						String subType = type.equals(ModPackageInfo.MODTYPE_CV) ? key : ModPackageInfo.SUBTYPE_EMPTY;
+						boolean b = ModPackageManager.getInstance().requestUninstall(type, subType, (ModHelperApplication) getActivity().getApplication());
+						String str = b ? getString(R.string.success) : getString(R.string.failed);
+						Snackbar.make(v, str, Snackbar.LENGTH_LONG).show();
 						// TODO: Implement this method
-					}
-				} );
+					});
 			adb.create ( ).show ( );
 
 		}
@@ -289,7 +272,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	private class ViewHolder extends RecyclerView.ViewHolder
 	{
 
-		private View v;
+		private final View v;
 		public ViewHolder ( View v )
 		{
 			super ( v );

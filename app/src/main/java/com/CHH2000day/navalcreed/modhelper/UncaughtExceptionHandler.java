@@ -8,7 +8,6 @@ import cn.bmob.v3.listener.*;
 import java.io.*;
 import android.widget.*;
 import android.os.*;
-import android.support.v7.app.*;
 import okio.*;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
@@ -47,7 +46,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 
 	}
 
-	public void checkUnpostedBug()
+	private void checkUnpostedBug()
 	{
 		final long time=ctx.getSharedPreferences(PREF_NAME, 0).getLong(ERRTIME, -1);
 		if (time == -1)

@@ -6,15 +6,11 @@ import java.io.*;
 import android.net.*;
 import android.app.Activity;
 import android.content.*;
-import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
-import org.json.*;
 import android.widget.*;
 import android.support.v7.app.*;
-import android.view.View.*;
 import android.support.design.widget.*;
 import android.text.method.*;
 import android.provider.*;
-import okio.*;
 
 public class ModPackageInstallerFragment extends Fragment
 {
@@ -41,11 +37,11 @@ public class ModPackageInstallerFragment extends Fragment
 
 		// TODO: Implement this method
 		v = inflater.inflate(R.layout.modinfopage, null);
-		preview = (ImageView)v.findViewById(R.id.modinfopageImageView);
-		info = (TextView)v.findViewById(R.id.modinfopageTextView);
-		select = (Button)v.findViewById(R.id.modinfopageButtonSelect);
-		update = (Button)v.findViewById(R.id.modinfopageButtonUpdate);
-		cancel = (Button)v.findViewById(R.id.modinfopageButtonCancel);
+		preview = v.findViewById(R.id.modinfopageImageView);
+		info = v.findViewById(R.id.modinfopageTextView);
+		select = v.findViewById(R.id.modinfopageButtonSelect);
+		update = v.findViewById(R.id.modinfopageButtonUpdate);
+		cancel = v.findViewById(R.id.modinfopageButtonCancel);
 		info.setMovementMethod(new ScrollingMovementMethod());
 		return v;
 	}
@@ -70,54 +66,34 @@ public class ModPackageInstallerFragment extends Fragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		// TODO: Implement this method
-		select.setOnClickListener(new OnClickListener(){
+		select.setOnClickListener(p1 -> {
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("*/*");
+			intent.addCategory(intent.CATEGORY_OPENABLE);
+			startActivityForResult(intent.createChooser(intent, getString(R.string.select_file)), QUERY_CODE);
 
-				@Override
-				public void onClick(View p1)
-				{Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
-					intent.setType("*/*");
-					intent.addCategory(intent.CATEGORY_OPENABLE);
-					startActivityForResult(intent.createChooser(intent, getString(R.string.select_file)), QUERY_CODE);
-
-					// TODO: Implement this method
-				}
-			});
-		select.setOnLongClickListener(new OnLongClickListener(){
-
-				@Override
-				public boolean onLongClick(View p1)
-				{
-					// TODO: Implement this method
-					final String pkg="com.android.documentsui";
-					Uri packageURI=Uri.parse("package:" + pkg);
-					Intent intent =  new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);  
-					startActivity(intent);
-					return true;
-				}
-			});
-		cancel.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View p1)
-				{
-					clear();
-					// TODO: Implement this method
-				}
-			});
-		update.setOnClickListener(new OnClickListener(){
-
-				@Override
-				public void onClick(View p1)
-				{
-					if (mpih == null)
-					{
-						Snackbar.make(v, R.string.modpkg_info_empty, Snackbar.LENGTH_LONG).show();
-						return;
-					}
-					mpih.beginInstall((Main)getActivity());
-					// TODO: Implement this method
-				}
-			});
+			// TODO: Implement this method
+		});
+		select.setOnLongClickListener(p1 -> {
+			// TODO: Implement this method
+			final String pkg = "com.android.documentsui";
+			Uri packageURI = Uri.parse("package:" + pkg);
+			Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
+			startActivity(intent);
+			return true;
+		});
+		cancel.setOnClickListener(p1 -> {
+			clear();
+			// TODO: Implement this method
+		});
+		update.setOnClickListener(p1 -> {
+			if (mpih == null) {
+				Snackbar.make(v, R.string.modpkg_info_empty, Snackbar.LENGTH_LONG).show();
+				return;
+			}
+			mpih.beginInstall((Main) getActivity());
+			// TODO: Implement this method
+		});
 	}
 
 	@Override
@@ -186,44 +162,32 @@ public class ModPackageInstallerFragment extends Fragment
 							.append(uri.getPath())
 							.toString())
 				.setNegativeButton(R.string.cancel, null)
-				.setPositiveButton(R.string.altn_install, new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface p1, int p2)
-					{
-						final Handler h=new Handler(){
-							public void handleMessage(Message msg)
-							{
-								if (msg.what == 0)
-								{
+					.setPositiveButton(R.string.altn_install, (p1, p2) -> {
+						final Handler h = new Handler() {
+							public void handleMessage(Message msg) {
+								if (msg.what == 0) {
 									isCache = true;
-									load((File)msg.obj);
-								}
-								else
-								{
-									AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
-									adb.setTitle(R.string.error)
-										.setMessage(Utils.getErrMsg((Throwable)msg.obj))
-										.setPositiveButton(R.string.ok, null)
-										.create().show();
+									load((File) msg.obj);
+								} else {
+									AlertDialog.Builder adb1 = new AlertDialog.Builder(getActivity());
+									adb1.setTitle(R.string.error)
+											.setMessage(Utils.getErrMsg((Throwable) msg.obj))
+											.setPositiveButton(R.string.ok, null)
+											.create().show();
 								}
 							}
 						};
-						new Thread(){
+						new Thread() {
 
 							@Override
-							public void run()
-							{
-								File f=new File(getActivity().getExternalCacheDir(), "cachedmodfile.ncmod");
-								try
-								{
+							public void run() {
+								File f = new File(getActivity().getExternalCacheDir(), "cachedmodfile.ncmod");
+								try {
 									InputStream in = getActivity().getContentResolver().openInputStream(uri);
 									Utils.writeToFile(in, f);
 									h.sendMessage(h.obtainMessage(0, f));
 
-								}
-								catch (Throwable t)
-								{
+								} catch (Throwable t) {
 									h.sendMessage(h.obtainMessage(-1, t));
 								}
 
@@ -231,7 +195,6 @@ public class ModPackageInstallerFragment extends Fragment
 							}
 						}.start();
 						// TODO: Implement this method
-					}
 				});
 			adb.create().show();
 			return;
@@ -331,9 +294,8 @@ public class ModPackageInstallerFragment extends Fragment
 
 	}
 
-	public static interface UriLoader
-	{
-		public Uri getUri();
+	public interface UriLoader {
+		Uri getUri();
 	}
 
 	@Override

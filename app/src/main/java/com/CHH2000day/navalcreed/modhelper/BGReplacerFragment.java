@@ -1,20 +1,29 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.content.*;
-import android.graphics.*;
-import android.os.*;
-import android.support.v4.app.*;
-import android.support.v7.app.*;
-import android.view.*;
-import android.view.View.*;
-import android.widget.*;
-import android.widget.AdapterView.*;
-import java.io.*;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
-import android.support.design.widget.*;
-import android.support.annotation.*;
-import android.net.*;
-import java.lang.ref.*;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.lang.ref.SoftReference;
 
 public class BGReplacerFragment extends ModFragment
 {
@@ -28,7 +37,7 @@ public class BGReplacerFragment extends ModFragment
 	private int cat=0,filepos=0;
 	private View v;
 	@Override
-	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		abs_path = new StringBuilder ( )
 			.append ( ((ModHelperApplication)getActivity ( ).getApplication ( )).getResFilesDirPath ( ) )
@@ -36,7 +45,7 @@ public class BGReplacerFragment extends ModFragment
 			.append ( "pic" )
 			.toString ( );
 		v = inflater.inflate ( R.layout.bgreplacer_fragment, null );
-        Spinner cateory = (Spinner) v.findViewById(R.id.bgreplacerSpinner1);
+		Spinner cateory = v.findViewById(R.id.bgreplacerSpinner1);
         cateory.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
@@ -52,7 +61,7 @@ public class BGReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-        Spinner file = (Spinner) v.findViewById(R.id.bgreplacerSpinner2);
+		Spinner file = v.findViewById(R.id.bgreplacerSpinner2);
 
         file.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -69,45 +78,30 @@ public class BGReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		picname = (TextView)v.findViewById ( R.id.bgreplacerPic );
-        Button btnrm = (Button) v.findViewById(R.id.bgreplacer_remove);
-        Button update = (Button) v.findViewById(R.id.bgreplacerbtn_update);
-        Button selpic = (Button) v.findViewById(R.id.bgreplacerbtn_select);
-        selpic.setOnClickListener(new OnClickListener() {
+		picname = v.findViewById(R.id.bgreplacerPic);
+		Button btnrm = v.findViewById(R.id.bgreplacer_remove);
+		Button update = v.findViewById(R.id.bgreplacerbtn_update);
+		Button selpic = v.findViewById(R.id.bgreplacerbtn_select);
+		selpic.setOnClickListener(p1 -> {
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("image/*");
+			startActivityForResult(intent, 1);
 
-				@Override
-				public void onClick (View p1)
-				{
-					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
-					intent.setType ( "image/*" );
-					startActivityForResult ( intent, 1 );
-
-					// TODO: Implement this method
-				}
-			} );
-        btnrm.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick (View p1)
-				{
-					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( R.string.notice )
+			// TODO: Implement this method
+		});
+		btnrm.setOnClickListener(p1 -> {
+			AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+			adb.setTitle(R.string.notice)
 					.setMessage(R.string.confirm_to_remove_all_changes)
-					.setNegativeButton ( R.string.cancel, null );
-					adb.setPositiveButton ( R.string.ok, new DialogInterface.OnClickListener ( ){
+					.setNegativeButton(R.string.cancel, null);
+			adb.setPositiveButton(R.string.ok, (dialogInterface, p2) -> {
+				removechanges();
+				// TODO: Implement this method
+			});
 
-							@Override
-							public void onClick (DialogInterface p1, int p2)
-							{
-								removechanges ( );
-								// TODO: Implement this method
-							}
-						} );
-
-					adb.create ( ).show ( );
-					// TODO: Implement this method
-				}
-			} );
+			adb.create().show();
+			// TODO: Implement this method
+		});
         update.setOnClickListener(new OnClickListener() {
 
 				private void install ()
@@ -142,16 +136,11 @@ public class BGReplacerFragment extends ModFragment
 							adb.setTitle ( R.string.notice )
 								.setMessage ( R.string.modpkg_install_ovwtmsg )
 								.setNegativeButton ( R.string.cancel, null )
-								.setPositiveButton ( R.string.cancel_and_exit, new DialogInterface.OnClickListener ( ){
-
-									@Override
-									public void onClick (DialogInterface p1, int p2)
-									{
-										uninstallMod ( );
-										install ( );
+									.setPositiveButton(R.string.cancel_and_exit, (p11, p2) -> {
+										uninstallMod();
+										install();
 										// TODO: Implement this method
-									}
-								} );
+									});
 							adb.create().show();
 						}
 						else

@@ -111,10 +111,7 @@ public class ModPackageManager
 			{
 				updateConfig ( true );
 				reflesh ( );
-			}
-			catch (FileNotFoundException e)
-			{}
-			catch (JSONException e)
+			} catch (FileNotFoundException | JSONException e)
 			{}
 		}
 
@@ -227,10 +224,7 @@ public class ModPackageManager
 		try
 		{
 			commit ( );
-		}
-		catch (IOException e)
-		{e.printStackTrace ( );}
-		catch (JSONException e)
+		} catch (IOException | JSONException e)
 		{e.printStackTrace ( );}
 		return;
 
@@ -252,10 +246,7 @@ public class ModPackageManager
 		try
 		{
 			commit ( );
-		}
-		catch (IOException e)
-		{e.printStackTrace ( );}
-		catch (JSONException e)
+		} catch (IOException | JSONException e)
 		{e.printStackTrace ( );}
 
 	}
@@ -347,10 +338,7 @@ public class ModPackageManager
 		try
 		{
 			commit ( );
-		}
-		catch (IOException e)
-		{e.printStackTrace ( );}
-		catch (JSONException e)
+		} catch (IOException | JSONException e)
 		{e.printStackTrace ( );}
 	}
 
@@ -449,8 +437,8 @@ public class ModPackageManager
 		 }*/
 		return modType.containsKey ( modtype ) ?modType.get ( modtype ): modType.get ( UNKNOWN );
 	}
-	public static interface OnDataChangedListener
-	{
-		public void onChange ( );
+
+	public interface OnDataChangedListener {
+		void onChange();
 	}
 }

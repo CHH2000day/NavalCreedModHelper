@@ -6,6 +6,8 @@ import android.support.v4.app.*;
 import android.view.*;
 import android.widget.*;
 import java.io.*;
+import java.util.Objects;
+
 import android.widget.AdapterView.*;
 import android.support.v7.app.*;
 import android.support.design.widget.*;
@@ -21,7 +23,7 @@ public class CrewPicReplacerFragment extends ModFragment
 	@Override
 	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{v = inflater.inflate ( R.layout.crew_pic_replacer, null );
-        Spinner country = (Spinner) v.findViewById(R.id.crewpicreplacerSpinnerCountry);
+		Spinner country = v.findViewById(R.id.crewpicreplacerSpinnerCountry);
         country.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
@@ -41,7 +43,7 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 			} );
 
-        Spinner num = (Spinner) v.findViewById(R.id.crewpicreplacerSpinnerCrew);
+		Spinner num = v.findViewById(R.id.crewpicreplacerSpinnerCrew);
         num.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 				@Override
@@ -56,76 +58,57 @@ public class CrewPicReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-        Button selpic = (Button) v.findViewById(R.id.crewpicreplacerButtonSelectPic);
-        selpic.setOnClickListener(new View.OnClickListener() {
+		Button selpic = v.findViewById(R.id.crewpicreplacerButtonSelectPic);
+		selpic.setOnClickListener(p1 -> {
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("image/*");
+			startActivityForResult(intent, 2);
 
-				@Override
-				public void onClick (View p1)
-				{
-					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
-					intent.setType ( "image/*" );
-					startActivityForResult ( intent, 2 );
+			// TODO: Implement this method
+		});
+		Button removepic = v.findViewById(R.id.crewpicreplacerButtonRemove);
+		removepic.setOnClickListener(p1 -> {
+			AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+			adb.setTitle(R.string.notice)
+					.setMessage(R.string.confirm_to_remove_changes)
+					.setPositiveButton(R.string.remove_changes, (dialogInterface, p2) -> {
+						if (getFile(selectedcountry, selectedcrew).delete()) {
+							Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
+						} else {
+							Snackbar.make(v, R.string.failed, Snackbar.LENGTH_LONG).show();
+						}
 
-					// TODO: Implement this method
-				}
-			} );
-        Button removepic = (Button) v.findViewById(R.id.crewpicreplacerButtonRemove);
-        removepic.setOnClickListener(new View.OnClickListener() {
+						// TODO: Implement this method
+					})
+					.setNegativeButton(R.string.cancel, null)
+					.create()
+					.show();
+			// TODO: Implement this method
+		});
+		removepic.setOnLongClickListener(p1 -> {
+			AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+			adb.setTitle(R.string.notice)
+					.setMessage(R.string.confirm_to_remove_all_changes)
+					.setPositiveButton(R.string.remove_changes, new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick (View p1)
-				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( R.string.notice )
-						.setMessage (  R.string.confirm_to_remove_changes)
-						.setPositiveButton ( R.string.remove_changes, new DialogInterface.OnClickListener ( ){
-
-							@Override
-							public void onClick (DialogInterface p1, int p2)
-							{if (getFile ( selectedcountry, selectedcrew ).delete ( ))
-								{
-									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
-								}
-								else
-								{Snackbar.make ( v, R.string.failed, Snackbar.LENGTH_LONG ).show ( );}
-
-								// TODO: Implement this method
+						@Override
+						public void onClick(DialogInterface p1, int p2) {
+							if (uninstallMod()) {
+								Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
+							} else {
+								Snackbar.make(v, R.string.failed, Snackbar.LENGTH_LONG).show();
 							}
-						} )
-						.setNegativeButton ( R.string.cancel, null )
-						.create ( )
-						.show ( );
-					// TODO: Implement this method
-				}
-			} );
-        removepic.setOnLongClickListener(new View.OnLongClickListener() {
+							// TODO: Implement this method
+						}
+					})
+					.setNegativeButton(R.string.cancel, null)
+					.create()
+					.show();
 
-				@Override
-				public boolean onLongClick (View p1)
-				{AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( R.string.notice )
-						.setMessage ( R.string.confirm_to_remove_all_changes )
-						.setPositiveButton ( R.string.remove_changes, new DialogInterface.OnClickListener ( ){
-
-							@Override
-							public void onClick (DialogInterface p1, int p2)
-							{if (uninstallMod ( ))
-								{
-									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
-								}
-								else
-								{Snackbar.make ( v, R.string.failed, Snackbar.LENGTH_LONG ).show ( );}
-								// TODO: Implement this method
-							}
-						} )
-						.setNegativeButton ( R.string.cancel, null )
-						.create ( )
-						.show ( );
-
-					// TODO: Implement this method
-					return true;
-				}
-			} );
-        Button updatepic = (Button) v.findViewById(R.id.crewpicreplacerButtonReplace);
+			// TODO: Implement this method
+			return true;
+		});
+		Button updatepic = v.findViewById(R.id.crewpicreplacerButtonReplace);
         updatepic.setOnClickListener(new View.OnClickListener() {
 				private void install ()
 				{
@@ -178,7 +161,7 @@ public class CrewPicReplacerFragment extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		selectedpic = (TextView)v.findViewById ( R.id.crewpicreplacerSelectedFile );
+		selectedpic = v.findViewById(R.id.crewpicreplacerSelectedFile);
 
 		// TODO: Implement this method
 		return v;
@@ -245,7 +228,7 @@ public class CrewPicReplacerFragment extends ModFragment
 					ba.recycle ( );
 					System.gc ( );
 				}
-				ba = BitmapFactory.decodeStream ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ) );
+				ba = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(Objects.requireNonNull(data.getData())));
 				selectedpic.setText ( data.getData ( ).toString ( ) );
 			}
 			catch (Throwable t)

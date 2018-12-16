@@ -267,13 +267,12 @@ public class Utils
 		String string =uri.toString ( );
 		String path[]=new String[2];
 		//判断文件是否在sd卡中
-		if ( string.indexOf ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) ) != -1 )
+		if (string.contains(String.valueOf(Environment.getExternalStorageDirectory())))
 		{
 			//对Uri进行切割
 			path = string.split ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) );
 			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
-		}
-		else if ( string.indexOf ( String.valueOf ( Environment.getDataDirectory ( ) ) ) != -1 )
+		} else if (string.contains(String.valueOf(Environment.getDataDirectory())))
 		{ //判断文件是否在手机内存中
 			//对Uri进行切割
 			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
@@ -321,8 +320,7 @@ public class Utils
 				md.update ( buffer, 0, len );
 			}
 			s = bytesToString ( md.digest ( ) );
-		}
-		catch (NoSuchAlgorithmException e)
+		} catch (NoSuchAlgorithmException ignored)
 		{}
 		finally
 		{

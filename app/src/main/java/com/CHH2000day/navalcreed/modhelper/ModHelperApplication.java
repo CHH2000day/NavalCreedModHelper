@@ -4,7 +4,7 @@ import android.content.pm.*;
 import android.util.*;
 import cn.bmob.v3.*;
 import java.io.*;
-import android.os.storage.*;
+
 import android.os.*;
 import com.CHH2000day.*;
 import android.content.pm.PackageManager.*;
@@ -30,7 +30,7 @@ public class ModHelperApplication extends Application
 	private static final String TW="TW";//num2
 	private String pkgnameinuse=GAME_PKGNAME_CN_SERVER;//CN EU TW
 	private static MainSharedPreferencesChangeListener preflistener;
-	public static String[] pkgnames;
+    public static final String[] pkgnames;
 	private boolean isMainPage=true;
 
 	static{
@@ -56,8 +56,7 @@ public class ModHelperApplication extends Application
 		try
 		{
 			UncaughtExceptionHandler.getInstance ( ).init ( ModHelperApplication.this );
-		}
-		catch (PackageManager.NameNotFoundException e)
+		} catch (PackageManager.NameNotFoundException ignored)
 		{}
 
 		try

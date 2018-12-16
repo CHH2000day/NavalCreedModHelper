@@ -1,34 +1,51 @@
 package com.CHH2000day.navalcreed.modhelper;
 
-import android.content.*;
-import android.net.*;
-import android.os.*;
-import android.support.design.widget.*;
-import android.support.v4.app.*;
-import android.support.v4.view.*;
-import android.support.v4.widget.*;
-import android.support.v7.app.*;
-import android.support.v7.widget.*;
-import android.util.*;
-import android.view.*;
-import cn.bmob.v3.*;
-import cn.bmob.v3.datatype.*;
-import cn.bmob.v3.exception.*;
-import cn.bmob.v3.listener.*;
-import java.io.*;
-import java.util.*;
-import java.net.*;
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import java.util.zip.*;
-import android.support.v4.content.*;
-import android.*;
-import android.content.pm.*;
-import android.support.annotation.*;
-import android.view.View.*;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.view.inputmethod.*;
-import org.json.*;
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DownloadFileListener;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -47,16 +64,16 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 
 	private static final int PERMISSION_CHECK_CODE = 125;
+
+	@SuppressLint("HandlerLeak")
 	@Override
-	protected void onCreate ( Bundle savedInstanceState )
-	{
+	protected void onCreate (Bundle savedInstanceState ) {
 		super.onCreate ( savedInstanceState );
 		setContentView ( R.layout.main );
-		Toolbar toolbar = (Toolbar) findViewById ( R.id.toolbar );
+		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar ( toolbar );
 		mupdateHandler = new Handler ( ){
-			public void handleMessage ( final Message msg )
-			{
+			public void handleMessage (final Message msg ) {
 
 				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
 				adb.create ( ).show ( );
@@ -86,20 +103,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 NavigationView navigationView = (NavigationView) findViewById ( R.id.nav_view );
 		 navigationView.setNavigationItemSelectedListener ( this );*/
 		//配置ViewPager与TabLayout
-		mViewPager = (ViewPager)findViewById ( R.id.viewPager );
-		TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+		mViewPager = findViewById(R.id.viewPager);
+		TabLayout mTabLayout = findViewById(R.id.tabLayout);
 		//构造Fragment实例
 		mBGReplacerFragment = new BGReplacerFragment ( );
 		LoginMovieReplacer mLoginMovieReplacer = new LoginMovieReplacer();
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
 		//如果系统版本为Lollipop前的旧设备，使用旧的BGM转码器
-		if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT )
-		{
+		if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ) {
 			mBGMReplacerFragment = new BGMReplacerFragmentSDK19B ( );
-		}
-		else
-		{
+		} else {
 			mBGMReplacerFragment = new BGMReplacerFragment ( );
 		}
 		ModPackageInstallerFragment mModpkgInstallerFragment = new ModPackageInstallerFragment();
@@ -109,8 +123,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		fragments.add ( mBGReplacerFragment );
 		fragments.add(mLoginMovieReplacer);
 		fragments.add ( mCrewPicReplacerFragment );
-		if ( getResources ( ).getConfiguration ( ).locale.getLanguage ( ).contains ( "zh" ) )
-		{
+		if ( getResources ( ).getConfiguration ( ).locale.getLanguage ( ).contains ( "zh" ) ) {
 			fragments.add ( mAntiHexieFragment );
 		}
 		fragments.add ( mBGMReplacerFragment );
@@ -128,8 +141,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 titles.add ( "Mod包管理" );
 		 titles.add ( "关于" );*/
 		String[] fragment_titles=getResources ( ).getStringArray ( R.array.fragment_titles );
-		for ( String title:fragment_titles )
-		{
+		for ( String title:fragment_titles ) {
 			titles.add ( title );
 		}
 		FragmentPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
@@ -144,8 +156,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 {
 		 installModPackageBeta(getIntent().getData().getPath());	
 		 }*/
-		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
-		{
+		if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) ) {
 
 			mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
 
@@ -252,7 +263,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	 }
 	 }
 	 */
-	private void checkVality ( )
+@SuppressLint("HandlerLeak")
+private void checkVality ( )
 	{
 		//进行检查
 		/*
@@ -304,15 +316,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					{
 						case 9010:
 							Snackbar.make ( mViewPager, R.string.network_err, Snackbar.LENGTH_LONG ).show ( );
-							ad.setButton ( ad.BUTTON_POSITIVE, getText ( R.string.exit ), new DialogInterface.OnClickListener ( ){
-
-									@Override
-									public void onClick ( DialogInterface p1, int p2 )
-									{
-										doExit ( );
-										// TODO: Implement this method
-									}
-								} );
+							ad.setButton(ad.BUTTON_POSITIVE, getText(R.string.exit), (p1, p2) -> {
+								doExit();
+								// TODO: Implement this method
+							});
 							break;
 							/*case -8:
 							 Snackbar.make(mViewPager,"权限验证成功",Sackbar.LENGTH_LONG).show();
@@ -511,7 +518,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					// TODO: Implement this method
 				}
 			} );
-		;
 	}
 	private String getDevId ( )
 	{
@@ -526,24 +532,14 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 				AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 				adb.setTitle ( R.string.permission_request )
 					.setMessage ( R.string.permission_request_msg )
-					.setNegativeButton ( R.string.cancel_and_exit, new DialogInterface.OnClickListener ( ){
-
-						@Override
-						public void onClick ( DialogInterface p1, int p2 )
-						{
-							finish ( );
+						.setNegativeButton(R.string.cancel_and_exit, (p1, p2) -> {
+							finish();
 							// TODO: Implement this method
-						}
-					} )
-					.setPositiveButton ( R.string.grant_permission, new DialogInterface.OnClickListener ( ){
-
-						@Override
-						public void onClick ( DialogInterface p1, int p2 )
-						{
-							ActivityCompat.requestPermissions ( Main.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CHECK_CODE );
+						})
+						.setPositiveButton(R.string.grant_permission, (p1, p2) -> {
+							ActivityCompat.requestPermissions(Main.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CHECK_CODE);
 							// TODO: Implement this method
-						}
-					} )
+						})
 					.setCancelable ( false );
 				AlertDialog ad=adb.create ( );
 				ad.setCanceledOnTouchOutside ( false );
@@ -612,15 +608,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 		adb.setTitle ( R.string.notice )
 			.setMessage ( R.string.exitmsg )
-			.setPositiveButton ( R.string.exit, new DialogInterface.OnClickListener ( ){
-
-				@Override
-				public void onClick ( DialogInterface p1, int p2 )
-				{
-					doExit ( );
+				.setPositiveButton(R.string.exit, (p1, p2) -> {
+					doExit();
 					// TODO: Implement this method
-				}
-			} )
+				})
 			.setNegativeButton ( R.string.cancel, null )
 			.create ( )
 			.show ( );
@@ -705,7 +696,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	private void showKeyDialog ( )
 	{
 		View d=getLayoutInflater ( ).inflate ( R.layout.dialog_key, null );
-		final EditText et=(EditText)d.findViewById ( R.id.dialogkeyEditTextKey );
+		final EditText et = d.findViewById(R.id.dialogkeyEditTextKey);
 		AlertDialog.Builder adb=new AlertDialog.Builder ( this );
 		adb.setTitle ( R.string.tester_authority_verify )
 			.setView ( d )
@@ -749,7 +740,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						 mvercheckHandler.sendEmptyMessage ( -1 );
 						 }*/
 
-						int serverver=universalobj.getVersion ( ).intValue ( );
+						int serverver = universalobj.getVersion();
 						try
 						{
 							int currver=getPackageManager ( ).getPackageInfo ( getPackageName ( ), 0 ).versionCode;
@@ -761,59 +752,49 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							adb.setTitle ( R.string.update )
 								.setMessage ( universalobj.getChangelog ( ) )
 								.setNegativeButton ( R.string.cancel, null )
-								.setPositiveButton ( R.string.update, new DialogInterface.OnClickListener ( ){
-
-									@Override
-									public void onClick ( DialogInterface p1, int p2 )
-									{BmobFile tgtfile=universalobj.getPackagefile ( );
-										if ( tgtfile == null )
-										{
+									.setPositiveButton(R.string.update, (p1, p21) -> {
+										BmobFile tgtfile = universalobj.getPackagefile();
+										if (tgtfile == null) {
 											return;
 										}
-										Snackbar.make ( mViewPager, R.string.downloading, Snackbar.LENGTH_LONG ).show ( );
-										AlertDialog.Builder db=new AlertDialog.Builder ( Main.this );
-										db.setTitle ( R.string.please_wait )
-											.setMessage ( R.string.downloading )
-											.setCancelable ( false );
-										final AlertDialog d=db.create ( );
-										d.setCanceledOnTouchOutside ( false );
-										d.show ( );
+										Snackbar.make(mViewPager, R.string.downloading, Snackbar.LENGTH_LONG).show();
+										AlertDialog.Builder db = new AlertDialog.Builder(Main.this);
+										db.setTitle(R.string.please_wait)
+												.setMessage(R.string.downloading)
+												.setCancelable(false);
+										final AlertDialog d = db.create();
+										d.setCanceledOnTouchOutside(false);
+										d.show();
 										//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
-										final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
+										final File destfile = new File(new File(getExternalCacheDir(), "download"), "update.apk");
 
-										tgtfile.download ( destfile, new DownloadFileListener ( ){
+										tgtfile.download(destfile, new DownloadFileListener() {
 
-												@Override
-												public void done ( String p1, BmobException p2 )
-												{
-													d.dismiss ( );
-													Snackbar.make ( mViewPager, R.string.downloaded, Snackbar.LENGTH_LONG ).show ( );
-													Intent i=new Intent ( Intent.ACTION_VIEW );
-													Uri data;
-													i.setFlags ( Intent.FLAG_ACTIVITY_NEW_TASK );
-													if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.N )
-													{
-														data = FileProvider.getUriForFile ( Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", destfile );
-														i.addFlags ( i.FLAG_GRANT_READ_URI_PERMISSION );
-													}
-													else
-													{
-														data = Uri.fromFile ( destfile );
-													}
-													i.setDataAndType ( data, "application/vnd.android.package-archive" );
-													startActivity ( i );
-													// TODO: Implement this method
+											@Override
+											public void done(String p1, BmobException p21) {
+												d.dismiss();
+												Snackbar.make(mViewPager, R.string.downloaded, Snackbar.LENGTH_LONG).show();
+												Intent i = new Intent(Intent.ACTION_VIEW);
+												Uri data;
+												i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+												if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+													data = FileProvider.getUriForFile(Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", destfile);
+													i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+												} else {
+													data = Uri.fromFile(destfile);
 												}
+												i.setDataAndType(data, "application/vnd.android.package-archive");
+												startActivity(i);
+												// TODO: Implement this method
+											}
 
-												@Override
-												public void onProgress ( Integer p1, long p2 )
-												{
-													// TODO: Implement this method
-												}
-											} );
+											@Override
+											public void onProgress(Integer p1, long p21) {
+												// TODO: Implement this method
+											}
+										});
 										// TODO: Implement this method
-									}
-								} );
+									});
 							mupdateHandler.sendMessage ( mupdateHandler.obtainMessage ( 0, adb ) );
 							// TODO: Implement this method
 						}
@@ -853,30 +834,19 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							adb0.setTitle ( R.string.announcement )
 								.setMessage ( bmobmsg.getMessage ( ) )
 								.setPositiveButton ( R.string.ok, null )
-								.setNeutralButton  (  R.string.dont_show, new DialogInterface.OnClickListener ( ){
-
-									@Override
-									public void onClick ( DialogInterface p1, int p2 )
-									{
-										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).apply ( );
+									.setNeutralButton(R.string.dont_show, (p1, p212) -> {
+										getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
 
 										// TODO: Implement this method
-									}
-								} )
-								.setNegativeButton ( R.string.copy, new DialogInterface.OnClickListener ( ){
-
-									@Override
-									public void onClick ( DialogInterface p1, int p2 )
-									{
-										ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE ); 
-										getSharedPreferences ( GENERAL, 0 ).edit ( ).putInt ( ANNOU_VER, id ).apply ( );
-										if ( !TextUtils.isEmpty ( bmobmsg.tocopy ( ) ) )
-										{
+									})
+									.setNegativeButton(R.string.copy, (p1, p21) -> {
+										ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+										getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+										if (!TextUtils.isEmpty(bmobmsg.tocopy())) {
 											cmb.setText(bmobmsg.tocopy().trim());
 										}
 										// TODO: Implement this method
-									}
-								} );
+									});
 
 							mupdateHandler.sendMessage ( mupdateHandler.obtainMessage ( 1, adb0 ) );
 						}
@@ -891,13 +861,14 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	}
 	private interface OnCheckResultListener
 	{
-		public void onSuccess ( );
-		public void onFail ( int reason, String errorrmsg );
+		void onSuccess();
+
+		void onFail(int reason, String errorrmsg);
 	}
 	private class KeyDialogListener implements AlertDialog.OnShowListener
 	{
 
-		private AlertDialog ad;
+		private final AlertDialog ad;
 		private Button btnCancel,btnEnter;
 		private EditText keyinput;
 		public KeyDialogListener ( final AlertDialog ad, final EditText input )
@@ -910,56 +881,36 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			btnCancel = ad.getButton ( ad.BUTTON_NEGATIVE );
 			btnEnter = ad.getButton ( ad.BUTTON_POSITIVE );
-			btnCancel.setOnClickListener ( new OnClickListener ( ){
+			btnCancel.setOnClickListener(p113 -> {
+				doExit();
+				// TODO: Implement this method
+			});
+			btnEnter.setOnClickListener(p112 -> {
+				String key = keyinput.getEditableText().toString().toUpperCase().trim();
+				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+				performkeycheck(key, new OnCheckResultListener() {
 
 					@Override
-					public void onClick ( View p1 )
-					{
-						doExit ( );
+					public void onSuccess() {
+						ad.dismiss();
 						// TODO: Implement this method
 					}
-				} );
-			btnEnter.setOnClickListener ( new OnClickListener ( ){
 
 					@Override
-					public void onClick ( View p1 )
-					{
-						String key=keyinput.getEditableText ( ).toString ( ).toUpperCase ( ).trim ( );
-						InputMethodManager imm = (InputMethodManager) getSystemService ( Context.INPUT_METHOD_SERVICE ); 
-						imm.toggleSoftInput ( 0, InputMethodManager.HIDE_NOT_ALWAYS ); 
-						performkeycheck ( key, new OnCheckResultListener ( ){
-
-								@Override
-								public void onSuccess ( )
-								{
-									ad.dismiss ( );
-									// TODO: Implement this method
-								}
-
-								@Override
-								public void onFail ( int reason, String errorrmsg )
-								{
-									Snackbar.make ( mViewPager, errorrmsg, Snackbar.LENGTH_LONG ).show ( );
-									// TODO: Implement this method
-								}
-							} );
+					public void onFail(int reason, String errorrmsg) {
+						Snackbar.make(mViewPager, errorrmsg, Snackbar.LENGTH_LONG).show();
 						// TODO: Implement this method
 					}
-				} );
-			btnEnter.setOnLongClickListener ( new OnLongClickListener ( ){
-
-					@Override
-					public boolean onLongClick ( View p1 )
-					{
-						ClipboardManager cmb = (ClipboardManager)getSystemService ( Context.CLIPBOARD_SERVICE );
-						cmb.setText(getDevId());
-						// TODO: Implement this method
-						return true;
-					}
-
-
-
-				} );
+				});
+				// TODO: Implement this method
+			});
+			btnEnter.setOnLongClickListener(p11 -> {
+				ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+				cmb.setText(getDevId());
+				// TODO: Implement this method
+				return true;
+			});
 			// TODO: Implement this method
 		}
 

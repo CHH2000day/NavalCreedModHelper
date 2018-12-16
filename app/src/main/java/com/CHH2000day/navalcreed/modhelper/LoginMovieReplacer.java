@@ -1,4 +1,6 @@
 package com.CHH2000day.navalcreed.modhelper;
+
+import android.annotation.SuppressLint;
 import android.content.*;
 import android.os.*;
 import android.support.design.widget.*;
@@ -27,77 +29,60 @@ public class LoginMovieReplacer extends Fragment
 
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		v = inflater.inflate ( R.layout.loginmoviereplacer_fragment, null );
-		file = (TextView)v.findViewById ( R.id.loginmoviereplacerfragmentTextView );
-        Button select = (Button) v.findViewById(R.id.loginmoviereplacerfragmentButtonSelect);
-        Button update = (Button) v.findViewById(R.id.loginmoviereplacerfragmentButtonUpdate);
-        Button remove = (Button) v.findViewById(R.id.loginmoviereplacerfragmentButtonRemove);
+		file = v.findViewById(R.id.loginmoviereplacerfragmentTextView);
+		Button select = v.findViewById(R.id.loginmoviereplacerfragmentButtonSelect);
+		Button update = v.findViewById(R.id.loginmoviereplacerfragmentButtonUpdate);
+		Button remove = v.findViewById(R.id.loginmoviereplacerfragmentButtonRemove);
 		// TODO: Implement this method
 
-        select.setOnClickListener(new OnClickListener() {
+		select.setOnClickListener(p1 -> {
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("*/*");
+			intent.addCategory(Intent.CATEGORY_OPENABLE);
+			startActivityForResult(Intent.createChooser(intent, getText(R.string.select_a_file_selector)), QUERY_CODE);
 
-				@Override
-				public void onClick ( View p1 )
-				{
-					Intent intent=new Intent ( Intent.ACTION_GET_CONTENT );
-					intent.setType ( "*/*" );
-					intent.addCategory(intent.CATEGORY_OPENABLE);
-					startActivityForResult ( intent.createChooser(intent,getText(R.string.select_a_file_selector)), QUERY_CODE );
-
-					// TODO: Implement this method
-				}
-			} );
-        update.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick ( View p1 )
-				{
-					if ( srcfile == null )
-					{
-						Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
-						return;
+			// TODO: Implement this method
+		});
+		update.setOnClickListener(p1 -> {
+			if (srcfile == null) {
+				Snackbar.make(v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG).show();
+				return;
+			}
+			AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+			adb.setTitle(R.string.please_wait)
+					.setMessage(R.string.transcode_writing)
+					.setCancelable(false);
+			final AlertDialog ad = adb.create();
+			ad.setCancelable(false);
+			@SuppressLint("HandlerLeak") final Handler h = new Handler() {
+				public void handleMessage(Message msg) {
+					ad.dismiss();
+					switch (msg.what) {
+						case 0:
+							//无异常
+							Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
+							break;
+						case 1:
+							//操作出现异常
+							Snackbar.make(v, ((Throwable) msg.obj).getMessage(), Snackbar.LENGTH_LONG).show();
 					}
-					AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-					adb.setTitle ( R.string.please_wait )
-						.setMessage ( R.string.transcode_writing )
-						.setCancelable ( false );
-					final AlertDialog ad=adb.create ( );
-					ad.setCancelable ( false );
-					final Handler h=new Handler ( ){
-						public void handleMessage ( Message msg )
-						{
-							ad.dismiss ( );
-							switch ( msg.what )
-							{
-								case 0:
-									//无异常
-									Snackbar.make ( v, R.string.success, Snackbar.LENGTH_LONG ).show ( );
-									break;
-								case 1:
-									//操作出现异常
-									Snackbar.make ( v, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-							}
-						}
-					};
-					ad.show ( );
-					new Thread ( ){
-						public void run ( )
-						{
-							try
-							{
-								Utils.copyFile ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), gettargetfile());
-								h.sendEmptyMessage ( 0 );
-							}
-							catch (IOException e)
-							{
-								h.sendMessage ( h.obtainMessage ( 1, e ) );
-							}
-
-						}
-					}.start ( );
-
-					// TODO: Implement this method
 				}
-			} );
+			};
+			ad.show();
+			new Thread() {
+				public void run() {
+					try {
+						Utils.copyFile(getActivity().getContentResolver().openInputStream(srcfile), gettargetfile());
+						h.sendEmptyMessage(0);
+					} catch (IOException e) {
+						h.sendMessage(h.obtainMessage(1, e));
+					}
+
+				}
+			}.start();
+
+			// TODO: Implement this method
+		});
 
         remove.setOnClickListener(new OnClickListener() {
 

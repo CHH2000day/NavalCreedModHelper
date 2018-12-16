@@ -90,28 +90,17 @@ public class ModPackageInstallHelper
 			}
 		};
 		mmha = (ModHelperApplication)listener.getActivity().getApplication();
-		new Thread(new Runnable(){
-
-				public void run()
-				{
-					try
-					{
-						load();
-						totalFileSize = calculateTotalSize();
-						mHandler.sendEmptyMessage(0);
-					}
-					catch (IOException e)
-					{
-						mHandler.sendMessage(mHandler.obtainMessage(-1, e));
-					}
-					catch (ModPackageInfo.IllegalModInfoException e)
-					{
-						mHandler.sendMessage(mHandler.obtainMessage(-1, e));
-					}
-				}
-
-
-			}).start();
+		new Thread(() -> {
+			try {
+				load();
+				totalFileSize = calculateTotalSize();
+				mHandler.sendEmptyMessage(0);
+			} catch (IOException e) {
+				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
+			} catch (IllegalModInfoException e) {
+				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
+			}
+		}).start();
 	}
 	private void load() throws IOException, ModPackageInfo.IllegalModInfoException
 	{
@@ -202,14 +191,9 @@ public class ModPackageInstallHelper
 			adb.setTitle(R.string.notice)
 				.setMessage(R.string.modpkg_ver_warning)
 				.setNegativeButton(R.string.cancel, null)
-				.setPositiveButton(R.string.cont, new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface p1, int p2)
-					{
+					.setPositiveButton(R.string.cont, (p1, p2) -> {
 						checkAvailSpace(activity);
 						// TODO: Implement this method
-					}
 				});
 			adb.create().show();
 		}
@@ -252,24 +236,14 @@ public class ModPackageInstallHelper
 			msubtype = SUBTYPE_CV_OFFSET;
 			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
 			adb.setTitle(R.string.modpkg_cv_to_replace)
-				.setSingleChoiceItems(R.array.cv_types, 0, new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface p1, int p2)
-					{
+					.setSingleChoiceItems(R.array.cv_types, 0, (p1, p2) -> {
 						msubtype = p2 + SUBTYPE_CV_OFFSET;
 						// TODO: Implement this method
-					}
 				})
 				.setNegativeButton(R.string.cancel, null)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener(){
-
-					@Override
-					public void onClick(DialogInterface p1, int p2) 
-					{
+					.setPositiveButton(R.string.ok, (p1, p2) -> {
 						checkInstall(activity);
 						// TODO: Implement this method
-					}
 				});
 			adb.create().show();
 
@@ -423,7 +397,7 @@ public class ModPackageInstallHelper
 		return msrcFile;
 	}
 
-	public static interface onModPackageLoadDoneListener
+	public interface onModPackageLoadDoneListener
 	{
 		void onSuccess();
 
@@ -541,8 +515,8 @@ public class ModPackageInstallHelper
 		protected void onPreExecute()
 		{
 			dialogView = mactivity.getLayoutInflater().inflate(R.layout.dialog_installmodpkg, null);
-			stat = (TextView)dialogView.findViewById(R.id.dialoginstallmodpkgStatus);
-			progressbar = (ProgressBar)dialogView.findViewById(R.id.dialoginstallmodpkgProgress);
+			stat = dialogView.findViewById(R.id.dialoginstallmodpkgStatus);
+			progressbar = dialogView.findViewById(R.id.dialoginstallmodpkgProgress);
 			// TODO: Implement this method
 			AlertDialog.Builder adb=new AlertDialog.Builder(mactivity);
 			adb.setTitle(R.string.please_wait)
@@ -617,15 +591,10 @@ public class ModPackageInstallHelper
 			@Override
 			public void onShow(DialogInterface p1)
 			{	button = alertdialog.getButton(ad.BUTTON_POSITIVE);
-				button.setOnClickListener(new OnClickListener(){
-
-						@Override
-						public void onClick(View p1)
-						{
-							ad.dismiss();
-							// TODO: Implement this method
-						}
-					});
+				button.setOnClickListener(p11 -> {
+					ad.dismiss();
+					// TODO: Implement this method
+				});
 				color = button.getCurrentTextColor();
 				button.setClickable(false);
 				button.setTextColor(Color.GRAY);
