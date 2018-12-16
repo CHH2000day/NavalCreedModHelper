@@ -425,10 +425,11 @@ public class ModPackageInstallHelper
 
 	public static interface onModPackageLoadDoneListener
 	{
-		public void onSuccess();
-		public void onFail(Throwable t);
+		void onSuccess();
 
-		public AppCompatActivity getActivity();
+		void onFail(Throwable t);
+
+		AppCompatActivity getActivity();
 	}
 	private static class InstallTask extends AsyncTask<Void,Integer,Boolean>
 	{
