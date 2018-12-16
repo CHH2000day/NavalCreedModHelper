@@ -1,6 +1,8 @@
 package com.CHH2000day.navalcreed.modhelper;
 import java.io.*;
 import java.util.*;
+
+import android.annotation.TargetApi;
 import android.media.*;
 import android.os.*;
 import android.net.*;
@@ -163,7 +165,7 @@ public class AudioFormatHelper
 							public void onFailure(String p1)
 							{
 								hasError = true;
-								throw  new RuntimeException(p1);
+								UIHandler.sendEmptyMessage(STATUS_ERROR);
 								// TODO: Implement this method
 							}
 
@@ -371,8 +373,9 @@ public class AudioFormatHelper
 //		UIHandler.sendEmptyMessage(STATUS_DONE);
 //		isProcessed = true;
 	}
-	private boolean decodeAudio(final Handler UIHandler) throws Exception
-	{
+
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	private boolean decodeAudio(final Handler UIHandler) throws Exception {
 
 		UIHandler.sendEmptyMessage(STATUS_LOADINGFILE);
 		//配置音轨分离器
@@ -380,24 +383,19 @@ public class AudioFormatHelper
 		final MediaExtractor me=new MediaExtractor();
 		cacheFile = new File(mcontext.getCacheDir(), "cache.pcm");
 		//配置数据源，默认优先使用File
-		if (srcFile != null)
-		{
+		if (srcFile != null) {
 			me.setDataSource(srcFile.getAbsolutePath());
-		}
-		else
-		{
+		} else {
 			me.setDataSource(mcontext, srcFileUri, null);
 		}
 		int soundtrackIndex=-1;
 		String mime="";
 		MediaFormat md=null;
 		//获取音频轨
-		for (int i=0;i < me.getTrackCount();i++)
-		{
+		for (int i=0; i < me.getTrackCount(); i++) {
 			md = me.getTrackFormat(i);
 			//通过检验mime判断是否为音频轨
-			if ((mime = md.getString(MediaFormat.KEY_MIME)).startsWith("audio"))
-			{//若为音频轨，判断是否在需要跳过解码的例外中
+			if ((mime = md.getString(MediaFormat.KEY_MIME)).startsWith("audio")) {//若为音频轨，判断是否在需要跳过解码的例外中
 				//
 				//取消例外在解码过程中的处理，转为在处理时处理
 				/*
@@ -431,8 +429,7 @@ public class AudioFormatHelper
 				break;
 			}
 		}
-		if (soundtrackIndex == -1)
-		{
+		if (soundtrackIndex == -1) {
 			throw new Exception("No audio track counld be found from file.");
 		}
 		me.selectTrack(soundtrackIndex);
@@ -442,100 +439,80 @@ public class AudioFormatHelper
 		UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
 
 		//创建缓存文件的输出流
-		if (!cacheFile.getParentFile().exists())
-		{
+		if (!cacheFile.getParentFile().exists()) {
 			cacheFile.getParentFile().mkdirs();
 		}
 		final FileOutputStream fos=new FileOutputStream(cacheFile);
 		mc.setCallback(new MediaCodec.Callback(){
 
-				int role=0;
-				@Override
-				public void onInputBufferAvailable(MediaCodec p1, int p2)
-				{
-					//如果解码完成，直接停止输入数据
-					if (isdecoded)
-					{return;}
-					//role:输入次数
-					role++;
-					int len=me.readSampleData(p1.getInputBuffer(p2), 0);
-					if (len < 0)
-					{//如果数据读完，通知解码器
-						p1.queueInputBuffer(p2, 0, 0, 0, p1.BUFFER_FLAG_END_OF_STREAM);
-					}
-					else
-					{
-						p1.queueInputBuffer(p2, 0, len, 0, 0);
-					}
-					//读取完数据后，移入下一帧
-					me.advance();
+			int role=0;
 
-
+			@Override
+			public void onInputBufferAvailable(MediaCodec p1, int p2) {
+				//如果解码完成，直接停止输入数据
+				if (isdecoded) {return;}
+				//role:输入次数
+				role++;
+				int len=me.readSampleData(p1.getInputBuffer(p2), 0);
+				if (len < 0) {//如果数据读完，通知解码器
+					p1.queueInputBuffer(p2, 0, 0, 0, p1.BUFFER_FLAG_END_OF_STREAM);
+				} else {
+					p1.queueInputBuffer(p2, 0, len, 0, 0);
 				}
+				//读取完数据后，移入下一帧
+				me.advance();
 
-				@Override
-				public void onOutputBufferAvailable(MediaCodec p1, int p2, MediaCodec.BufferInfo p3)
-				{
-					if (p3.flags == p1.BUFFER_FLAG_END_OF_STREAM)
-					{//如果解码器提示数据读完，停止输入数据，关闭输出流，通知主线程
-						try
-						{
-							fos.close();
-						}
-						catch (IOException e)
-						{//忽略
-						}
-						isdecoded = true;
-						return;
+
+			}
+
+			@Override
+			public void onOutputBufferAvailable(MediaCodec p1, int p2, MediaCodec.BufferInfo p3) {
+				if (p3.flags == p1.BUFFER_FLAG_END_OF_STREAM) {//如果解码器提示数据读完，停止输入数据，关闭输出流，通知主线程
+					try {
+						fos.close();
+					} catch (IOException e) {//忽略
 					}
-					else
-					{
-						//从解码器读取数据
-						byte[] b=new byte[p1.getOutputBuffer(p2).remaining()];
-						p1.getOutputBuffer(p2).get(b, 0, b.length);
-						p1.getOutputBuffer(p2).clear();
-						p1.releaseOutputBuffer(p2, false);
+					isdecoded = true;
+					return;
+				} else {
+					//从解码器读取数据
+					byte[] b=new byte[p1.getOutputBuffer(p2).remaining()];
+					p1.getOutputBuffer(p2).get(b, 0, b.length);
+					p1.getOutputBuffer(p2).clear();
+					p1.releaseOutputBuffer(p2, false);
 						/*
 						 //将数据写入ByteStream
 						 //decodeddata.write ( b, 0, b.length );
 						 */
-						//将解码后数据写入本地缓存
-						try
-						{
-							fos.write(b, 0, b.length);
-						}
-						catch (IOException e)
-						{
-							UIHandler.sendMessage(UIHandler.obtainMessage(STATUS_ERROR, e));
-						}
-
+					//将解码后数据写入本地缓存
+					try {
+						fos.write(b, 0, b.length);
+					} catch (IOException e) {
+						UIHandler.sendMessage(UIHandler.obtainMessage(STATUS_ERROR, e));
 					}
 
-					// TODO: Implement this method
-
 				}
 
-				@Override
-				public void onError(MediaCodec p1, MediaCodec.CodecException p2)
-				{
-					UIHandler.handleMessage(UIHandler.obtainMessage(STATUS_ERROR, p2));
-					// TODO: Implement this method
-				}
+				// TODO: Implement this method
 
-				@Override
-				public void onOutputFormatChanged(MediaCodec p1, MediaFormat p2)
-				{
+			}
 
-					// TODO: Implement this method
-				}
-			});
+			@Override
+			public void onError(MediaCodec p1, MediaCodec.CodecException p2) {
+				UIHandler.handleMessage(UIHandler.obtainMessage(STATUS_ERROR, p2));
+				// TODO: Implement this method
+			}
+
+			@Override
+			public void onOutputFormatChanged(MediaCodec p1, MediaFormat p2) {
+
+				// TODO: Implement this method
+			}
+		});
 		//启动解码器，直至解码完成
 		mc.start();
 		do{
-			try
-			{Thread.sleep(50);}
-			finally
-			{}
+			try {Thread.sleep(50);} finally {}
 		}while(!isdecoded);
 		//解码结束，释放资源
 		mc.stop();
