@@ -62,16 +62,19 @@
 	<string name="bgfrag_intro">使用說明:\n加載背景，地圖加載背景，匹配背景三個選項下都必須放入1,2,3三張圖片才能生效，選擇替換内容和圖片後點擊套用即可</string>
 	<string name="crewpicfrag_intro">使用說明:\n每個國家有15-16個頭像可供替換，替換部分即可生效，不必全部替換，替換後可通過修改成員檔案選擇所替換的頭像\n流程：選擇所替換國家和頭像序號後選擇圖片然後點擊套用\n點擊清空更改清空該船員頭像更改，長按清空更改清空該國家所有船員頭像更改</string>
 	<string name="modpkg_ver_warning">目前應用版本可能無法實現mod包裡所有功能，是否繼續？</string>
-	<string name="modpkg_interface_warning">該mod包使用了已经被棄用的接口，如需繼續安裝請前往超控mod包管理機制</string>
+	<string name="modpkg_interface_warning">該mod包使用了已经被棄用的接口，如需繼續安裝請前往禁用mod包管理機制</string>
 	<string name="modpkg_already_installed_warning">當前已安裝了相同類型的mod包，請先去mod管理器卸載後再安裝</string>
 	<string name="modpkg_cv_to_replace">選擇要替換的艦長語音</string>
 	<string name="invalid_mod_info">無效的mod描述文件</string>
 	<string name="failed_to_resolve_pth">解析文件真實路徑失敗,請將此界面截圖並發送给開發者</string>
-	<string name="ovrd_warning">超控mod管理系統將使mod管理器失效，是否繼續？</string>
+	<string name="ovrd_warning">禁用mod管理系統將使mod管理器失效，是否繼續？</string>
 	<string name="mod_pkg_management_sys">mod包管理系統</string>
 	<string name="loginmovie_intro">使用說明:\n登入動畫只支持使用以下格式替換:\n文件格式:ogv\n視頻編碼:theora\n建議在電腦轉碼後再放到手機裡\n注意，視頻裡的音頻不會被播放，請在BGM替換器裡替換</string>
 	<string name="transcode_success">完成，耗時%1$dms</string>
 	<string name="transcode_failed">%1$s.\n耗時%2$dms后失敗.\n%3$s</string>
+	<string name="enabled">已啟用</string>
+	<string name="disabled">已禁用</string>
+	
 	<!--
 		strings for mod package types
 	-->

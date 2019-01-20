@@ -62,12 +62,12 @@
 	<string name="bgfrag_intro">Instructions:\nloading picture,loadingmap picture,matching picture each scene have to change ALL pictures to effective,select what scene,picture and press Apply</string>
 	<string name="crewpicfrag_intro">Instructions:\nEach country has 15 to 16 pictures to change you can change only one of these pictures,doesn\'t need to change all，you can find the picture what you have changed in crew file\nWhat to do:Choose what country and picture number,then choose what picture you want to change and press to change Apply\nPress RemoveChange to remove the picture what you chose,press longer to remove ALL the picture in which country you chose</string>
 	<string name="modpkg_ver_warning">The current software version may not be able to implement all the functions in the mod package. Continue?</string>
-	<string name="modpkg_interface_warning">An abandoned interface was used by the mod package.You need to override the "mod package management system" to install it if you want.</string>
+	<string name="modpkg_interface_warning">An abandoned interface was used by the mod package.You need to disable the "mod package management system" to install it if you want.</string>
 	<string name="modpkg_already_installed_warning">A mod paakage which is the same type of this package was already installed.You need to uninstall it in mod package manager to install this package.</string>
 	<string name="modpkg_cv_to_replace">Select the captain voice to replace</string>
 	<string name="invalid_mod_info">Invalid mod description file </string>
 	<string name="failed_to_resolve_pth">Filed to resolve actual path of the selected file.\nTake a screenshot and send it to the developer please.</string>
-	<string name="ovrd_warning">Mod package management system would not work after overriding it,continue? </string>
+	<string name="ovrd_warning">Mod package management system would not work after disable it,continue? </string>
 	<string name="mod_pkg_management_sys">Mod package management system</string>
 	<string name="loginmovie_intro">Introduction:\nLogin movie can only be replaced with a fllowing format video:\nFile format:ogv\nVideo encoding:theora\nWe recommend that you transcode it on a PC and then send it to your device.\nNotice that the audio in the video would not be played,custom it in BGM page.</string>
 	<string name="dont_show">Don\'t show</string>
@@ -80,6 +80,8 @@
 	<string name="buildtype" translatable="false">common</string>
 	<string name="transcode_success">Succeed in %1$dms.</string>
 	<string name="transcode_failed">%1$s.\nFailed in %2$dms.\n%3$s</string>
+	<string name="enabled">Enabled</string>
+	<string name="disabled">Disabled</string>
 	<!--
 	strings for mod package types
 	-->
