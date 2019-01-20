@@ -11,7 +11,7 @@
 		<TextView
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:text="@+string/modtype"
+			android:text="@string/modtype"
 			android:layout_alignParentLeft="true"
 			android:layout_alignParentTop="true"
 			android:id="@+id/modmanageritemTextView"
@@ -20,7 +20,7 @@
 		<TextView
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:text="@+string/long_click_to_uninstall"
+			android:text="@string/long_click_to_uninstall"
 			android:layout_alignParentRight="true"
 			android:layout_below="@id/modmanageritemTextView"
 			android:id="@+id/modmanageritemMemo"/>

@@ -8,8 +8,8 @@
 	<ToggleButton
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:textOff="NORM"
-		android:textOn="OVRD"
+		android:textOff="Enabled"
+		android:textOn="Disabled"
 		android:layout_alignParentRight="true"
 		android:id="@+id/modmanagerswitcherToggleButton1"
 		android:textColor="@color/ovrdswitch_selector"/>
@@ -17,7 +17,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/mod_pkg_management_sys"
+		android:text="@string/mod_pkg_management_sys"
 		android:layout_alignParentTop="true"
 		android:layout_alignParentLeft="true"
 		android:id="@+id/modmanagerswitcherTextView"

@@ -9,19 +9,19 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-		android:text="@+string/aboutmsg"
+		android:text="@string/aboutmsg"
 		android:id="@+id/aboutfragmentTextView"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/about_license"
+		android:text="@string/about_license"
 		android:id="@+id/aboutfragmentLicense"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select_target_package"
+		android:text="@string/select_target_package"
 		android:id="@+id/aboutfragmentButtonselectpkg"/>
 
 	<Button

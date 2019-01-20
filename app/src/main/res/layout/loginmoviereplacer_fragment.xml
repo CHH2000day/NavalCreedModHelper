@@ -8,13 +8,13 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select_file"
+		android:text="@string/select_file"
 		android:id="@+id/loginmoviereplacerfragmentTextViewUnused"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select"
+		android:text="@string/select"
 		android:layout_below="@id/loginmoviereplacerfragmentTextViewUnused"
 		android:id="@+id/loginmoviereplacerfragmentButtonSelect"
 		android:layout_alignParentRight="true"/>
@@ -22,7 +22,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/unselected"
+		android:text="@string/unselected"
 		android:layout_below="@id/loginmoviereplacerfragmentTextViewUnused"
 		android:id="@+id/loginmoviereplacerfragmentTextView"
 		android:layout_alignBottom="@id/loginmoviereplacerfragmentButtonSelect"
@@ -34,20 +34,20 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/apply"
+		android:text="@string/apply"
 		android:layout_below="@id/loginmoviereplacerfragmentButtonSelect"
 		android:id="@+id/loginmoviereplacerfragmentButtonUpdate"/>
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-		android:text="@+string/loginmovie_intro"
+		android:text="@string/loginmovie_intro"
 		android:layout_below="@id/loginmoviereplacerfragmentButtonUpdate"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/remove_changes"
+		android:text="@string/remove_changes"
 		android:layout_below="@id/loginmoviereplacerfragmentTextView"
 		android:layout_toRightOf="@+id/loginmoviereplacerfragmentButtonUpdate"
 		android:id="@+id/loginmoviereplacerfragmentButtonRemove"/>
