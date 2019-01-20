@@ -111,7 +111,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		mCrewPicReplacerFragment = new CrewPicReplacerFragment ( );
 		mAntiHexieFragment = new CustomShipNameFragment ( );
 		//如果系统版本为Lollipop前的旧设备，使用旧的BGM转码器
-		if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ) {
+		if ( Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ) {
 			mBGMReplacerFragment = new BGMReplacerFragmentSDK19B ( );
 		} else {
 			mBGMReplacerFragment = new BGMReplacerFragment ( );
