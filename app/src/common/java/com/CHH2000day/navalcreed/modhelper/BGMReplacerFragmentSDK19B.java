@@ -14,10 +14,10 @@ import android.content.res.*;
 
 public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 {
-	private static final int MUSICCOUNT_HARBOR=6;
+	private static final int MUSICCOUNT_HARBOR=8;
 	private static final int MUSICCOUNT_LOADING=3;
 	private static final int MUSICCOUNT_BATTLESTART=4;
-	private static final int MUSICCOUNT_BATTLEHEAT=7;
+	private static final int MUSICCOUNT_BATTLEHEAT=8;
 	private static final int MUSICCOUNT_BATTLEEND=3;
 	private static final int MUSICCOUNT_BATTLEVICTORY=4;
 	private static final int MUSICCOUNT_BATTLEFAIL=2;
