@@ -9,7 +9,9 @@ android {
 	signingConfigs {
 		release {
 			storeFile file("../CHH2000day.keystore")
+			storePassword STORE_PWD
 			keyAlias KEY_ALIAS
+			keyPassword KEY_PWD
 		}
 	}
     defaultConfig {
