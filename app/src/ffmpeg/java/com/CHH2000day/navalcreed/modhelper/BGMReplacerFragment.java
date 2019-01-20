@@ -35,7 +35,7 @@ public class BGMReplacerFragment extends ModFragment
 	private static final String[] SCENE={"Harbor","Loading","BattleStart","BattleHeat","BattleEnd","Victory","Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/};
 	//private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
 	private static String[] scene_toshow;
-	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
+	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7","8"};
 	//private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
 	private static String[] filenames_unselected;
 	private static final String[] FILENAMES_BATTLEFAIL={"Danger","Fail"};

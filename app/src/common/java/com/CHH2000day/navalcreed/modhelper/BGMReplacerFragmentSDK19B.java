@@ -24,7 +24,7 @@ public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 	private static final String[] SCENE={"Harbor","Loading","BattleStart","BattleHeat","BattleEnd","Victory","Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/};
 	//private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
 	private static String[] scene_toshow;
-	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7"};
+	private static final String[] FILENAMES_UNIVERSAL={"1","2","3","4","5","6","7","8"};
     private static final String[] FILENAMES_BATTLEFAIL = {"Danger", "Fail"};
 	//private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
 	private static String[] filenames_battlefail_toshow;
