@@ -41,7 +41,7 @@
 	<TextView
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
-			android:text="@+string/unselected"
+			android:text="@string/unselected"
 			android:layout_below="@id/bgmreplacerMusic"
 			android:id="@+id/bgmreplacerText"
 			android:layout_alignBottom="@id/bgmreplacerSelect"
@@ -60,7 +60,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/remove_changes"
+		android:text="@string/remove_changes"
 		android:layout_toRightOf="@id/bgmreplacerUpdate"
 		android:layout_below="@id/bgmreplacerText"
 		android:id="@+id/bgmreplacerRemove"/>
@@ -68,7 +68,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/bgmreplacer_info"
+		android:text="@string/bgmreplacer_info"
 		android:layout_below="@id/bgmreplacerUpdate"
 		android:id="@+id/bgmreplacerfragmentTextViewInfo"/>
 
