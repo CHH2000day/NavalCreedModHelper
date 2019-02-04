@@ -96,6 +96,10 @@ public class AboutFragment extends Fragment
                 // TODO: Implement this method
             });
         }
+		mtextview.setText(new StringBuilder().append(((ModHelperApplication)(getActivity().getApplication())).getVersionName())
+											.append("\n")
+											.append(mtextview.getText())
+											.toString());
         license.setOnClickListener(p1 -> {
 
             try {

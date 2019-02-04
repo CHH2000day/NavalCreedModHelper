@@ -32,7 +32,12 @@ public class ModHelperApplication extends Application
 	private static MainSharedPreferencesChangeListener preflistener;
     public static final String[] pkgnames;
 	private boolean isMainPage=true;
+	private String versionName="unknown";
 
+	public String getVersionName()
+	{
+		return versionName;
+	}
 	static{
 		pkgnames = new String[3];
 		pkgnames [ 0 ] = CN;
@@ -58,6 +63,18 @@ public class ModHelperApplication extends Application
 			UncaughtExceptionHandler.getInstance ( ).init ( ModHelperApplication.this );
 		} catch (PackageManager.NameNotFoundException ignored)
 		{}
+
+
+		PackageManager packageManager = getPackageManager();
+		try
+		{
+			PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+			versionName=packageInfo.versionName;
+		}
+		catch (PackageManager.NameNotFoundException e)
+		{
+			
+		}
 
 		try
 		{
