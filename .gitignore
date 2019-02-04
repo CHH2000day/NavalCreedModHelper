@@ -7,3 +7,4 @@ local.properties
 /.gradle/
 /build/
 CHH2000day.keystore
+app/build/
