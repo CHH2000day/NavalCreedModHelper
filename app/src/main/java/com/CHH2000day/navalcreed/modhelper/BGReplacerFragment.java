@@ -18,7 +18,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -37,7 +36,7 @@ public class BGReplacerFragment extends ModFragment
 	private int cat=0,filepos=0;
 	private View v;
 	@Override
-	public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		abs_path = new StringBuilder ( )
 			.append ( ((ModHelperApplication)getActivity ( ).getApplication ( )).getResFilesDirPath ( ) )
