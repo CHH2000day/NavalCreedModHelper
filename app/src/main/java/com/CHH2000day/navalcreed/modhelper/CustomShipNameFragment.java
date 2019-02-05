@@ -41,7 +41,14 @@ public class CustomShipNameFragment extends ModFragment
 		Button exec = v.findViewById(R.id.antihexiefragmentButtonExec);
 
 		exec.setOnClickListener(p1 -> {
-			Snackbar.make(v, "操作开始，在出现提示前请勿关闭程序", Snackbar.LENGTH_LONG).show();
+			
+			AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
+			adb.setTitle("请稍等");
+			adb.setMessage("正在进行反和谐");
+			adb.setCancelable(false);
+			final AlertDialog ad=adb.create();
+			ad.setCanceledOnTouchOutside(false);
+			ad.show();
 			final File f = new File(path);
 			if (f.exists() && f.isFile()) {
 				f.delete();
@@ -57,6 +64,7 @@ public class CustomShipNameFragment extends ModFragment
 					final AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
 
 					if (p2 != null) {
+						ad.cancel();
 						adb.setMessage(p2.getMessage())
 								.setTitle(R.string.failed)
 								.setPositiveButton(R.string.ok, null)
@@ -70,6 +78,7 @@ public class CustomShipNameFragment extends ModFragment
 
 							@Override
 							public void done(String p1, BmobException p2) {
+								ad.cancel();
 								if (p2 != null) {
 									adb.setTitle(R.string.failed)
 											.setMessage(p2.getMessage())
