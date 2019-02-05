@@ -888,7 +888,8 @@ private void checkVality ( )
 			btnEnter.setOnClickListener(p112 -> {
 				String key = keyinput.getEditableText().toString().toUpperCase().trim();
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
+				imm.hideSoftInputFromWindow(keyinput.getWindowToken(), 0) ;
+				//imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 				performkeycheck(key, new OnCheckResultListener() {
 
 					@Override
