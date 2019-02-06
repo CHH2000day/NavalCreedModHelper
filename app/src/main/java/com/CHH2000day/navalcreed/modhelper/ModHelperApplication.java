@@ -11,6 +11,7 @@ import android.content.pm.PackageManager.*;
 import android.content.*;
 import java.util.*;
 import org.json.*;
+import com.orhanobut.logger.*;
 public class ModHelperApplication extends Application
 {
 	//never used
@@ -56,6 +57,12 @@ public class ModHelperApplication extends Application
 	@Override
 	public void onCreate ( )
 	{
+		//if in debug mode,write log to storage
+		if(BuildConfig.DEBUG){
+		Logger.addLogAdapter(new DiskLogAdapter());
+		}
+		Logger.addLogAdapter(new AndroidLogAdapter());
+		Logger.i("Logger inited");
 		Bmob.initialize ( ModHelperApplication.this, StaticData.API_KEY );
 		Log.i ( "Bmob initalized", "Bmob initalized" );
 		try
@@ -81,7 +88,9 @@ public class ModHelperApplication extends Application
 			Class c=Class.forName ( "cc.binmt.signature.PmsHookApplication" );
 			if ( c != null )
 			{
-				throw new RuntimeException ( "Hook detected.Environment is not safe." );
+				RuntimeException r= new RuntimeException ( "Hook detected.Environment is not safe." );
+				Logger.d(r);
+				throw r;
 			}
 		}
 		catch (ClassNotFoundException e)
@@ -93,6 +102,7 @@ public class ModHelperApplication extends Application
 		mainpref.registerOnSharedPreferenceChangeListener ( preflistener);
 		cleanPathCache();
 		updateTargetPackageName ( getMainSharedPrederences ( ).getString ( KEY_PKGNAME, CN ) );
+		Logger.i("Target package:%s",pkgnameinuse);
 		/*try
 		{
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
@@ -105,7 +115,6 @@ public class ModHelperApplication extends Application
 		//ModPackageInstallHelper.init(this);
 		ModPackageManager.getInstance().init(this);
 		reconfigModPackageManager();
-		
 		// TODO: Implement this method
 		super.onCreate ( );
 	}
@@ -127,11 +136,13 @@ public class ModHelperApplication extends Application
 		try
 		{
 			ModPackageManager.getInstance ( ).config ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
+			Logger.i("Mod package manager configured.");
 		}
-		catch (IOException e)
-		{e.printStackTrace();}
-		catch (JSONException e)
-		{e.printStackTrace();}
+		catch (Exception e)
+		{
+			Logger.d(e);
+			Logger.w("failed to configure mod package manager.");
+		}
 		
 	}
 	public File getResDir ( )
@@ -150,7 +161,7 @@ public class ModHelperApplication extends Application
 				.append ( pkgnameinuse )
 				.toString ( );
 			resDir = new File ( resfilePath );
-
+			Logger.d("Res dir:%s",resDir.getPath());
 		}
 		return resDir;
 	}

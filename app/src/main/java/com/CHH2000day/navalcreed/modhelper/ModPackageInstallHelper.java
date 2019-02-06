@@ -13,6 +13,7 @@ import android.widget.*;
 import android.graphics.*;
 import android.view.View.*;
 import android.support.annotation.*;
+import com.orhanobut.logger.*;
 
 public class ModPackageInstallHelper
 {
@@ -95,10 +96,9 @@ public class ModPackageInstallHelper
 				load();
 				totalFileSize = calculateTotalSize();
 				mHandler.sendEmptyMessage(0);
-			} catch (IOException e) {
+			} catch (Exception e) {
 				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
-			} catch (IllegalModInfoException e) {
-				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
+				Logger.d(e);
 			}
 		}).start();
 	}
@@ -171,6 +171,7 @@ public class ModPackageInstallHelper
 			totalsize += entry.getSize();
 		}
 		en = null;
+		Logger.i("mod size:%d bytes",totalsize);
 		return totalsize;
 	}
 	public long getTotalSize()
@@ -452,6 +453,7 @@ public class ModPackageInstallHelper
 				File targetFile;
 				ZipInputStream zis=new ZipInputStream(new FileInputStream(msrcFile));
 				Source source;
+				Logger.i("Starting to install Mod package");
 				while ((ze = zis.getNextEntry()) != null)
 				{
 					//不解压mod描述文件
@@ -464,6 +466,7 @@ public class ModPackageInstallHelper
 					{
 						//若是，创建目录结构
 						targetFile = new File(mainPath, ze.getName());
+						Logger.i("Creating file path:%s",targetFile.getPath());
 						Utils.ensureFileParent(targetFile);
 						if (targetFile.isFile())
 						{
@@ -478,6 +481,7 @@ public class ModPackageInstallHelper
 					{
 						//写出文件
 						targetFile = new File(mainPath, ze.getName());
+						Logger.i("Writing file:%s",targetFile.getPath());
 						Utils.ensureFileParent(targetFile);
 						//若写出的目标文件已为目录，删除
 						if (targetFile.isDirectory())
@@ -503,6 +507,7 @@ public class ModPackageInstallHelper
 			catch (Exception e)
 			{
 				e.printStackTrace();
+				Logger.d(e);
 				this.e = e;
 				return false;
 			}

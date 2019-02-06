@@ -7,6 +7,7 @@ import android.util.*;
 import java.util.*;
 import android.support.annotation.*;
 import java.lang.ref.*;
+import com.orhanobut.logger.*;
 
 public class ModPackageInfo
 {
@@ -239,6 +240,10 @@ public class ModPackageInfo
 					byte[] piccache=android.util.Base64.decode ( jo.getString ( mpi.KEY_PREVIEW ), android.util.Base64.DEFAULT );
 					mpi.setModPreview ( piccache  );
 				}
+				Logger.i("ModPackageInfo created");
+				Logger.i("Mod name:%s",mpi.getModName());
+				Logger.i("Mod type:%s",mpi.getModType());
+				Logger.i("Target verion:%s",mpi.getModTargetVer());
 				return mpi;
 
 			}
