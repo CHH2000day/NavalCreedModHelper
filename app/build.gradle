@@ -37,8 +37,8 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 86
-        versionName "build-2019020501-alpha"
+        versionCode 87
+        versionName "build-2019020600-alpha"
         flavorDimensions "versionCode"
 		
     }
