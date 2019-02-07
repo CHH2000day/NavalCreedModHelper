@@ -33,22 +33,20 @@
 				<data android:mimeType="*/*" />
 				<data android:pathPattern=".*\\.ncmod" />
 			</intent-filter>
-			
-
-		</activity>
+					</activity>
 
 	<activity
             android:name=".CreateActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".DeleteActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".UpdateActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".FindActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"/>
 	<provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
