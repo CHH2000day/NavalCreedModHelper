@@ -111,7 +111,7 @@ public class CustomShipNameHelper
 		bs.writeUtf8(HOF);
 		while (li.hasNext())
 		{
-			int i=Integer.valueOf(li.next());
+			int i=li.next();
 			name = shipnames.getOrDefault(i, name);
 			if (name.equals(empty))
 			{continue;}
