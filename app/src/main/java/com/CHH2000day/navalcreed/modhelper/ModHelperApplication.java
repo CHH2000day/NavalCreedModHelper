@@ -12,6 +12,7 @@ import android.content.*;
 import java.util.*;
 import org.json.*;
 import com.orhanobut.logger.*;
+import com.tencent.bugly.crashreport.*;
 public class ModHelperApplication extends Application
 {
 	//never used
@@ -64,19 +65,27 @@ public class ModHelperApplication extends Application
 		Logger.addLogAdapter(new AndroidLogAdapter());
 		Logger.i("Logger inited");
 		Bmob.initialize ( ModHelperApplication.this, StaticData.API_KEY );
-		Log.i ( "Bmob initalized", "Bmob initalized" );
-		try
+		Logger.i ( "Bmob initalized", "Bmob initalized" );
+		
+		//Removed old bugly framework
+		/*try
 		{
 			UncaughtExceptionHandler.getInstance ( ).init ( ModHelperApplication.this );
 		} catch (PackageManager.NameNotFoundException ignored)
 		{}
-
+		*/
 
 		PackageManager packageManager = getPackageManager();
 		try
 		{
 			PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+			CrashReport.UserStrategy strategy =new CrashReport.UserStrategy(this);
+			strategy.setAppChannel(BuildConfig.DEBUG?"ALPHA":"RELEASE");
+			strategy.setAppPackageName(packageInfo.packageName);
+			strategy.setAppVersion(packageInfo.versionName);
 			versionName=packageInfo.versionName;
+			CrashReport.initCrashReport(this,"a21f3fab2a",BuildConfig.DEBUG,strategy);
+			Logger.i("Bugly inited");
 		}
 		catch (PackageManager.NameNotFoundException e)
 		{
