@@ -60,6 +60,22 @@
     	android:name="cn.bmob.v3.util.BmobContentProvider"
     	android:authorities="com.CHH2000day.navalcreed.modhelper.BmobContentProvider">
 	</provider>
+		<!-- 配置APP ID -->
+		<meta-data
+            android:name="BUGLY_APPID"
+            android:value="a21f3fab2a" />
+		<!-- 配置APP版本号 -->
+		<meta-data
+            android:name="BUGLY_APP_VERSION"
+            android:value="0v0" />
+		<!-- 配置APP渠道号 -->
+		<meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="0v0" />
+		<!-- 配置Bugly调试模式（true或者false）-->
+		<meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="true" />
     </application>
 
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
