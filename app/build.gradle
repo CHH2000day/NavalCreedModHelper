@@ -37,8 +37,8 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 88
-        versionName "build-2019020700-alpha"
+        versionCode 89
+        versionName "build-2019031000-alpha"
         flavorDimensions "versionCode"
 		
     }
@@ -82,6 +82,7 @@ dependencies {
 	implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 	implementation 'io.reactivex.rxjava2:rxjava:2.2.4'
 	implementation 'com.google.code.gson:gson:2.8.5'
+	implementation 'com.tencent.bugly:crashreport:2.8.6.0'
 	ffmpegImplementation "com.writingminds:FFmpegAndroid:0.3.2"
 
 	
