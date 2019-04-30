@@ -105,4 +105,6 @@
 	<string name="modtype_captainvoice_ja_bb">Captain voice(Japanese-BB)</string>
 	<string name="modtype_captainvoice_ja_ca">Captain voice(Japanese-CA)</string>
 	<string name="modtype_captainvoice_ja_dd">Captain voice(Japanese-DD)</string>
+	<string name="modtype_captainvoice_de">Captain voice(German)</string>
+	<string name="modtype_captainvoice_ru">Captain voice(Russian)</string>
 </resources>

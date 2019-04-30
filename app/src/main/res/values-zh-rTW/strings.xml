@@ -98,5 +98,7 @@
 	<string name="modtype_captainvoice_ja_bb">艦長語音-日語-戰列艦</string>
 	<string name="modtype_captainvoice_ja_ca">艦長語音-日語-巡洋艦</string>
 	<string name="modtype_captainvoice_ja_dd">艦長語音-日語-驅逐艦</string>
+	<string name="modtype_captainvoice_de">艦長語音-德語</string>
+	<string name="modtype_captainvoice_ru">艦長語音-俄語</string>
 	
 </resources>

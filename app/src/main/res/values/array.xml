@@ -78,5 +78,7 @@
 		<item>Japanese-Battleship</item>
 		<item>Japanese-Crusier</item>
 		<item>Japanese-Destroyer</item>
+		<item>German</item>
+		<item>Russian</item>
 	</string-array>
 	</resources>

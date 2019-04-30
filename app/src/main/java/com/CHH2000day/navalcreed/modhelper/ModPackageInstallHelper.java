@@ -35,6 +35,8 @@ public class ModPackageInstallHelper
 	private static final String SUBPATH_CV_JP_BB=SUBPATH_CV_JP + File.separatorChar + "Battleship";
 	private static final String SUBPATH_CV_JP_CA=SUBPATH_CV_JP + File.separatorChar + "Cruiser";
 	private static final String SUBPATH_CV_JP_DD=SUBPATH_CV_JP + File.separatorChar + "Destroyer";
+	private static final String SUBPATH_CV_DE=File.separatorChar + "GermanUsual";
+	private static final String SUBPATH_CV_RU=File.separatorChar + "RussianUsual";
 
 	public static final int SUBTYPE_NULL=0;
 	public static final int SUBTYPE_CV_EN=1200;
@@ -43,6 +45,8 @@ public class ModPackageInstallHelper
 	public static final int SUBTYPE_CV_JP_BB=1203;
 	public static final int SUBTYPE_CV_JP_CA=1204;
 	public static final int SUBTYPE_CV_JP_DD=1205;
+	public static final int SUBTYPE_CV_DE=1206;
+	public static final int SUBTYPE_CV_RU=1207;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
 	private onModPackageLoadDoneListener mlistener;
@@ -91,12 +95,15 @@ public class ModPackageInstallHelper
 			}
 		};
 		mmha = (ModHelperApplication)listener.getActivity().getApplication();
-		new Thread(() -> {
-			try {
+		new Thread() -> {
+			try
+			{
 				load();
 				totalFileSize = calculateTotalSize();
 				mHandler.sendEmptyMessage(0);
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
 				Logger.d(e);
 			}
@@ -171,7 +178,7 @@ public class ModPackageInstallHelper
 			totalsize += entry.getSize();
 		}
 		en = null;
-		Logger.i("mod size:%d bytes",totalsize);
+		Logger.i("mod size:%d bytes", totalsize);
 		return totalsize;
 	}
 	public long getTotalSize()
@@ -192,10 +199,10 @@ public class ModPackageInstallHelper
 			adb.setTitle(R.string.notice)
 				.setMessage(R.string.modpkg_ver_warning)
 				.setNegativeButton(R.string.cancel, null)
-					.setPositiveButton(R.string.cont, (p1, p2) -> {
-						checkAvailSpace(activity);
-						// TODO: Implement this method
-				});
+				.setPositiveButton(R.string.cont, (p1, p2) -> {
+				checkAvailSpace(activity);
+				// TODO: Implement this method
+			});
 			adb.create().show();
 		}
 		else
@@ -237,15 +244,15 @@ public class ModPackageInstallHelper
 			msubtype = SUBTYPE_CV_OFFSET;
 			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
 			adb.setTitle(R.string.modpkg_cv_to_replace)
-					.setSingleChoiceItems(R.array.cv_types, 0, (p1, p2) -> {
-						msubtype = p2 + SUBTYPE_CV_OFFSET;
-						// TODO: Implement this method
-				})
-				.setNegativeButton(R.string.cancel, null)
-					.setPositiveButton(R.string.ok, (p1, p2) -> {
-						checkInstall(activity);
-						// TODO: Implement this method
-				});
+				.setSingleChoiceItems(R.array.cv_types, 0, (p1, p2) -> {
+				msubtype = p2 + SUBTYPE_CV_OFFSET;
+				// TODO: Implement this method
+			})
+			.setNegativeButton(R.string.cancel, null)
+				.setPositiveButton(R.string.ok, (p1, p2) -> {
+				checkInstall(activity);
+				// TODO: Implement this method
+			});
 			adb.create().show();
 
 		}
@@ -303,30 +310,35 @@ public class ModPackageInstallHelper
 	}
 	private static String getSubType(int msubtype)
 	{
-		String s=ModPackageInfo.SUBTYPE_EMPTY;
-		if (SUBTYPE_CV_EN == msubtype)
-		{
-			s = ModPackageInfo.SUB_MODTYPE_CV_EN;
-		}
-		else if (SUBTYPE_CV_CN == msubtype)
-		{
-			s = ModPackageInfo.SUB_MODTYPE_CV_CN;
-		}
-		else if (SUBTYPE_CV_JP_CV == msubtype)
-		{
-			s = ModPackageInfo.SUB_MODTYPE_CV_JP_CV;
-		}
-		else if (SUBTYPE_CV_JP_BB == msubtype)
-		{
-			s = ModPackageInfo.SUB_MODTYPE_CV_JP_BB;
-		}
-		else if (SUBTYPE_CV_JP_CA == msubtype)
-		{
-			s = ModPackageInfo.SUB_MODTYPE_CV_JP_CA;
-		}
-		else if (SUBTYPE_CV_JP_DD == msubtype)
-		{
-			s = ModPackageInfo.SUB_MODTYPE_CV_JP_DD;
+		String s="";
+		switch(msubtype){
+			case SUBTYPE_CV_CN:
+				s=ModPackageInfo.SUB_MODTYPE_CV_CN;
+				break;
+			case SUBTYPE_CV_EN:
+				s=ModPackageInfo.SUB_MODTYPE_CV_EN;
+				break;
+			case SUBTYPE_CV_JP_CV:
+				s=ModPackageInfo.SUB_MODTYPE_CV_JP_CV;
+				break;
+			case SUBTYPE_CV_JP_BB:
+				s=ModPackageInfo.SUB_MODTYPE_CV_JP_BB;
+				break;
+			case SUBTYPE_CV_JP_CA:
+				s=ModPackageInfo.SUB_MODTYPE_CV_JP_CA;
+				break;
+			case SUBTYPE_CV_JP_DD:
+				s=ModPackageInfo.SUB_MODTYPE_CV_JP_DD;
+				break;
+			case SUBTYPE_CV_DE:
+				s=ModPackageInfo.SUB_MODTYPE_CV_DE;
+				break;
+			case SUBTYPE_CV_RU:
+				s=ModPackageInfo.SUB_MODTYPE_CV_RU;
+				break;
+			default:
+				s=ModPackageInfo.SUBTYPE_EMPTY;
+				break;
 		}
 		return s;
 	}
@@ -335,61 +347,58 @@ public class ModPackageInstallHelper
 	{
 		String pth=app.getResFilesDirPath();
 
-		if (ModPackageInfo.MODTYPE_CV.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_CV;
-			if (subType == SUBTYPE_CV_CN)
-			{
-				pth = pth + SUBPATH_CV_CN;
-			}
-			else if (subType == SUBTYPE_CV_EN)
-			{
-				pth = pth + SUBPATH_CV_EN;
-			}
-			else if (subType == SUBTYPE_CV_JP_CV)
-			{
-				pth = pth + SUBPATH_CV_JP_CV;
-			}
-			else if (subType == SUBTYPE_CV_JP_BB)
-			{
-				pth = pth + SUBPATH_CV_JP_BB;
-			}
-			else if (subType == SUBTYPE_CV_JP_CA)
-			{
-				pth = pth + SUBPATH_CV_JP_CA;
-			}
-			else if (subType == SUBTYPE_CV_JP_DD)
-			{
-				pth = pth + SUBPATH_CV_JP_DD;
-			}
-		}
-		if (ModPackageInfo.MODTYPE_BACKGROUND.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_BACKGROUND;
-		}
-		if (ModPackageInfo.MODTYPE_BGM.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_BGM;
-		}
-		if (ModPackageInfo.MODTYPE_CREWPIC.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_CREWHEAD;
-		}
-		if (ModPackageInfo.MODTYPE_SOUNDEFFECT.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_SOUNDEFFECT;
-		}
-		if (ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_SOUNDEFFECT_SEC;
-		}
-		if (ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM.equals(modType))
-		{
-			pth = pth + PRIMARYPATH_SOUNDEFFECT_PRIM;
-		}
-		if (ModPackageInfo.MODTYPE_OTHER.equals(modType))
-		{
-			pth = pth + PRIMARYTYPE_OTHER;
+		switch(modType){
+			case ModPackageInfo.MODTYPE_CV:
+				pth += PRIMARYPATH_CV;
+				switch (subType)
+				{
+					case SUBTYPE_CV_CN:
+						pth += SUBPATH_CV_CN;
+						break;
+					case SUBTYPE_CV_EN:
+						pth += SUBPATH_CV_EN;
+						break;
+					case SUBTYPE_CV_JP_CV:
+						pth += SUBPATH_CV_JP_CV;
+						break;
+					case SUBTYPE_CV_JP_BB:
+						pth += SUBPATH_CV_JP_BB;
+						break;
+					case SUBTYPE_CV_JP_CA:
+						pth += SUBPATH_CV_JP_CA;
+						break;
+					case SUBTYPE_CV_JP_DD:
+						pth += SUBPATH_CV_JP_DD;
+						break;
+					case SUBTYPE_CV_DE:
+						pth += SUBPATH_CV_DE;
+						break;
+					case SUBTYPE_CV_RU:
+						pth += SUBPATH_CV_RU;
+						break;
+				}
+				break;
+			case ModPackageInfo.MODTYPE_BACKGROUND:
+				pth+=PRIMARYPATH_BACKGROUND;
+				break;
+			case ModPackageInfo.MODTYPE_BGM:
+				pth+=PRIMARYPATH_BGM;
+				break;
+			case ModPackageInfo.MODTYPE_CREWPIC:
+				pth+=PRIMARYPATH_CREWHEAD;
+				break;
+			case ModPackageInfo.MODTYPE_SOUNDEFFECT:
+				pth+=PRIMARYPATH_SOUNDEFFECT;
+				break;
+			case ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM:
+				pth+=PRIMARYPATH_SOUNDEFFECT_PRIM;
+				break;
+			case ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC:
+				pth+=PRIMARYPATH_SOUNDEFFECT_SEC;
+				break;
+			case ModPackageInfo.MODTYPE_OTHER:
+				pth+=PRIMARYTYPE_OTHER;
+				break;
 		}
 		return pth;
 	}
@@ -466,7 +475,7 @@ public class ModPackageInstallHelper
 					{
 						//若是，创建目录结构
 						targetFile = new File(mainPath, ze.getName());
-						Logger.i("Creating file path:%s",targetFile.getPath());
+						Logger.i("Creating file path:%s", targetFile.getPath());
 						Utils.ensureFileParent(targetFile);
 						if (targetFile.isFile())
 						{
@@ -481,7 +490,7 @@ public class ModPackageInstallHelper
 					{
 						//写出文件
 						targetFile = new File(mainPath, ze.getName());
-						Logger.i("Writing file:%s",targetFile.getPath());
+						Logger.i("Writing file:%s", targetFile.getPath());
 						Utils.ensureFileParent(targetFile);
 						//若写出的目标文件已为目录，删除
 						if (targetFile.isDirectory())
@@ -596,7 +605,7 @@ public class ModPackageInstallHelper
 			@Override
 			public void onShow(DialogInterface p1)
 			{	button = alertdialog.getButton(ad.BUTTON_POSITIVE);
-				button.setOnClickListener(p11 -> {
+				button.setOnClickListener(> {
 					ad.dismiss();
 					// TODO: Implement this method
 				});
