@@ -610,10 +610,16 @@ public class ModPackageInstallHelper
 			@Override
 			public void onShow(DialogInterface p1)
 			{	button = alertdialog.getButton(ad.BUTTON_POSITIVE);
-				button.setOnClickListener(-> {
-					ad.dismiss();
-					// TODO: Implement this method
-				});
+				button.setOnClickListener(new OnClickListener(){
+
+						@Override
+						public void onClick(View p1)
+						{
+							ad.dismiss();
+							// TODO: Implement this method
+						}
+					}
+				);
 				color = button.getCurrentTextColor();
 				button.setClickable(false);
 				button.setTextColor(Color.GRAY);
