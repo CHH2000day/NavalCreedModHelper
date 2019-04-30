@@ -107,7 +107,7 @@ public class ModPackageInstallHelper
 				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
 				Logger.d(e);
 			}
-		}).start();
+		}.start();
 	}
 	private void load() throws IOException, ModPackageInfo.IllegalModInfoException
 	{
