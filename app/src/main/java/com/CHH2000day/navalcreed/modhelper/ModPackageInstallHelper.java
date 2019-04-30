@@ -95,17 +95,20 @@ public class ModPackageInstallHelper
 			}
 		};
 		mmha = (ModHelperApplication)listener.getActivity().getApplication();
-		new Thread() -> {
-			try
+		new Thread() {
+			public void run()
 			{
-				load();
-				totalFileSize = calculateTotalSize();
-				mHandler.sendEmptyMessage(0);
-			}
-			catch (Exception e)
-			{
-				mHandler.sendMessage(mHandler.obtainMessage(-1, e));
-				Logger.d(e);
+				try
+				{
+					load();
+					totalFileSize = calculateTotalSize();
+					mHandler.sendEmptyMessage(0);
+				}
+				catch (Exception e)
+				{
+					mHandler.sendMessage(mHandler.obtainMessage(-1, e));
+					Logger.d(e);
+				}
 			}
 		}.start();
 	}
@@ -311,33 +314,34 @@ public class ModPackageInstallHelper
 	private static String getSubType(int msubtype)
 	{
 		String s="";
-		switch(msubtype){
+		switch (msubtype)
+		{
 			case SUBTYPE_CV_CN:
-				s=ModPackageInfo.SUB_MODTYPE_CV_CN;
+				s = ModPackageInfo.SUB_MODTYPE_CV_CN;
 				break;
 			case SUBTYPE_CV_EN:
-				s=ModPackageInfo.SUB_MODTYPE_CV_EN;
+				s = ModPackageInfo.SUB_MODTYPE_CV_EN;
 				break;
 			case SUBTYPE_CV_JP_CV:
-				s=ModPackageInfo.SUB_MODTYPE_CV_JP_CV;
+				s = ModPackageInfo.SUB_MODTYPE_CV_JP_CV;
 				break;
 			case SUBTYPE_CV_JP_BB:
-				s=ModPackageInfo.SUB_MODTYPE_CV_JP_BB;
+				s = ModPackageInfo.SUB_MODTYPE_CV_JP_BB;
 				break;
 			case SUBTYPE_CV_JP_CA:
-				s=ModPackageInfo.SUB_MODTYPE_CV_JP_CA;
+				s = ModPackageInfo.SUB_MODTYPE_CV_JP_CA;
 				break;
 			case SUBTYPE_CV_JP_DD:
-				s=ModPackageInfo.SUB_MODTYPE_CV_JP_DD;
+				s = ModPackageInfo.SUB_MODTYPE_CV_JP_DD;
 				break;
 			case SUBTYPE_CV_DE:
-				s=ModPackageInfo.SUB_MODTYPE_CV_DE;
+				s = ModPackageInfo.SUB_MODTYPE_CV_DE;
 				break;
 			case SUBTYPE_CV_RU:
-				s=ModPackageInfo.SUB_MODTYPE_CV_RU;
+				s = ModPackageInfo.SUB_MODTYPE_CV_RU;
 				break;
 			default:
-				s=ModPackageInfo.SUBTYPE_EMPTY;
+				s = ModPackageInfo.SUBTYPE_EMPTY;
 				break;
 		}
 		return s;
@@ -347,7 +351,8 @@ public class ModPackageInstallHelper
 	{
 		String pth=app.getResFilesDirPath();
 
-		switch(modType){
+		switch (modType)
+		{
 			case ModPackageInfo.MODTYPE_CV:
 				pth += PRIMARYPATH_CV;
 				switch (subType)
@@ -379,25 +384,25 @@ public class ModPackageInstallHelper
 				}
 				break;
 			case ModPackageInfo.MODTYPE_BACKGROUND:
-				pth+=PRIMARYPATH_BACKGROUND;
+				pth += PRIMARYPATH_BACKGROUND;
 				break;
 			case ModPackageInfo.MODTYPE_BGM:
-				pth+=PRIMARYPATH_BGM;
+				pth += PRIMARYPATH_BGM;
 				break;
 			case ModPackageInfo.MODTYPE_CREWPIC:
-				pth+=PRIMARYPATH_CREWHEAD;
+				pth += PRIMARYPATH_CREWHEAD;
 				break;
 			case ModPackageInfo.MODTYPE_SOUNDEFFECT:
-				pth+=PRIMARYPATH_SOUNDEFFECT;
+				pth += PRIMARYPATH_SOUNDEFFECT;
 				break;
 			case ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM:
-				pth+=PRIMARYPATH_SOUNDEFFECT_PRIM;
+				pth += PRIMARYPATH_SOUNDEFFECT_PRIM;
 				break;
 			case ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC:
-				pth+=PRIMARYPATH_SOUNDEFFECT_SEC;
+				pth += PRIMARYPATH_SOUNDEFFECT_SEC;
 				break;
 			case ModPackageInfo.MODTYPE_OTHER:
-				pth+=PRIMARYTYPE_OTHER;
+				pth += PRIMARYTYPE_OTHER;
 				break;
 		}
 		return pth;
@@ -605,7 +610,7 @@ public class ModPackageInstallHelper
 			@Override
 			public void onShow(DialogInterface p1)
 			{	button = alertdialog.getButton(ad.BUTTON_POSITIVE);
-				button.setOnClickListener(> {
+				button.setOnClickListener(-> {
 					ad.dismiss();
 					// TODO: Implement this method
 				});
