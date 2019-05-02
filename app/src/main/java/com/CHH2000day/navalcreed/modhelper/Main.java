@@ -379,7 +379,7 @@ private void checkVality ( )
 							if ( p1.size ( ) > 0 )
 							{
 								final TesterInfo info=p1.get ( 0 );
-								if (  info.getdeviceId ( ).equals ( getDevId ( ) ) ||info.getSSAID().equals(getDevId())||info.getSSAID().equals("")||info.getSSAID()==null)
+								if (  info.getSSAID()==null||info.getdeviceId()==null||info.getdeviceId ( ).equals ( getDevId ( ) )||info.getSSAID().equals(getDevId())||info.getSSAID().equals(""))
 								{
 
 
