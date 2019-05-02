@@ -8,3 +8,4 @@ local.properties
 /build/
 CHH2000day.keystore
 app/build/
+*.sh
