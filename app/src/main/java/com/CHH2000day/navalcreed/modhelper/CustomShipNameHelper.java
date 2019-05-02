@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 import okio.*;
 import com.orhanobut.logger.*;
+import android.os.*;
 
 public class CustomShipNameHelper
 {
@@ -51,8 +52,8 @@ public class CustomShipNameHelper
 		char[] line=null;
 		String str=null;
 		ArrayList ids=new ArrayList();
-		StringBuilder id=new StringBuilder();
-		StringBuilder name=new StringBuilder();
+		String id=null;
+		String name=null;;
 		boolean isInId=false;
 		boolean isInName=false;
 		for (int i=0;i < raw.length;i++)
@@ -62,44 +63,36 @@ public class CustomShipNameHelper
 			{
 				continue;
 			}
-			line = str.toCharArray();
-			for (char c:line)
-			{
-				if (c == '"')
-				{
-					isInName = !isInName;
-				}
-				else if (isInName)
-				{
-					name.append(c);
-				}
-				else if (c == ']')
-				{
-					isInId = false;
-				}
-				else if (isInId)
-				{
-					id.append(c);
-				}
-				else if (c == '[')
-				{
-
-					isInId = false;
-				}
-			}
+			id = str.substring(str.indexOf('[') + 1, str.indexOf(']') - 1);
+			name = str.substring(str.indexOf('\"') + 1, str.lastIndexOf('"') - 1);
 			//end of each line's resolve
-			if (id.length() > 0 && name.length() > 0)
-			{
-				int shipId=Integer.valueOf(id.toString());
-				ids.add(shipId);
-				shipnames.put(shipId, name.toString());
-			}
-			id.delete(0, id.length());
-			name.delete(0, name.length());
+			int shipId=Integer.valueOf(id);
+			ids.add(shipId);
+			shipnames.put(shipId, name);
+
+			id = null;
+			name = null;
 			//reset StringBuilders after each loop
 		}
 		//end of all loops
-		Collections.sort(ids);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+		{
+			Collections.sort(ids);
+		}
+		else
+		{
+			ids.sort(new Comparator<Integer>() {
+					@Override
+					public int compare(Integer o1, Integer o2)
+					{
+						// TODO Auto-generated method stub
+						if ((int)o1 < (int)o2)return -1;
+						else return 1;
+					}
+				});	
+
+		}
+
 	}
 	private void writeToFile(File dest) throws IOException
 	{
