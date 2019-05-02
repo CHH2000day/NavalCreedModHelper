@@ -4,8 +4,19 @@ import cn.bmob.v3.*;
 public class TesterInfo extends BmobObject
 {
 	private String key;
+	private String SSAID;
 	private String model;
 	private String deviceId;
+
+	public void setSSAID(String sSAID)
+	{
+		SSAID = sSAID;
+	}
+
+	public String getSSAID()
+	{
+		return SSAID;
+	}
 
 
 	/*

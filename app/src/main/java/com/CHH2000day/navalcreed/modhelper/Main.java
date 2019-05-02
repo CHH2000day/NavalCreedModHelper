@@ -46,6 +46,8 @@ import cn.bmob.v3.listener.UpdateListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import android.provider.*;
+import java.util.*;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -377,11 +379,12 @@ private void checkVality ( )
 							if ( p1.size ( ) > 0 )
 							{
 								final TesterInfo info=p1.get ( 0 );
-								if ( info.getdeviceId ( ) == null || info.getdeviceId ( ).equals ( "" ) || info.getdeviceId ( ).equals ( getDevId ( ) ) )
+								if (  info.getdeviceId ( ).equals ( getDevId ( ) ) ||info.getSSAID().equals(getDevId())||info.getSSAID().equals(""))
 								{
 
 
-									info.setdeviceId ( getDevId ( ) );
+									//info.setdeviceId ( getDevId ( ) );
+									info.setSSAID(getDevId());
 									info.setModel ( Build.MODEL );
 									info.update ( info.getObjectId ( ), new UpdateListener ( ){
 
@@ -521,7 +524,9 @@ private void checkVality ( )
 	}
 	private String getDevId ( )
 	{
-		return Build.SERIAL;
+		String android_id=Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID); 
+		return android_id;
+		//return Build.SERIAL;
 	}
 	public void checkPermission ( )
 	{
