@@ -934,11 +934,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		{
 			btnCancel = ad.getButton(ad.BUTTON_NEGATIVE);
 			btnEnter = ad.getButton(ad.BUTTON_POSITIVE);
-			btnCancel.setOnClickListener(> {
+			btnCancel.setOnClickListener(listener-> {
 				doExit();
 				// TODO: Implement this method
 			});
-			btnEnter.setOnClickListener(> {
+			btnEnter.setOnClickListener(listener-> {
 				String key = keyinput.getEditableText().toString().toUpperCase().trim();
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(keyinput.getWindowToken(), 0) ;
@@ -961,7 +961,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					});
 				// TODO: Implement this method
 			});
-			btnEnter.setOnLongClickListener(> {
+			btnEnter.setOnLongClickListener(listener-> {
 				ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 				cmb.setText(getDevId());
 				// TODO: Implement this method
