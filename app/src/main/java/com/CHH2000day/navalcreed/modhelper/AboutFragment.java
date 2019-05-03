@@ -123,6 +123,7 @@ public class AboutFragment extends Fragment
 				{
 					// TODO: Implement this method
 					SharedPreferences sp=app.getMainSharedPrederences();
+					try{
 					if(KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY,""))){
 						//If local key is avail
 						boolean status=((Main)getActivity()).isUseAlphaChannel();
@@ -132,7 +133,9 @@ public class AboutFragment extends Fragment
 					else{
 						((Main)getActivity()).showKeyDialog();
 					}
-					
+					}catch(Exception ignored){
+						
+					}
 					return false;
 				}
 			});
