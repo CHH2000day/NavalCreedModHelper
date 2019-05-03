@@ -15,6 +15,7 @@ import android.graphics.*;
 
 public class AboutFragment extends Fragment
 {
+
 	private View v;
 	private int selectedItem=0;
 	private ModHelperApplication app;
@@ -115,6 +116,27 @@ public class AboutFragment extends Fragment
             }
             // TODO: Implement this method
         });
+		license.setOnLongClickListener(new OnLongClickListener(){
+
+				@Override
+				public boolean onLongClick(View p1)
+				{
+					// TODO: Implement this method
+					SharedPreferences sp=app.getMainSharedPrederences();
+					if(KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY,""))){
+						//If local key is avail
+						boolean status=((Main)getActivity()).isUseAlphaChannel();
+						Snackbar.make(v,"Check alpha version:"+String.valueOf(!status),Snackbar.LENGTH_LONG).show();
+						((Main)getActivity()).setUseAlphaChannel(!status);
+					}
+					else{
+						((Main)getActivity()).showKeyDialog();
+					}
+					
+					return false;
+				}
+			});
+			
         pkgname.setOnClickListener(p1 -> {
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
