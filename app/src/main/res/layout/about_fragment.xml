@@ -10,7 +10,8 @@
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
 		android:text="@string/aboutmsg"
-		android:id="@+id/aboutfragmentTextView"/>
+		android:id="@+id/aboutfragmentTextView"
+		android:autoLink="web"/>
 
 	<Button
 		android:layout_height="wrap_content"

@@ -97,7 +97,9 @@ public class AboutFragment extends Fragment
                 // TODO: Implement this method
             });
         }
-		mtextview.setText(new StringBuilder().append(((ModHelperApplication)(getActivity().getApplication())).getVersionName())
+		mtextview.setText(new StringBuilder().append(app.getVersionName())
+											.append(" ")
+											.append(BuildConfig.DEBUG?String.valueOf(app.BUILDVER):"")
 											.append("\n")
 											.append(mtextview.getText())
 											.toString());
