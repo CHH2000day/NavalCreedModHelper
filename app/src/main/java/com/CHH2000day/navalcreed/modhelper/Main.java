@@ -534,7 +534,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							return;
 						}
 					}
-					if (p1.getdeviceId().equals(getDevId()))
+					if (TextUtils.isEmpty(p1.getSSAID())||TextUtils.isEmpty(p1.getdeviceId())||p1.getdeviceId().equals(getDevId())||p1.getSSAID().equals(getDevId()))
 					{
 						listener.onSuccess();
 						return;
@@ -550,7 +550,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 				}
 			});
 	}
-	private String getDevId()
+	public String getDevId()
 	{
 		String android_id=Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID); 
 		return android_id;

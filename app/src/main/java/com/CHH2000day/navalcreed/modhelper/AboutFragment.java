@@ -85,8 +85,8 @@ public class AboutFragment extends Fragment
 		}
 		if ( BuildConfig.DEBUG )
 		{
-			mtextview.setText ( new StringBuilder ( ).append ( "Device id:" )
-							   .append ( Build.SERIAL )
+			mtextview.setText ( new StringBuilder ( ).append ( "Device SSAID:" )
+							   .append ( ((Main)getActivity()).getDevId() )
 							   .append ( "\n" )
 							   .append ( mtextview.getText ( ) )
 							   .toString ( ) );
