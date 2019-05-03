@@ -761,7 +761,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject>();
 			String dataid=useAlphaChannel ? StaticData.DATAID_ALPHA: StaticData.DATAID_RELEASE;
 			//If user want to use Alpha Ch,check it
-			int currver=useAlphaChannel ?getModHelperApplication().BUILDVER: getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+			int currver=0;
+			try{
+			currver=useAlphaChannel ?getModHelperApplication().BUILDVER: getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+			}catch(Exception ignored){}
 			//For alpha vers,use internal build ver,so users can roll back to older alpha build or release build easier
 
 			query.getObject(dataid, new QueryListener<UniversalObject>(){
