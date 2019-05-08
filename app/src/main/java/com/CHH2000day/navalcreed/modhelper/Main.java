@@ -854,7 +854,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							});
 							if(currver>=universalobj.getMinVer()){
 								adb.setCancelable(true);
-								adb.setNegativeButton(R.string.cancel);
+								adb.setNegativeButton(R.string.cancel,null);
 							}
 							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
 							// TODO: Implement this method
