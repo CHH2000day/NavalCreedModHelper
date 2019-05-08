@@ -9,6 +9,12 @@ public class UniversalObject extends BmobObject
 	private BmobFile packagefile;
 	private String changelog;
 	private boolean avail;
+	private Integer minVer;
+
+	public Integer getMinVer()
+	{
+		return minVer;
+	}
 
 
 	public Integer getVersion ()

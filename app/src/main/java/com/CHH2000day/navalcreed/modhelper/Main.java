@@ -83,7 +83,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			{
 
 				AlertDialog.Builder adb=(AlertDialog.Builder)msg.obj;
-				adb.create().show();
+				AlertDialog ad=adb.create();
+				ad.setCanceledOnTouchOutside(false);
+				ad.show();
 
 
 			}
@@ -801,7 +803,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							AlertDialog.Builder adb=new AlertDialog.Builder(Main.this);
 							adb.setTitle(R.string.update)
 								.setMessage(universalobj.getChangelog())
-								.setNegativeButton(R.string.cancel, null)
 								.setPositiveButton(R.string.update, (p1, p21) -> {
 								BmobFile tgtfile = universalobj.getPackagefile();
 								if (tgtfile == null)
@@ -851,6 +852,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 									});
 								// TODO: Implement this method
 							});
+							if(currver>=universalobj.getMinVer()){
+								adb.setCancelable(true);
+								adb.setNegativeButton(R.string.cancel);
+							}
 							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
 							// TODO: Implement this method
 						}
