@@ -48,6 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.provider.*;
 import java.util.*;
+import com.orhanobut.logger.*;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -840,7 +841,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 												data = Uri.fromFile(destfile);
 											}
 											i.setDataAndType(data, "application/vnd.android.package-archive");
+											try{
 											startActivity(i);
+											}catch(Exception e){
+												Logger.e(e,"");
+											}
 											// TODO: Implement this method
 										}
 
