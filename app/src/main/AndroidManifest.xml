@@ -1,99 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  xmlns:tools="http://schemas.android.com/tools" package="com.CHH2000day.navalcreed.modhelper">
-
-    <application
-			android:allowBackup="true"
-			android:icon="@drawable/icon"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme.NoActionBar"
-			android:name=".ModHelperApplication"
-			android:resizeableActivity="true"
-			android:networkSecurityConfig="@xml/network_security_config">
-        <activity
-            android:name=".Main"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>	
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="file" />
-				<data android:host="*" />
-				<data android:mimeType="*/*" />
-				<data android:pathPattern=".*\\.ncmod" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW" />
-				<category android:name="android.intent.category.DEFAULT" />
-				<data android:scheme="content" />
-				<data android:host="*" />
-				<data android:mimeType="*/*" />
-				<data android:pathPattern=".*\\.ncmod" />
-			</intent-filter>
-					</activity>
-
-	<activity
-            android:name=".CreateActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".DeleteActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".UpdateActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".FindActivity"
-            android:screenOrientation="portrait"/>
-	<provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_path" />
-        </provider>
-	<provider
-    	android:name="cn.bmob.v3.util.BmobContentProvider"
-    	android:authorities="com.CHH2000day.navalcreed.modhelper.BmobContentProvider">
-	</provider>
-		<!-- 配置APP ID -->
-		<meta-data
-            android:name="BUGLY_APPID"
-            android:value="a21f3fab2a" />
-		<!-- 配置APP版本号 -->
-		<meta-data
-            android:name="BUGLY_APP_VERSION"
-            android:value="0v0" />
-		<!-- 配置APP渠道号 -->
-		<meta-data
-            android:name="BUGLY_APP_CHANNEL"
-            android:value="0v0" />
-		<!-- 配置Bugly调试模式（true或者false）-->
-		<meta-data
-            android:name="BUGLY_ENABLE_DEBUG"
-            android:value="true" />
-    </application>
-
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	package="com.CHH2000day.navalcreed.modhelper">
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
-	<!--允许联网 --> 
-	<uses-permission android:name="android.permission.INTERNET" /> 
-	<!--获取GSM（2g）、WCDMA（联通3g）等网络状态的信息  --> 
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> 
-	<!--获取wifi网络状态的信息 --> 
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> 
-	<!--保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
-	<uses-permission android:name="android.permission.WAKE_LOCK" /> 
-	<!--获取sd卡写的权限，用于文件上传和下载-->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<!--允许读取手机状态 用于创建BmobInstallation--> 
-	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
-	<!--并不知道这权限到底干啥的，不加会有莫名其妙的SecurityException-->
-	<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" tools:ignore="ProtectedPermissions"/>
-	<uses-permission android:name="android.permission.READ_LOGS" />
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission
+		android:name="android.permission.INTERACT_ACROSS_USERS"
+		tools:ignore="ProtectedPermissions"/>
+	<uses-permission android:name="android.permission.READ_LOGS"/>
+	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+	<uses-permission android:name="android.permission.INSTALL_PACKAGES"/>
+	<application
+		android:allowBackup="true"
+		android:icon="@drawable/icon"
+		android:label="@string/app_name"
+		android:theme="@style/AppTheme.NoActionBar"
+		android:name=".ModHelperApplication"
+		android:resizeableActivity="true"
+		android:networkSecurityConfig="@xml/network_security_config">
+		<activity
+			android:name=".Main"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:scheme="file"/>
+				<data android:host="*"/>
+				<data android:mimeType="*/*"/>
+				<data android:pathPattern=".*\\.ncmod"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:scheme="content"/>
+				<data android:host="*"/>
+				<data android:mimeType="*/*"/>
+				<data android:pathPattern=".*\\.ncmod"/>
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".CreateActivity"
+			android:screenOrientation="portrait"/>
+		<activity
+			android:name=".DeleteActivity"
+			android:screenOrientation="portrait"/>
+		<activity
+			android:name=".UpdateActivity"
+			android:screenOrientation="portrait"/>
+		<activity
+			android:name=".FindActivity"
+			android:screenOrientation="portrait"/>
+		<provider
+			android:name="android.support.v4.content.FileProvider"
+			android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_path"/>
+		</provider>
+		<provider
+			android:name="cn.bmob.v3.util.BmobContentProvider"
+			android:authorities="com.CHH2000day.navalcreed.modhelper.BmobContentProvider"/>
+		<meta-data
+			android:name="BUGLY_APPID"
+			android:value="a21f3fab2a"/>
+		<meta-data
+			android:name="BUGLY_APP_VERSION"
+			android:value="0v0"/>
+		<meta-data
+			android:name="BUGLY_APP_CHANNEL"
+			android:value="0v0"/>
+		<meta-data
+			android:name="BUGLY_ENABLE_DEBUG"
+			android:value="true"/>
+	</application>
 </manifest>
