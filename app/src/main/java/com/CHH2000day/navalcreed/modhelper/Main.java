@@ -379,7 +379,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						if (reason == 0)
 						{
 							//如果设备不匹配，清除本地许可数据
-							((ModHelperApplication)getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID, "").apply();
+							((ModHelperApplication)getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY,"").apply();
 						}
 						mveronboothandler.sendEmptyMessage(reason);
 						// TODO: Implement this method
@@ -992,6 +992,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					});
 				// TODO: Implement this method
 			});
+			keyinput.getEditableText().append(getModHelperApplication().getMainSharedPrederences().getString(KEY_AUTHKEY,""));
 			btnEnter.setOnLongClickListener(listener-> {
 				ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 				cmb.setText(getDevId());

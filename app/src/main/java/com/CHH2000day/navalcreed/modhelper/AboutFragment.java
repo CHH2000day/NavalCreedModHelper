@@ -19,12 +19,14 @@ public class AboutFragment extends Fragment
 	private View v;
 	private int selectedItem=0;
 	private ModHelperApplication app;
+	private String deviceId;
 
 	@Override
 	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{	app = (ModHelperApplication)getActivity ( ).getApplication ( );
 		app.getPkgNameNum ( app.getMainSharedPrederences ( ).getString ( app.KEY_PKGNAME, app.CN ) );
 		v = inflater.inflate ( R.layout.about_fragment, null );
+		deviceId=((Main)getActivity()).getDevId();
         Button license = v.findViewById(R.id.aboutfragmentLicense);
         Button pkgname = v.findViewById(R.id.aboutfragmentButtonselectpkg);
         TextView mtextview = v.findViewById(R.id.aboutfragmentTextView);
@@ -86,13 +88,13 @@ public class AboutFragment extends Fragment
 		if ( BuildConfig.DEBUG )
 		{
 			mtextview.setText ( new StringBuilder ( ).append ( "Device SSAID:" )
-							   .append ( ((Main)getActivity()).getDevId() )
+							   .append ( deviceId)
 							   .append ( "\n" )
 							   .append ( mtextview.getText ( ) )
 							   .toString ( ) );
             mtextview.setOnClickListener(p1 -> {
                 ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                cmb.setText(Build.SERIAL);
+                cmb.setText(deviceId);
                 Snackbar.make(v, "Device id has been copied", Snackbar.LENGTH_LONG).show();
                 // TODO: Implement this method
             });
