@@ -26,7 +26,7 @@
 	<string name="transcode_transcoding">轉換中</string>
 	<string name="transcode_writing">正在導出</string>
 	<string name="timeused">用時:</string>
-	<string name="aboutmsg">本應用依照Apache License 2.0開源協議開源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本應用的源碼\n制作:@CHH2000day\n說明:@此生 @天津风\n圖標提供:@猫咪要保护所有人\n翻譯:@Jim Li\nQQ群:702884712\n本軟體官網: https://nc.CHH2000dy.com</string>
+	<string name="aboutmsg">本應用依照Apache License 2.0開源協議開源，可以在https://github.com/CHH2000day/NavalCreedModHelper上得到本應用的源碼\n制作:@CHH2000day\n說明:@此生 @天津风\n圖標提供:@猫咪要保护所有人\n翻譯:@Jim Li\nQQ群:702884712\n本軟體官網: https://nc.CHH2000day.com</string>
 	<string name="modpkg_install_ovwtmsg">"已安裝同類型的mod包，確定要繼續嗎？\n繼續安裝將卸載原mod包"</string>
 	<string name="bgm_transcode_disabled">系统版本低於5.1，無法使用bgm轉檔功能</string>
 	<string name="not_a_wavfile">文件格式錯誤！文件不為wav編碼</string>
