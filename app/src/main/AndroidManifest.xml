@@ -42,6 +42,22 @@
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:scheme="file"/>
+				<data android:host="*"/>
+				<data android:mimeType="*/*"/>
+				<data android:pathPattern=".*\.ncmod"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:scheme="content"/>
+				<data android:host="*"/>
+				<data android:mimeType="*/*"/>
+				<data android:pathPattern=".*\.ncmod"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 				<data android:scheme="content"/>
 				<data android:host="*"/>
 				<data android:mimeType="*/*"/>
