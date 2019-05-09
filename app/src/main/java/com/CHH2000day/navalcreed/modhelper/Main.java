@@ -68,8 +68,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	private CustomShipNameFragment mAntiHexieFragment;
 	private boolean showAd=true;
 	private boolean useAlphaChannel=BuildConfig.DEBUG;
+	private File updateApk;
 
 	private static final int PERMISSION_CHECK_CODE = 125;
+
+	private static final int REQUEST_CODE_APP_INSTALL=126;
 
 	@SuppressLint("HandlerLeak")
 	@Override
@@ -603,6 +606,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 				((ModHelperApplication)getApplication()).reconfigModPackageManager();
 			}
 		}
+		if(requestCode==REQUEST_CODE_APP_INSTALL&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+			installApk();
+		}
 	}
 
 
@@ -755,6 +761,33 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		ad.show();
 	}
 
+	
+	private void installApk(){
+		if(updateApk!=null){
+			if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+				if(!getPackageManager().canRequestPackageInstalls()){
+					Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+					startActivityForResult(intent,REQUEST_CODE_APP_INSTALL);
+				}
+			}
+			Intent i = new Intent(Intent.ACTION_VIEW);
+			Uri data;
+			i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+			{
+				data = FileProvider.getUriForFile(Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", updateApk);
+				i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			}
+			else
+			{
+				data = Uri.fromFile(updateApk);
+			}
+			i.setDataAndType(data, "application/vnd.android.package-archive");
+			startActivity(i);
+			updateApk=null;
+			}
+			
+	}
 	protected class UpdateThread extends Thread
 	{
 
@@ -827,25 +860,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										public void done(String p1, BmobException p21)
 										{
 											d.dismiss();
+											updateApk=destfile;
 											Snackbar.make(mViewPager, R.string.downloaded, Snackbar.LENGTH_LONG).show();
-											Intent i = new Intent(Intent.ACTION_VIEW);
-											Uri data;
-											i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-											if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-											{
-												data = FileProvider.getUriForFile(Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", destfile);
-												i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-											}
-											else
-											{
-												data = Uri.fromFile(destfile);
-											}
-											i.setDataAndType(data, "application/vnd.android.package-archive");
-											try{
-											startActivity(i);
-											}catch(Exception e){
-												Logger.e(e,"");
-											}
+											installApk();
 											// TODO: Implement this method
 										}
 
