@@ -96,5 +96,4 @@
 	<!--并不知道这权限到底干啥的，不加会有莫名其妙的SecurityException-->
 	<uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" tools:ignore="ProtectedPermissions"/>
 	<uses-permission android:name="android.permission.READ_LOGS" />
-	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 </manifest>
