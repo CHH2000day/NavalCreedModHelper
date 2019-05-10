@@ -231,7 +231,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			{
 				Snackbar.make ( v, "This type of mod package can't be uninstalled", Snackbar.LENGTH_LONG ).show ( );
 			}
-			if ( modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_CN ) || modtype.equals ( ModPackageInfo.SUB_MODTYPE_CV_EN ) )
+			if ( modtype.startsWith("CV"))
 			{
 				if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CV, modtype ) )
 				{
@@ -257,7 +257,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 				.setMessage ( getString ( R.string.confirm_to_remove_changes_to_parta ) + ModPackageManager.getInstance ( ).resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + getString ( R.string.confirm_to_remove_changes_to_partb ) )
 				.setNegativeButton ( R.string.cancel, null )
 					.setPositiveButton(R.string.cont, (p1, p2) -> {
-						String type = key.equals(ModPackageInfo.SUB_MODTYPE_CV_CN) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_EN) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_BB) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_CV) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_CA) || key.equals(ModPackageInfo.SUB_MODTYPE_CV_JP_DD) ? ModPackageInfo.MODTYPE_CV : key;
+						String type = key.startsWith("CV") ? ModPackageInfo.MODTYPE_CV : key;
 						String subType = type.equals(ModPackageInfo.MODTYPE_CV) ? key : ModPackageInfo.SUBTYPE_EMPTY;
 						boolean b = ModPackageManager.getInstance().requestUninstall(type, subType, (ModHelperApplication) getActivity().getApplication());
 						String str = b ? getString(R.string.success) : getString(R.string.failed);
