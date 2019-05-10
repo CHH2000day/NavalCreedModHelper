@@ -79,6 +79,8 @@
 		<item>Japanese-Crusier</item>
 		<item>Japanese-Destroyer</item>
 		<item>German</item>
+		<!-- disable in this build
 		<item>Russian</item>
+		-->
 	</string-array>
 	</resources>

@@ -77,6 +77,7 @@
 			<item>日语-巡洋舰</item>
 			<item>日语-驱逐舰</item>
 			<item>德语</item>
-			<item>俄语</item>
+			<!-- disable in this build
+			<item>俄语</item>-->
 		</string-array>
 	</resources>
