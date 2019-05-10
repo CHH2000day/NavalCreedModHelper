@@ -727,6 +727,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	public void setUseAlphaChannel(boolean useAlphaChannel)
 	{
 		this.useAlphaChannel = useAlphaChannel;
+		getModHelperApplication().getMainSharedPrederences().edit().putBoolean(KEY_USEALPHACHANNEL,this.useAlphaChannel).apply();
 	}
 
 	public boolean isUseAlphaChannel()
