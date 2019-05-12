@@ -50,6 +50,7 @@ import android.provider.*;
 import java.util.*;
 import com.orhanobut.logger.*;
 import java.io.*;
+import android.os.*;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -855,8 +856,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 										catch(IOException e){
 											Logger.e(e,"download failed");
 										}
+										Looper.prepare();
 										d.dismiss();
-																			}
+										Looper.loop();
+									}
 								}.start();
 								});
 								//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );

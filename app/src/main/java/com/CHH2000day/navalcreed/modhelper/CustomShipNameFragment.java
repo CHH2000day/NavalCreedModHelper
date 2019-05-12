@@ -58,6 +58,7 @@ public class CustomShipNameFragment extends ModFragment
 					}
 					new Thread(){
 						public void run(){
+							Looper.prepare();
 							try
 							{
 								Utils.downloadFile(res_url, f);
@@ -65,6 +66,7 @@ public class CustomShipNameFragment extends ModFragment
 									.setTitle(R.string.success).
 									setPositiveButton(R.string.ok,null)
 									.create().show();
+								
 							}
 							catch (IOException e)
 							{
@@ -73,8 +75,8 @@ public class CustomShipNameFragment extends ModFragment
 									.setTitle(R.string.failed)
 									.setPositiveButton(R.string.ok,null)
 									.create().show();
-								
 							}
+							finally{Looper.loop();}
 						}
 					}.start();
 							
