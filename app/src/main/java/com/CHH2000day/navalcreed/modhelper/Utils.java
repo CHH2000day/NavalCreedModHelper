@@ -363,5 +363,6 @@ public class Utils
 		Sink s=Okio.sink(destFile);
 		BufferedSink bs=Okio.buffer(s);
 		bs.writeAll(r.body().source());
+		bs.close();
 	}
 }
