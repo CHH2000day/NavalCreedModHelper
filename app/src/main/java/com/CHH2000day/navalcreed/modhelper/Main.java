@@ -49,6 +49,7 @@ import java.util.List;
 import android.provider.*;
 import java.util.*;
 import com.orhanobut.logger.*;
+import java.io.*;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader
 {
@@ -846,11 +847,16 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 									public void run()
 									{
 										File f=new File(getExternalCacheDir(), "update.apk");
-										Utils.downloadFile(url, f);
-										updateApk = f;
+										try{
+											Utils.downloadFile(url, f);
+											updateApk = f;
+											installApk();
+											}
+										catch(IOException e){
+											Logger.e(e,"download failed");
+										}
 										d.dismiss();
-										installApk();
-									}
+																			}
 								}.start();
 								});
 								//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
