@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select_country"
+		android:text="@string/select_country"
 		android:id="@+id/crewpicreplacerTextView1"/>
 
 	<Spinner
@@ -21,7 +21,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select_target_pic"
+		android:text="@string/select_target_pic"
 		android:layout_below="@id/crewpicreplacerSpinnerCountry"
 		android:id="@+id/crewpicreplacerTextView2"/>
 
@@ -35,7 +35,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select"
+		android:text="@string/select"
 		android:layout_below="@id/crewpicreplacerSpinnerCrew"
 		android:id="@+id/crewpicreplacerButtonSelectPic"
 		android:layout_alignParentRight="true"/>
@@ -43,14 +43,14 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/apply"
+		android:text="@string/apply"
 		android:layout_below="@id/crewpicreplacerButtonSelectPic"
 		android:id="@+id/crewpicreplacerButtonReplace"/>
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/unselected"
+		android:text="@string/unselected"
 		android:layout_below="@id/crewpicreplacerSpinnerCrew"
 		android:layout_toLeftOf="@id/crewpicreplacerButtonSelectPic"
 		android:layout_alignParentLeft="true"
@@ -62,7 +62,7 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/remove_changes"
+		android:text="@string/remove_changes"
 		android:layout_toRightOf="@id/crewpicreplacerButtonReplace"
 		android:layout_below="@id/crewpicreplacerSelectedFile"
 		android:id="@+id/crewpicreplacerButtonRemove"/>
@@ -70,7 +70,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/crewpicfrag_intro"
+		android:text="@string/crewpicfrag_intro"
 		android:layout_below="@id/crewpicreplacerButtonReplace"/>
 
 </RelativeLayout>

@@ -8,7 +8,7 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select_a_scene"
+		android:text="@string/select_a_scene"
 		android:id="@+id/bgreplacerTextView1"/>
 
 	<Spinner
@@ -29,14 +29,14 @@
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select_pic"
+		android:text="@string/select_pic"
 		android:layout_below="@id/bgreplacerSpinner1"
 		android:id="@+id/bgreplacerTextView2"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/select"
+		android:text="@string/select"
 		android:layout_below="@id/bgreplacerTextView2"
 		android:id="@+id/bgreplacerbtn_select"
 		android:layout_alignParentRight="true"/>
@@ -44,21 +44,21 @@
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/apply"
+		android:text="@string/apply"
 		android:layout_below="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacerbtn_update"/>
 
 	<TextView
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/bgfrag_intro"
+		android:text="@string/bgfrag_intro"
 		android:layout_below="@id/bgreplacerbtn_update"
 		android:id="@+id/bgreplacerTextView3"/>
 
 	<Button
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="@+string/remove_changes"
+		android:text="@string/remove_changes"
 		android:layout_toRightOf="@id/bgreplacerbtn_update"
 		android:layout_below="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacer_remove"/>
@@ -71,7 +71,7 @@
 			android:layout_alignParentLeft="true"
 			android:layout_alignBottom="@id/bgreplacerbtn_select"
 			android:id="@+id/bgreplacerPic"
-			android:text="@+string/unselected"
+			android:text="@string/unselected"
 			android:gravity="left|center_vertical"
 			android:paddingStart="3dp"/>
 
