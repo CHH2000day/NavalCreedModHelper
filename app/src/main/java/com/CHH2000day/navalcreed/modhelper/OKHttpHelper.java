@@ -18,7 +18,7 @@ public class OKHttpHelper
 		return client;
 	}
 	private static void init() throws UnknownHostException{
-		HeldCertificate rootCertificate = new HeldCertificate.Builder()
+		/*HeldCertificate rootCertificate = new HeldCertificate.Builder()
 			.certificateAuthority(1)
 			.build();
 
@@ -38,8 +38,9 @@ public class OKHttpHelper
 		HandshakeCertificates clientCertificates = new HandshakeCertificates.Builder()
 			.addTrustedCertificate(rootCertificate.certificate())
 			.build();
+			*/
 		client = new OkHttpClient.Builder()
-			.sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager())
+			//.sslSocketFactory(clientCertificates.sslSocketFactory(), clientCertificates.trustManager())
 			.build();
 	}
 }
