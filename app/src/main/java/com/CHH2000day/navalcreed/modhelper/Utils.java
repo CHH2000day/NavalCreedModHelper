@@ -356,9 +356,7 @@ public class Utils
     }
 	
 	public static void downloadFile(String url,File destFile) throws IOException{
-		synchronized(client){
-			if(client==null) client=new OkHttpClient();
-		}
+		if(client==null) client=new OkHttpClient();
 		Request req=new Request.Builder().url(url).build();
 		Response r=client.newCall(req).execute();
 		ensureFileParent(destFile);
