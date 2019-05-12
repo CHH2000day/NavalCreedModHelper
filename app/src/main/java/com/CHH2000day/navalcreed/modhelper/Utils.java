@@ -10,6 +10,7 @@ import android.content.*;
 import android.provider.*;
 import java.security.*;
 import okio.*;
+import okhttp3.*;
 
 public class Utils
 {
@@ -18,6 +19,7 @@ public class Utils
 	public static final String FORMAT_UNKNOWN="ERROR";
 	public static final byte[] HEADER_WAV={ 82, 73, 70, 70 };
 	public static final byte[] HEADER_OGG={ 79, 103, 103, 83 };
+	private static OkHttpClient client;
 
 	public static String identifyFormat ( InputStream in, boolean closeStream ) throws IOException
 	{
@@ -352,4 +354,16 @@ public class Utils
         }
         return new String ( temp );
     }
+	
+	public static void downloadFile(String url,File destFile) throws IOException{
+		synchronized(client){
+			if(client==null) client=new OkHttpClient();
+		}
+		Request req=new Request.Builder().url(url).build();
+		Response r=client.newCall(req).execute();
+		ensureFileParent(destFile);
+		Sink s=Okio.sink(destFile);
+		BufferedSink bs=Okio.buffer(s);
+		bs.writeAll(r.body().source());
+	}
 }

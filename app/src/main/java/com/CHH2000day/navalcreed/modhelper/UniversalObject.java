@@ -10,18 +10,22 @@ public class UniversalObject extends BmobObject
 	private String changelog;
 	private boolean avail;
 	private Integer minVer;
+	private String download;
+
+	public String getDownload()
+	{
+		return download;
+	}
 
 	public Integer getMinVer()
 	{
 		return minVer;
 	}
 
-
 	public Integer getVersion ()
 	{
 		return version;
 	}
-
 
 	public BmobFile getPackagefile ()
 	{

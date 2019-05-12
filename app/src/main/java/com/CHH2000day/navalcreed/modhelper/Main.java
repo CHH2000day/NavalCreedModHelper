@@ -839,11 +839,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							adb.setTitle(R.string.update)
 								.setMessage(universalobj.getChangelog())
 								.setPositiveButton(R.string.update, (p1, p21) -> {
-								BmobFile tgtfile = universalobj.getPackagefile();
-								if (tgtfile == null)
-								{
-									return;
-								}
 								Snackbar.make(mViewPager, R.string.downloading, Snackbar.LENGTH_LONG).show();
 								AlertDialog.Builder db = new AlertDialog.Builder(Main.this);
 								db.setTitle(R.string.please_wait)
@@ -852,30 +847,18 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								final AlertDialog d = db.create();
 								d.setCanceledOnTouchOutside(false);
 								d.show();
+								String url=universalobj.getDownload();
+								new Thread(){
+									public void run(){
+										File f=new File(getExternalCacheDir(),"update.apk");
+										Utils.downloadFile(url,f);
+										updateApk=f;
+										d.dismiss();
+										installApk();
+									}
+								}.start();
 								//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
-								final File destfile = new File(new File(getExternalCacheDir(), "download"), "update.apk");
-
-								tgtfile.download(destfile, new DownloadFileListener() {
-
-										@Override
-										public void done(String p1, BmobException p21)
-										{
-											d.dismiss();
-											updateApk=destfile;
-											Snackbar.make(mViewPager, R.string.downloaded, Snackbar.LENGTH_LONG).show();
-											installApk();
-											// TODO: Implement this method
-										}
-
-										@Override
-										public void onProgress(Integer p1, long p21)
-										{
-											// TODO: Implement this method
-										}
-									});
-								// TODO: Implement this method
-							});
-							if(currver>=universalobj.getMinVer()){
+								if(currver>=universalobj.getMinVer()){
 								adb.setCancelable(true);
 								adb.setNegativeButton(R.string.cancel,null);
 							}

@@ -12,6 +12,7 @@ import cn.bmob.v3.exception.*;
 import cn.bmob.v3.datatype.*;
 import android.support.design.widget.*;
 import android.content.*;
+import com.orhanobut.logger.*;
 
 public class CustomShipNameFragment extends ModFragment
 {
@@ -23,8 +24,7 @@ public class CustomShipNameFragment extends ModFragment
 		return false;
 	}
 
-
-	
+	private static final String res_url="https://static-dir.CHh2000day.com/nc/customshipname_v21.lua";
 	private View v;
     private String path;
 	@Override
@@ -40,69 +40,51 @@ public class CustomShipNameFragment extends ModFragment
 
 		Button exec = v.findViewById(R.id.antihexiefragmentButtonExec);
 
-		exec.setOnClickListener(p1 -> {
-			
-			AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
-			adb.setTitle("请稍等");
-			adb.setMessage("正在进行反和谐");
-			adb.setCancelable(false);
-			final AlertDialog ad=adb.create();
-			ad.setCanceledOnTouchOutside(false);
-			ad.show();
-			final File f = new File(path);
-			if (f.exists() && f.isFile()) {
-				f.delete();
-			}
-			if (!f.getParentFile().exists()) {
-				f.getParentFile().mkdirs();
-			}
-			BmobQuery<UniversalObject> query = new BmobQuery<UniversalObject>();
-			query.getObject(StaticData.DATA_ID_ANTIHEXIE, new QueryListener<UniversalObject>() {
+		exec.setOnClickListener(new OnClickListener(){
 
 				@Override
-				public void done(UniversalObject p1, BmobException p2) {
-					final AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
-
-					if (p2 != null) {
-						ad.cancel();
-						adb.setMessage(p2.getMessage())
-								.setTitle(R.string.failed)
-								.setPositiveButton(R.string.ok, null)
-								.create().show();
-						return;
-
+				public void onClick(View p1)
+				{
+					final AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
+					adb.setTitle("请稍等");
+					adb.setMessage("正在进行反和谐");
+					adb.setCancelable(false);
+					final AlertDialog ad=adb.create();
+					ad.setCanceledOnTouchOutside(false);
+					ad.show();
+					final File f = new File(path);
+					if (f.exists() && f.isFile()) {
+						f.delete();
 					}
-					BmobFile bf = p1.getPackagefile();
-					if (bf != null) {
-						bf.download(f, new DownloadFileListener() {
-
-							@Override
-							public void done(String p1, BmobException p2) {
-								ad.cancel();
-								if (p2 != null) {
-									adb.setTitle(R.string.failed)
-											.setMessage(p2.getMessage())
-											.setPositiveButton(R.string.ok, null)
-											.create().show();
-									return;
-								}
+					new Thread(){
+						public void run(){
+							try
+							{
+								Utils.downloadFile(res_url, f);
 								adb.setMessage(R.string.success)
-										.setTitle(R.string.success)
-										.setPositiveButton(R.string.ok, null)
-										.create().show();
-
-								// TODO: Implement this method
+									.setTitle(R.string.success).
+									setPositiveButton(R.string.ok,null)
+									.create().show();
 							}
-
-							@Override
-							public void onProgress(Integer p1, long p2) {
-								// TODO: Implement this method
+							catch (IOException e)
+							{
+								Logger.e(e,"");
+								adb.setMessage(R.string.failed)
+									.setTitle(R.string.failed)
+									.setPositiveButton(R.string.ok,null)
+									.create().show();
+								
 							}
-						});
-					}
-					// TODO: Implement this method
+						}
+					}.start();
+							
+							
+				// TODO: Implement this method
 				}
-			});
+
+			
+			
+			
 			/*AlertDialog.Builder adb=new AlertDialog.Builder(getActivity());
 			 adb.setTitle("提示")
 			 .setMessage("该功能尚未实现")
