@@ -76,7 +76,10 @@ public class CustomShipNameFragment extends ModFragment
 									.setPositiveButton(R.string.ok,null)
 									.create().show();
 							}
-							finally{Looper.loop();}
+							finally{
+								ad.dismiss();
+								Looper.loop();
+							}
 						}
 					}.start();
 							
