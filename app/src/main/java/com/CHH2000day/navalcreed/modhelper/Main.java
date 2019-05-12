@@ -379,7 +379,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						if (reason == 0)
 						{
 							//如果设备不匹配，清除本地许可数据
-							((ModHelperApplication)getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY,"").apply();
+							((ModHelperApplication)getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY, "").apply();
 						}
 						mveronboothandler.sendEmptyMessage(reason);
 						// TODO: Implement this method
@@ -436,8 +436,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 											}
 										});
 								}
-								if(!getDevId().equals(info.getdeviceId())&&!getDevId().equals(info.getSSAID())){
-									listener.onFail(0,"Device mismatch!Local key is removed.");
+								if (!getDevId().equals(info.getdeviceId()) && !getDevId().equals(info.getSSAID()))
+								{
+									listener.onFail(0, "Device mismatch!Local key is removed.");
 								}
 							}
 						}
@@ -540,7 +541,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							return;
 						}
 					}
-					if (TextUtils.isEmpty(p1.getSSAID())||TextUtils.isEmpty(p1.getdeviceId())||p1.getdeviceId().equals(getDevId())||p1.getSSAID().equals(getDevId()))
+					if (TextUtils.isEmpty(p1.getSSAID()) || TextUtils.isEmpty(p1.getdeviceId()) || p1.getdeviceId().equals(getDevId()) || p1.getSSAID().equals(getDevId()))
 					{
 						listener.onSuccess();
 						return;
@@ -606,7 +607,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 				((ModHelperApplication)getApplication()).reconfigModPackageManager();
 			}
 		}
-		if(requestCode==REQUEST_CODE_APP_INSTALL&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+		if (requestCode == REQUEST_CODE_APP_INSTALL && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+		{
 			installApk();
 		}
 	}
@@ -727,7 +729,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 	public void setUseAlphaChannel(boolean useAlphaChannel)
 	{
 		this.useAlphaChannel = useAlphaChannel;
-		getModHelperApplication().getMainSharedPrederences().edit().putBoolean(KEY_USEALPHACHANNEL,this.useAlphaChannel).apply();
+		getModHelperApplication().getMainSharedPrederences().edit().putBoolean(KEY_USEALPHACHANNEL, this.useAlphaChannel).apply();
 	}
 
 	public boolean isUseAlphaChannel()
@@ -762,13 +764,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		ad.show();
 	}
 
-	
-	private void installApk(){
-		if(updateApk!=null){
-			if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
-				if(!getPackageManager().canRequestPackageInstalls()){
+
+	private void installApk()
+	{
+		if (updateApk != null)
+		{
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			{
+				if (!getPackageManager().canRequestPackageInstalls())
+				{
 					Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-					startActivityForResult(intent,REQUEST_CODE_APP_INSTALL);
+					startActivityForResult(intent, REQUEST_CODE_APP_INSTALL);
 				}
 			}
 			Intent i = new Intent(Intent.ACTION_VIEW);
@@ -785,9 +791,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			}
 			i.setDataAndType(data, "application/vnd.android.package-archive");
 			startActivity(i);
-			updateApk=null;
-			}
-			
+			updateApk = null;
+		}
+
 	}
 	protected class UpdateThread extends Thread
 	{
@@ -798,7 +804,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 			BmobQuery<UniversalObject> query=new BmobQuery<UniversalObject>();
 			String dataid=useAlphaChannel ? StaticData.DATAID_ALPHA: StaticData.DATAID_RELEASE;
 			//If user want to use Alpha Ch,check it
-			
+
 			query.getObject(dataid, new QueryListener<UniversalObject>(){
 
 					@Override
@@ -824,11 +830,14 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 						int serverver = universalobj.getVersion();
 						int currver=0;
-						try{
-							currver=useAlphaChannel ?getModHelperApplication().BUILDVER: getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-						}catch(Exception ignored){}
+						try
+						{
+							currver = useAlphaChannel ?getModHelperApplication().BUILDVER: getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+						}
+						catch (Exception ignored)
+						{}
 						//For alpha vers,use internal build ver,so users can roll back to older alpha build or release build easier
-						
+
 						try
 						{
 							if (serverver <= currver)
@@ -849,29 +858,33 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								d.show();
 								String url=universalobj.getDownload();
 								new Thread(){
-									public void run(){
-										File f=new File(getExternalCacheDir(),"update.apk");
-										Utils.downloadFile(url,f);
-										updateApk=f;
+									public void run()
+									{
+										File f=new File(getExternalCacheDir(), "update.apk");
+										Utils.downloadFile(url, f);
+										updateApk = f;
 										d.dismiss();
 										installApk();
 									}
 								}.start();
+								});
 								//final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
-								if(currver>=universalobj.getMinVer()){
-								adb.setCancelable(true);
-								adb.setNegativeButton(R.string.cancel,null);
+								if (currver >= universalobj.getMinVer())
+								{
+									adb.setCancelable(true);
+									adb.setNegativeButton(R.string.cancel, null);
+								}
+								mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
+								// TODO: Implement this method
 							}
-							mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
-							// TODO: Implement this method
-						}
-						catch (Exception e)
-						{e.printStackTrace();}}
-				});
-			// TODO: Implement this method
-			super.run();
+							catch (Exceptione)
+							{e.printStackTrace();}}
+					});
+					// TODO: Implement this method
+					super.run();
 
-		}
+				}
+		
 
 	}
 
@@ -976,7 +989,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 					});
 				// TODO: Implement this method
 			});
-			keyinput.getEditableText().append(getModHelperApplication().getMainSharedPrederences().getString(KEY_AUTHKEY,""));
+			keyinput.getEditableText().append(getModHelperApplication().getMainSharedPrederences().getString(KEY_AUTHKEY, ""));
 			btnEnter.setOnLongClickListener(listener-> {
 				ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 				cmb.setText(getDevId());
