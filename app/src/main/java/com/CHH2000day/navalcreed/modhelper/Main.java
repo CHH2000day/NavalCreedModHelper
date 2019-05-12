@@ -862,8 +862,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
 								// TODO: Implement this method
 							}
-							catch (Exceptione)
+					catch (Exception e)
 							{e.printStackTrace();}
+					}
 					});
 					// TODO: Implement this method
 				
