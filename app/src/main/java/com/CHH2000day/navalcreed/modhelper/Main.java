@@ -815,19 +815,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 							Log.w("Updater", "Failed to get update data");
 							return;
 						}
-
-						//如果为测试版，检测服务器端是否允许测试
-
-						/*2018/3/24 换用cd-key进行测试版权限验证
-						 if ( !universalobj.isAvail ( ) )
-						 {
-						 mvercheckHandler.sendEmptyMessage ( 0 );
-						 }
-						 else
-						 {
-						 mvercheckHandler.sendEmptyMessage ( -1 );
-						 }*/
-
 						int serverver = universalobj.getVersion();
 						int currver=0;
 						try
@@ -836,8 +823,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 						}
 						catch (Exception ignored)
 						{}
-						//For alpha vers,use internal build ver,so users can roll back to older alpha build or release build easier
-
 						try
 						{
 							if (serverver <= currver)
@@ -878,12 +863,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 								// TODO: Implement this method
 							}
 							catch (Exceptione)
-							{e.printStackTrace();}}
+							{e.printStackTrace();}
 					});
 					// TODO: Implement this method
-					super.run();
-
-				}
+				
+			}
 		
 
 	}
