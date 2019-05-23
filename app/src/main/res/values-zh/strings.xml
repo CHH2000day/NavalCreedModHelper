@@ -106,5 +106,6 @@
 	<string name="modtype_captainvoice_ja_dd">舰长语音-日语-驱逐舰</string>
 	<string name="modtype_captainvoice_de">舰长语音-德语</string>
 	<string name="modtype_captainvoice_ru">舰长语音-俄语</string>
+	<string name="modtype_captainvoice_ru_vlad">舰长语音-俄语-幽默</string>
 	
 </resources>

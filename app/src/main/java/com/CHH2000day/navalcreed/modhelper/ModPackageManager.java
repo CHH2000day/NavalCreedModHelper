@@ -17,10 +17,10 @@ public class ModPackageManager
 	private static ModPackageManager mmm;
 	private OnDataChangedListener OnDataChangedListener;
 	private static final String[] CATEORY_BG={"loading","loadingmap","matching"};
-	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN,ModPackageInfo.SUB_MODTYPE_CV_JP_CV,ModPackageInfo.SUB_MODTYPE_CV_JP_BB,ModPackageInfo.SUB_MODTYPE_CV_JP_CA,ModPackageInfo.SUB_MODTYPE_CV_JP_DD,ModPackageInfo.SUB_MODTYPE_CV_DE,ModPackageInfo.SUB_MODTYPE_CV_RU};
+	public static final String[] PUBLIC_KEYS={ModPackageInfo.MODTYPE_BACKGROUND,ModPackageInfo.MODTYPE_BGM,ModPackageInfo.MODTYPE_SOUNDEFFECT,ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM,ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC,ModPackageInfo.MODTYPE_CREWPIC,ModPackageInfo.SUB_MODTYPE_CV_CN,ModPackageInfo.SUB_MODTYPE_CV_EN,ModPackageInfo.SUB_MODTYPE_CV_JP_CV,ModPackageInfo.SUB_MODTYPE_CV_JP_BB,ModPackageInfo.SUB_MODTYPE_CV_JP_CA,ModPackageInfo.SUB_MODTYPE_CV_JP_DD,ModPackageInfo.SUB_MODTYPE_CV_DE,ModPackageInfo.SUB_MODTYPE_CV_RU,ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD};
 	private static String[] used_prim_keys;
 	private static String[] used_sec_keys;
-	private static final int SEC_KEY_COUNTS=8;
+	private static final int SEC_KEY_COUNTS=9;
 	private HashMap<String,String> modType;
 	private static final String UNKNOWN="unknown";
 	static{
@@ -66,6 +66,7 @@ public class ModPackageManager
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_JP_DD, res.getString(R.string.modtype_captainvoice_ja_dd));
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_DE, res.getString(R.string.modtype_captainvoice_de));
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU, res.getString(R.string.modtype_captainvoice_ru));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD,res.getString(R.string.modtype_captainvoice_ru_vlad));
 	}
 	public void config(File storedFile) throws  IOException, JSONException
 	{
@@ -182,6 +183,9 @@ public class ModPackageManager
 				break;
 			case ModPackageInfo.SUB_MODTYPE_CV_RU:
 				subt = ModPackageInstallHelper.SUBTYPE_CV_RU;
+				break;
+			case ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD:
+				subt = ModPackageInstallHelper.SUBTYPE_CV_RU_VLAD;
 				break;
 		}
 		String path=ModPackageInstallHelper.getPath(modtype, subt, app);

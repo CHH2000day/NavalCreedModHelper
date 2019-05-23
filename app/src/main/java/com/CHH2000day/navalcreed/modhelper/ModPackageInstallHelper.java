@@ -37,6 +37,7 @@ public class ModPackageInstallHelper
 	private static final String SUBPATH_CV_JP_DD=SUBPATH_CV_JP + File.separatorChar + "Destroyer";
 	private static final String SUBPATH_CV_DE=File.separatorChar + "GermanUsual";
 	private static final String SUBPATH_CV_RU=File.separatorChar + "RussianUsual";
+	private static final String SUBPATH_CV_RU_VLAD=File.separatorChar + "RussianVlad";
 
 	public static final int SUBTYPE_NULL=0;
 	public static final int SUBTYPE_CV_EN=1200;
@@ -47,6 +48,7 @@ public class ModPackageInstallHelper
 	public static final int SUBTYPE_CV_JP_DD=1205;
 	public static final int SUBTYPE_CV_DE=1206;
 	public static final int SUBTYPE_CV_RU=1207;
+	public static final int SUBTYPE_CV_RU_VLAD=1208;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
 	private onModPackageLoadDoneListener mlistener;
@@ -340,6 +342,9 @@ public class ModPackageInstallHelper
 			case SUBTYPE_CV_RU:
 				s = ModPackageInfo.SUB_MODTYPE_CV_RU;
 				break;
+			case SUBTYPE_CV_RU_VLAD:
+				s= ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD;
+				break;
 			default:
 				s = ModPackageInfo.SUBTYPE_EMPTY;
 				break;
@@ -380,6 +385,9 @@ public class ModPackageInstallHelper
 						break;
 					case SUBTYPE_CV_RU:
 						pth += SUBPATH_CV_RU;
+						break;
+					case SUBTYPE_CV_RU_VLAD:
+						pth += SUBPATH_CV_RU_VLAD;
 						break;
 				}
 				break;
