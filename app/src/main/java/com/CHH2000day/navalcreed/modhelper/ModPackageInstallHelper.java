@@ -38,6 +38,7 @@ public class ModPackageInstallHelper
 	private static final String SUBPATH_CV_DE=File.separatorChar + "GermanUsual";
 	private static final String SUBPATH_CV_RU=File.separatorChar + "RussianUsual";
 	private static final String SUBPATH_CV_RU_VLAD=File.separatorChar + "RussianVlad";
+	private static final String SUBPATH_CV_RU_BEARD=File.separatorChar + "RussianBeard";
 
 	public static final int SUBTYPE_NULL=0;
 	public static final int SUBTYPE_CV_EN=1200;
@@ -47,8 +48,13 @@ public class ModPackageInstallHelper
 	public static final int SUBTYPE_CV_JP_CA=1204;
 	public static final int SUBTYPE_CV_JP_DD=1205;
 	public static final int SUBTYPE_CV_DE=1206;
-	public static final int SUBTYPE_CV_RU=1207;
+	public static final int SUBTYPE_CV_RU_BEARD=1207;
 	public static final int SUBTYPE_CV_RU_VLAD=1208;
+	
+	/*
+	Mark original russian voice for migration.
+	*/
+	public static final int SUBTYPE_CV_RU=9300;
 	private static final int SUBTYPE_CV_OFFSET=SUBTYPE_CV_EN;
 
 	private onModPackageLoadDoneListener mlistener;
@@ -343,7 +349,10 @@ public class ModPackageInstallHelper
 				s = ModPackageInfo.SUB_MODTYPE_CV_RU;
 				break;
 			case SUBTYPE_CV_RU_VLAD:
-				s= ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD;
+				s = ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD;
+				break;
+			case SUBTYPE_CV_RU_BEARD:
+				s = ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD;
 				break;
 			default:
 				s = ModPackageInfo.SUBTYPE_EMPTY;
@@ -388,6 +397,9 @@ public class ModPackageInstallHelper
 						break;
 					case SUBTYPE_CV_RU_VLAD:
 						pth += SUBPATH_CV_RU_VLAD;
+						break;
+					case SUBTYPE_CV_RU_BEARD:
+						pth += SUBPATH_CV_RU_BEARD;
 						break;
 				}
 				break;

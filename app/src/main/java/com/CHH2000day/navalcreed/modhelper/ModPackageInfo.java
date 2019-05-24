@@ -34,6 +34,7 @@ public class ModPackageInfo
 	public static final String SUB_MODTYPE_CV_DE="CV_DE";
 	public static final String SUB_MODTYPE_CV_RU="CV_RU";
 	public static final String SUB_MODTYPE_CV_RU_VLAD="CV_RU_VLAD";
+	public static final String SUB_MODTYPE_CV_RU_BEARD="CV_RU_BEARD";
 	private static ArrayList<String> abandoned_types;
 	//mod信息相关
 	private static final String KEY_MINSUPPORTVER="minSupportVer";
