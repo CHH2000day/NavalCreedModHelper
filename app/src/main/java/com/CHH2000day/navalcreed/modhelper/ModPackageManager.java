@@ -67,7 +67,7 @@ public class ModPackageManager
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_DE, res.getString(R.string.modtype_captainvoice_de));
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU, res.getString(R.string.modtype_captainvoice_ru));
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD,res.getString(R.string.modtype_captainvoice_ru_vlad));
-		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD,res.getString(R.string.modtype_captainvoicevru_beard));
+		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD,res.getString(R.string.modtype_captainvoice_ru_beard));
 	}
 	public void config(File storedFile) throws  IOException, JSONException
 	{
