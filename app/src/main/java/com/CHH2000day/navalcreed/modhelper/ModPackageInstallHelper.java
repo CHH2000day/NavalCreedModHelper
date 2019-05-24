@@ -37,8 +37,8 @@ public class ModPackageInstallHelper
 	private static final String SUBPATH_CV_JP_DD=SUBPATH_CV_JP + File.separatorChar + "Destroyer";
 	private static final String SUBPATH_CV_DE=File.separatorChar + "GermanUsual";
 	private static final String SUBPATH_CV_RU=File.separatorChar + "RussianUsual";
-	private static final String SUBPATH_CV_RU_VLAD=File.separatorChar + "RussianVlad";
-	private static final String SUBPATH_CV_RU_BEARD=File.separatorChar + "RussianBeard";
+	private static final String SUBPATH_CV_RU_VLAD=File.separatorChar + "RussianUsual_Vlad";
+	private static final String SUBPATH_CV_RU_BEARD=File.separatorChar + "RussianUsual_Beard";
 
 	public static final int SUBTYPE_NULL=0;
 	public static final int SUBTYPE_CV_EN=1200;
