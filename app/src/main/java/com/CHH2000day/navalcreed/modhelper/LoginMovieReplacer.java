@@ -11,6 +11,7 @@ import android.net.*;
 import java.io.*;
 import android.view.View.*;
 import android.support.v7.app.*;
+import com.orhanobut.logger.*;
 
 public class LoginMovieReplacer extends Fragment
 {
@@ -121,7 +122,7 @@ public class LoginMovieReplacer extends Fragment
 		{
 			//OGG与OGV拥有相同的magic number
 			srcfile = data.getData ( );
-
+			Logger.d("Get uri: authority:%s path:%s",srcfile.getEncodedAuthority(),srcfile.getEncodedPath());
 			if ( !Utils.FORMAT_OGG.equals ( Utils.identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), true ) ) )
 			{
 				srcfile = null;

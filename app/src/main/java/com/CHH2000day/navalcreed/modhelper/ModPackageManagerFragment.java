@@ -150,14 +150,15 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		@Override
 		public RecyclerView.ViewHolder onCreateViewHolder ( ViewGroup p1, int p2 )
 		{
-			View vi=li.inflate ( R.layout.modmanager_item, null );
+			View vi=li.inflate ( R.layout.modmanager_item, p1 );
 			// TODO: Implement this method
 			return new ViewHolder ( vi );
 		}
 
 		@Override
 		public void onBindViewHolder ( RecyclerView.ViewHolder p1, int p2 )
-		{View v=( (ViewHolder)p1 ).getView ( );
+		{
+			View v=( (ViewHolder)p1 ).getView ( );
 			RelativeLayout rl=(RelativeLayout)v.findViewById ( R.id.modmanageritemRelativeLayout );
 			TextView info=(TextView)v.findViewById ( R.id.modmanageritemTextView );
 			TextView memo=(TextView)v.findViewById ( R.id.modmanageritemMemo );
