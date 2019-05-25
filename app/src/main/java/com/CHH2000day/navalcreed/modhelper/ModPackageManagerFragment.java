@@ -25,7 +25,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 	{
 		// TODO: Implement this method
 		super.onCreateView ( inflater, container, savedInstanceState );
-		v = inflater.inflate ( R.layout.modmanagerfragmemt, container );
+		v = inflater.inflate ( R.layout.modmanagerfragmemt, null );
 		recyclerview = (RecyclerView)v.findViewById ( R.id.modmanagerfragmemtRecyclerView );
 		ovrd_switch = (ToggleButton)v.findViewById ( R.id.modmanagerswitcherToggleButton1 );
 		return v;
