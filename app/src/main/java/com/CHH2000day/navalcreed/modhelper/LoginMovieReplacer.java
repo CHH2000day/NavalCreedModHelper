@@ -73,7 +73,7 @@ public class LoginMovieReplacer extends Fragment
 			new Thread() {
 				public void run() {
 					try {
-						Utils.copyFile(getActivity().getContentResolver().openInputStream(srcfile), gettargetfile());
+						Utils.copyFile(getInStream(srcfile), gettargetfile());
 						h.sendEmptyMessage(0);
 					} catch (IOException e) {
 						h.sendMessage(h.obtainMessage(1, e));
@@ -105,25 +105,14 @@ public class LoginMovieReplacer extends Fragment
 		}
 		return target;
 	}
-	@Override
-	public void onActivityResult ( int requestCode, int resultCode, Intent data )
-	{
-		// TODO: Implement this method
-		super.onActivityResult ( requestCode, resultCode, data );
-		if ( requestCode != QUERY_CODE )
-		{return;}
-		if( resultCode != AppCompatActivity.RESULT_OK){
-			return;
-		}
-		if ( data == null || data.getData ( ) == null )
-		{Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
-			return;}
+	private void doLoad(Uri uri){
 		try
 		{
 			//OGG与OGV拥有相同的magic number
-			srcfile = data.getData ( );
+			srcfile = uri;
 			Logger.d("Get uri: authority:%s path:%s",srcfile.getEncodedAuthority(),srcfile.getEncodedPath());
-			if ( !Utils.FORMAT_OGG.equals ( Utils.identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), true ) ) )
+			
+			if ( !Utils.FORMAT_OGG.equals ( Utils.identifyFormat ( getInStream(uri), true )) )
 			{
 				srcfile = null;
 				Snackbar.make ( v, R.string.not_a_ogv_file, Snackbar.LENGTH_LONG ).show ( );
@@ -135,6 +124,33 @@ public class LoginMovieReplacer extends Fragment
 			srcfile = null;
 			Snackbar.make ( v, R.string.failed, Snackbar.LENGTH_LONG ).show ( );
 		}
+	}
+	private InputStream getInStream(Uri uri) throws FileNotFoundException{
+		InputStream in;
+		String path=Utils.resolveFilePath(uri,getContext());
+		if(path!=null){
+			in=new FileInputStream(path);
+		}else{
+			in=getContext().getContentResolver().openInputStream(uri);
+		}
+		return in;
+	}
+	@Override
+	public void onActivityResult ( int requestCode, int resultCode, Intent data )
+	{
+		// TODO: Implement this method
+		super.onActivityResult ( requestCode, resultCode, data );
+		if ( requestCode != QUERY_CODE )
+		{return;}
+		if( resultCode != AppCompatActivity.RESULT_OK){
+			return;
+		}
+		if ( data == null || data.getData ( ) == null )
+		{
+			Snackbar.make ( v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG ).show ( );
+			return;
+			}
+		doLoad(data.getData());
 		if ( srcfile != null )
 		{
 			file.setText ( srcfile.getPath ( ) );
