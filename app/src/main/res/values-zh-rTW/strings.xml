@@ -99,7 +99,7 @@
 	<string name="modtype_captainvoice_ja_ca">艦長語音-日語-巡洋艦</string>
 	<string name="modtype_captainvoice_ja_dd">艦長語音-日語-驅逐艦</string>
 	<string name="modtype_captainvoice_de">艦長語音-德語</string>
-	<string name="modtype_captainvoice_ru">艦長語音-俄語</string>
+	<string name="modtype_captainvoice_ru">艦長語音-俄語（棄用）</string>
 	<string name="modtype_captainvoice_ru_vlad">艦長語音-俄語-嚴肅</string>
 	<string name="modtype_captainvoice_ru_beard">艦長語音-俄語-幽默</string>
 </resources>

@@ -15,7 +15,7 @@ import com.orhanobut.logger.*;
 import com.tencent.bugly.crashreport.*;
 public class ModHelperApplication extends Application
 {
-	public static final int BUILDVER=10011;
+	public static final int BUILDVER=10012;
 	//never used
 	//private android.os.Handler merrmsghdl;
 	private File resDir;
