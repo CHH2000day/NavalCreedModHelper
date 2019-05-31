@@ -285,6 +285,7 @@ public class Utils
 	}
 	public static String getErrMsg ( Throwable t )
 	{
+		if(t==null)return "Unknown exception";
 		Class err=t.getClass ( );
 		return err.getName ( ) + "\n" + t.getMessage ( );
 	}
