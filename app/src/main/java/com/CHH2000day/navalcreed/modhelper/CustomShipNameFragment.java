@@ -24,7 +24,7 @@ public class CustomShipNameFragment extends ModFragment
 		return false;
 	}
 
-	private static final String res_url="https://static-dir.CHH2000day.com/nc/customshipname_v21.lua";
+	private static final String res_url="https://static.CHH2000day.com/nc/customshipname_v21.lua";
 	private View v;
     private String path;
 	@Override
