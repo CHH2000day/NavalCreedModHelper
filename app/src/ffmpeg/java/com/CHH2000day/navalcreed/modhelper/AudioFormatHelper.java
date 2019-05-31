@@ -165,7 +165,7 @@ public class AudioFormatHelper
 							public void onFailure(String p1)
 							{
 								hasError = true;
-								UIHandler.sendEmptyMessage(STATUS_ERROR);
+								UIHandler.sendEmptyMessage(STATUS_ERROR,new IOException(p1));
 								// TODO: Implement this method
 							}
 
