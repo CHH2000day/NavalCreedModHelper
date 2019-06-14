@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: cn.bmob.android:bmob-sdk:3.7.3-rc1@aar">
+    <CLASSES>
+      <root url="jar://D:/.gradle/caches/transforms-2/files-2.1/15fd70ef32305e4c0abdefa42a159cb2/jars/classes.jar!/" />
+      <root url="jar://D:/.gradle/caches/transforms-2/files-2.1/15fd70ef32305e4c0abdefa42a159cb2/jars/libs/BmobSDK_3.7.3-rc1_20190424.jar!/" />
+      <root url="file://D:/.gradle/caches/transforms-2/files-2.1/15fd70ef32305e4c0abdefa42a159cb2/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
