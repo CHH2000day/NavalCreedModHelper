@@ -70,7 +70,7 @@ public class CustomShipNameFragment extends ModFragment
 							}
 							catch (IOException e)
 							{
-								Logger.e(e,"");
+								Logger.e(e,e.getLocalizedMessage());
 								adb.setMessage(R.string.failed)
 									.setTitle(R.string.failed)
 									.setPositiveButton(R.string.ok,null)
