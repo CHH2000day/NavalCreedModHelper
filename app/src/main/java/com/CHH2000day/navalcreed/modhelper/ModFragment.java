@@ -29,24 +29,31 @@ public abstract class ModFragment extends Fragment
     }
 
     protected void showAd(View v) {
-        if (!shouldShowAd()) {
-            return;
-        }
-        RelativeLayout l = v.findViewById(R.id.adlayout);
-        if (l == null) {
-            Logger.d("failed to get ad layout ");
-            return;
-        }
-        BannerView ad = new BannerView();
-        ad.setInterface(getMainActivity(), new RDInterface() {
+        new Thread() {
             @Override
-            public void rdView(ViewGroup benner) {
-                super.rdView(benner);
-                l.addView(benner); //layout是你自己定义的布局
+            public void run() {
+                super.run();
+                if (!shouldShowAd()) {
+                    return;
+                }
+                RelativeLayout l = v.findViewById(R.id.adlayout);
+                if (l == null) {
+                    Logger.d("failed to get ad layout ");
+                    return;
+                }
+                BannerView ad = new BannerView();
+                ad.setInterface(getMainActivity(), new RDInterface() {
+                    @Override
+                    public void rdView(ViewGroup benner) {
+                        super.rdView(benner);
+                        l.addView(benner); //layout是你自己定义的布局
+                    }
+                });
+                ad.load();
+                ad.show();
+
             }
-        });
-        ad.load();
-        ad.show();
+        }.start();
 
     }
 
