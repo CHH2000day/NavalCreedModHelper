@@ -1,16 +1,25 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.content.*;
-import android.graphics.*;
-import android.os.*;
-import android.support.v4.app.*;
-import android.view.*;
-import android.widget.*;
-import java.io.*;
-import java.util.Objects;
 
-import android.widget.AdapterView.*;
-import android.support.v7.app.*;
-import android.support.design.widget.*;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Objects;
 
 public class CrewPicReplacerFragment extends ModFragment
 {
@@ -21,8 +30,8 @@ public class CrewPicReplacerFragment extends ModFragment
 	private TextView selectedpic;
 	private String[] countrys={"usa","japan","uk","china","italy","france","ussr","german"};
 	@Override
-	public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{v = inflater.inflate ( R.layout.crew_pic_replacer, null );
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		v = inflater.inflate(R.layout.crew_pic_replacer, null);
 		Spinner country = v.findViewById(R.id.crewpicreplacerSpinnerCountry);
         country.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -162,8 +171,8 @@ public class CrewPicReplacerFragment extends ModFragment
 				}
 			} );
 		selectedpic = v.findViewById(R.id.crewpicreplacerSelectedFile);
-
 		// TODO: Implement this method
+		showAd(v);
 		return v;
 	}
 

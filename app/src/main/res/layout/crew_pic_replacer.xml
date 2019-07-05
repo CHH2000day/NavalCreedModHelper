@@ -68,10 +68,17 @@
 		android:id="@+id/crewpicreplacerButtonRemove"/>
 
 	<TextView
-		android:layout_height="wrap_content"
+		android:id="@+id/info"
 		android:layout_width="wrap_content"
-		android:text="@string/crewpicfrag_intro"
-		android:layout_below="@id/crewpicreplacerButtonReplace"/>
+		android:layout_height="wrap_content"
+		android:layout_below="@id/crewpicreplacerButtonReplace"
+		android:text="@string/crewpicfrag_intro" />
+
+	<include
+		layout="@layout/adlayout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/info" />
 
 </RelativeLayout>
 

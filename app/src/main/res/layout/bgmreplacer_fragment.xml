@@ -72,5 +72,11 @@
 		android:layout_below="@id/bgmreplacerUpdate"
 		android:id="@+id/bgmreplacerfragmentTextViewInfo"/>
 
+	<include
+		layout="@layout/adlayout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/bgmreplacerfragmentTextViewInfo" />
+
 </RelativeLayout>
 

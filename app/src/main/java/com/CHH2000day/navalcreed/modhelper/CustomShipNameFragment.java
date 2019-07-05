@@ -1,18 +1,19 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.os.*;
-import android.support.v4.app.*;
-import android.support.v7.app.*;
-import android.view.*;
-import android.view.View.*;
-import android.widget.*;
-import cn.bmob.v3.*;
-import java.io.*;
-import cn.bmob.v3.listener.*;
-import cn.bmob.v3.exception.*;
-import cn.bmob.v3.datatype.*;
-import android.support.design.widget.*;
-import android.content.*;
-import com.orhanobut.logger.*;
+
+import android.os.Bundle;
+import android.os.Looper;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.orhanobut.logger.Logger;
+
+import java.io.File;
+import java.io.IOException;
 
 public class CustomShipNameFragment extends ModFragment
 {
@@ -132,6 +133,7 @@ public class CustomShipNameFragment extends ModFragment
 			// TODO: Implement this method
 			return true;
 		});
+		showAd(v);
 		// TODO: Implement this method
 		return v;
 	}

@@ -152,6 +152,7 @@ public class BGReplacerFragment extends ModFragment
 			} );
 
 		// TODO: Implement this method
+        showAd(v);
 		return v;
 	}
 	private void removechanges ()

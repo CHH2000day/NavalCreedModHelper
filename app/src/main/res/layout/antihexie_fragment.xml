@@ -18,5 +18,11 @@
 		android:layout_below="@id/antihexiefragmentTextView1"
 		android:id="@+id/antihexiefragmentButtonExec"/>
 
+	<include
+		layout="@layout/adlayout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/antihexiefragmentButtonExec" />
+
 </RelativeLayout>
 

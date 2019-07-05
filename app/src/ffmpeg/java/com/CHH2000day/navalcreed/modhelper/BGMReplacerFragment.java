@@ -82,6 +82,7 @@ public class BGMReplacerFragment extends ModFragment
 		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
 
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
+		showAd(v);
 		return v;
 	}
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_height="wrap_content"
 	android:layout_width="match_parent"
 	android:padding="10dp">
@@ -18,22 +19,24 @@
 			android:text="长按二维码可保存至本地"/>
 
 		<ImageView
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:src="@drawable/donate_alipay"
 			android:id="@+id/dialogdonateImageAlipay"
-			android:adjustViewBounds="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dialogdonateTextView1"
 			android:layout_centerHorizontal="true"
-			android:layout_below="@id/dialogdonateTextView1"/>
+            android:adjustViewBounds="true"
+            android:src="@drawable/donate_alipay"
+            app:srcCompat="@drawable/donate_alipay" />
 
 		<ImageView
-			android:layout_height="wrap_content"
+            android:id="@+id/dialogdonateImageWeChat"
 			android:layout_width="wrap_content"
-			android:src="@drawable/donate_wechat"
-			android:id="@+id/dialogdonateImageWeChat"
+            android:layout_height="wrap_content"
 			android:layout_below="@id/dialogdonateImageAlipay"
+            android:layout_centerHorizontal="true"
 			android:adjustViewBounds="true"
-			android:layout_centerHorizontal="true"/>
+            android:src="@drawable/donate_wechat"
+            app:srcCompat="@drawable/donate_wechat" />
 
 	</RelativeLayout>
 

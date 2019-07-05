@@ -1,19 +1,30 @@
 package com.CHH2000day.navalcreed.modhelper;
 
 import android.annotation.SuppressLint;
-import android.content.*;
-import android.os.*;
-import android.support.design.widget.*;
-import android.support.v4.app.*;
-import android.view.*;
-import android.widget.*;
-import android.net.*;
-import java.io.*;
-import android.view.View.*;
-import android.support.v7.app.*;
-import com.orhanobut.logger.*;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
-public class LoginMovieReplacer extends Fragment
+import com.orhanobut.logger.Logger;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+public class LoginMovieReplacer extends ModFragment
 {
 
 	private ModHelperApplication mapplication;
@@ -95,7 +106,7 @@ public class LoginMovieReplacer extends Fragment
 					// TODO: Implement this method
 				}
 			} );
-
+		showAd(v);
 		return v;
 	}
 
@@ -158,5 +169,8 @@ public class LoginMovieReplacer extends Fragment
 
 	}
 
-
+	@Override
+	public boolean uninstallMod() {
+		return false;
+	}
 }

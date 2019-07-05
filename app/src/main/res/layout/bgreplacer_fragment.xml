@@ -21,7 +21,7 @@
 	<Spinner
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:layout_toRightOf="@id/bgreplacerSpinner1"
+		android:layout_toEndOf="@id/bgreplacerSpinner1"
 		android:layout_below="@id/bgreplacerTextView1"
 		android:id="@+id/bgreplacerSpinner2"
 		android:entries="@array/filename_bg"/>
@@ -39,7 +39,7 @@
 		android:text="@string/select"
 		android:layout_below="@id/bgreplacerTextView2"
 		android:id="@+id/bgreplacerbtn_select"
-		android:layout_alignParentRight="true"/>
+		android:layout_alignParentEnd="true" />
 
 	<Button
 		android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:text="@string/remove_changes"
-		android:layout_toRightOf="@id/bgreplacerbtn_update"
+		android:layout_toEndOf="@id/bgreplacerbtn_update"
 		android:layout_below="@id/bgreplacerbtn_select"
 		android:id="@+id/bgreplacer_remove"/>
 
@@ -67,13 +67,19 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content"
 			android:layout_below="@id/bgreplacerTextView2"
-			android:layout_toLeftOf="@id/bgreplacerbtn_select"
-			android:layout_alignParentLeft="true"
+		android:layout_alignParentStart="true"
+		android:layout_toStartOf="@id/bgreplacerbtn_select"
 			android:layout_alignBottom="@id/bgreplacerbtn_select"
 			android:id="@+id/bgreplacerPic"
 			android:text="@string/unselected"
 			android:gravity="left|center_vertical"
 			android:paddingStart="3dp"/>
+
+	<include
+		layout="@layout/adlayout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/bgreplacerTextView3" />
 
 </RelativeLayout>
 

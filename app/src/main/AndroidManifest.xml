@@ -13,9 +13,20 @@
 	<uses-permission
 		android:name="android.permission.INTERACT_ACROSS_USERS"
 		tools:ignore="ProtectedPermissions"/>
-	<uses-permission android:name="android.permission.READ_LOGS"/>
+	<uses-permission
+		android:name="android.permission.READ_LOGS"
+		tools:ignore="ProtectedPermissions" />
 	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-	<uses-permission android:name="android.permission.INSTALL_PACKAGES"/>
+	<uses-permission
+		android:name="android.permission.INSTALL_PACKAGES"
+		tools:ignore="ProtectedPermissions" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+	<uses-permission android:name="android.permission.READ_CALENDAR" />
+	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
+
 	<application
 		android:allowBackup="true"
 		android:icon="@drawable/icon"
@@ -64,18 +75,7 @@
 				<data android:pathPattern=".*\\.ncmod"/>
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".CreateActivity"
-			android:screenOrientation="portrait"/>
-		<activity
-			android:name=".DeleteActivity"
-			android:screenOrientation="portrait"/>
-		<activity
-			android:name=".UpdateActivity"
-			android:screenOrientation="portrait"/>
-		<activity
-			android:name=".FindActivity"
-			android:screenOrientation="portrait"/>
+
 		<provider
 			android:name="android.support.v4.content.FileProvider"
 			android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
@@ -100,5 +100,148 @@
 		<meta-data
 			android:name="BUGLY_ENABLE_DEBUG"
 			android:value="true"/>
+
+		<activity
+			android:name="com.qy.MTGCommonActivity"
+			android:configChanges="keyboard|orientation"
+			android:exported="true"
+			android:screenOrientation="portrait"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+		<activity
+			android:name="com.qy.MTGRewardVideoActivity"
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+		<activity
+			android:name="com.qy.MTGInterstitialActivity"
+			android:configChanges="orientation|screenSize"
+			android:screenOrientation="portrait" />
+
+		<service android:name="com.qy.MTGService">
+			<intent-filter>
+				<action android:name="com.mintegral.msdk.download.action" />
+			</intent-filter>
+		</service>
+
+		<activity
+			android:name="com.qy.AppActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+		<service
+			android:name="com.qy.DownloadService"
+			android:exported="false" />
+
+		<activity
+			android:name="com.qy.ADActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+		<activity
+			android:name="com.qy.PortraitADActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:screenOrientation="portrait" />
+		<activity
+			android:name="com.qy.LandscapeADActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:screenOrientation="landscape" />
+
+		<activity
+			android:name="com.qy.AdActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"></activity>
+		<activity
+			android:name="com.qy.InterstitialAdActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:theme="@android:style/Theme.Translucent" />
+		<activity
+			android:name="com.qy.NetworkChangeActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+		<activity
+			android:name="com.qy.VideoAdActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+		<service android:name="com.qy.UnDownloadService" />
+
+		<activity
+			android:name="com.qy.InMobiAdActivity"
+			android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
+			android:hardwareAccelerated="true"
+			android:resizeableActivity="false"
+			android:theme="@android:style/Theme.NoTitleBar"
+			tools:ignore="UnusedAttribute" />
+
+		<service
+			android:name="com.qy.ApkDownloader$ApkDownloadService"
+			android:enabled="true" />
+
+
+		<activity android:name="com.qy.VLionWebViewActivity" />
+		<activity
+			android:name="com.qy.VideoViewActivity"
+			android:configChanges="orientation|screenSize"
+			android:screenOrientation="landscape" />
+
+		<activity
+			android:name="com.qy.DvxVideoActivity"
+			android:configChanges="orientation|keyboard|screenSize|screenLayout"
+			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+		<service android:name="com.qy.IndependentService" />
+
+
+		<activity
+			android:name="com.qy.sdk.views.MyActivity"
+			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+		<service android:name="com.qy.selfrd.services.QyService">
+			<intent-filter android:priority="1000">
+				<action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+				<action android:name="com.qyrdk.service" />
+			</intent-filter>
+		</service>
+
+		<activity
+			android:name="com.qy.AdShowActivity"
+			android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
+			android:hardwareAccelerated="true"
+			android:launchMode="singleTask"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+		<activity
+			android:name="com.qy.InterstitialVideoActivity"
+			android:launchMode="singleTask"
+			android:theme="@android:style/Theme.Translucent" />
+		<activity
+			android:name="com.qy.StimulateVideoActivity"
+			android:launchMode="singleTask" />
+		<activity
+			android:name="com.qy.DialogActivity"
+			android:launchMode="singleTask"
+			android:theme="@android:style/Theme.Dialog" />
+
+		<service
+			android:name="com.qy.ManService"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="com.adroid.SERVICE" />
+			</intent-filter>
+		</service>
+
+
+		<receiver android:name="com.qy.sdk_rx.listeners.QyReceiver">
+			<intent-filter>
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+				<action android:name="android.intent.action.USER_PRESENT" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.PACKAGE_ADDED" />
+				<data android:scheme="package" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+			</intent-filter>
+		</receiver>
+
+
 	</application>
 </manifest>

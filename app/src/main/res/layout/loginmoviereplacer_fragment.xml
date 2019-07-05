@@ -39,10 +39,11 @@
 		android:id="@+id/loginmoviereplacerfragmentButtonUpdate"/>
 
 	<TextView
-		android:layout_height="wrap_content"
+		android:id="@+id/loginmoviereplacerinfo"
 		android:layout_width="match_parent"
-		android:text="@string/loginmovie_intro"
-		android:layout_below="@id/loginmoviereplacerfragmentButtonUpdate"/>
+		android:layout_height="wrap_content"
+		android:layout_below="@id/loginmoviereplacerfragmentButtonUpdate"
+		android:text="@string/loginmovie_intro" />
 
 	<Button
 		android:layout_height="wrap_content"
@@ -51,6 +52,12 @@
 		android:layout_below="@id/loginmoviereplacerfragmentTextView"
 		android:layout_toRightOf="@+id/loginmoviereplacerfragmentButtonUpdate"
 		android:id="@+id/loginmoviereplacerfragmentButtonRemove"/>
+
+	<include
+		layout="@layout/adlayout"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/loginmoviereplacerinfo" />
 
 </RelativeLayout>
 

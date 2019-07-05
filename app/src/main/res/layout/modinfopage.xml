@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@+id/modpackageinstaller_main_mainview"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -41,11 +38,11 @@
 		android:layout_toRightOf="@id/modinfopageButtonSelect"/>
 
 	<ImageView
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:src="@drawable/no_preview"
 		android:id="@+id/modinfopageImageView"
-		android:adjustViewBounds="true"/>
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:adjustViewBounds="true"
+		android:src="@drawable/no_preview" />
 
 	<TextView
 		android:layout_height="wrap_content"
