@@ -105,7 +105,7 @@ public class CustomShipNameHelper
 		while (li.hasNext())
 		{
 			int i=(Integer)li.next();
-			name = shipnames.getOrDefault(i, name);
+			name=shipnames.get(i);
 			if (name.equals(empty))
 			{continue;}
 			bs.writeUtf8(String.format(STATEMENT, i, shipnames.get(i)));
