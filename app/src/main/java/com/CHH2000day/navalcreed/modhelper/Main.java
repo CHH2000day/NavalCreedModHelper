@@ -713,7 +713,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
             Uri data;
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                data = FileProvider.getUriForFile(Main.this, "com.CHH2000day.navalcreed.modhelper.filwprovider", updateApk);
+                data = FileProvider.getUriForFile(Main.this, "com.CHH2000day.navalcreed.modhelper.fileprovider", updateApk);
                 i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 data = Uri.fromFile(updateApk);
