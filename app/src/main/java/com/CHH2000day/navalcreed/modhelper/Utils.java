@@ -8,6 +8,9 @@ import android.os.*;
 import android.database.*;
 import android.content.*;
 import android.provider.*;
+
+import com.orhanobut.logger.Logger;
+
 import java.security.*;
 import okio.*;
 import okhttp3.*;
@@ -234,6 +237,23 @@ public class Utils
 			String[] val=uri.getPath ( ).split ( "/external_path", 2 );
 			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + val [ 1 ];
 		}
+
+		String string =uri.toString ( );
+		String path[]=new String[2];
+		//判断文件是否在sd卡中
+		if (string.contains(String.valueOf(Environment.getExternalStorageDirectory())))
+		{
+			//对Uri进行切割
+			path = string.split ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) );
+			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
+		} else if (string.contains(String.valueOf(Environment.getDataDirectory())))
+		{ //判断文件是否在手机内存中
+			//对Uri进行切割
+			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
+			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
+		}
+
+
 		//遍历查询
 
 		Cursor cursor = null;
@@ -255,6 +275,9 @@ public class Utils
 				}
             }
         }
+        catch (SecurityException e){
+			Logger.e(e,"Failed to resolve path");
+		}
 		finally
 		{
             if ( cursor != null )
@@ -265,20 +288,6 @@ public class Utils
 
 
 
-		String string =uri.toString ( );
-		String path[]=new String[2];
-		//判断文件是否在sd卡中
-		if (string.contains(String.valueOf(Environment.getExternalStorageDirectory())))
-		{
-			//对Uri进行切割
-			path = string.split ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) );
-			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
-		} else if (string.contains(String.valueOf(Environment.getDataDirectory())))
-		{ //判断文件是否在手机内存中
-			//对Uri进行切割
-			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
-			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
-		}
 
 		return null;
 
