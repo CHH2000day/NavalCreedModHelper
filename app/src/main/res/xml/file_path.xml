@@ -3,4 +3,35 @@
     <external-cache-path name="cache_download" path="."/>
 	<cache-path name="internal_cache_download" path="."/>
 	<root-path name="0v0" path="."/>
+    <files-path
+        name="apks"
+        path="../apks" />
+    <files-path
+        name="plugs"
+        path="/plugs" />
+    <files-path
+        name="logs"
+        path="/" />
+    <root-path
+        name="download"
+        path="" />
+    <external-path
+        name="gdt_sdk_download_path"
+        path="GDTDOWNLOAD" />
+    <external-files-path
+        name="bdpath"
+        path="bddownload/" />
+    <external-path
+        name="bdpathsd"
+        path="bddownload/" />
+     
+    <external-path
+        name="external_files"
+        path="." />
+    <cache-path
+        name="apk1"
+        path="." />
+    <external-path
+        name="apk2"
+        path="." />
 </paths>
