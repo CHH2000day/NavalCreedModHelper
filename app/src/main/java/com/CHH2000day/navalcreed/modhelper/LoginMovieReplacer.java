@@ -106,8 +106,14 @@ public class LoginMovieReplacer extends ModFragment
 					// TODO: Implement this method
 				}
 			} );
-		showAd(v);
+
 		return v;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		showAd(v);
 	}
 
 	private File gettargetfile(){

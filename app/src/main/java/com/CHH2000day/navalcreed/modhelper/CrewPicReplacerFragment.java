@@ -172,15 +172,19 @@ public class CrewPicReplacerFragment extends ModFragment
 			} );
 		selectedpic = v.findViewById(R.id.crewpicreplacerSelectedFile);
 		// TODO: Implement this method
-		showAd(v);
+
 		return v;
 	}
 
 	@Override
-	public void onDestroy ()
-	{
-		if (ba != null)
-		{
+	public void onResume() {
+		super.onResume();
+		showAd(v);
+	}
+
+	@Override
+	public void onDestroy () {
+		if (ba != null) {
 			ba.recycle ( );
 			//手动释放以防止Bitmap未被释放
 

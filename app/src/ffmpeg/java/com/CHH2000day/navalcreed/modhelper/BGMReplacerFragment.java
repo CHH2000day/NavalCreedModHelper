@@ -1,25 +1,34 @@
 package com.CHH2000day.navalcreed.modhelper;
 
-import android.app.*;
-import android.content.*;
-import android.database.*;
-import android.os.*;
-import android.provider.*;
-import android.support.design.widget.*;
-import android.view.*;
-import android.view.View.*;
-import android.widget.*;
-import android.widget.AdapterView.*;
-import java.io.*;
-import java.util.*;
-
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import java.nio.channels.*;
-import android.net.*;
-import android.support.v7.app.AppCompatActivity;
-import android.graphics.*;
-import android.content.res.*;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 public class BGMReplacerFragment extends ModFragment
 {
 
@@ -82,7 +91,6 @@ public class BGMReplacerFragment extends ModFragment
 		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
 
 		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
-		showAd(v);
 		return v;
 	}
 
@@ -96,6 +104,13 @@ public class BGMReplacerFragment extends ModFragment
 		initview ( );
 		
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		showAd(v);
+	}
+
 	private void initValues(){
 		Resources res=getResources();
 		scene_toshow=res.getStringArray(R.array.bgm_scene_toshow);

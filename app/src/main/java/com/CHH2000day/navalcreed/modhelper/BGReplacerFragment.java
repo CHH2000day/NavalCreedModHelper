@@ -152,7 +152,6 @@ public class BGReplacerFragment extends ModFragment
 			} );
 
 		// TODO: Implement this method
-        showAd(v);
 		return v;
 	}
 	private void removechanges ()
@@ -174,14 +173,16 @@ public class BGReplacerFragment extends ModFragment
 		return true;
 	}
 
-
+	@Override
+	public void onResume() {
+		super.onResume();
+		showAd(v);
+	}
 
 	@Override
-	public void onDestroy ()
-	{
+	public void onDestroy () {
 		// TODO: Implement this method
-		if (ba != null)
-		{
+		if (ba != null) {
 			ba.recycle ( );
 			//手动释放以防止Bitmap未被释放
 
