@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.writingminds:FFmpegAndroid:0.3.2@aar">
+    <CLASSES>
+      <root url="jar://D:/.gradle/caches/transforms-2/files-2.1/4cdfe2a5da6390af33152a9a1dc9aa11/jars/classes.jar!/" />
+      <root url="file://D:/.gradle/caches/transforms-2/files-2.1/4cdfe2a5da6390af33152a9a1dc9aa11/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://D:/.gradle/caches/modules-2/files-2.1/com.writingminds/FFmpegAndroid/0.3.2/73be0f2fd8c9c2fe8a158322387aa39428cd1ad4/FFmpegAndroid-0.3.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
