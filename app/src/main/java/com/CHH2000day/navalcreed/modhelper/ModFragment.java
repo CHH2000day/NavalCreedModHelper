@@ -29,32 +29,45 @@ public abstract class ModFragment extends Fragment
     }
 
     protected void showAd(View v) {
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                if (!shouldShowAd()) {
-                    return;
-                }
-                RelativeLayout l = v.findViewById(R.id.adlayout);
-                if (l == null) {
-                    Logger.d("failed to get ad layout ");
-                    return;
-                }
-                BannerView ad = new BannerView();
-                ad.setInterface(getMainActivity(), new RDInterface() {
-                    @Override
-                    public void rdView(ViewGroup benner) {
-                        super.rdView(benner);
-                        l.addView(benner); //layout是你自己定义的布局
-                    }
-                });
-                ad.load();
-                ad.show();
+        new AdThread(v).start();
 
+    }
+
+    private class AdThread extends Thread {
+        private View v;
+
+        public AdThread(View v) {
+            this.v = v;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                Logger.e(e, "Failed to delay ad load,canceling");
+                return;
             }
-        }.start();
-
+            if (!shouldShowAd()) {
+                return;
+            }
+            RelativeLayout l = v.findViewById(R.id.adlayout);
+            if (l == null) {
+                Logger.d("failed to get ad layout ");
+                return;
+            }
+            BannerView ad = new BannerView();
+            ad.setInterface(getMainActivity(), new RDInterface() {
+                @Override
+                public void rdView(ViewGroup benner) {
+                    super.rdView(benner);
+                    l.addView(benner); //layout是你自己定义的布局
+                }
+            });
+            ad.load();
+            ad.show();
+        }
     }
 
 }
