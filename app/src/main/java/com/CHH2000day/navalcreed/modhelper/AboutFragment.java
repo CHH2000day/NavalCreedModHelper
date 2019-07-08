@@ -60,6 +60,7 @@ public class AboutFragment extends Fragment {
                         ad.show();
                     }
                 });
+		ad.load();
                 return true;
             });
             donate.setOnClickListener(p1 -> {
