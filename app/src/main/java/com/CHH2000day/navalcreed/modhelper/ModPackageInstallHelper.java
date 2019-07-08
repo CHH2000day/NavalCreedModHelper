@@ -1,19 +1,36 @@
 package com.CHH2000day.navalcreed.modhelper;
-import java.io.*;
-import java.util.zip.*;
-import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
-import org.json.*;
-import android.content.*;
-import java.util.*;
-import android.support.v7.app.*;
-import android.os.*;
-import okio.*;
-import android.view.*;
-import android.widget.*;
-import android.graphics.*;
-import android.view.View.*;
-import android.support.annotation.*;
-import com.orhanobut.logger.*;
+
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
+import android.os.StatFs;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException;
+import com.orhanobut.logger.Logger;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
+
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Sink;
+import okio.Source;
 
 public class ModPackageInstallHelper
 {
@@ -576,6 +593,8 @@ public class ModPackageInstallHelper
 		{
 			progressbar.setProgress(progressbar.getMax());
 			dm.ondone();
+            if (!ad.isShowing()) return;
+            //Prevent illegal state
 			if (result)
 			{
 				ad.setTitle(R.string.success);
