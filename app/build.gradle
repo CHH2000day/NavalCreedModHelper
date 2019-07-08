@@ -7,21 +7,11 @@ android {
 	useLibrary 'org.apache.http.legacy'
 	lintOptions{ abortOnError false }
 	applicationVariants.all { variant ->
-        if (variant.buildType.name.equals('release')) {
             variant.outputs.all { output ->
-                def buildName = "NavalCreedModHelper"
+				def buildName = "NavalCreedModHelper"
                 def type = variant.flavorName
                 def releaseApkName = buildName +  "-" + versionName +  '.apk'
                 outputFileName = releaseApkName
-            }
-        }
-        if (variant.buildType.name.equals('debug')) {
-            variant.outputs.all { output ->
-                def buildName = "NavalCreedModHelper"
-                def type = variant.flavorName
-                def releaseApkName = buildName +  "-" + versionName +  '.apk'
-                outputFileName = releaseApkName
-            }
         }
     }
 
