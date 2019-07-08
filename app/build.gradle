@@ -38,7 +38,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 95
-        versionName "build-2019070600-alpha"
+        versionName "build-2019070800-alpha"
         flavorDimensions "versionCode"
 		
     }

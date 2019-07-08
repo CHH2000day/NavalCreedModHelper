@@ -22,7 +22,7 @@ import java.util.Arrays;
 import cn.bmob.v3.Bmob;
 public class ModHelperApplication extends Application
 {
-	public static final int BUILDVER = 10017;
+	public static final int BUILDVER = 10018;
 	//never used
 	//private android.os.Handler merrmsghdl;
 	private File resDir;
