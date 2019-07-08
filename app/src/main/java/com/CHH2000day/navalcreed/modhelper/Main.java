@@ -925,7 +925,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 return;
             }
             if (!showAd) return;
-            ;
+
             BannerView ad = new BannerView();
             ad.setInterface(Main.this, new RDInterface() {
                 @Override
