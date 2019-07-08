@@ -126,7 +126,7 @@ public class AboutFragment extends Fragment {
         }
         mtextview.setText(new StringBuilder().append(app.getVersionName())
                 .append(" ")
-                .append(BuildConfig.DEBUG ? String.valueOf(app.BUILDVER) : "")
+                .append(String.valueOf(app.BUILDVER))
                 .append("\n")
                 .append(mtextview.getText())
                 .toString());
