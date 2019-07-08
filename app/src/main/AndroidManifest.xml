@@ -85,6 +85,7 @@
 				android:name="android.support.FILE_PROVIDER_PATHS"
 				android:resource="@xml/file_path"/>
 		</provider>
+		<uses-library android:name="org.apache.http.legacy" android:required="false" />
 		<provider
 			android:name="cn.bmob.v3.util.BmobContentProvider"
 			android:authorities="com.CHH2000day.navalcreed.modhelper.BmobContentProvider"/>
