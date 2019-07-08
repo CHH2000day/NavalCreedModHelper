@@ -133,7 +133,7 @@ public class CustomShipNameFragment extends ModFragment
 			// TODO: Implement this method
 			return true;
 		});
-
+        showAd(v);
 		// TODO: Implement this method
 		return v;
 	}
@@ -141,6 +141,6 @@ public class CustomShipNameFragment extends ModFragment
 	@Override
 	public void onResume() {
 		super.onResume();
-		showAd(v);
+        //showAd(v);
 	}
 }

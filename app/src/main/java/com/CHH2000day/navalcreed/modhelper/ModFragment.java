@@ -19,6 +19,7 @@ public abstract class ModFragment extends Fragment
 	*/
 	public abstract boolean uninstallMod();
 
+    private boolean isAdLoaded = false;
     private Main getMainActivity() {
         return (Main) getActivity();
     }
@@ -29,8 +30,11 @@ public abstract class ModFragment extends Fragment
     }
 
     protected void showAd(View v) {
-        new AdThread(v).start();
-
+      /*  if(isAdLoaded){
+            return;
+        }*/
+        //new AdThread(v).start();
+        //isAdLoaded=true;
     }
 
     private class AdThread extends Thread {
@@ -44,7 +48,7 @@ public abstract class ModFragment extends Fragment
         public void run() {
             super.run();
             try {
-                Thread.sleep(300);
+                Thread.sleep(600);
             } catch (InterruptedException e) {
                 Logger.e(e, "Failed to delay ad load,canceling");
                 return;

@@ -152,6 +152,7 @@ public class BGReplacerFragment extends ModFragment
 			} );
 
 		// TODO: Implement this method
+        showAd(v);
 		return v;
 	}
 	private void removechanges ()
@@ -176,7 +177,7 @@ public class BGReplacerFragment extends ModFragment
 	@Override
 	public void onResume() {
 		super.onResume();
-		showAd(v);
+        //showAd(v);
 	}
 
 	@Override

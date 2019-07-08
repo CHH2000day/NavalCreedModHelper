@@ -91,4 +91,5 @@ dependencies {
 	
 	//Remove is as it's denpended by bmob libs
 	implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+  //  implementation 'com.android.support:support-v4:28.0.0'
 }

@@ -1,42 +1,67 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.support.v4.app.*;
-import android.view.*;
-import android.os.*;
-import android.widget.*;
-import android.view.View.*;
-import android.content.res.*;
-import okio.*;
-import java.io.*;
-import android.support.v7.app.*;
-import android.content.*;
-import android.support.design.widget.*;
-import android.graphics.drawable.*;
-import android.graphics.*;
 
-public class AboutFragment extends Fragment
-{
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-	private View v;
-	private int selectedItem=0;
-	private ModHelperApplication app;
-	private String deviceId;
+import com.qy.sdk.Interfaces.RDInterface;
+import com.qy.sdk.rds.VideoView;
 
-	@Override
-	public View onCreateView ( final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
-	{	app = (ModHelperApplication)getActivity ( ).getApplication ( );
-		app.getPkgNameNum ( app.getMainSharedPrederences ( ).getString ( app.KEY_PKGNAME, app.CN ) );
-		v = inflater.inflate ( R.layout.about_fragment, null );
-		deviceId=((Main)getActivity()).getDevId();
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+import okio.BufferedSource;
+import okio.Okio;
+import okio.Source;
+
+public class AboutFragment extends Fragment {
+
+    private View v;
+    private int selectedItem = 0;
+    private ModHelperApplication app;
+    private String deviceId;
+
+    @Override
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        app = (ModHelperApplication) getActivity().getApplication();
+        app.getPkgNameNum(app.getMainSharedPrederences().getString(app.KEY_PKGNAME, app.CN));
+        v = inflater.inflate(R.layout.about_fragment, null);
+        deviceId = ((Main) getActivity()).getDevId();
         Button license = v.findViewById(R.id.aboutfragmentLicense);
         Button pkgname = v.findViewById(R.id.aboutfragmentButtonselectpkg);
         TextView mtextview = v.findViewById(R.id.aboutfragmentTextView);
-		Button donate = v.findViewById(R.id.aboutfragmentButtonDonate);
-		if ( !isChineseEnvironment ( ) )
-		{
-			donate.setVisibility ( View.GONE );
-		}
-		else
-		{
+        Button donate = v.findViewById(R.id.aboutfragmentButtonDonate);
+        if (!isChineseEnvironment()) {
+            donate.setVisibility(View.GONE);
+        } else {
+            donate.setOnLongClickListener(listener -> {
+                Snackbar.make(v, "Loading ad", Snackbar.LENGTH_LONG).show();
+                VideoView ad = new VideoView();
+                ad.setInterface(getActivity(), new RDInterface() {
+                    @Override
+                    public void onLoadSuccess() {
+                        super.onLoadSuccess();
+                        ad.show();
+                    }
+                });
+                return true;
+            });
             donate.setOnClickListener(p1 -> {
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 View diaView = inflater.inflate(R.layout.dialog_donate, null);
@@ -83,15 +108,14 @@ public class AboutFragment extends Fragment
                 adb.create().show();
                 // TODO: Implement this method
             });
-			
-		}
-		if ( BuildConfig.DEBUG )
-		{
-			mtextview.setText ( new StringBuilder ( ).append ( "Device SSAID:" )
-							   .append ( deviceId)
-							   .append ( "\n" )
-							   .append ( mtextview.getText ( ) )
-							   .toString ( ) );
+
+        }
+        if (BuildConfig.DEBUG) {
+            mtextview.setText(new StringBuilder().append("Device SSAID:")
+                    .append(deviceId)
+                    .append("\n")
+                    .append(mtextview.getText())
+                    .toString());
             mtextview.setOnClickListener(p1 -> {
                 ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(deviceId);
@@ -99,12 +123,12 @@ public class AboutFragment extends Fragment
                 // TODO: Implement this method
             });
         }
-		mtextview.setText(new StringBuilder().append(app.getVersionName())
-											.append(" ")
-											.append(BuildConfig.DEBUG?String.valueOf(app.BUILDVER):"")
-											.append("\n")
-											.append(mtextview.getText())
-											.toString());
+        mtextview.setText(new StringBuilder().append(app.getVersionName())
+                .append(" ")
+                .append(BuildConfig.DEBUG ? String.valueOf(app.BUILDVER) : "")
+                .append("\n")
+                .append(mtextview.getText())
+                .toString());
         license.setOnClickListener(p1 -> {
 
             try {
@@ -120,27 +144,25 @@ public class AboutFragment extends Fragment
             }
             // TODO: Implement this method
         });
-		license.setOnLongClickListener(new OnLongClickListener(){
+        license.setOnLongClickListener(new OnLongClickListener() {
 
-				@Override
-				public boolean onLongClick(View p1)
-				{
-					// TODO: Implement this method
-					SharedPreferences sp=app.getMainSharedPrederences();
-					if(KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY,""))){
-						//If local key is avail
-						boolean status=((Main)getActivity()).isUseAlphaChannel();
-						Snackbar.make(v,"Check alpha version:"+String.valueOf(!status),Snackbar.LENGTH_LONG).show();
-						((Main)getActivity()).setUseAlphaChannel(!status);
-					}
-					else{
-						((Main)getActivity()).showKeyDialog();
-					}
-					
-					return false;
-				}
-			});
-			
+            @Override
+            public boolean onLongClick(View p1) {
+                // TODO: Implement this method
+                SharedPreferences sp = app.getMainSharedPrederences();
+                if (KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY, ""))) {
+                    //If local key is avail
+                    boolean status = ((Main) getActivity()).isUseAlphaChannel();
+                    Snackbar.make(v, "Check alpha version:" + String.valueOf(!status), Snackbar.LENGTH_LONG).show();
+                    ((Main) getActivity()).setUseAlphaChannel(!status);
+                } else {
+                    ((Main) getActivity()).showKeyDialog();
+                }
+
+                return false;
+            }
+        });
+
         pkgname.setOnClickListener(p1 -> {
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
@@ -163,20 +185,19 @@ public class AboutFragment extends Fragment
             // TODO: Implement this method
         });
 
-		// TODO: Implement this method
-		return v;
-	}
+        // TODO: Implement this method
+        return v;
+    }
 
-	private boolean isChineseEnvironment ( )
-	{
-		return getResources ( ).getConfiguration ( ).locale.getLanguage ( ).contains ( "zh" );
-	}
-	@Override
-	public void onResume ( )
-	{
-		// TODO: Implement this method
-		super.onResume ( );
-		selectedItem = app.getPkgNameNum ( app.getMainSharedPrederences ( ).getString ( app.KEY_PKGNAME, app.CN ) );
-	}
+    private boolean isChineseEnvironment() {
+        return getResources().getConfiguration().locale.getLanguage().contains("zh");
+    }
+
+    @Override
+    public void onResume() {
+        // TODO: Implement this method
+        super.onResume();
+        selectedItem = app.getPkgNameNum(app.getMainSharedPrederences().getString(app.KEY_PKGNAME, app.CN));
+    }
 
 }

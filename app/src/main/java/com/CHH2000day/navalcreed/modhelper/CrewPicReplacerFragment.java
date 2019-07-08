@@ -172,14 +172,14 @@ public class CrewPicReplacerFragment extends ModFragment
 			} );
 		selectedpic = v.findViewById(R.id.crewpicreplacerSelectedFile);
 		// TODO: Implement this method
-
+		showAd(v);
 		return v;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		showAd(v);
+		//showAd(v);
 	}
 
 	@Override

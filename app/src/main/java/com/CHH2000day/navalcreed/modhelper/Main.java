@@ -32,11 +32,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.orhanobut.logger.Logger;
+import com.qy.sdk.Interfaces.RDInterface;
+import com.qy.sdk.rds.BannerView;
 
 import java.io.File;
 import java.io.IOException;
@@ -156,6 +159,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         checkVality();
         new UpdateThread().start();
         new AnnouncementThread().start();
+        new AdThread(findViewById(R.id.adlayout)).start();
         //禁用测试版Mod包安装
 		/*
 		 if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
@@ -165,9 +169,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
 
             mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
-
-
         }
+
     }
 
     @Override
@@ -903,6 +906,37 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         }
 
 
+    }
+
+    private class AdThread extends Thread {
+        private ViewGroup v;
+
+        public AdThread(ViewGroup v) {
+            this.v = v;
+        }
+
+        @Override
+        public void run() {
+            super.run();
+            try {
+                Thread.sleep(600);
+            } catch (InterruptedException e) {
+                Logger.e(e, "Failed to delay ad load,canceling");
+                return;
+            }
+            if (!showAd) return;
+            ;
+            BannerView ad = new BannerView();
+            ad.setInterface(Main.this, new RDInterface() {
+                @Override
+                public void rdView(ViewGroup benner) {
+                    super.rdView(benner);
+                    v.addView(benner); //layout是你自己定义的布局
+                }
+            });
+            ad.load();
+            ad.show();
+        }
     }
 
 }

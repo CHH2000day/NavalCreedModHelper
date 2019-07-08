@@ -108,7 +108,7 @@ public class BGMReplacerFragment extends ModFragment
 	@Override
 	public void onResume() {
 		super.onResume();
-		showAd(v);
+        //showAd(v);
 	}
 
 	private void initValues()
