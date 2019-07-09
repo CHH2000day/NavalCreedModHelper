@@ -246,32 +246,34 @@ public class BGMReplacerFragment extends ModFragment
 					final Monitor mon=new Monitor(ad);
 					ad.setOnShowListener(mon);
 					ad.setCancelable(false);
-					final Handler h=new Handler(){
-						public void handleMessage(Message msg)
-						{
-							switch (msg.what)
-							{
+					@android.annotation.SuppressLint("HandlerLeak") final Handler h=new Handler(){
+						public void handleMessage(Message msg) {
+							switch (msg.what) {
 								case AudioFormatHelper.STATUS_START:
-									//无异常
+									if (!ad.isShowing())
+										return;                                    //无异常
 									progress.setText(R.string.transcode_starting);
 									break;
 								case AudioFormatHelper.STATUS_LOADINGFILE:
+									if (!ad.isShowing()) return;
 									//操作出现异常
 									progress.setText(R.string.transcode_getting_audio_track);
 									break;
 								case AudioFormatHelper.STATUS_TRANSCODING:
+									if (!ad.isShowing()) return;
 									progress.setText(R.string.transcode_transcoding);
 									break;
 								case AudioFormatHelper.STATUS_WRITING:
+									if (!ad.isShowing()) return;
 									progress.setText(R.string.transcode_writing);
 									break;
 								case AudioFormatHelper.STATUS_DONE:
+									if (!ad.isShowing()) return;
 									long usedtime=System.currentTimeMillis() - starttime;
 									pb.setIndeterminate(false);
 									pb.setProgress(100);
 									ad.setTitle(R.string.success);
-									if (isAdded())
-									{
+									if (isAdded()) {
 										progress.setText(getString(R.string.transcode_success,usedtime));
 										mon.ondone();
 									}else{
@@ -279,6 +281,7 @@ public class BGMReplacerFragment extends ModFragment
 									}
 									break;
 								case AudioFormatHelper.STATUS_ERROR:
+									if (!ad.isShowing()) return;
 									String s=progress.getText().toString();
 									Exception e=(Exception)msg.obj;
 									long l=System.currentTimeMillis() - starttime;
@@ -529,6 +532,7 @@ public class BGMReplacerFragment extends ModFragment
 		}
 		public void ondone()
 		{
+			if (!ad.isShowing()) return;
 			button.setTextColor(color);
 			button.setClickable(true);
 		}
