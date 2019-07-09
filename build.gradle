@@ -13,11 +13,13 @@ buildscript {
 }
 allprojects {
     repositories {
-        maven{url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven{ url 'https://maven.aliyun.com/repository/central' }
         jcenter(){ url 'http://jcenter.bintray.com/'}
         google()
         maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }
         maven { url "https://jitpack.io" }
+        maven { url 'https://maven.aliyun.com/repository/google'}
+        maven { url 'https://maven.aliyun.com/repository/jcenter'}
     }
 }
 
