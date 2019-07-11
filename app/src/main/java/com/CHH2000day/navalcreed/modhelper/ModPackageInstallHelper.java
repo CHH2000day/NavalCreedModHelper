@@ -1,5 +1,6 @@
 package com.CHH2000day.navalcreed.modhelper;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -7,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -188,9 +190,9 @@ public class ModPackageInstallHelper
 
 		}
 	}
-	public void beginInstall(final AppCompatActivity activity)
-	{
-		checkVersion(activity);
+
+    public void beginInstall(final Fragment fragment) {
+        checkVersion(fragment);
 	}
 	private long calculateTotalSize()
 	{
@@ -218,34 +220,35 @@ public class ModPackageInstallHelper
 	 {
 	 return false;
 	 }*/
-	private void checkVersion(final AppCompatActivity activity)
+    private void checkVersion(final Fragment fragment)
 	{
 		//检查是否能实现mod包的所有功能
 		if (!mmpi.hasAllFeature())
 		{
-			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
+            AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
 			adb.setTitle(R.string.notice)
 				.setMessage(R.string.modpkg_ver_warning)
 				.setNegativeButton(R.string.cancel, null)
 				.setPositiveButton(R.string.cont, (p1, p2) -> {
-				checkAvailSpace(activity);
+                    checkAvailSpace(fragment);
 				// TODO: Implement this method
 			});
 			adb.create().show();
 		}
 		else
 		{
-			checkAvailSpace(activity);
+            checkAvailSpace(fragment);
 		}
 	}
-	private void checkAvailSpace(final AppCompatActivity activity)
+
+    private void checkAvailSpace(final Fragment fragment)
 	{
 		StatFs fs=new StatFs(mmha.getResFilesDirPath());
 		long avail=fs.getAvailableBytes();
 		if (getTotalSize() > avail)
 		{
 			{
-				AlertDialog.Builder adb=new AlertDialog.Builder(activity);
+                AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
 				adb.setTitle(R.string.notice)
 					.setMessage(new StringBuilder().append("No enough space left on device,this mod package requires ")
 								.append(getTotalSize())
@@ -259,10 +262,11 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			checkModType(activity);
+            checkModType(fragment);
 		}
 	}
-	private void checkModType(final AppCompatActivity activity)
+
+    private void checkModType(final Fragment fragment)
 	{
 		//检查mod包类型
 		//如果mod包类型为语音包，确认安装位置
@@ -270,7 +274,7 @@ public class ModPackageInstallHelper
 		{
 
 			msubtype = SUBTYPE_CV_OFFSET;
-			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
+            AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
 			adb.setTitle(R.string.modpkg_cv_to_replace)
 				.setSingleChoiceItems(R.array.cv_types, 0, (p1, p2) -> {
 				msubtype = p2 + SUBTYPE_CV_OFFSET;
@@ -278,7 +282,7 @@ public class ModPackageInstallHelper
 			})
 			.setNegativeButton(R.string.cancel, null)
 				.setPositiveButton(R.string.ok, (p1, p2) -> {
-				checkInstall(activity);
+                    checkInstall(fragment);
 				// TODO: Implement this method
 			});
 			adb.create().show();
@@ -286,18 +290,18 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			checkInstall(activity);
+            checkInstall(fragment);
 		}
 
 
 	}
 
-	private void checkInstall(final AppCompatActivity activity)
+    private void checkInstall(final Fragment fragment)
 	{
 		ModPackageManager mpm=ModPackageManager.getInstance();
 		if (mpm.checkInstalled(mmpi.getModType(), getSubType(msubtype)))
 		{
-			AlertDialog.Builder adb=new AlertDialog.Builder(activity);
+            AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
 			adb.setTitle(R.string.error)
 				.setMessage(R.string.modpkg_already_installed_warning);
 			adb.create().show();
@@ -307,11 +311,11 @@ public class ModPackageInstallHelper
 		{
 			if (ModPackageManager.getInstance().isOverride())
 			{
-				install(activity);
+                install(fragment);
 			}
 			else
 			{
-				AlertDialog.Builder adb=new AlertDialog.Builder(activity);
+                AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
 				adb.setTitle(R.string.error)
 					.setMessage(R.string.modpkg_interface_warning);
 				adb.create().show();
@@ -319,15 +323,14 @@ public class ModPackageInstallHelper
 		}
 		else
 		{
-			install(activity);
+            install(fragment);
 		}
 
 	}
 
-	private void install(final AppCompatActivity activity)
-	{
+    private void install(final Fragment fragment) {
 
-		InstallTask it=new InstallTask(msubtype, activity, getModPackageInfo(), msrcFile, mpkgFile);
+        InstallTask it = new InstallTask(msubtype, fragment, getModPackageInfo(), msrcFile, mpkgFile);
 		it.execute();
 
 
@@ -469,19 +472,22 @@ public class ModPackageInstallHelper
 		private TextView stat;
 		private ProgressBar progressbar;
 		private DialogMonitor dm;
-		private AppCompatActivity mactivity;
+        private Activity mactivity;
 		private ModPackageInfo mmpi;
 		private File msrcFile;
 		private ZipFile mpkgFile;
 		private int mSubType;
-		protected InstallTask(int subType, final AppCompatActivity activity, ModPackageInfo mpi, File srcFile, ZipFile pkgFile)
+        private Fragment fragment;
+
+        protected InstallTask(int subType, final Fragment fragment, ModPackageInfo mpi, File srcFile, ZipFile pkgFile)
 		{
 			mSubType = subType;
-			mactivity = activity;
+            mactivity = fragment.getActivity();
 			mmpi = mpi;
 			msrcFile = srcFile;
 			mpkgFile = pkgFile;
-			mainPath = getPath(mmpi.getModType(), subType, (ModHelperApplication)activity.getApplication());
+            mainPath = getPath(mmpi.getModType(), subType, (ModHelperApplication) mactivity.getApplication());
+            this.fragment = fragment;
 		}
 		@Override
 		protected Boolean doInBackground(Void[] p1)
@@ -593,7 +599,7 @@ public class ModPackageInstallHelper
 		{
 			progressbar.setProgress(progressbar.getMax());
 			dm.ondone();
-            if (!ad.isShowing()) return;
+            if (!fragment.isAdded()) return;
             //Prevent illegal state
 			if (result)
 			{
@@ -603,6 +609,7 @@ public class ModPackageInstallHelper
 			}
 			else
 			{
+
 				ad.setTitle(R.string.error);
 				String s=new StringBuilder().append(mactivity.getText(R.string.failed))
 					.append(":")
@@ -619,6 +626,7 @@ public class ModPackageInstallHelper
 		protected void onProgressUpdate(Integer[] values)
 		{
 			super.onProgressUpdate(values);
+            if (!fragment.isAdded()) return;
 			if (totalcount == 0)
 			{
 				totalcount = mpkgFile.size();
