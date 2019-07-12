@@ -247,28 +247,24 @@ public class BGMReplacerFragment extends ModFragment
 					final Handler h=new Handler ( ){
 						public void handleMessage ( Message msg )
 						{
+							if(!isAdded())return;
 							switch ( msg.what )
 							{
 								case AudioFormatHelper.STATUS_START:
 									//无异常
-									if(!ad.isShowing())return;
 									progress.setText ( R.string.transcode_starting );
 									break;
 								case AudioFormatHelper.STATUS_LOADINGFILE:
 									//操作出现异常
-									if(!ad.isShowing())return;
 									progress.setText ( R.string.transcode_getting_audio_track );
 									break;
 								case AudioFormatHelper.STATUS_TRANSCODING:
-									if(!ad.isShowing())return;
 									progress.setText ( R.string.transcode_transcoding );
 									break;
 								case AudioFormatHelper.STATUS_WRITING:
-									if(!ad.isShowing())return;
 									progress.setText ( R.string.transcode_writing );
 									break;
 								case AudioFormatHelper.STATUS_DONE:
-									if(!ad.isShowing())return;
 									long usedtime=System.currentTimeMillis ( ) - starttime;
 									pb.setIndeterminate ( false );
 									pb.setProgress ( 100 );
@@ -277,7 +273,6 @@ public class BGMReplacerFragment extends ModFragment
 									mon.ondone ( );
 									break;
 								case AudioFormatHelper.STATUS_ERROR:
-									if(!ad.isShowing())return;
 									String s=progress.getText ( ).toString ( );
 									long l=System.currentTimeMillis() - starttime;
 									Exception e=(Exception)msg.obj;
