@@ -1,16 +1,26 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.support.v4.app.*;
-import android.os.*;
-import android.view.*;
-import java.io.*;
-import android.net.*;
+
 import android.app.Activity;
-import android.content.*;
-import android.widget.*;
-import android.support.v7.app.*;
-import android.support.design.widget.*;
-import android.text.method.*;
-import android.provider.*;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.InputStream;
 
 public class ModPackageInstallerFragment extends Fragment
 {
@@ -91,7 +101,7 @@ public class ModPackageInstallerFragment extends Fragment
 				Snackbar.make(v, R.string.modpkg_info_empty, Snackbar.LENGTH_LONG).show();
 				return;
 			}
-			mpih.beginInstall((Main) getActivity());
+            mpih.beginInstall(this);
 			// TODO: Implement this method
 		});
 	}
