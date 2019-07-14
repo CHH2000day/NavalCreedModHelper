@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +29,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +43,7 @@ import android.widget.EditText;
 import com.orhanobut.logger.Logger;
 import com.qy.sdk.Interfaces.RDInterface;
 import com.qy.sdk.rds.BannerView;
+import com.qy.sdk.rds.SplashView;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +75,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     private boolean showAd = true;
     private boolean useAlphaChannel = BuildConfig.DEBUG;
     private File updateApk;
+    private ViewGroup mContentView;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -112,6 +117,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 NavigationView navigationView = (NavigationView) findViewById ( R.id.nav_view );
 		 navigationView.setNavigationItemSelectedListener ( this );*/
         //配置ViewPager与TabLayout
+        mContentView = findViewById(R.id.maincontentview);
         mViewPager = findViewById(R.id.viewPager);
         TabLayout mTabLayout = findViewById(R.id.tabLayout);
         //构造Fragment实例
@@ -191,131 +197,18 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         checkPermission();
 
     }
-//禁用测试版mod包安装
-	/*
-	 private void installModPackageBeta(String path){
-	 String filepath;
-	 if ( TextUtils.isEmpty ( path ))
-	 {
-	 return;
-	 }
-	 filepath = path;
-	 try
-	 {
-	 final ZipFile mzipfile=new ZipFile ( filepath );
-	 AlertDialog ad1;
-	 AlertDialog.Builder adb=new AlertDialog.Builder ( Main.this );
-	 adb.setTitle ( "确定要继续么" )
-	 .setMessage ( new StringBuilder ( )
-	 .append ( "确定要安装mod文件:" )
-	 .append ( filepath )
-	 .append ( " " )
-	 .append ( "么？" )
-	 .append ( "\n" )
-	 .append ( "安装该mod文件可能对游戏/设备造成损坏，请确认该mod文件来自于可信渠道" )
-	 .toString ( ) )
-	 .setNegativeButton ( "取消", null )
-	 .setPositiveButton ( "确定安装", new DialogInterface.OnClickListener ( ){
-
-	 @Override
-	 public void onClick ( DialogInterface p1, int p2 )
-	 {
-	 AlertDialog.Builder adbb=new AlertDialog.Builder ( Main.this );
-	 adbb.setTitle ( "正在安装mod文件，请稍等" )
-	 .setMessage ( "正在安装mod，所需时间由mod文件大小及设备性能所决定" )
-	 .setCancelable ( false );
-	 final AlertDialog dialog=adbb.create ( );
-	 dialog.setCanceledOnTouchOutside ( false );
-	 dialog.show ( );
-	 final Handler h=new Handler ( ){
-	 public void handleMessage ( Message msg )
-	 {
-	 dialog.dismiss ( );
-	 if ( msg.what != 0 )
-	 {
-	 Snackbar.make ( mViewPager, ( (Throwable)msg.obj ).getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-	 }
-	 else
-	 {
-	 Snackbar.make ( mViewPager, "操作完成", Snackbar.LENGTH_LONG ).show ( );
-
-	 }
-	 }
-	 };
-	 new Thread ( ){
-	 public void run ( )
-	 {try
-	 {
-	 Utils.decompresssZIPFile ( mzipfile, getModHelperApplication ( ).getResFilesDirPath ( ) );
-	 h.sendEmptyMessage ( 0 );
-	 }
-	 catch (IOException e)
-	 {
-	 h.sendMessage ( h.obtainMessage ( 1, e ) );
-	 }
-	 }
-	 }.start ( );
-
-	 // TODO: Implement this method
-	 }
-	 } )
-	 .setCancelable ( false );
-	 ad1 = adb.create ( );
-	 ad1.setCanceledOnTouchOutside ( false );
-	 ad1.show ( );
-
-	 }
-	 catch (IOException e)
-	 {
-	 Snackbar.make ( mViewPager, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );
-	 return;
-	 }
-	 }
-	 */
 
     @SuppressLint("HandlerLeak")
     private void checkVality() {
         //进行检查
-		/*
-		 AlertDialog.Builder adb_ver=new AlertDialog.Builder ( this );
-		 adb_ver.setCancelable ( false );
-		 adb_ver.setTitle ( "验证中...." )
-		 .setMessage ( "验证测试版是否可用....\n请稍等....." );
-		 final AlertDialog ad_ver=adb_ver.create ( );
-		 ad_ver.setCanceledOnTouchOutside ( false );
-
-		 mvercheckHandler = new Handler ( ){
-		 public void handleMessage ( Message msg )
-		 {
-		 switch ( msg.what )
-		 {
-		 case -1:
-		 //测试版可用
-		 ad_ver.dismiss ( );
-		 break;
-		 case 0:
-		 //测试版不可用
-		 Snackbar.make ( mViewPager, "测试版不可用！", Snackbar.LENGTH_INDEFINITE ).setAction ( "退出", new OnClickListener ( ){
-
-		 @Override
-		 public void onClick ( View p1 )
-		 {
-		 finish ( );
-		 // TODO: Implement this method
-		 }
-		 } ).show ( ) ;
-
-		 break;
-		 }
-		 }
-		 };*/
-        //ad_ver.show ( );
 
         String key = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_AUTHKEY, "");
         if (!TextUtils.isEmpty(key) && KeyUtil.checkKeyFormat(key)) {
             //If a test key is found,disable ad
             showAd = false;
             useAlphaChannel = getModHelperApplication().getMainSharedPrederences().getBoolean(KEY_USEALPHACHANNEL, BuildConfig.DEBUG);
+        } else {
+            showSplashAd();
         }
 
         if (BuildConfig.DEBUG) {
@@ -368,6 +261,56 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 }
             });
         }
+
+    }
+
+    private void showSplashAd() {
+        SplashView ad = new SplashView();
+        ad.setInterface(this, new RDInterface() {
+            @Override
+            public void onLoadSuccess() {
+                super.onLoadSuccess();
+                ad.show();//在isReady或onLoadSuccess准备后再调用
+            }
+
+            @Override
+            public void rdView(ViewGroup view) {
+                super.rdView(view);
+                TypedValue tv = new TypedValue();
+                int actionBarHeight = 0;
+                if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+                    actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
+                }
+                CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                params.gravity = Gravity.BOTTOM;
+                params.height = mContentView.getHeight() - 2 * actionBarHeight;
+                view.setLayoutParams(params);//设置开屏广告的大小，建议全屏或占70%以上
+                mContentView.addView(view);//将广告元素放入布局
+                @SuppressLint("HandlerLeak") Handler adcloseer = new Handler() {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        super.handleMessage(msg);
+                        mContentView.removeView(view);
+                    }
+                };
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            Thread.sleep(5000);
+                        } catch (Exception e) {
+                            Logger.e(e, "");
+                        } finally {
+                            adcloseer.sendEmptyMessage(0);
+                        }
+                    }
+                }.start();
+            }
+
+        });
+
+        ad.load();
 
     }
 
