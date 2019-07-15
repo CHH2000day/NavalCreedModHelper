@@ -272,6 +272,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 super.onLoadSuccess();
                 ad.show();//在isReady或onLoadSuccess准备后再调用
             }
+
             @Override
             public void rdView(ViewGroup view) {
                 super.rdView(view);
@@ -549,7 +550,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     }
 
     private void doExit() {
-        android.os.Process.killProcess(android.os.Process.myPid());
+        finish();
     }
 
     @Override
