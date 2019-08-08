@@ -24,7 +24,7 @@ import java.util.Arrays;
 import cn.bmob.v3.Bmob;
 public class ModHelperApplication extends Application
 {
-	public static final int BUILDVER = 10023;
+	public static final int BUILDVER = 10024;
 
 	private static URL REQUEST_URL;
 
