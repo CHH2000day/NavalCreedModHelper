@@ -40,10 +40,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.qy.sdk.Interfaces.RDInterface;
 import com.qy.sdk.rds.BannerView;
 import com.qy.sdk.rds.SplashView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,9 +55,14 @@ import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.UpdateListener;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader {
 
@@ -76,6 +84,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     private boolean useAlphaChannel = BuildConfig.DEBUG;
     private File updateApk;
     private ViewGroup mContentView;
+    private boolean isChecked = false;
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -182,7 +191,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     @Override
     protected void onStart() {
         // TODO: Implement this method
-
         super.onStart();
     }
 
@@ -201,9 +209,10 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     @SuppressLint("HandlerLeak")
     private void checkVality() {
         //进行检查
-
+        if (isChecked) return;
+        isChecked = true;
         String key = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_AUTHKEY, "");
-        if (!TextUtils.isEmpty(key) && KeyUtil.checkKeyFormat(key)) {
+        if (BuildConfig.DEBUG || (!TextUtils.isEmpty(key) && KeyUtil.checkKeyFormat(key))) {
             //If a test key is found,disable ad
             showAd = false;
             useAlphaChannel = getModHelperApplication().getMainSharedPrederences().getBoolean(KEY_USEALPHACHANNEL, BuildConfig.DEBUG);
@@ -317,49 +326,33 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     public void performkeycheck(String key, final OnCheckResultListener listener) {
         if (KeyUtil.checkKeyFormat(key)) {
-            BmobQuery<TesterInfo> query_key = new BmobQuery<TesterInfo>();
-            query_key.addWhereEqualTo("key", key);
-            query_key.findObjects(new FindListener<TesterInfo>() {
+            OkHttpClient client = OKHttpHelper.getClient();
+            Request.Builder builder = new Request.Builder();
+            RequestBody body = new FormBody.Builder()
+                    .add(ServerActions.ACTION, ServerActions.ACTION_CHECKTEST)
+                    .add(ServerActions.VALUE_KEY, key)
+                    .add(ServerActions.VALUE_SSAID, getDevId())
+                    .add(ServerActions.VALUE_DEVICE, Build.MODEL)
+                    .build();
+            builder.url(getModHelperApplication().getRequestUrl());
+            builder.post(body);
+            OKHttpHelper.getClient().newCall(builder.build()).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    listener.onFail(1, "Failed to connect to server");
+                }
 
                 @Override
-                public void done(List<TesterInfo> p1, BmobException p2) {
-                    if (p2 == null) {
-                        if (p1.size() > 0) {
-                            final TesterInfo info = p1.get(0);
-                            if (info.getSSAID() == null || info.getdeviceId() == null || info.getdeviceId().equals(getDevId()) || info.getSSAID().equals(getDevId()) || info.getSSAID().equals("")) {
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
+                    if (bean.getResultCode() >= 0) {
+                        if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
+                        getModHelperApplication().getMainSharedPrederences().edit().putString(KEY_AUTHKEY, key).apply();
+                        listener.onSuccess();
 
-
-                                info.setdeviceId("N/A");
-                                info.setSSAID(getDevId());
-                                info.setModel(Build.MODEL);
-                                info.update(info.getObjectId(), new UpdateListener() {
-
-                                    @Override
-                                    public void done(BmobException p1) {
-                                        // TODO: Implement this method
-                                        if (p1 == null) {
-                                            ((ModHelperApplication) getApplication()).getMainSharedPrederences()
-                                                    .edit()
-                                                    .putString(KEY_OBJID, info.getObjectId())
-                                                    .putString(KEY_AUTHKEY, key)
-                                                    .apply();
-                                            listener.onSuccess();
-                                        } else {
-                                            listener.onFail(1, p1.getMessage());
-                                            return;
-                                        }
-                                    }
-                                });
-                            }
-                            if (!getDevId().equals(info.getdeviceId()) && !getDevId().equals(info.getSSAID())) {
-                                listener.onFail(0, "Device mismatch!Local key is removed.");
-                            }
-                        }
                     } else {
-                        listener.onFail(1, p2.getMessage());
-                        return;
+                        listener.onFail(bean.getResultCode(), bean.getMessage());
                     }
-                    // TODO: Implement this method
                 }
             });
 			/*
@@ -426,35 +419,74 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     }
 
     private void performStartTesterPermissionCheck(final OnCheckResultListener listener) {
-        String objid = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_OBJID, "");
-        if (TextUtils.isEmpty(objid)) {
-            listener.onFail(2, "Unregistered！");
+        //
+        //remove old bmob mode
+        //
+
+//
+//        String objid = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_OBJID, "");
+//        if (TextUtils.isEmpty(objid)) {
+//            listener.onFail(2, "Unregistered！");
+//            return;
+//        }
+//        BmobQuery<TesterInfo> query = new BmobQuery<TesterInfo>();
+//        query.getObject(objid, new QueryListener<TesterInfo>() {
+//
+//            @Override
+//            public void done(TesterInfo p1, BmobException p2) {
+//                if (p2 != null) {
+//                    if (p2.getErrorCode() == 9010 || p2.getErrorCode() == 9016) {
+//                        listener.onFail(9010, "Network error");
+//                        return;
+//                    } else {
+//                        listener.onFail(1, p2.getMessage());
+//                        return;
+//                    }
+//                }
+//                if (TextUtils.isEmpty(p1.getSSAID()) || TextUtils.isEmpty(p1.getdeviceId()) || p1.getdeviceId().equals(getDevId()) || p1.getSSAID().equals(getDevId())) {
+//                    listener.onSuccess();
+//                    return;
+//                } else {
+//                    listener.onFail(0, "Device mismatch,please contact developer to reset your key");
+//                    return;
+//                }
+//
+//
+//
+//            }
+//        });
+        String key = getModHelperApplication().getMainSharedPrederences().getString(KEY_AUTHKEY, "");
+        if (!KeyUtil.checkKeyFormat(key)) {
+            listener.onFail(2, "Invalid local key!");
             return;
         }
-        BmobQuery<TesterInfo> query = new BmobQuery<TesterInfo>();
-        query.getObject(objid, new QueryListener<TesterInfo>() {
+        OkHttpClient client = OKHttpHelper.getClient();
+        Request.Builder builder = new Request.Builder();
+        RequestBody body = new FormBody.Builder()
+                .add(ServerActions.ACTION, ServerActions.ACTION_CHECKTEST)
+                .add(ServerActions.VALUE_KEY, key)
+                .add(ServerActions.VALUE_SSAID, getDevId())
+                .add(ServerActions.VALUE_DEVICE, Build.MODEL)
+                .build();
+        builder.url(getModHelperApplication().getRequestUrl());
+        builder.post(body);
+        OKHttpHelper.getClient().newCall(builder.build()).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                listener.onFail(1, "Failed to connect to server");
+            }
 
             @Override
-            public void done(TesterInfo p1, BmobException p2) {
-                if (p2 != null) {
-                    if (p2.getErrorCode() == 9010 || p2.getErrorCode() == 9016) {
-                        listener.onFail(9010, "Network error");
-                        return;
-                    } else {
-                        listener.onFail(1, p2.getMessage());
-                        return;
-                    }
-                }
-                if (TextUtils.isEmpty(p1.getSSAID()) || TextUtils.isEmpty(p1.getdeviceId()) || p1.getdeviceId().equals(getDevId()) || p1.getSSAID().equals(getDevId())) {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
+                if (bean.getResultCode() >= 0) {
                     listener.onSuccess();
-                    return;
+                    if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
                 } else {
-                    listener.onFail(0, "Device mismatch,please contact developer to reset your key");
-                    return;
+                    listener.onFail(bean.getResultCode(), bean.getMessage());
+                    Logger.w(bean.getMessage());
                 }
-
-
-                // TODO: Implement this method
+                response.close();
             }
         });
     }
