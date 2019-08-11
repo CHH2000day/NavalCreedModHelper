@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -28,7 +27,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -63,6 +61,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Sink;
 
 public class Main extends AppCompatActivity implements ModPackageInstallerFragment.UriLoader {
 
@@ -84,7 +85,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     private boolean useAlphaChannel = BuildConfig.DEBUG;
     private File updateApk;
     private ViewGroup mContentView;
-    private boolean isChecked = false;
+    private static final String TYPE_COMMON = "common";
+    private static final String TYPE_FFMPEG = "ffmpeg";
 
     @SuppressLint("HandlerLeak")
     @Override
@@ -208,9 +210,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     @SuppressLint("HandlerLeak")
     private void checkVality() {
-        //进行检查
-        if (isChecked) return;
-        isChecked = true;
+        //Perform check
         String key = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_AUTHKEY, "");
         if (BuildConfig.DEBUG || (!TextUtils.isEmpty(key) && KeyUtil.checkKeyFormat(key))) {
             //If a test key is found,disable ad
@@ -355,62 +355,62 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     }
                 }
             });
-			/*
-			 BmobQuery<TesterInfo> query_emptydevice=new BmobQuery<TesterInfo> ( );
-			 query_emptydevice.addWhereEqualTo ( "deviceId", "" );
-			 BmobQuery<TesterInfo> query_currdevice=new BmobQuery<TesterInfo> ( );
-			 query_currdevice.addWhereEqualTo ( "deviceId", getDevId ( ) );
-			 List<BmobQuery<TesterInfo>> ors=new ArrayList<BmobQuery<TesterInfo>> ( );
-			 ors.add ( query_emptydevice );
-			 ors.add ( query_currdevice );
-			 BmobQuery<TesterInfo> tmp=new BmobQuery<TesterInfo> ( );
-			 BmobQuery<TesterInfo> or=tmp.or ( ors );
-			 List<BmobQuery<TesterInfo>> finaldata=new ArrayList<BmobQuery<TesterInfo>> ( );
-			 finaldata.add ( or );
-			 finaldata.add ( query_key );
-			 BmobQuery<TesterInfo> and=new BmobQuery<TesterInfo> ( );
-			 BmobQuery<TesterInfo> main=and.and ( finaldata );
-			 main.setLimit ( 1 );
-			 main.findObjects ( new FindListener<TesterInfo> ( ){
-
-			 @Override
-			 public void done ( List<TesterInfo> p1, BmobException p2 )
-			 {
-			 if ( p2 == null )
-			 {
-			 if ( p1.size ( ) > 0 )
-			 {
-			 final TesterInfo info=p1.get ( 0 );
-			 info.setdeviceId ( getDevId ( ) );
-			 info.setModel(Build.MODEL);
-			 info.update ( info.getObjectId(),new UpdateListener ( ){
-
-			 @Override
-			 public void done ( BmobException p1 )
-			 {
-			 // TODO: Implement this method
-			 if ( p1 == null )
-			 {
-			 ( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
-			 listener.onSuccess ( );
-			 }
-			 else
-			 {
-			 listener.onFail ( 1, p1.getMessage ( ) );
-			 return;
-			 }
-			 }
-			 } );
-			 }
-			 }
-			 else
-			 {
-			 listener.onFail ( 1, p2.getMessage ( ) );
-			 return;
-			 }
-			 // TODO: Implement this method
-			 }
-			 } );*/
+//			/*
+//			 BmobQuery<TesterInfo> query_emptydevice=new BmobQuery<TesterInfo> ( );
+//			 query_emptydevice.addWhereEqualTo ( "deviceId", "" );
+//			 BmobQuery<TesterInfo> query_currdevice=new BmobQuery<TesterInfo> ( );
+//			 query_currdevice.addWhereEqualTo ( "deviceId", getDevId ( ) );
+//			 List<BmobQuery<TesterInfo>> ors=new ArrayList<BmobQuery<TesterInfo>> ( );
+//			 ors.add ( query_emptydevice );
+//			 ors.add ( query_currdevice );
+//			 BmobQuery<TesterInfo> tmp=new BmobQuery<TesterInfo> ( );
+//			 BmobQuery<TesterInfo> or=tmp.or ( ors );
+//			 List<BmobQuery<TesterInfo>> finaldata=new ArrayList<BmobQuery<TesterInfo>> ( );
+//			 finaldata.add ( or );
+//			 finaldata.add ( query_key );
+//			 BmobQuery<TesterInfo> and=new BmobQuery<TesterInfo> ( );
+//			 BmobQuery<TesterInfo> main=and.and ( finaldata );
+//			 main.setLimit ( 1 );
+//			 main.findObjects ( new FindListener<TesterInfo> ( ){
+//
+//			 @Override
+//			 public void done ( List<TesterInfo> p1, BmobException p2 )
+//			 {
+//			 if ( p2 == null )
+//			 {
+//			 if ( p1.size ( ) > 0 )
+//			 {
+//			 final TesterInfo info=p1.get ( 0 );
+//			 info.setdeviceId ( getDevId ( ) );
+//			 info.setModel(Build.MODEL);
+//			 info.update ( info.getObjectId(),new UpdateListener ( ){
+//
+//			 @Override
+//			 public void done ( BmobException p1 )
+//			 {
+//
+//			 if ( p1 == null )
+//			 {
+//			 ( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
+//			 listener.onSuccess ( );
+//			 }
+//			 else
+//			 {
+//			 listener.onFail ( 1, p1.getMessage ( ) );
+//			 return;
+//			 }
+//			 }
+//			 } );
+//			 }
+//			 }
+//			 else
+//			 {
+//			 listener.onFail ( 1, p2.getMessage ( ) );
+//			 return;
+//			 }
+//			 // TODO: Implement this method
+//			 }
+//			 } );*/
         } else {
             //密钥格式验证失败
             listener.onFail(0, "Invalid Key");
@@ -619,43 +619,43 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 
     }
-    /*
-	 @SuppressWarnings("StatementWithEmptyBody")
-	 @Override
-	 public boolean onNavigationItemSelected(MenuItem item)
-	 {
-	 // Handle navigation view item clicks here.
-	 int id = item.getItemId();
-
-	 if (id == R.id.nav_camera)
-	 {
-	 // Handle the camera action
-	 }
-	 else if (id == R.id.nav_gallery)
-	 {
-
-	 }
-	 else if (id == R.id.nav_slideshow)
-	 {
-
-	 }
-	 else if (id == R.id.nav_manage)
-	 {
-
-	 }
-	 else if (id == R.id.nav_share)
-	 {
-
-	 }
-	 else if (id == R.id.nav_send)
-	 {
-
-	 }
-
-	 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-	 drawer.closeDrawer(GravityCompat.START);
-	 return true;
-	 }*/
+//    /*
+//	 @SuppressWarnings("StatementWithEmptyBody")
+//	 @Override
+//	 public boolean onNavigationItemSelected(MenuItem item)
+//	 {
+//	 // Handle navigation view item clicks here.
+//	 int id = item.getItemId();
+//
+//	 if (id == R.id.nav_camera)
+//	 {
+//	 // Handle the camera action
+//	 }
+//	 else if (id == R.id.nav_gallery)
+//	 {
+//
+//	 }
+//	 else if (id == R.id.nav_slideshow)
+//	 {
+//
+//	 }
+//	 else if (id == R.id.nav_manage)
+//	 {
+//
+//	 }
+//	 else if (id == R.id.nav_share)
+//	 {
+//
+//	 }
+//	 else if (id == R.id.nav_send)
+//	 {
+//
+//	 }
+//
+//	 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//	 drawer.closeDrawer(GravityCompat.START);
+//	 return true;
+//	 }*/
 
     public boolean isUseAlphaChannel() {
         return useAlphaChannel;
@@ -726,69 +726,181 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
         @Override
         public void run() {
-            BmobQuery<UniversalObject> query = new BmobQuery<UniversalObject>();
-            String dataid = useAlphaChannel ? StaticData.DATAID_ALPHA : StaticData.DATAID_RELEASE;
-            //If user want to use Alpha Ch,check it
 
-            query.getObject(dataid, new QueryListener<UniversalObject>() {
+            try {
+                //Get current version
+                final int currver = useAlphaChannel ? getModHelperApplication().BUILDVER : getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                //Generate request
+                RequestBody body = new FormBody.Builder()
+                        .add(ServerActions.ACTION, ServerActions.ACTION_CHECKUPDATE)
+                        .add(ServerActions.VALUE_BUILD_TYPE, useAlphaChannel ? ServerActions.BUILD_TYPE_ALPHA : ServerActions.BUILD_TYPE_RELEASE)
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                builder.url(getModHelperApplication().getRequestUrl())
+                        .post(body);
+                OkHttpClient client = OKHttpHelper.getClient();
+                //Send request
+                client.newCall(builder.build()).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                        //Failed to connect to server
+                        Logger.w("Failed to get update data.");
+                    }
 
-                @Override
-                public void done(final UniversalObject universalobj, BmobException p2) {
-                    if (p2 != null) {
-                        Log.w("Updater", "Failed to get update data");
-                        return;
-                    }
-                    int serverver = universalobj.getVersion();
-                    int currver = 0;
-                    try {
-                        currver = useAlphaChannel ? getModHelperApplication().BUILDVER : getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-                    } catch (Exception ignored) {
-                    }
-                    try {
-                        if (serverver <= currver) {
-                            return;
-                        }
-                        AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
-                        adb.setTitle(R.string.update)
-                                .setMessage(universalobj.getChangelog())
-                                .setPositiveButton(R.string.update, (p1, p21) -> {
-                                    Snackbar.make(mViewPager, R.string.downloading, Snackbar.LENGTH_LONG).show();
-                                    AlertDialog.Builder db = new AlertDialog.Builder(Main.this);
-                                    db.setTitle(R.string.please_wait)
-                                            .setMessage(R.string.downloading)
-                                            .setCancelable(false);
-                                    final AlertDialog d = db.create();
-                                    d.setCanceledOnTouchOutside(false);
-                                    d.show();
-                                    String url = universalobj.getDownload();
-                                    new Thread() {
-                                        public void run() {
-                                            File f = new File(getExternalCacheDir(), "update.apk");
-                                            try {
-                                                Utils.downloadFile(url, f);
-                                                updateApk = f;
-                                                installApk();
-                                            } catch (IOException e) {
-                                                Logger.e(e, "download failed");
+                    @Override
+                    public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                        VersionBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), VersionBean.class);
+                        if (bean.resultCode >= 0) {
+                            //If result code is greater than 0,it means there exists memo
+                            if (bean.resultCode > 0) {
+                                //TODO:Handle the memo.
+                            }
+                            //Handle normal situation
+                            //Type is either ffmpeg or common
+                            final VersionBean.VersionInfo versionInfo = BuildConfig.FLAVOR.equals(TYPE_COMMON) ? bean.getCommonInfo() : bean.getFfmpegInfo();
+                            //If any update is available
+                            if (versionInfo.getBuildCode() > currver) {
+                                AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
+                                adb.setTitle(R.string.update)
+                                        .setMessage(versionInfo.getChangelog())
+                                        .setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                //Downloading
+
+                                                AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
+                                                adb.setCancelable(false)
+                                                        .setTitle(R.string.please_wait)
+                                                        .setMessage(R.string.downloading);
+                                                final AlertDialog ad = adb.create();
+                                                ad.show();
+                                                new Thread() {
+                                                    @Override
+                                                    public void run() {
+                                                        super.run();
+                                                        OkHttpClient client = OKHttpHelper.getClient();
+                                                        Request.Builder builder1 = new Request.Builder();
+                                                        builder1.url(versionInfo.getUrl());
+                                                        client.newCall(builder1.build()).enqueue(new Callback() {
+                                                            @Override
+                                                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+                                                                ad.dismiss();
+                                                                Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show();
+                                                                Logger.e(e, "FAiled to download update");
+
+                                                            }
+
+                                                            @Override
+                                                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                                                boolean isOK = false;
+                                                                try {
+                                                                    File f = new File(getExternalCacheDir(), "update.apk");
+                                                                    Utils.ensureFileParent(f);
+                                                                    Sink sink = Okio.sink(f);
+                                                                    BufferedSink bufferedSink = Okio.buffer(sink);
+                                                                    bufferedSink.writeAll(response.body().source());
+                                                                    bufferedSink.flush();
+                                                                    bufferedSink.close();
+                                                                    sink.close();
+                                                                    updateApk = f;
+                                                                    isOK = true;
+                                                                } catch (Exception e) {
+                                                                    e.printStackTrace();
+                                                                } finally {
+                                                                    ad.dismiss();
+                                                                    if (isOK) installApk();
+                                                                }
+
+
+                                                            }
+                                                        });
+                                                    }
+                                                }.start();
+
                                             }
-                                            Looper.prepare();
-                                            d.dismiss();
-                                            Looper.loop();
-                                        }
-                                    }.start();
-                                });
-                        //final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
-                        if (currver >= universalobj.getMinVer()) {
-                            adb.setCancelable(true);
-                            adb.setNegativeButton(R.string.cancel, null);
+                                        })
+                                        .setCancelable(false);
+                                //If update is not forced
+                                if (currver >= versionInfo.getMinVer()) {
+                                    adb.setNegativeButton(R.string.cancel, null);
+                                    adb.setCancelable(true);
+                                    mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
+                                }
+                                //Post dialog builder
+                            }
+                        } else {
+                            //Server returns an error
                         }
-                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
-                        // TODO: Implement this method
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-                }
-            });
+                });
+
+            } catch (Exception e) {
+                Logger.e(e, e.getLocalizedMessage());
+            }
+//            BmobQuery<UniversalObject> query = new BmobQuery<UniversalObject>();
+//            String dataid = useAlphaChannel ? StaticData.DATAID_ALPHA : StaticData.DATAID_RELEASE;
+//            //If user want to use Alpha Ch,check it
+//
+//            query.getObject(dataid, new QueryListener<UniversalObject>() {
+//
+//                @Override
+//                public void done(final UniversalObject universalobj, BmobException p2) {
+//                    if (p2 != null) {
+//                        Log.w("Updater", "Failed to get update data");
+//                        return;
+//                    }
+//                    int serverver = universalobj.getVersion();
+//                    int currver = 0;
+//                    try {
+//                        currver = useAlphaChannel ? getModHelperApplication().BUILDVER : getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+//                    } catch (Exception ignored) {
+//                    }
+//                    try {
+//                        if (serverver <= currver) {
+//                            return;
+//                        }
+//                        AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
+//                        adb.setTitle(R.string.update)
+//                                .setMessage(universalobj.getChangelog())
+//                                .setPositiveButton(R.string.update, (p1, p21) -> {
+//                                    Snackbar.make(mViewPager, R.string.downloading, Snackbar.LENGTH_LONG).show();
+//                                    AlertDialog.Builder db = new AlertDialog.Builder(Main.this);
+//                                    db.setTitle(R.string.please_wait)
+//                                            .setMessage(R.string.downloading)
+//                                            .setCancelable(false);
+//                                    final AlertDialog d = db.create();
+//                                    d.setCanceledOnTouchOutside(false);
+//                                    d.show();
+//                                    String url = universalobj.getDownload();
+//                                    new Thread() {
+//                                        public void run() {
+//                                            File f = new File(getExternalCacheDir(), "update.apk");
+//                                            try {
+//                                                Utils.downloadFile(url, f);
+//                                                updateApk = f;
+//                                                installApk();
+//                                            } catch (IOException e) {
+//                                                Logger.e(e, "download failed");
+//                                            }
+//                                            Looper.prepare();
+//                                            d.dismiss();
+//                                            Looper.loop();
+//                                        }
+//                                    }.start();
+//                                });
+//                        //final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
+//                        if (currver >= universalobj.getMinVer()) {
+//                            adb.setCancelable(true);
+//                            adb.setNegativeButton(R.string.cancel, null);
+//                        }
+//                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
+//                        // TODO: Implement this method
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
             // TODO: Implement this method
 
         }
