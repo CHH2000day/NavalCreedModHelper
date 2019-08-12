@@ -52,9 +52,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.QueryListener;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -335,7 +332,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     .add(ServerActions.VALUE_SSAID, getDevId())
                     .add(ServerActions.VALUE_DEVICE, Build.MODEL)
                     .build();
-            builder.url(getModHelperApplication().getRequestUrl());
+            builder.url(ServerActions.REQUEST_URL);
             builder.post(body);
             OKHttpHelper.getClient().newCall(builder.build()).enqueue(new Callback() {
                 @Override
@@ -469,7 +466,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 .add(ServerActions.VALUE_SSAID, getDevId())
                 .add(ServerActions.VALUE_DEVICE, Build.MODEL)
                 .build();
-        builder.url(getModHelperApplication().getRequestUrl());
+        builder.url(ServerActions.REQUEST_URL);
         builder.post(body);
         OKHttpHelper.getClient().newCall(builder.build()).enqueue(new Callback() {
             @Override
@@ -737,7 +734,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                         .add(ServerActions.VALUE_BUILD_TYPE, useAlphaChannel ? ServerActions.BUILD_TYPE_ALPHA : ServerActions.BUILD_TYPE_RELEASE)
                         .build();
                 Request.Builder builder = new Request.Builder();
-                builder.url(getModHelperApplication().getRequestUrl())
+                builder.url(ServerActions.REQUEST_URL)
                         .post(body);
                 OkHttpClient client = OKHttpHelper.getClient();
                 //Send request
@@ -917,44 +914,92 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
         @Override
         public void run() {
-            BmobQuery<BmobMessage> query = new BmobQuery<BmobMessage>();
-            query.getObject(StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage>() {
+            super.run();
+            OkHttpClient client = OKHttpHelper.getClient();
+            Request.Builder builder = new Request.Builder();
+            FormBody.Builder formBuilder = new FormBody.Builder();
+            formBuilder.add(ServerActions.ACTION, ServerActions.ACTION_GET_ANNOUNCEMENT);
+            formBuilder.add(ServerActions.VALUE_BUILD_TYPE, BuildConfig.DEBUG ? ServerActions.BUILD_TYPE_ALPHA : ServerActions.BUILD_TYPE_RELEASE);
+            builder.url(ServerActions.REQUEST_URL);
+            builder.post(formBuilder.build());
+            client.newCall(builder.build()).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show();
+                    Logger.e(e, "Failed to get announcement");
+                }
 
                 @Override
-                public void done(final BmobMessage bmobmsg, BmobException p2) {
-                    if (p2 != null) {
-                        p2.printStackTrace();
-                        return;
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    AnnouncementBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), AnnouncementBean.class);
+                    if (bean.getResultCode() >= 0) {
+                        final int id = bean.getId();
+                        int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
+                        AlertDialog.Builder adb0 = new AlertDialog.Builder(Main.this);
+
+                        if (id > currid) {
+                            adb0.setTitle(bean.getTitle())
+                                    .setMessage(bean.getAnnouncement())
+                                    .setPositiveButton(R.string.ok, null)
+                                    .setNeutralButton(R.string.dont_show, (p1, p212) -> {
+                                        getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+
+                                        // TODO: Implement this method
+                                    })
+                                    .setNegativeButton(R.string.copy, (p1, p21) -> {
+                                        ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                        getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+                                        if (!TextUtils.isEmpty(bean.getToCopy())) {
+                                            cmb.setText(bean.getToCopy().trim());
+                                        }
+                                        // TODO: Implement this method
+                                    });
+
+                            mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
+                        }
+                    } else {
+                        Snackbar.make(mContentView, bean.getMessage(), Snackbar.LENGTH_LONG).show();
                     }
-                    final int id = bmobmsg.getmsgid();
-                    int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
-                    AlertDialog.Builder adb0 = new AlertDialog.Builder(Main.this);
-
-                    if (id > currid) {
-                        adb0.setTitle(R.string.announcement)
-                                .setMessage(bmobmsg.getMessage())
-                                .setPositiveButton(R.string.ok, null)
-                                .setNeutralButton(R.string.dont_show, (p1, p212) -> {
-                                    getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
-
-                                    // TODO: Implement this method
-                                })
-                                .setNegativeButton(R.string.copy, (p1, p21) -> {
-                                    ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                    getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
-                                    if (!TextUtils.isEmpty(bmobmsg.tocopy())) {
-                                        cmb.setText(bmobmsg.tocopy().trim());
-                                    }
-                                    // TODO: Implement this method
-                                });
-
-                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
-                    }
-                    // TODO: Implement this method
                 }
             });
+//            BmobQuery<BmobMessage> query = new BmobQuery<BmobMessage>();
+//            query.getObject(StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage>() {
+//
+//                @Override
+//                public void done(final BmobMessage bmobmsg, BmobException p2) {
+//                    if (p2 != null) {
+//                        p2.printStackTrace();
+//                        return;
+//                    }
+//                    final int id = bmobmsg.getmsgid();
+//                    int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
+//                    AlertDialog.Builder adb0 = new AlertDialog.Builder(Main.this);
+//
+//                    if (id > currid) {
+//                        adb0.setTitle(R.string.announcement)
+//                                .setMessage(bmobmsg.getMessage())
+//                                .setPositiveButton(R.string.ok, null)
+//                                .setNeutralButton(R.string.dont_show, (p1, p212) -> {
+//                                    getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+//
+//                                    // TODO: Implement this method
+//                                })
+//                                .setNegativeButton(R.string.copy, (p1, p21) -> {
+//                                    ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//                                    getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+//                                    if (!TextUtils.isEmpty(bmobmsg.tocopy())) {
+//                                        cmb.setText(bmobmsg.tocopy().trim());
+//                                    }
+//                                    // TODO: Implement this method
+//                                });
+//
+//                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
+//                    }
+//                    // TODO: Implement this method
+//                }
+//            });
             // TODO: Implement this method
-            super.run();
+
 
         }
 

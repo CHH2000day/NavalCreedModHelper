@@ -17,28 +17,12 @@ import com.qy.sdk.Utils.ErrorCode;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 
 import cn.bmob.v3.Bmob;
 public class ModHelperApplication extends Application
 {
 	public static final int BUILDVER = 10025;
-
-	private static URL REQUEST_URL;
-
-	static {
-		try {
-			REQUEST_URL = new URL("https://ncapi.chh2000day.com/ncapi.do");
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static URL getRequestUrl() {
-		return REQUEST_URL;
-	}
 
 	//never used
 	//private android.os.Handler merrmsghdl;
@@ -47,7 +31,7 @@ public class ModHelperApplication extends Application
 	private String resfilePath="";
 	private SharedPreferences mainpref;
 	private static final String STOREDFILE_NAME="mod.install";
-//public static final String GAME_PKGNAME="com.loong.warship.zl";
+	//public static final String GAME_PKGNAME="com.loong.warship.zl";
 	protected static final String KEY_PKGNAME="pkgName";
 	private static final String GAME_PKGNAME_CN_SERVER="com.loong.warship.zl";
 	private static final String GAME_PKGNAME_EU_SERVER="com.zloong.eu.nc";
