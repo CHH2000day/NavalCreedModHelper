@@ -19,7 +19,6 @@ import com.tencent.bugly.crashreport.CrashReport;
 import java.io.File;
 import java.util.Arrays;
 
-import cn.bmob.v3.Bmob;
 public class ModHelperApplication extends Application
 {
 	public static final int BUILDVER = 10025;
@@ -73,9 +72,7 @@ public class ModHelperApplication extends Application
 		}
 		Logger.addLogAdapter(new AndroidLogAdapter());
 		Logger.i("Logger inited");
-		Bmob.initialize ( ModHelperApplication.this, StaticData.API_KEY );
-		Logger.i ( "Bmob initalized", "Bmob initalized" );
-		
+
 		//Removed old bugly framework
 		/*try
 		{

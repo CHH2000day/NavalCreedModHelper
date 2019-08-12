@@ -1,14 +1,19 @@
 package com.CHH2000day.navalcreed.modhelper;
 
-import android.content.*;
-import android.content.pm.*;
-import android.util.*;
-import cn.bmob.v3.exception.*;
-import cn.bmob.v3.listener.*;
-import java.io.*;
-import android.widget.*;
-import android.os.*;
-import okio.*;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import okio.BufferedSink;
+import okio.Okio;
+import okio.Sink;
 
 public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 {
@@ -60,20 +65,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
 			{
 				FileInputStream fis =new FileInputStream(tgt);
 				String testerid=ctx.getSharedPreferences(PREF_NAME, 0).getString(StaticData.KEY_TESTER_ID, "");
-				new Bugly().postBug(testerid + "\n" + new String(Utils.readAllbytes(fis)), time, app_ver, app_ver_int).save(new SaveListener<String>(){
-
-						@Override
-						public void done(String p1, BmobException p2)
-						{
-							if (p2 == null)
-							{
-								ctx.getSharedPreferences(PREF_NAME, 0).edit().putLong(ERRTIME, -1).apply();
-							}
-							else
-							{p2.printStackTrace();}
-							// TODO: Implement this method
-						}
-					});}
+			}
 			catch (Exception e)
 			{
 				e.printStackTrace();
