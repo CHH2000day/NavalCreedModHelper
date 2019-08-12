@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 public class ModHelperApplication extends Application
 {
-	public static final int BUILDVER = 10025;
+    public static final int BUILDVER = 10026;
 
 	//never used
 	//private android.os.Handler merrmsghdl;
