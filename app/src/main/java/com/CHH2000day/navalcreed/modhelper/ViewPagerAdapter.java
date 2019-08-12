@@ -1,6 +1,10 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.support.v4.app.*;
-import java.util.*;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+
+import java.util.List;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 	private final List<Fragment> fragments;
@@ -10,7 +14,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 		 * @param manager
 		 * @param fragments
 		 */
-		public ViewPagerAdapter(FragmentManager manager, List<Fragment> fragments,List<String> titles){
+        public ViewPagerAdapter(FragmentManager manager, List<Fragment> fragments, List<String> titles) {
 				super(manager);
 				this.fragments=fragments;
 				this.titles=titles;

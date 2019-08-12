@@ -1,13 +1,19 @@
 package com.CHH2000day.navalcreed.modhelper;
-import java.io.*;
-import android.graphics.*;
-import org.json.*;
-import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.*;
-import android.util.*;
-import java.util.*;
-import android.support.annotation.*;
-import java.lang.ref.*;
-import com.orhanobut.logger.*;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import androidx.annotation.NonNull;
+
+import com.orhanobut.logger.Logger;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
 
 public class ModPackageInfo
 {

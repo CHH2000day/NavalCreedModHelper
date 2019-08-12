@@ -4,7 +4,7 @@ import android.widget.*;
 import android.view.View.*;
 import android.net.*;
 import android.content.*;
-import android.support.v7.app.*;
+import androidx.appcompat.app.*;
 import android.support.design.widget.*;
 import android.os.*;
 import android.widget.AdapterView.*;

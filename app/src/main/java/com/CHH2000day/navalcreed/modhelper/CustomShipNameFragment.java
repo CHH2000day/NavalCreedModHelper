@@ -2,14 +2,15 @@ package com.CHH2000day.navalcreed.modhelper;
 
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;

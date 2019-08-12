@@ -1,12 +1,16 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.support.v7.app.*;
-import android.os.*;
-import android.view.*;
-import android.support.v7.widget.*;
-import android.content.*;
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
-import android.support.v4.app.*;
-import android.support.design.widget.*;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class ModPackageInstallerActvity extends AppCompatActivity
 {

@@ -7,15 +7,16 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException;
 import com.orhanobut.logger.Logger;

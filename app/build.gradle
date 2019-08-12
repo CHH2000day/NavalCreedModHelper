@@ -63,11 +63,11 @@ android {
 
 dependencies {
 	//noinspection GradleCompatible
-	implementation 'com.android.support:design:28.0.0'
+	implementation 'com.google.android.material:material:1.0.0'
 	implementation 'cn.bmob.android:bmob-sdk:3.7.4'
-	implementation 'com.android.support:appcompat-v7:28.0.0'
-	implementation 'com.android.support:recyclerview-v7:28.0.0'
-	implementation 'com.android.support:cardview-v7:28.0.0'
+	implementation 'androidx.appcompat:appcompat:1.0.0'
+	implementation 'androidx.recyclerview:recyclerview:1.0.0'
+	implementation 'androidx.cardview:cardview:1.0.0'
 	implementation 'com.squareup.okio:okio:2.2.2'
 	implementation 'com.squareup.okhttp3:okhttp:4.0.0'
 	implementation 'com.squareup.okhttp3:okhttp-tls:4.0.0'

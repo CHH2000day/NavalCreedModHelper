@@ -1,16 +1,33 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.view.*;
-import android.widget.*;
-import android.view.View.*;
-import android.net.*;
-import android.content.*;
-import android.support.v7.app.*;
-import android.support.design.widget.*;
-import android.os.*;
-import android.widget.AdapterView.*;
-import java.io.*;
-import java.util.*;
-import android.content.res.*;
+
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 public class BGMReplacerFragmentSDK19B extends BGMReplacerFragment
 {

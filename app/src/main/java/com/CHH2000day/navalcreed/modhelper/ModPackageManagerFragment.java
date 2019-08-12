@@ -1,13 +1,22 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.support.v4.app.*;
-import android.view.*;
-import android.support.v7.widget.*;
-import android.widget.*;
-import android.os.*;
-import android.widget.CompoundButton.*;
-import android.support.v7.app.*;
-import android.content.*;
-import android.support.design.widget.*;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class ModPackageManagerFragment extends Fragment implements ModPackageManager.OnDataChangedListener
 {
@@ -88,7 +97,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 
 		if ( !ModPackageManager.getInstance ( ).isOverride ( ) )
 		{
-			recyclerview.setLayoutManager ( new LinearLayoutManager ( getActivity ( ), LinearLayoutManager.VERTICAL, false ) );
+            recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 			recyclerview.setAdapter ( adapter );
 			ModPackageManager.getInstance ( ).setonDataChangedListener ( this );
 		}

@@ -1,9 +1,10 @@
 package com.CHH2000day.navalcreed.modhelper;
 
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import androidx.fragment.app.Fragment;
 
 import com.orhanobut.logger.Logger;
 import com.qy.sdk.Interfaces.RDInterface;
