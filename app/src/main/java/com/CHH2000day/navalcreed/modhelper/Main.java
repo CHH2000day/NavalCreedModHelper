@@ -778,6 +778,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                                                     @Override
                                                     public void run() {
                                                         super.run();
+                                                        //Open connection
                                                         OkHttpClient client = OKHttpHelper.getClient();
                                                         Request.Builder builder1 = new Request.Builder();
                                                         builder1.url(versionInfo.getUrl());
@@ -795,9 +796,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                                                             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                                                                 boolean isOK = false;
                                                                 try {
+                                                                    //Ensure target file is accessible
                                                                     File f = new File(getExternalCacheDir(), "update.apk");
                                                                     Utils.ensureFileParent(f);
                                                                     Sink sink = Okio.sink(f);
+                                                                    //Write to file
                                                                     BufferedSink bufferedSink = Okio.buffer(sink);
                                                                     bufferedSink.writeAll(response.body().source());
                                                                     bufferedSink.flush();
@@ -807,6 +810,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                                                                     isOK = true;
                                                                 } catch (Exception e) {
                                                                     e.printStackTrace();
+                                                                    Logger.e(e, "Error while downloading");
                                                                 } finally {
                                                                     ad.dismiss();
                                                                     if (isOK) installApk();
