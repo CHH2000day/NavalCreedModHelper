@@ -24,35 +24,34 @@ public class ModHelperApplication extends Application {
 
     public static final String CN = "CN";//num0
     private File resfilesdir;
+    public static final String[] pkgnames;
+    private static final String STOREDFILE_NAME = "mod.install";
+    //never used
+    //private android.os.Handler merrmsghdl;
+    private File resDir;
     //public static final String GAME_PKGNAME="com.loong.warship.zl";
     protected static final String KEY_PKGNAME = "pkgName";
-    private static final String STOREDFILE_NAME = "mod.install";
     private static final String GAME_PKGNAME_CN_SERVER = "com.loong.warship.zl";
     private static final String GAME_PKGNAME_EU_SERVER = "com.zloong.eu.nc";
     private static final String GAME_PKGNAME_TW_SERVER = "hk.com.szn.zj";
     private static final String EU = "EU";//num1
-    private static final String TW = "TW";//num2
-    private static MainSharedPreferencesChangeListener preflistener;
-
-    static {
-        pkgnames = new String[3];
-        pkgnames[0] = CN;
-        pkgnames[1] = EU;
-        pkgnames[2] = TW;
-    }
-
-    //never used
-    //private android.os.Handler merrmsghdl;
-    private File resDir;
     private String resfilePath = "";
+    private static final String TW = "TW";//num2
     private SharedPreferences mainpref;
-    public static final String[] pkgnames;
+    private static MainSharedPreferencesChangeListener preflistener;
     private String pkgnameinuse = GAME_PKGNAME_CN_SERVER;//CN EU TW
     private boolean isMainPage = true;
     private String versionName = "unknown";
 
     public String getVersionName() {
         return versionName;
+    }
+
+    static {
+        pkgnames = new String[3];
+        pkgnames[0] = CN;
+        pkgnames[1] = EU;
+        pkgnames[2] = TW;
     }
 
     public void setIsMainPage(boolean isMainPage) {
