@@ -41,7 +41,7 @@ public class AboutFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         app = (ModHelperApplication) getActivity().getApplication();
-        app.getPkgNameNum(app.getMainSharedPrederences().getString(app.KEY_PKGNAME, app.CN));
+        app.getPkgNameNum(app.getMainSharedPreferences().getString(app.KEY_PKGNAME, app.CN));
         v = inflater.inflate(R.layout.about_fragment, null);
         deviceId = ((Main) getActivity()).getDevId();
         Button license = v.findViewById(R.id.aboutfragmentLicense);
@@ -151,7 +151,7 @@ public class AboutFragment extends Fragment {
             @Override
             public boolean onLongClick(View p1) {
                 // TODO: Implement this method
-                SharedPreferences sp = app.getMainSharedPrederences();
+                SharedPreferences sp = app.getMainSharedPreferences();
                 if (KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY, ""))) {
                     //If local key is avail
                     boolean status = ((Main) getActivity()).isUseAlphaChannel();
@@ -169,7 +169,7 @@ public class AboutFragment extends Fragment {
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setTitle(R.string.select_target_package);
-            adb.setSingleChoiceItems(app.pkgnames, app.getPkgNameNum(app.getMainSharedPrederences().getString(app.KEY_PKGNAME, app.CN)), new DialogInterface.OnClickListener() {
+            adb.setSingleChoiceItems(app.pkgnames, app.getPkgNameNum(app.getMainSharedPreferences().getString(app.KEY_PKGNAME, app.CN)), new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface p1, int p2) {
@@ -178,7 +178,7 @@ public class AboutFragment extends Fragment {
                 }
             });
             adb.setPositiveButton(R.string.ok, (dialogInterface, p2) -> {
-                app.getMainSharedPrederences().edit().putString(app.KEY_PKGNAME, app.getPkgNameByNum(selectedItem)).apply();
+                app.getMainSharedPreferences().edit().putString(app.KEY_PKGNAME, app.getPkgNameByNum(selectedItem)).apply();
                 // TODO: Implement this method
             });
             adb.setNegativeButton(R.string.cancel, null);
@@ -199,7 +199,7 @@ public class AboutFragment extends Fragment {
     public void onResume() {
         // TODO: Implement this method
         super.onResume();
-        selectedItem = app.getPkgNameNum(app.getMainSharedPrederences().getString(app.KEY_PKGNAME, app.CN));
+        selectedItem = app.getPkgNameNum(app.getMainSharedPreferences().getString(app.KEY_PKGNAME, app.CN));
     }
 
 }

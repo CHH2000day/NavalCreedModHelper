@@ -205,11 +205,11 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     @SuppressLint("HandlerLeak")
     private void checkVality() {
         //Perform check
-        String key = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_AUTHKEY, "");
+        String key = ((ModHelperApplication) getApplication()).getMainSharedPreferences().getString(KEY_AUTHKEY, "");
         if (BuildConfig.DEBUG || (!TextUtils.isEmpty(key) && KeyUtil.checkKeyFormat(key))) {
             //If a test key is found,disable ad
             showAd = false;
-            useAlphaChannel = getModHelperApplication().getMainSharedPrederences().getBoolean(KEY_USEALPHACHANNEL, BuildConfig.DEBUG);
+            useAlphaChannel = getModHelperApplication().getMainSharedPreferences().getBoolean(KEY_USEALPHACHANNEL, BuildConfig.DEBUG);
         } else {
             showSplashAd();
         }
@@ -257,7 +257,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 public void onFail(int reason, String errorrmsh) {
                     if (reason == 0) {
                         //如果设备不匹配，清除本地许可数据
-                        ((ModHelperApplication) getApplication()).getMainSharedPrederences().edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY, "").apply();
+                        ((ModHelperApplication) getApplication()).getMainSharedPreferences().edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY, "").apply();
                     }
                     mveronboothandler.sendEmptyMessage(reason);
                     // TODO: Implement this method
@@ -341,7 +341,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
                     if (bean.getResultCode() >= 0) {
                         if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
-                        getModHelperApplication().getMainSharedPrederences().edit().putString(KEY_AUTHKEY, key).apply();
+                        getModHelperApplication().getMainSharedPreferences().edit().putString(KEY_AUTHKEY, key).apply();
                         listener.onSuccess();
 
                     } else {
@@ -385,7 +385,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 //
 //			 if ( p1 == null )
 //			 {
-//			 ( (ModHelperApplication)getApplication ( ) ).getMainSharedPrederences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
+//			 ( (ModHelperApplication)getApplication ( ) ).getMainSharedPreferences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
 //			 listener.onSuccess ( );
 //			 }
 //			 else
@@ -418,7 +418,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         //
 
 //
-//        String objid = ((ModHelperApplication) getApplication()).getMainSharedPrederences().getString(KEY_OBJID, "");
+//        String objid = ((ModHelperApplication) getApplication()).getMainSharedPreferences().getString(KEY_OBJID, "");
 //        if (TextUtils.isEmpty(objid)) {
 //            listener.onFail(2, "Unregistered！");
 //            return;
@@ -449,7 +449,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 //
 //            }
 //        });
-        String key = getModHelperApplication().getMainSharedPrederences().getString(KEY_AUTHKEY, "");
+        String key = getModHelperApplication().getMainSharedPreferences().getString(KEY_AUTHKEY, "");
         if (!KeyUtil.checkKeyFormat(key)) {
             listener.onFail(2, "Invalid local key!");
             return;
@@ -657,7 +657,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     public void setUseAlphaChannel(boolean useAlphaChannel) {
         this.useAlphaChannel = useAlphaChannel;
-        getModHelperApplication().getMainSharedPrederences().edit().putBoolean(KEY_USEALPHACHANNEL, this.useAlphaChannel).apply();
+        getModHelperApplication().getMainSharedPreferences().edit().putBoolean(KEY_USEALPHACHANNEL, this.useAlphaChannel).apply();
     }
 
     @Override
@@ -1041,7 +1041,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 });
                 // TODO: Implement this method
             });
-            keyinput.getEditableText().append(getModHelperApplication().getMainSharedPrederences().getString(KEY_AUTHKEY, ""));
+            keyinput.getEditableText().append(getModHelperApplication().getMainSharedPreferences().getString(KEY_AUTHKEY, ""));
             btnEnter.setOnLongClickListener(listener -> {
                 ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(getDevId());
