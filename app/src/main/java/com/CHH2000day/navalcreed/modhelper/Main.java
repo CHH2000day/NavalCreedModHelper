@@ -723,7 +723,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
             try {
                 //Get current version
-                final int currver = useAlphaChannel ? getModHelperApplication().BUILDVER : getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
+                final int currver = useAlphaChannel ? BuildConfig.BuildVersion : getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
                 //Generate request
                 RequestBody body = new FormBody.Builder()
                         .add(ServerActions.ACTION, ServerActions.ACTION_CHECKUPDATE)

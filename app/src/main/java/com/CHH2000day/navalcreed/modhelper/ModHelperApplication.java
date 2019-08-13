@@ -20,8 +20,6 @@ import java.io.File;
 import java.util.Arrays;
 
 public class ModHelperApplication extends Application {
-    public static final int BUILDVER = 10026;
-
     public static final String CN = "CN";//num0
     private File resfilesdir;
     public static final String[] pkgnames;

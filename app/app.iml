@@ -216,6 +216,5 @@
     <orderEntry type="library" name="Gradle: androidx.recyclerview:recyclerview:1.1.0-beta02@aar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:D.\Android\AndroidProjects\NavalCreedModHelper\app\libs\OkDownload-okhttp.jar:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.http.legacy-android-28" level="project" />
-    <orderEntry type="library" name="Gradle: com.writingminds:FFmpegAndroid:0.3.2@aar" level="project" />
   </component>
 </module>
