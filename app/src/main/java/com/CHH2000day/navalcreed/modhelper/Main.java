@@ -1070,7 +1070,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 Logger.e(e, "Failed to delay ad load,canceling");
                 return;
             }
-            if (!showAd) return;
+            //if (!showAd) return;
 
             BannerView ad = new BannerView();
             ad.setInterface(Main.this, new RDInterface() {
