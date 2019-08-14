@@ -28,7 +28,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 96
-        versionName "build-2019081300-alpha"
+        versionName "3.4.0-release"
         flavorDimensions "versionCode"
 		buildConfigField "int","BuildVersion","10028"
     }
