@@ -30,7 +30,7 @@ android {
         versionCode 96
         versionName "build-2019081300-alpha"
         flavorDimensions "versionCode"
-		buildConfigField "int","BuildVersion","10027"
+		buildConfigField "int","BuildVersion","10028"
     }
     	productFlavors {
 		common {
