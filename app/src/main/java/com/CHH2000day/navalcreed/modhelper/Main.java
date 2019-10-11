@@ -338,14 +338,19 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
-                    if (bean.getResultCode() >= 0) {
-                        if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
-                        getModHelperApplication().getMainSharedPreferences().edit().putString(KEY_AUTHKEY, key).apply();
-                        listener.onSuccess();
+                    try {
+                        DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
+                        if (bean.getResultCode() >= 0) {
+                            if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
+                            getModHelperApplication().getMainSharedPreferences().edit().putString(KEY_AUTHKEY, key).apply();
+                            listener.onSuccess();
+                        } else {
+                            listener.onFail(bean.getResultCode(), bean.getMessage());
+                        }
+                    } catch (IllegalStateException ignored) {
 
-                    } else {
-                        listener.onFail(bean.getResultCode(), bean.getMessage());
+                    } finally {
+                        response.close();
                     }
                 }
             });
@@ -472,15 +477,21 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
-                if (bean.getResultCode() >= 0) {
-                    listener.onSuccess();
-                    if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
-                } else {
-                    listener.onFail(bean.getResultCode(), bean.getMessage());
-                    Logger.w(bean.getMessage());
+                try {
+                    DataBean bean = new Gson().fromJson(response.body().charStream(), DataBean.class);
+                    if (bean.getResultCode() >= 0) {
+                        listener.onSuccess();
+                        if (bean.getResultCode() > 0) Logger.d(bean.getMessage());
+                    } else {
+                        listener.onFail(bean.getResultCode(), bean.getMessage());
+                        Logger.w(bean.getMessage());
+                    }
+
+                } catch (IllegalStateException ignored) {
+                    listener.onFail(-20, "Invalid response");
+                } finally {
+                    response.close();
                 }
-                response.close();
             }
         });
     }
@@ -743,92 +754,98 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                        VersionBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), VersionBean.class);
-                        if (bean.resultCode >= 0) {
-                            //If result code is greater than 0,it means there exists memo
-                            if (bean.resultCode > 0) {
-                                //TODO:Handle the memo.
-                            }
-                            //Handle normal situation
-                            //Type is either ffmpeg or common
-                            final VersionBean.VersionInfo versionInfo = BuildConfig.FLAVOR.equals(TYPE_COMMON) ? bean.getCommonInfo() : bean.getFfmpegInfo();
-                            //If any update is available
-                            if (versionInfo.getBuildCode() > currver) {
-                                AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
-                                adb.setTitle(R.string.update)
-                                        .setMessage(versionInfo.getChangelog())
-                                        .setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                //Downloading
+                        try {
+                            VersionBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), VersionBean.class);
 
-                                                AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
-                                                adb.setCancelable(false)
-                                                        .setTitle(R.string.please_wait)
-                                                        .setMessage(R.string.downloading);
-                                                final AlertDialog ad = adb.create();
-                                                ad.show();
-                                                new Thread() {
-                                                    @Override
-                                                    public void run() {
-                                                        super.run();
-                                                        //Open connection
-                                                        OkHttpClient client = OKHttpHelper.getClient();
-                                                        Request.Builder builder1 = new Request.Builder();
-                                                        builder1.url(versionInfo.getUrl());
-                                                        client.newCall(builder1.build()).enqueue(new Callback() {
-                                                            @Override
-                                                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                            if (bean.resultCode >= 0) {
+                                //If result code is greater than 0,it means there exists memo
+                                if (bean.resultCode > 0) {
+                                    //TODO:Handle the memo.
+                                }
+                                //Handle normal situation
+                                //Type is either ffmpeg or common
+                                final VersionBean.VersionInfo versionInfo = BuildConfig.FLAVOR.equals(TYPE_COMMON) ? bean.getCommonInfo() : bean.getFfmpegInfo();
+                                //If any update is available
+                                if (versionInfo.getBuildCode() > currver) {
+                                    AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
+                                    adb.setTitle(R.string.update)
+                                            .setMessage(versionInfo.getChangelog())
+                                            .setPositiveButton(R.string.update, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    //Downloading
 
-                                                                ad.dismiss();
-                                                                Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show();
-                                                                Logger.e(e, "FAiled to download update");
+                                                    AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
+                                                    adb.setCancelable(false)
+                                                            .setTitle(R.string.please_wait)
+                                                            .setMessage(R.string.downloading);
+                                                    final AlertDialog ad = adb.create();
+                                                    ad.show();
+                                                    new Thread() {
+                                                        @Override
+                                                        public void run() {
+                                                            super.run();
+                                                            //Open connection
+                                                            OkHttpClient client = OKHttpHelper.getClient();
+                                                            Request.Builder builder1 = new Request.Builder();
+                                                            builder1.url(versionInfo.getUrl());
+                                                            client.newCall(builder1.build()).enqueue(new Callback() {
+                                                                @Override
+                                                                public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
-                                                            }
-
-                                                            @Override
-                                                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                                                                boolean isOK = false;
-                                                                try {
-                                                                    //Ensure target file is accessible
-                                                                    File f = new File(getExternalCacheDir(), "update.apk");
-                                                                    Utils.ensureFileParent(f);
-                                                                    Sink sink = Okio.sink(f);
-                                                                    //Write to file
-                                                                    BufferedSink bufferedSink = Okio.buffer(sink);
-                                                                    bufferedSink.writeAll(response.body().source());
-                                                                    bufferedSink.flush();
-                                                                    bufferedSink.close();
-                                                                    sink.close();
-                                                                    updateApk = f;
-                                                                    isOK = true;
-                                                                } catch (Exception e) {
-                                                                    e.printStackTrace();
-                                                                    Logger.e(e, "Error while downloading");
-                                                                } finally {
                                                                     ad.dismiss();
-                                                                    if (isOK) installApk();
+                                                                    Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show();
+                                                                    Logger.e(e, "FAiled to download update");
+
                                                                 }
 
+                                                                @Override
+                                                                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                                                    boolean isOK = false;
+                                                                    try {
+                                                                        //Ensure target file is accessible
+                                                                        File f = new File(getExternalCacheDir(), "update.apk");
+                                                                        Utils.ensureFileParent(f);
+                                                                        Sink sink = Okio.sink(f);
+                                                                        //Write to file
+                                                                        BufferedSink bufferedSink = Okio.buffer(sink);
+                                                                        bufferedSink.writeAll(response.body().source());
+                                                                        bufferedSink.flush();
+                                                                        bufferedSink.close();
+                                                                        sink.close();
+                                                                        updateApk = f;
+                                                                        isOK = true;
+                                                                    } catch (Exception e) {
+                                                                        e.printStackTrace();
+                                                                        Logger.e(e, "Error while downloading");
+                                                                    } finally {
+                                                                        ad.dismiss();
+                                                                        if (isOK) installApk();
+                                                                    }
 
-                                                            }
-                                                        });
-                                                    }
-                                                }.start();
 
-                                            }
-                                        })
-                                        .setCancelable(false);
-                                //If update is not forced
-                                if (currver >= versionInfo.getMinVer()) {
-                                    adb.setNegativeButton(R.string.cancel, null);
-                                    adb.setCancelable(true);
-                                    mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
+                                                                }
+                                                            });
+                                                        }
+                                                    }.start();
+
+                                                }
+                                            })
+                                            .setCancelable(false);
+                                    //If update is not forced
+                                    if (currver >= versionInfo.getMinVer()) {
+                                        adb.setNegativeButton(R.string.cancel, null);
+                                        adb.setCancelable(true);
+                                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
+                                    }
+                                    //Post dialog builder
                                 }
-                                //Post dialog builder
+                            } else {
+                                //Server returns an error
                             }
-                        } else {
-                            //Server returns an error
+                        } catch (IllegalStateException ignored) {
+                        } finally {
+                            response.close();
                         }
                     }
                 });
@@ -927,34 +944,39 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    AnnouncementBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), AnnouncementBean.class);
-                    if (bean.getResultCode() >= 0) {
-                        final int id = bean.getId();
-                        int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
-                        AlertDialog.Builder adb0 = new AlertDialog.Builder(Main.this);
+                    try {
+                        AnnouncementBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), AnnouncementBean.class);
+                        if (bean.getResultCode() >= 0) {
+                            final int id = bean.getId();
+                            int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
+                            AlertDialog.Builder adb0 = new AlertDialog.Builder(Main.this);
 
-                        if (id > currid) {
-                            adb0.setTitle(bean.getTitle())
-                                    .setMessage(bean.getAnnouncement())
-                                    .setPositiveButton(R.string.ok, null)
-                                    .setNeutralButton(R.string.dont_show, (p1, p212) -> {
-                                        getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+                            if (id > currid) {
+                                adb0.setTitle(bean.getTitle())
+                                        .setMessage(bean.getAnnouncement())
+                                        .setPositiveButton(R.string.ok, null)
+                                        .setNeutralButton(R.string.dont_show, (p1, p212) -> {
+                                            getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
 
-                                        // TODO: Implement this method
-                                    })
-                                    .setNegativeButton(R.string.copy, (p1, p21) -> {
-                                        ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                        getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
-                                        if (!TextUtils.isEmpty(bean.getToCopy())) {
-                                            cmb.setText(bean.getToCopy().trim());
-                                        }
-                                        // TODO: Implement this method
-                                    });
+                                            // TODO: Implement this method
+                                        })
+                                        .setNegativeButton(R.string.copy, (p1, p21) -> {
+                                            ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                            getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
+                                            if (!TextUtils.isEmpty(bean.getToCopy())) {
+                                                cmb.setText(bean.getToCopy().trim());
+                                            }
+                                            // TODO: Implement this method
+                                        });
 
-                            mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
+                                mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
+                            }
+                        } else {
+                            Snackbar.make(mContentView, bean.getMessage(), Snackbar.LENGTH_LONG).show();
                         }
-                    } else {
-                        Snackbar.make(mContentView, bean.getMessage(), Snackbar.LENGTH_LONG).show();
+                    } catch (IllegalStateException ignored) {
+                    } finally {
+                        response.close();
                     }
                 }
             });
