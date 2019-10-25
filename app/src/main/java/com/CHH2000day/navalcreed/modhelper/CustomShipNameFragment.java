@@ -29,7 +29,7 @@ public class CustomShipNameFragment extends ModFragment
 		return false;
 	}
 
-    private static final String res_url = "https://static.CHH2000day.com/nc/customshipname_v21.patch";
+    private static final String res_url = "https://static.CHH2000day.com/nc/customshipname_v22.patch";
 	private View v;
     private String path;
     private File file;
