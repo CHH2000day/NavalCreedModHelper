@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
 //flavorDimensions("common","ffmpeg")
     compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    buildToolsVersion "29.0.2"
 	useLibrary 'org.apache.http.legacy'
 	lintOptions{ abortOnError false }
 	applicationVariants.all { variant ->
@@ -63,10 +63,10 @@ android {
 
 dependencies {
 	//noinspection GradleCompatible
-	implementation 'com.google.android.material:material:1.1.0-alpha09'
+	implementation 'com.google.android.material:material:1.2.0-alpha01'
 	//implementation 'cn.bmob.android:bmob-sdk:3.7.4'
-	implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-	implementation 'androidx.recyclerview:recyclerview:1.1.0-beta02'
+	implementation 'androidx.appcompat:appcompat:1.1.0'
+	implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
 	implementation 'androidx.cardview:cardview:1.0.0'
 	implementation 'com.squareup.okio:okio:2.4.1'
 	implementation 'com.squareup.okhttp3:okhttp:4.2.2'
