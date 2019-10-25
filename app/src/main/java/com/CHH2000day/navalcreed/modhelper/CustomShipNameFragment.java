@@ -16,6 +16,9 @@ import com.orhanobut.logger.Logger;
 import java.io.File;
 import java.io.IOException;
 
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class CustomShipNameFragment extends ModFragment
 {
 
@@ -26,9 +29,11 @@ public class CustomShipNameFragment extends ModFragment
 		return false;
 	}
 
-	private static final String res_url="https://static.CHH2000day.com/nc/customshipname_v21.lua";
+    private static final String res_url = "https://static.CHH2000day.com/nc/customshipname_v21.patch";
 	private View v;
     private String path;
+    private File file;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
@@ -39,7 +44,16 @@ public class CustomShipNameFragment extends ModFragment
 			.append("datas")
 			.append(File.separatorChar)
 			.append("customnames.lua").toString();
-
+        file = new File(path);
+        if (!file.exists()) {
+            Utils.ensureFileParent(file);
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        CustomShipNameHelper.getInstance().init(file);
 		Button exec = v.findViewById(R.id.antihexiefragmentButtonExec);
 
 		exec.setOnClickListener(new OnClickListener(){
@@ -63,11 +77,20 @@ public class CustomShipNameFragment extends ModFragment
 							Looper.prepare();
 							try
 							{
-								Utils.downloadFile(res_url, f);
-								adb.setMessage(R.string.success)
-									.setTitle(R.string.success).
-									setPositiveButton(R.string.ok,null)
-									.create().show();
+                                Request r = new Request.Builder().url(res_url).build();
+                                Response response = OKHttpHelper.getClient().newCall(r).execute();
+                                if (CustomShipNameHelper.getInstance().patch(response.body().source(), file)) {
+                                    adb.setMessage(R.string.success)
+                                            .setTitle(R.string.success).
+                                            setPositiveButton(R.string.ok, null)
+                                            .create().show();
+                                } else {
+                                    adb.setMessage(R.string.failed)
+                                            .setTitle(R.string.failed)
+                                            .setPositiveButton(R.string.ok, null)
+                                            .create().show();
+                                }
+
 								
 							}
 							catch (IOException e)
