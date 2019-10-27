@@ -27,10 +27,10 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 96
-        versionName "build-2019102500-alpha"
+        versionCode 98
+        versionName "3.4.2-release"
         flavorDimensions "versionCode"
-		buildConfigField "int","BuildVersion","10030"
+		buildConfigField "int","BuildVersion","10031"
     }
     	productFlavors {
 		common {
