@@ -1,6 +1,7 @@
 package com.CHH2000day.navalcreed.modhelper;
 
 import android.os.Build;
+import android.text.TextUtils;
 
 import com.orhanobut.logger.Logger;
 
@@ -105,12 +106,31 @@ public class CustomShipNameHelper {
             }
             if (err_pos == 0) {
                 shipnames = buffer;
+                syncIDList();
             }
         }
 
         return err_pos;
     }
 
+    void syncIDList() {
+        synchronized (idList) {
+            idList = new ArrayList(shipnames.keySet());
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                Collections.sort(idList);
+            } else {
+                idList.sort(new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2) {
+                        // TODO Auto-generated method stub
+                        if ((int) o1 < (int) o2) return -1;
+                        else return 1;
+                    }
+                });
+
+            }
+        }
+    }
     private void doInit(File src) throws IOException {
         if (shipnames == null || idList == null) {
             shipnames = new HashMap<Integer, String>();
@@ -123,6 +143,9 @@ public class CustomShipNameHelper {
         String orig = bs.readUtf8();
         bs.close();
         s.close();
+        if (TextUtils.isEmpty(orig)) {
+            return;
+        }
         String[] raw = orig.split("\n");
         char[] line = null;
         String str = null;
@@ -149,20 +172,9 @@ public class CustomShipNameHelper {
             //reset StringBuilders after each loop
         }
         //end of all loops
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            Collections.sort(ids);
-        } else {
-            ids.sort(new Comparator<Integer>() {
-                @Override
-                public int compare(Integer o1, Integer o2) {
-                    // TODO Auto-generated method stub
-                    if ((int) o1 < (int) o2) return -1;
-                    else return 1;
-                }
-            });
 
-        }
         idList = ids;
+        syncIDList();
         inited = true;
     }
 
@@ -184,6 +196,7 @@ public class CustomShipNameHelper {
 
         }
         bs.writeUtf8(EOC);
+        bs.writeUtf8("\n");
         bs.writeUtf8(EOF);
         bs.close();
         s.close();
