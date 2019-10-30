@@ -203,7 +203,7 @@ public class CrewPicReplacerFragment extends ModFragment
 	private String getFilePath (int country, int num)
 	{
 		return new StringBuilder ( )
-			.append ( ((ModHelperApplication)getActivity ( ).getApplication ( )).getResFilesDirPath ( ) )
+				.append(getMainActivity().getModHelperApplication().getResFilesDirPath())
 			.append ( File.separatorChar )
 			.append ( "pic" )
 			.append ( File.separatorChar )

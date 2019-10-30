@@ -17,6 +17,7 @@ import com.qy.sdk.Utils.ErrorCode;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class ModHelperApplication extends Application {
@@ -40,6 +41,16 @@ public class ModHelperApplication extends Application {
     private String pkgnameinuse = GAME_PKGNAME_CN_SERVER;//CN EU TW
     private boolean isMainPage = true;
     private String versionName = "unknown";
+    private String customShipnamePath = null;
+    private File customShipNameFile = null;
+
+    public File getCustomShipNameFile() {
+        return customShipNameFile;
+    }
+
+    public String getCustomShipnamePath() {
+        return customShipnamePath;
+    }
 
     public String getVersionName() {
         return versionName;
@@ -107,6 +118,22 @@ public class ModHelperApplication extends Application {
         cleanPathCache();
         updateTargetPackageName(getMainSharedPreferences().getString(KEY_PKGNAME, CN));
         Logger.i("Target package:%s", pkgnameinuse);
+        customShipnamePath = new StringBuilder()
+                .append(getResFilesDirPath())
+                .append(File.separatorChar)
+                .append("datas")
+                .append(File.separatorChar)
+                .append("customnames.lua").toString();
+        customShipNameFile = new File(customShipnamePath);
+        if (!customShipNameFile.exists()) {
+            Utils.ensureFileParent(customShipNameFile);
+            try {
+                customShipNameFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        CustomShipNameHelper.getInstance().init(customShipNameFile);
 		/*try
 		{
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );

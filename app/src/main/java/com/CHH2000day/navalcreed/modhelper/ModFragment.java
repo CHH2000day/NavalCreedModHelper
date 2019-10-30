@@ -21,7 +21,8 @@ public abstract class ModFragment extends Fragment
 	public abstract boolean uninstallMod();
 
     private boolean isAdLoaded = false;
-    private Main getMainActivity() {
+
+    protected Main getMainActivity() {
         return (Main) getActivity();
     }
 

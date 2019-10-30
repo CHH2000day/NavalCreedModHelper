@@ -31,29 +31,13 @@ public class CustomShipNameFragment extends ModFragment
 
     private static final String res_url = "https://static.CHH2000day.com/nc/customshipname_v22.patch";
 	private View v;
-    private String path;
-    private File file;
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		v = inflater.inflate(R.layout.antihexie_fragment, null);
-		path = new StringBuilder()
-			.append(((ModHelperApplication)getActivity().getApplication()).getResFilesDirPath())
-			.append(File.separatorChar)
-			.append("datas")
-			.append(File.separatorChar)
-			.append("customnames.lua").toString();
-        file = new File(path);
-        if (!file.exists()) {
-            Utils.ensureFileParent(file);
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        CustomShipNameHelper.getInstance().init(file);
+		;
 		Button exec = v.findViewById(R.id.antihexiefragmentButtonExec);
 
 		exec.setOnClickListener(new OnClickListener(){
@@ -68,10 +52,7 @@ public class CustomShipNameFragment extends ModFragment
 					final AlertDialog ad=adb.create();
 					ad.setCanceledOnTouchOutside(false);
 					ad.show();
-					final File f = new File(path);
-					if (f.exists() && f.isFile()) {
-						f.delete();
-					}
+
 					new Thread(){
 						public void run(){
 							Looper.prepare();
@@ -79,7 +60,7 @@ public class CustomShipNameFragment extends ModFragment
 							{
                                 Request r = new Request.Builder().url(res_url).build();
                                 Response response = OKHttpHelper.getClient().newCall(r).execute();
-                                if (CustomShipNameHelper.getInstance().patch(response.body().source(), file)) {
+								if (CustomShipNameHelper.getInstance().patch(response.body().source(), getMainActivity().getModHelperApplication().getCustomShipNameFile())) {
                                     adb.setMessage(R.string.success)
                                             .setTitle(R.string.success).
                                             setPositiveButton(R.string.ok, null)
@@ -140,7 +121,7 @@ public class CustomShipNameFragment extends ModFragment
 			// TODO: Implement this method
 		});
 		exec.setOnLongClickListener(p1 -> {
-			final File f = new File(path);
+			final File f = getMainActivity().getModHelperApplication().getCustomShipNameFile();
 			AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
 			adb.setTitle(R.string.notice)
 					.setMessage(R.string.confirm_to_remove_all_changes)

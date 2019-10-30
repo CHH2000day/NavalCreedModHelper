@@ -41,7 +41,7 @@ public class BGReplacerFragment extends ModFragment
 	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
 		abs_path = new StringBuilder ( )
-			.append ( ((ModHelperApplication)getActivity ( ).getApplication ( )).getResFilesDirPath ( ) )
+                .append(getMainActivity().getModHelperApplication().getResFilesDirPath())
 			.append ( File.separatorChar )
 			.append ( "pic" )
 			.toString ( );
