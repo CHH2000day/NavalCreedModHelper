@@ -28,7 +28,6 @@ import java.io.InputStream;
 public class LoginMovieReplacer extends ModFragment
 {
 
-	private ModHelperApplication mapplication;
 	private View v;
 	private TextView file;
 
@@ -40,7 +39,6 @@ public class LoginMovieReplacer extends ModFragment
 	public View onCreateView ( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState )
 	{
 
-		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		v = inflater.inflate ( R.layout.loginmoviereplacer_fragment, null );
 		file = v.findViewById(R.id.loginmoviereplacerfragmentTextView);
 		Button select = v.findViewById(R.id.loginmoviereplacerfragmentButtonSelect);
@@ -119,7 +117,7 @@ public class LoginMovieReplacer extends ModFragment
 
 	private File gettargetfile(){
 		if(target==null){
-			target=new File(mapplication.getResFilesDir(),"loginmovie.ogv");
+			target = new File(getMainActivity().getModHelperApplication().getResFilesDir(), "loginmovie.ogv");
 		}
 		return target;
 	}

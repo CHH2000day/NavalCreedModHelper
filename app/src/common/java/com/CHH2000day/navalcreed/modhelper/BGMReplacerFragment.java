@@ -65,7 +65,6 @@ public class BGMReplacerFragment extends ModFragment
 
 	private static final int QUERY_CODE=2;
 
-	private ModHelperApplication mapplication;
 	private View v;
 	private Spinner mSceneSpinner,mFileNameSpinner;
 	private int curr_scene,curr_type,curr_music;
@@ -90,7 +89,6 @@ public class BGMReplacerFragment extends ModFragment
 		remove = (Button)v.findViewById(R.id.bgmreplacerRemove);
 		update = (Button)v.findViewById(R.id.bgmreplacerUpdate);
 
-		mapplication = (ModHelperApplication)getActivity().getApplication();
 		return v;
 	}
 
@@ -363,7 +361,7 @@ public class BGMReplacerFragment extends ModFragment
 	{
         return new File(
 			new StringBuilder()
-			.append(mapplication.getResFilesDirPath())
+			.append(getMainActivity().getModHelperApplication().getResFilesDirPath())
 			.append(File.separatorChar)
 			.append("sound")
 			.append(File.separatorChar)

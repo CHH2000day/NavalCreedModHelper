@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NavalCreedModHelper.iml" filepath="$PROJECT_DIR$/NavalCreedModHelper.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NavalCreedModHelper.iml" filepath="$PROJECT_DIR$/NavalCreedModHelper.iml" group="NavalCreedModHelper" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="NavalCreedModHelper/app" />
     </modules>
   </component>
 </project>

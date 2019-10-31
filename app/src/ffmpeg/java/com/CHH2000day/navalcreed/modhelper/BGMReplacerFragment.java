@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +22,10 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +66,6 @@ public class BGMReplacerFragment extends ModFragment
 
 	private static final int QUERY_CODE=2;
 
-	private ModHelperApplication mapplication;
 	private FileNameAdapter mfilenameadapter;
 	private View v;
 	private Spinner mSceneSpinner,mFileNameSpinner;
@@ -90,7 +91,6 @@ public class BGMReplacerFragment extends ModFragment
 		remove = (Button)v.findViewById ( R.id.bgmreplacerRemove );
 		update = (Button)v.findViewById ( R.id.bgmreplacerUpdate );
 
-		mapplication = (ModHelperApplication)getActivity ( ).getApplication ( );
 		return v;
 	}
 
@@ -357,7 +357,7 @@ public class BGMReplacerFragment extends ModFragment
 	{
 		File f=new File (
 			new StringBuilder ( )
-			.append ( mapplication.getResFilesDirPath ( ) )
+					.append(getMainActivity().getModHelperApplication().getResFilesDirPath())
 			.append ( File.separatorChar )
 			.append ( "sound" )
 			.append ( File.separatorChar )

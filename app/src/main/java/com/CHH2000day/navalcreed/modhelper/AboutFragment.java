@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.qy.sdk.Interfaces.RDInterface;
@@ -31,17 +30,15 @@ import okio.BufferedSource;
 import okio.Okio;
 import okio.Source;
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends ModFragment {
 
     private View v;
     private int selectedItem = 0;
-    private ModHelperApplication app;
     private String deviceId;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        app = (ModHelperApplication) getActivity().getApplication();
-        app.getPkgNameNum(app.getMainSharedPreferences().getString(app.KEY_PKGNAME, app.CN));
+        getMainActivity().getModHelperApplication().getPkgNameNum(getMainActivity().getModHelperApplication().getMainSharedPreferences().getString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().CN));
         v = inflater.inflate(R.layout.about_fragment, null);
         deviceId = ((Main) getActivity()).getDevId();
         Button license = v.findViewById(R.id.aboutfragmentLicense);
@@ -125,7 +122,7 @@ public class AboutFragment extends Fragment {
                 // TODO: Implement this method
             });
         }
-        mtextview.setText(new StringBuilder().append(app.getVersionName())
+        mtextview.setText(new StringBuilder().append(getMainActivity().getModHelperApplication().getVersionName())
                 .append(" ")
                 .append(String.valueOf(BuildConfig.BuildVersion))
                 .append("\n")
@@ -151,7 +148,7 @@ public class AboutFragment extends Fragment {
             @Override
             public boolean onLongClick(View p1) {
                 // TODO: Implement this method
-                SharedPreferences sp = app.getMainSharedPreferences();
+                SharedPreferences sp = getMainActivity().getModHelperApplication().getMainSharedPreferences();
                 if (KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY, ""))) {
                     //If local key is avail
                     boolean status = ((Main) getActivity()).isUseAlphaChannel();
@@ -169,7 +166,7 @@ public class AboutFragment extends Fragment {
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setTitle(R.string.select_target_package);
-            adb.setSingleChoiceItems(app.pkgnames, app.getPkgNameNum(app.getMainSharedPreferences().getString(app.KEY_PKGNAME, app.CN)), new DialogInterface.OnClickListener() {
+            adb.setSingleChoiceItems(getMainActivity().getModHelperApplication().pkgnames, getMainActivity().getModHelperApplication().getPkgNameNum(getMainActivity().getModHelperApplication().getMainSharedPreferences().getString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().CN)), new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface p1, int p2) {
@@ -178,7 +175,7 @@ public class AboutFragment extends Fragment {
                 }
             });
             adb.setPositiveButton(R.string.ok, (dialogInterface, p2) -> {
-                app.getMainSharedPreferences().edit().putString(app.KEY_PKGNAME, app.getPkgNameByNum(selectedItem)).apply();
+                getMainActivity().getModHelperApplication().getMainSharedPreferences().edit().putString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().getPkgNameByNum(selectedItem)).apply();
                 // TODO: Implement this method
             });
             adb.setNegativeButton(R.string.cancel, null);
@@ -199,7 +196,12 @@ public class AboutFragment extends Fragment {
     public void onResume() {
         // TODO: Implement this method
         super.onResume();
-        selectedItem = app.getPkgNameNum(app.getMainSharedPreferences().getString(app.KEY_PKGNAME, app.CN));
+        selectedItem = getMainActivity().getModHelperApplication().getPkgNameNum(getMainActivity().getModHelperApplication().getMainSharedPreferences().getString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().CN));
     }
 
+    @Override
+    public boolean uninstallMod() {
+        //Nothing to do
+        return false;
+    }
 }
