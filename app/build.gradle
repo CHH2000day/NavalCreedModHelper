@@ -28,9 +28,9 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 98
-        versionName "build-2019103100"
+        versionName "build-2019110500"
         flavorDimensions "versionCode"
-		buildConfigField "int","BuildVersion","10032"
+		buildConfigField "int","BuildVersion","10033"
     }
     	productFlavors {
 		common {
@@ -74,7 +74,7 @@ dependencies {
 	//implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 	//implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
 	implementation 'com.google.code.gson:gson:2.8.6'
-	implementation 'com.tencent.bugly:crashreport:3.0.0'
+	implementation 'com.tencent.bugly:crashreport:3.1.0'
 	implementation 'com.squareup.picasso:picasso:2.71828'
 	ffmpegImplementation "com.writingminds:FFmpegAndroid:0.3.2"
 
