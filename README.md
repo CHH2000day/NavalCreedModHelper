@@ -1,7 +1,6 @@
 # NavalCreedModHelper
-A application to apply mods on NavalCreed
+にゃんぱすー!
+This is a application to apply modifications on NavalCreed
 
-
-NOTICE:
-I have no time to maintain this project this year.But if you have a new idea,you can implment it and send me a pull requeset and I'll merge it when I'm free.
-I'll be back in early June,2019.
+Now working on server.Expected no client update until early 2020(maybe late Dec?LoL)
+Online mod store is being developed,expected everyone will be able to upload their works.
