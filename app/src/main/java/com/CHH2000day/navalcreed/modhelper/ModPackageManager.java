@@ -1,11 +1,23 @@
 package com.CHH2000day.navalcreed.modhelper;
-import java.util.*;
-import java.io.*;
-import okio.*;
-import org.json.*;
-import android.content.*;
-import android.content.res.*;
-import java.util.concurrent.*;
+
+import android.content.Context;
+import android.content.res.Resources;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+import okio.BufferedSink;
+import okio.BufferedSource;
+import okio.Okio;
+import okio.Sink;
+import okio.Source;
 
 public class ModPackageManager
 {
@@ -68,14 +80,16 @@ public class ModPackageManager
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU, res.getString(R.string.modtype_captainvoice_ru));
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD,res.getString(R.string.modtype_captainvoice_ru_vlad));
 		modType.put(ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD,res.getString(R.string.modtype_captainvoice_ru_beard));
+		modType.put(ModPackageInfo.MOSTYPE_CUSTOMSHIPNAME, res.getString(R.string.modtype_customshipname));
 	}
 	public void config(File storedFile) throws  IOException, JSONException
 	{
 		configFile = storedFile;
 		installedMod = new ConcurrentHashMap<String,String>();
-		reflesh();
+		refresh();
 	}
-	private void reflesh() throws JSONException, IOException
+
+	private void refresh() throws JSONException, IOException
 	{
 		try
 		{
@@ -115,7 +129,7 @@ public class ModPackageManager
 			try
 			{
 				updateConfig(true);
-				reflesh();
+				refresh();
 			}
 			catch (FileNotFoundException | JSONException e)
 			{}
@@ -146,7 +160,7 @@ public class ModPackageManager
 	private void commit() throws IOException, JSONException
 	{
 		updateConfig(false);
-		reflesh();
+		refresh();
 	}
 	public boolean requestUninstall(String modtype, String subtype, ModHelperApplication app)
 	{

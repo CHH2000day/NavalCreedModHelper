@@ -29,6 +29,7 @@ public class ModPackageInfo
 	public static final String MODTYPE_BGM="BackgroundMusic";
 	public static final String MODTYPE_BACKGROUND="Background";
 	public static final String MODTYPE_CREWPIC="CrewPic";
+	public static final String MOSTYPE_CUSTOMSHIPNAME = "CustomShipName";
 	public static final String MODTYPE_OTHER="Other";
 	public static final String SUBTYPE_EMPTY="";
 	public static final String SUB_MODTYPE_CV_CN="CV_CN";
@@ -242,7 +243,7 @@ public class ModPackageInfo
 				mpi.setModTargetVer ( jo.getInt ( mpi.KEY_TARGETVER ) );
 				//检查是否有预览图并解码
 				String b64pic=jo.getString ( mpi.KEY_PREVIEW );
-				//Not to laod pic in mod.info if it's smaller than 40 bytes
+				//Not to load pic in mod.info if it's smaller than 40 bytes
 				//If external preview is used keep the value empty(recommended) or less than 60 bytes long
 				//NO preview pic can be shortrer than 40 bytes(60 bytes after encoded into base64)
 				if ( jo.getBoolean ( mpi.KEY_HASPREVIEW ) && b64pic != null && b64pic.length ( ) >= 60 )

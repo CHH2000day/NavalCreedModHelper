@@ -31,6 +31,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import okio.BufferedSink;
+import okio.BufferedSource;
 import okio.Okio;
 import okio.Sink;
 import okio.Source;
@@ -40,6 +41,7 @@ public class ModPackageInstallHelper
 	//常量声明
 	private static final String FILE_MODINFO="mod.info";
 	private static final String FILE_MODPREVIEW="mod.preview";
+	private static final String FILE_CUSTOMSHIPNAME_PATCH = "shipnames.patch";
 	private static final String PRIMARYPATH_CV=File.separatorChar + "sound" + File.separatorChar + "Voice";
 	private static final String PRIMARYPATH_BGM=File.separatorChar + "sound" + File.separatorChar + "Music";
 	private static final String PRIMARYPATH_SOUNDEFFECT=File.separatorChar + "sound" + File.separatorChar + "soundeffect" + File.separatorChar + "ginsir";
@@ -491,17 +493,52 @@ public class ModPackageInstallHelper
             this.fragment = fragment;
 		}
 		@Override
-		protected Boolean doInBackground(Void[] p1)
-		{
-			if (ModPackageInfo.Versions.VER_0 == mmpi.getModTargetVer() || ModPackageInfo.Versions.VER_1 == mmpi.getModTargetVer())
-			{
-				return installModVer0();}
-			else 
-			{
+		protected Boolean doInBackground(Void[] p1) {
+			if (ModPackageInfo.Versions.VER_0 == mmpi.getModTargetVer() || ModPackageInfo.Versions.VER_1 == mmpi.getModTargetVer()) {
+				if (mmpi.getModType().equals(ModPackageInfo.MOSTYPE_CUSTOMSHIPNAME)) {
+					return patchShipName();
+				}
+				return installModVer0();
+			} else {
+				if (mmpi.getModType().equals(ModPackageInfo.MOSTYPE_CUSTOMSHIPNAME)) {
+					return patchShipName();
+				}
 				return installModVer0();
 			}
 
 
+		}
+
+		private boolean patchShipName() {
+			publishProgress(0);
+
+			ZipFile zipFile = null;
+			try {
+				zipFile = new ZipFile(msrcFile);
+				ZipEntry ze = zipFile.getEntry(FILE_CUSTOMSHIPNAME_PATCH);
+				if (ze == null) {
+					throw new IOException("Could not found patch:" + FILE_CUSTOMSHIPNAME_PATCH);
+				}
+				Source source = Okio.source(zipFile.getInputStream(ze));
+				if (source == null) {
+					throw new IOException("Failed to read patch from file");
+				}
+				BufferedSource bufferedSource = Okio.buffer(source);
+				return CustomShipNameHelper.getInstance().patch(bufferedSource);
+			} catch (Exception ex) {
+				Logger.e(ex, null);
+				ex.printStackTrace();
+				e = ex;
+			} finally {
+				if (zipFile != null) {
+					try {
+						zipFile.close();
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+				}
+			}
+			return false;
 		}
 		private boolean installModVer0()
 		{

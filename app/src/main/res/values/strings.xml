@@ -109,4 +109,5 @@
 	<string name="modtype_captainvoice_ru">Captain voice(Russian)(Abandoned)</string>
 	<string name="modtype_captainvoice_ru_vlad">Captain voice(Russian-Serious)</string>
 	<string name="modtype_captainvoice_ru_beard">Captain voice(Russian-Heroic)</string>
+	<string name="modtype_customshipname">CustomShipName</string>
 </resources>

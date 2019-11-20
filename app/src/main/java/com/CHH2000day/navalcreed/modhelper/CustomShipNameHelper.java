@@ -29,6 +29,7 @@ public class CustomShipNameHelper {
     private static boolean inited = false;
     private HashMap<Integer, String> shipnames;
     private ArrayList idList;
+    private File luafile;
 
     public synchronized static CustomShipNameHelper getInstance() {
         if (mcsh == null) {
@@ -46,6 +47,9 @@ public class CustomShipNameHelper {
         }
     }
 
+    public boolean patch(BufferedSource src) {
+        return patch(src, this.luafile);
+    }
     /**
      * @param src  patch data
      * @param dest customshipnames.lua
@@ -132,6 +136,7 @@ public class CustomShipNameHelper {
         }
     }
     private void doInit(File src) throws IOException {
+        this.luafile = src;
         if (shipnames == null || idList == null) {
             shipnames = new HashMap<Integer, String>();
             idList = new ArrayList();

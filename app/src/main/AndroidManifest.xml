@@ -1,250 +1,117 @@
 <?xml version='1.0' encoding='utf-8'?>
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	package="com.CHH2000day.navalcreed.modhelper">
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.INTERNET"/>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-	<uses-permission
-		android:name="android.permission.INTERACT_ACROSS_USERS"
-		tools:ignore="ProtectedPermissions"/>
-	<uses-permission
-		android:name="android.permission.READ_LOGS"
-		tools:ignore="ProtectedPermissions" />
-	<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
-	<uses-permission
-		android:name="android.permission.INSTALL_PACKAGES"
-		tools:ignore="ProtectedPermissions" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-	<uses-permission android:name="android.permission.READ_CALENDAR" />
-	<uses-permission android:name="android.permission.WRITE_CALENDAR" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.CHH2000day.navalcreed.modhelper">
 
-	<application
-		android:allowBackup="true"
-		android:icon="@drawable/icon"
-		android:label="@string/app_name"
-		android:theme="@style/AppTheme.NoActionBar"
-		android:name=".ModHelperApplication"
-		android:resizeableActivity="true"
-		android:networkSecurityConfig="@xml/network_security_config">
-		<activity
-			android:name=".Main"
-			android:label="@string/app_name">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="file"/>
-				<data android:host="*"/>
-				<data android:mimeType="*/*"/>
-				<data android:pathPattern=".*\\.ncmod"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="file"/>
-				<data android:host="*"/>
-				<data android:mimeType="*/*"/>
-				<data android:pathPattern=".*\.ncmod"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="content"/>
-				<data android:host="*"/>
-				<data android:mimeType="*/*"/>
-				<data android:pathPattern=".*\.ncmod"/>
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="content"/>
-				<data android:host="*"/>
-				<data android:mimeType="*/*"/>
-				<data android:pathPattern=".*\\.ncmod"/>
-			</intent-filter>
-		</activity>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission
+        android:name="android.permission.INTERACT_ACROSS_USERS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.INSTALL_PACKAGES"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
 
-		<provider
+    <application
+        android:name=".ModHelperApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:resizeableActivity="true"
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name="com.CHH2000day.navalcreed.modhelper.Main"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.ncmod" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\.ncmod" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\.ncmod" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.ncmod" />
+            </intent-filter>
+        </activity>
+
+        <provider
             android:name="androidx.core.content.FileProvider"
-			android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
-			android:exported="false"
-			android:grantUriPermissions="true">
-			<meta-data
-				android:name="android.support.FILE_PROVIDER_PATHS"
-				android:resource="@xml/file_path"/>
-		</provider>
-		<provider
-			android:name="com.qy.sdk.TMProvider"
-			android:authorities="com.CHH2000day.navalcreed.modhelper.TTMultiProvider"
-			android:exported="false" />
+            android:authorities="com.CHH2000day.navalcreed.modhelper.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
+        <provider
+            android:name="com.wq.rx.TProvider"
+            android:authorities="com.CHH2000day.navalcreed.modhelper.TTMultiProvider"
+            android:exported="false" />
 
-		<uses-library android:name="org.apache.http.legacy" android:required="false" />
-		<meta-data
-			android:name="BUGLY_APPID"
-			android:value="a21f3fab2a"/>
-		<meta-data
-			android:name="BUGLY_APP_VERSION"
-			android:value="0v0"/>
-		<meta-data
-			android:name="BUGLY_APP_CHANNEL"
-			android:value="0v0"/>
-		<meta-data
-			android:name="BUGLY_ENABLE_DEBUG"
-			android:value="true"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
 
-		<activity
-			android:name="com.qy.MTGCommonActivity"
-			android:configChanges="keyboard|orientation"
-			android:exported="true"
-			android:screenOrientation="portrait"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-		<activity
-			android:name="com.qy.MTGRewardVideoActivity"
-			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-		<activity
-			android:name="com.qy.MTGInterstitialActivity"
-			android:configChanges="orientation|screenSize"
-			android:screenOrientation="portrait" />
-
-		<service android:name="com.qy.MTGService">
-			<intent-filter>
-				<action android:name="com.mintegral.msdk.download.action" />
-			</intent-filter>
-		</service>
-
-		<activity
-			android:name="com.qy.AppActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-		<service
-			android:name="com.qy.DownloadService"
-			android:exported="false" />
-
-		<activity
-			android:name="com.qy.ADActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-		<activity
-			android:name="com.qy.PortraitADActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-			android:screenOrientation="portrait" />
-		<activity
-			android:name="com.qy.LandscapeADActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-			android:screenOrientation="landscape" />
-
-		<activity
-			android:name="com.qy.AdActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"></activity>
-		<activity
-			android:name="com.qy.InterstitialAdActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-			android:theme="@android:style/Theme.Translucent" />
-		<activity
-			android:name="com.qy.NetworkChangeActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-		<activity
-			android:name="com.qy.VideoAdActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-		<service android:name="com.qy.UnDownloadService" />
-
-		<activity
-			android:name="com.qy.InMobiAdActivity"
-			android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
-			android:hardwareAccelerated="true"
-			android:resizeableActivity="false"
-			android:theme="@android:style/Theme.NoTitleBar"
-			tools:ignore="UnusedAttribute" />
-
-		<service
-			android:name="com.qy.ApkDownloader$ApkDownloadService"
-			android:enabled="true" />
+        <meta-data
+            android:name="BUGLY_APPID"
+            android:value="a21f3fab2a" />
+        <meta-data
+            android:name="BUGLY_APP_VERSION"
+            android:value="0v0" />
+        <meta-data
+            android:name="BUGLY_APP_CHANNEL"
+            android:value="0v0" />
+        <meta-data
+            android:name="BUGLY_ENABLE_DEBUG"
+            android:value="true" />
 
 
-		<activity android:name="com.qy.VLionWebViewActivity" />
-		<activity
-			android:name="com.qy.VideoViewActivity"
-			android:configChanges="orientation|screenSize"
-			android:screenOrientation="landscape" />
+    </application>
 
-		<activity
-			android:name="com.qy.DvxVideoActivity"
-			android:configChanges="orientation|keyboard|screenSize|screenLayout"
-			android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
-
-		<service android:name="com.qy.IndependentService" />
-
-
-		<activity
-			android:name="com.qy.sdk.views.MyActivity"
-			android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-		<service android:name="com.qy.selfrd.services.QyService">
-			<intent-filter android:priority="1000">
-				<action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-				<action android:name="com.qyrdk.service" />
-			</intent-filter>
-		</service>
-
-		<activity
-			android:name="com.qy.AdShowActivity"
-			android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-			android:hardwareAccelerated="true"
-			android:launchMode="singleTask"
-			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-		<activity
-			android:name="com.qy.InterstitialVideoActivity"
-			android:launchMode="singleTask"
-			android:theme="@android:style/Theme.Translucent" />
-		<activity
-			android:name="com.qy.StimulateVideoActivity"
-			android:launchMode="singleTask" />
-		<activity
-			android:name="com.qy.DialogActivity"
-			android:launchMode="singleTask"
-			android:theme="@android:style/Theme.Dialog" />
-
-		<service
-			android:name="com.qy.ManService"
-			android:enabled="true"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="com.adroid.SERVICE" />
-			</intent-filter>
-		</service>
-
-
-		<receiver android:name="com.qy.sdk_rx.listeners.QyReceiver">
-			<intent-filter>
-				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-				<action android:name="android.intent.action.USER_PRESENT" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.PACKAGE_ADDED" />
-				<data android:scheme="package" />
-			</intent-filter>
-			<intent-filter>
-				<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-			</intent-filter>
-		</receiver>
-
-
-	</application>
 </manifest>

@@ -108,5 +108,6 @@
 	<string name="modtype_captainvoice_ru">舰长语音-俄语(弃用）</string>
 	<string name="modtype_captainvoice_ru_vlad">舰长语音-俄语-严肃</string>
 	<string name="modtype_captainvoice_ru_beard">舰长语音-俄语-幽默</string>
-	
+    <string name="modtype_customshipname">自定义船名</string>
+
 </resources>
