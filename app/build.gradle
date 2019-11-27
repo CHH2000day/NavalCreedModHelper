@@ -27,10 +27,10 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 98
-        versionName "build-2019112000"
+        versionCode 99
+        versionName "build-2019112700"
         flavorDimensions "versionCode"
-		buildConfigField "int","BuildVersion","10034"
+		buildConfigField "int","BuildVersion","10035"
     }
     	productFlavors {
 		common {
@@ -63,7 +63,7 @@ android {
 
 dependencies {
 	//noinspection GradleCompatible
-	implementation 'com.google.android.material:material:1.2.0-alpha01'
+	implementation 'com.google.android.material:material:1.2.0-alpha02'
 	//implementation 'cn.bmob.android:bmob-sdk:3.7.4'
 	implementation 'androidx.appcompat:appcompat:1.1.0'
 	implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
