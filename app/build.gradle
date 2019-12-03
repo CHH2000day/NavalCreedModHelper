@@ -28,9 +28,9 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 99
-        versionName "build-2019112700"
+        versionName "build-2019120300"
         flavorDimensions "versionCode"
-		buildConfigField "int","BuildVersion","10035"
+		buildConfigField "int","BuildVersion","10036"
     }
     	productFlavors {
 		common {
@@ -66,7 +66,7 @@ dependencies {
 	implementation 'com.google.android.material:material:1.2.0-alpha02'
 	//implementation 'cn.bmob.android:bmob-sdk:3.7.4'
 	implementation 'androidx.appcompat:appcompat:1.1.0'
-	implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
+	implementation 'androidx.recyclerview:recyclerview:1.1.0'
 	implementation 'androidx.cardview:cardview:1.0.0'
 	implementation 'com.squareup.okio:okio:2.4.1'
 	implementation 'com.squareup.okhttp3:okhttp:4.2.2'
