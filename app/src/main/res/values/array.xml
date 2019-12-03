@@ -1,85 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-	<resources>
-	<string-array name="path_bg">
-		<item>Background:Loading</item>
-		<item>Background:LoadingMap</item>
-		<item>Background:Matching</item>
-	</string-array>
-	<string-array name="filename_bg">
-		<item>picture1</item>
-		<item>picture2</item>
-		<item>picture3</item>
-	</string-array>
-	<string-array name="country_crewpic">
-		<item>USA</item>
-		<item>Japan</item>
-		<item>UK</item>
-		<item>China</item>
-		<item>Italy</item>
-		<item>France</item>
-		<item>USSR</item>
-		<item>Germany</item>
-	</string-array>
-	<string-array name="crewpic_name">
-		<item>pic1</item>
-		<item>pic2</item>
-		<item>pic3</item>
-		<item>pic4</item>
-		<item>pic5</item>
-		<item>pic6</item>
-		<item>pic7</item>
-		<item>pic8</item>
-		<item>pic9</item>
-		<item>pic10</item>
-		<item>pic11</item>
-		<item>pic12</item>
-		<item>pic13</item>
-		<item>pic14</item>
-		<item>pic15</item>
-		<item>pic16</item>
-	</string-array>
-	<string-array name="bgm_scene_toshow">
-		<item>Harbor</item>
-		<item>Loading</item>
-		<item>BattleStart</item>
-		<item>BattleHeat</item>
-		<item>BattleEnd</item>
-		<item>Victory</item>
-		<item>Fail</item>
-	</string-array>
-	<string-array name="bgm_battlefail_toshow">
-		<item>Danger</item>
-		<item>Fail</item>
-	</string-array>
-	<string-array name="bgm_loading_toshow">
-		<item>Loading</item>
-		<item>Login</item>
-		<item>Queuing</item>
-	</string-array>
-	<string-array name="bgm_select_a_scene">
-		<item>Select a scene</item>		
-	</string-array>
-	<string-array name="fragment_titles">
-		<item>Background</item>
-		<item>Login movie</item>
-		<item>Crew pics</item>
-		<!--
-		<item>反和谐</item>
-		-->
-		<item>BGM</item>
-		<item>Mod package installer</item>
-		<item>Mod package manager</item>
-		<item>About</item>
-	</string-array>
-	<string-array name="cv_types">
-		<item>English</item>
-		<item>Chinese</item>
-		<item>Japanese-Carrier</item>
-		<item>Japanese-Battleship</item>
-		<item>Japanese-Crusier</item>
-		<item>Japanese-Destroyer</item>
-		<item>German</item>
-		<item>Russian-Heroic</item>
-		<item>Russian-Serious</item>
-	</string-array>
-	</resources>
+<resources>
+    <string-array name="path_bg">
+        <item>Background:Loading</item>
+        <item>Background:LoadingMap</item>
+        <item>Background:Matching</item>
+    </string-array>
+    <string-array name="filename_bg">
+        <item>picture1</item>
+        <item>picture2</item>
+        <item>picture3</item>
+    </string-array>
+    <string-array name="country_crewpic">
+        <item>USA</item>
+        <item>Japan</item>
+        <item>UK</item>
+        <item>China</item>
+        <item>Italy</item>
+        <item>France</item>
+        <item>USSR</item>
+        <item>Germany</item>
+    </string-array>
+    <string-array name="crewpic_name">
+        <item>pic1</item>
+        <item>pic2</item>
+        <item>pic3</item>
+        <item>pic4</item>
+        <item>pic5</item>
+        <item>pic6</item>
+        <item>pic7</item>
+        <item>pic8</item>
+        <item>pic9</item>
+        <item>pic10</item>
+        <item>pic11</item>
+        <item>pic12</item>
+        <item>pic13</item>
+        <item>pic14</item>
+        <item>pic15</item>
+        <item>pic16</item>
+    </string-array>
+    <string-array name="bgm_scene_toshow">
+        <item>Harbor</item>
+        <item>Loading</item>
+        <item>BattleStart</item>
+        <item>BattleHeat</item>
+        <item>BattleEnd</item>
+        <item>Victory</item>
+        <item>Fail</item>
+    </string-array>
+    <string-array name="bgm_battlefail_toshow">
+        <item>Danger</item>
+        <item>Fail</item>
+    </string-array>
+    <string-array name="bgm_loading_toshow">
+        <item>Loading</item>
+        <item>Login</item>
+        <item>Queuing</item>
+    </string-array>
+    <string-array name="bgm_select_a_scene">
+        <item>Select a scene</item>
+    </string-array>
+    <string-array name="modtypes">
+        <item>All</item>
+        <item>QaQ</item>
+    </string-array>
+    <string-array name="fragment_titles">
+        <item>Background</item>
+        <item>Login movie</item>
+        <item>Crew pics</item>
+        <!--
+        <item>反和谐</item>
+        -->
+        <item>BGM</item>
+        <item>Mod package installer</item>
+        <item>Mod package manager</item>
+        <item>About</item>
+    </string-array>
+    <string-array name="cv_types">
+        <item>English</item>
+        <item>Chinese</item>
+        <item>Japanese-Carrier</item>
+        <item>Japanese-Battleship</item>
+        <item>Japanese-Crusier</item>
+        <item>Japanese-Destroyer</item>
+        <item>German</item>
+        <item>Russian-Heroic</item>
+        <item>Russian-Serious</item>
+    </string-array>
+</resources>

@@ -109,5 +109,10 @@
 	<string name="modtype_captainvoice_ru_vlad">舰长语音-俄语-严肃</string>
 	<string name="modtype_captainvoice_ru_beard">舰长语音-俄语-幽默</string>
     <string name="modtype_customshipname">自定义船名</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="email">邮箱</string>
+    <string name="register">注册</string>
+    <string name="login">登录</string>
 
 </resources>

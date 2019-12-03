@@ -110,4 +110,9 @@
 	<string name="modtype_captainvoice_ru_vlad">Captain voice(Russian-Serious)</string>
 	<string name="modtype_captainvoice_ru_beard">Captain voice(Russian-Heroic)</string>
 	<string name="modtype_customshipname">CustomShipName</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="register">Register</string>
+    <string name="login">login</string>
 </resources>

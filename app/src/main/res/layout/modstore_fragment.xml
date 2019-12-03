@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="6dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/modstorecard1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fadingEdge="horizontal|vertical"
+        android:padding="6dp"
+        app:cardCornerRadius="16dp"
+        app:cardUseCompatPadding="false"
+        app:contentPadding="6dp">
+
+        <SearchView
+            android:id="@+id/modstore_searchview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </SearchView>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/modstorecard2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modstorecard1"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:clipToPadding="false"
+        android:padding="6dp"
+        android:requiresFadingEdge="horizontal|vertical"
+        app:cardCornerRadius="6dp"
+        app:cardPreventCornerOverlap="false"
+        app:contentPadding="6dp">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/modtypes"
+            android:textAlignment="center" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/modstorecard3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modstorecard2"
+        android:layout_alignParentBottom="true"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="6dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>
