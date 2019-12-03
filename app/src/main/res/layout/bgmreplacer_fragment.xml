@@ -31,12 +31,13 @@
 		android:id="@+id/bgmreplacerMusic"/>
 
 	<Button
-		android:layout_height="wrap_content"
+		android:id="@+id/bgmreplacerSelect"
 		android:layout_width="wrap_content"
-		android:text="@string/select"
+		android:layout_height="wrap_content"
 		android:layout_below="@id/bgmreplacerMusic"
-		android:layout_alignParentRight="true"
-		android:id="@+id/bgmreplacerSelect"/>
+		android:layout_alignParentEnd="true"
+		android:layout_alignParentRight="false"
+		android:text="@string/select" />
 
 	<TextView
 			android:layout_height="wrap_content"

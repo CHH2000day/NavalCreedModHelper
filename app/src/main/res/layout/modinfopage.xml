@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/modpackageinstaller_main_mainview"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -8,49 +9,71 @@
 	android:paddingRight="6dp"
 	android:paddingTop="6dp">
 
-	<Button
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="@string/select_file"
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true"
-		android:id="@+id/modinfopageButtonSelect"
-		android:layout_marginLeft="6dp"
-		android:layout_marginRight="6dp"/>
-
-	<Button
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="@string/cancel"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentBottom="true"
-		android:id="@+id/modinfopageButtonCancel"
-		android:layout_toLeftOf="@id/modinfopageButtonSelect"/>
-
-	<Button
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="@string/install"
-		android:layout_alignParentEnd="true"
-		android:layout_alignParentBottom="true"
-		android:layout_toLeftOf="@id/modinfopageButtonCancel"
-		android:id="@+id/modinfopageButtonUpdate"
-		android:layout_toRightOf="@id/modinfopageButtonSelect"/>
-
-	<ImageView
-		android:id="@+id/modinfopageImageView"
+	<LinearLayout
+		android:id="@+id/modinfo_buttons"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:adjustViewBounds="true"
-		android:src="@drawable/no_preview" />
+		android:layout_alignParentStart="false"
+		android:layout_alignParentTop="false"
+		android:layout_alignParentBottom="true"
+		android:layout_marginTop="6dp"
+		android:orientation="horizontal">
 
-	<TextView
-		android:layout_height="wrap_content"
+		<Button
+			android:id="@+id/modinfopageButtonSelect"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="3"
+			android:text="@string/select_file" />
+
+		<Button
+			android:id="@+id/modinfopageButtonCancel"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="3"
+			android:text="@string/cancel" />
+
+		<Button
+			android:id="@+id/modinfopageButtonUpdate"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="3"
+			android:text="@string/install" />
+
+	</LinearLayout>
+
+	<androidx.cardview.widget.CardView
 		android:layout_width="match_parent"
-		android:text="@string/modpkg_info_empty"
-		android:layout_below="@id/modinfopageImageView"
-		android:layout_above="@id/modinfopageButtonCancel"
-		android:id="@+id/modinfopageTextView"/>
+		android:layout_height="wrap_content"
+		android:layout_above="@id/modinfo_buttons"
+		android:layout_alignParentTop="true"
+		android:layout_marginStart="6dp"
+		android:layout_marginTop="6dp"
+		android:layout_marginEnd="6dp"
+		app:cardCornerRadius="2dp"
+		app:contentPadding="6dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+			<ImageView
+				android:id="@+id/modinfopageImageView"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="2"
+				android:adjustViewBounds="true"
+				android:src="@drawable/no_preview" />
+
+			<TextView
+				android:id="@+id/modinfopageTextView"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_weight="3"
+				android:text="@string/modpkg_info_empty" />
+		</LinearLayout>
+	</androidx.cardview.widget.CardView>
 
 </RelativeLayout>
 

@@ -98,6 +98,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		if ( !ModPackageManager.getInstance ( ).isOverride ( ) )
 		{
             recyclerview.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+            recyclerview.addItemDecoration(new VerticalSpaceItemDecoration());
 			recyclerview.setAdapter ( adapter );
 			ModPackageManager.getInstance ( ).setonDataChangedListener ( this );
 		}
@@ -140,6 +141,66 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		// TODO: Implement this method
 	}
 
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final View v;
+
+        public ViewHolder(View v) {
+            super(v);
+            this.v = v;
+        }
+
+        public View getView() {
+            return v;
+        }
+    }
+
+    private class UninstallListener implements View.OnLongClickListener {
+
+        @Override
+        public boolean onLongClick(View p1) {
+            if (ModPackageManager.getInstance().isOverride()) {
+                //OVRD时禁用管理器
+                return false;
+            }
+            int num = (int) p1.getTag();
+            String modtype = ModPackageManager.PUBLIC_KEYS[num];
+            if (modtype.equals(ModPackageInfo.MODTYPE_OTHER)) {
+                Snackbar.make(v, "This type of mod package can't be uninstalled", Snackbar.LENGTH_LONG).show();
+            }
+            if (modtype.startsWith("CV")) {
+                if (ModPackageManager.getInstance().checkInstalled(ModPackageInfo.MODTYPE_CV, modtype)) {
+                    uninstall(modtype);
+                }
+            } else {
+                if (ModPackageManager.getInstance().checkInstalled(modtype, ModPackageInfo.SUBTYPE_EMPTY)) {
+                    uninstall(modtype);
+                }
+            }
+
+
+            // TODO: Implement this method
+            return true;
+        }
+
+        private void uninstall(final String key) {
+            AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
+            adb.setTitle(R.string.notice)
+                    .setMessage(getString(R.string.confirm_to_remove_changes_to_parta) + ModPackageManager.getInstance().resolveModType(key) + ":" + ModPackageManager.getInstance().getModList().get(key) + getString(R.string.confirm_to_remove_changes_to_partb))
+                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.cont, (p1, p2) -> {
+                        String type = key.startsWith("CV") ? ModPackageInfo.MODTYPE_CV : key;
+                        String subType = type.equals(ModPackageInfo.MODTYPE_CV) ? key : ModPackageInfo.SUBTYPE_EMPTY;
+                        boolean b = ModPackageManager.getInstance().requestUninstall(type, subType, (ModHelperApplication) getActivity().getApplication());
+                        String str = b ? getString(R.string.success) : getString(R.string.failed);
+                        Snackbar.make(v, str, Snackbar.LENGTH_LONG).show();
+                        // TODO: Implement this method
+                    });
+            adb.create().show();
+
+        }
+
+    }
 
 	private class MyAdapter extends RecyclerView.Adapter
 	{
@@ -161,7 +222,7 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 		{
 			View vi=li.inflate ( R.layout.modmanager_item, null );
 			// TODO: Implement this method
-			return new ViewHolder ( vi );
+            return new ViewHolder(vi);
 		}
 
 		@Override
@@ -198,11 +259,10 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 			}
 			else
 			{
-				memo.setText ( "" );
+                memo.setText(R.string.mod_not_installed);
 				info.setText ( new StringBuilder ( ).append ( getString ( R.string.modtype ) )
 							  .append ( ModPackageManager.getInstance ( ).resolveModType ( keys [ p2 ] ) )
-							  .append ( "\n" )
-							  .append ( getString ( R.string.mod_not_installed ) ).toString ( ) );
+                        .toString());
 			}
 
 
@@ -223,74 +283,5 @@ public class ModPackageManagerFragment extends Fragment implements ModPackageMan
 
 
 
-	}
-	private class UninstallListener implements View.OnLongClickListener
-	{
-
-		@Override
-		public boolean onLongClick ( View p1 )
-		{
-			if ( ModPackageManager.getInstance ( ).isOverride ( ) )
-			{
-				//OVRD时禁用管理器
-				return false;
-			}
-			int num=(int)p1.getTag ( );
-			String modtype=ModPackageManager.PUBLIC_KEYS [ num ];
-			if ( modtype.equals ( ModPackageInfo.MODTYPE_OTHER ) )
-			{
-				Snackbar.make ( v, "This type of mod package can't be uninstalled", Snackbar.LENGTH_LONG ).show ( );
-			}
-			if ( modtype.startsWith("CV"))
-			{
-				if ( ModPackageManager.getInstance ( ).checkInstalled ( ModPackageInfo.MODTYPE_CV, modtype ) )
-				{
-					uninstall ( modtype );
-				}
-			}
-			else
-			{
-				if ( ModPackageManager.getInstance ( ).checkInstalled ( modtype, ModPackageInfo.SUBTYPE_EMPTY ) )
-				{
-					uninstall ( modtype );
-				}
-			}
-
-
-			// TODO: Implement this method
-			return true;
-		}
-		private void uninstall ( final String key )
-		{
-			AlertDialog.Builder adb=new AlertDialog.Builder ( getActivity ( ) );
-			adb.setTitle ( R.string.notice )
-				.setMessage ( getString ( R.string.confirm_to_remove_changes_to_parta ) + ModPackageManager.getInstance ( ).resolveModType ( key ) + ":" + ModPackageManager.getInstance ( ).getModList ( ).get ( key ) + getString ( R.string.confirm_to_remove_changes_to_partb ) )
-				.setNegativeButton ( R.string.cancel, null )
-					.setPositiveButton(R.string.cont, (p1, p2) -> {
-						String type = key.startsWith("CV") ? ModPackageInfo.MODTYPE_CV : key;
-						String subType = type.equals(ModPackageInfo.MODTYPE_CV) ? key : ModPackageInfo.SUBTYPE_EMPTY;
-						boolean b = ModPackageManager.getInstance().requestUninstall(type, subType, (ModHelperApplication) getActivity().getApplication());
-						String str = b ? getString(R.string.success) : getString(R.string.failed);
-						Snackbar.make(v, str, Snackbar.LENGTH_LONG).show();
-						// TODO: Implement this method
-					});
-			adb.create ( ).show ( );
-
-		}
-
-	}
-	private class ViewHolder extends RecyclerView.ViewHolder
-	{
-
-		private final View v;
-		public ViewHolder ( View v )
-		{
-			super ( v );
-			this.v = v;
-		}
-		public View getView ( )
-		{
-			return v;
-		}
 	}
 }

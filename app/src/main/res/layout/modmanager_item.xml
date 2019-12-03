@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-	<RelativeLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-	
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:padding="6dp"
-		android:id="@+id/modmanageritemRelativeLayout">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/modmanageritemRelativeLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="6dp">
 
 		<TextView
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:text="@string/modtype"
-			android:layout_alignParentLeft="true"
-			android:layout_alignParentTop="true"
 			android:id="@+id/modmanageritemTextView"
-			android:layout_alignParentRight="true"/>
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			android:layout_alignParentTop="true"
+			android:text="@string/modtype" />
 
 		<TextView
-			android:layout_height="wrap_content"
+			android:id="@+id/modmanageritemMemo"
 			android:layout_width="wrap_content"
-			android:text="@string/long_click_to_uninstall"
-			android:layout_alignParentRight="true"
+			android:layout_height="wrap_content"
 			android:layout_below="@id/modmanageritemTextView"
-			android:id="@+id/modmanageritemMemo"/>
-
+			android:layout_alignParentEnd="true"
+			android:layout_alignParentBottom="true"
+			android:text="@string/long_click_to_uninstall"
+			android:textAlignment="viewEnd" />
 	</RelativeLayout>
+
+
+
+
 
 
 
