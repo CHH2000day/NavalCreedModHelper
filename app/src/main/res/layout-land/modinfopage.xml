@@ -4,7 +4,6 @@
     android:id="@+id/modpackageinstaller_main_mainview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mintegral_reward_endcard_land_bg"
     android:paddingLeft="6dp"
     android:paddingTop="6dp"
     android:paddingRight="6dp"
