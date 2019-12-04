@@ -20,7 +20,7 @@ public class ModPackageInfo
 	//常量声明
 
 	//软件版本
-	public static final int PKGVER=Versions.VER_4;
+    public static final int PKGVER = Versions.VER_5;
 
 	public static final String MODTYPE_CV="CaptainVoice";
 	public static final String MODTYPE_SOUNDEFFECT_PRIM="SoundEffect_PRIM";
@@ -301,5 +301,7 @@ public class ModPackageInfo
 		public static final int VER_3=3;
 		//ver3 -> ver4 support for external mod preview
 		public static final int VER_4=4;
+        //ver5: support for custom ship name
+        public static final int VER_5 = 5;
 	}
 }
