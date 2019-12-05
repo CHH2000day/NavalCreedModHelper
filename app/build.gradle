@@ -28,9 +28,9 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 99
-        versionName "build-2019120500"
+        versionName "build-2019120600"
         flavorDimensions "versionCode"
-        buildConfigField "int", "BuildVersion", "10038"
+        buildConfigField "int", "BuildVersion", "10039"
     }
     productFlavors {
         common {
