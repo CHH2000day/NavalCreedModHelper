@@ -296,19 +296,19 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                         mContentView.removeView(view);
                     }
                 };
-                new Thread() {
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            Thread.sleep(2500);
-                        } catch (Exception e) {
-                            Logger.e(e, "");
-                        } finally {
-                            adcloseer.sendEmptyMessage(0);
-                        }
-                    }
-                }.start();
+//                new Thread() {
+//                    @Override
+//                    public void run() {
+//                        super.run();
+//                        try {
+//                            Thread.sleep(2500);
+//                        } catch (Exception e) {
+//                            Logger.e(e, "");
+//                        } finally {
+//                            adcloseer.sendEmptyMessage(0);
+//                        }
+//                    }
+//                }.start();
             }
 
         });
