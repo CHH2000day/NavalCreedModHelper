@@ -144,7 +144,6 @@
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.6@jar" level="project" />
     <orderEntry type="library" name="Gradle: __local_aars__:D./Android/AndroidProjects/NavalCreedModHelper/app/libs/qysdk.aar:unspecified@jar" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.databinding:viewbinding:3.6.0-rc01@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.material:material:1.2.0-alpha03@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat:1.1.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.viewpager2:viewpager2:1.0.0@aar" level="project" />

@@ -17,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException;
 import com.orhanobut.logger.Logger;
@@ -428,7 +427,6 @@ public class ModPackageInstallHelper {
         private File msrcFile;
         private ZipFile mpkgFile;
         private int mSubType;
-        private Fragment fragment;
 
         protected InstallTask(int subType, Activity activity, ModPackageInfo mpi, File srcFile, ZipFile pkgFile) {
             mSubType = subType;
@@ -573,7 +571,6 @@ public class ModPackageInstallHelper {
         protected void onPostExecute(Boolean result) {
             progressbar.setProgress(progressbar.getMax());
             dm.ondone();
-            if (!fragment.isAdded()) return;
             //Prevent illegal state
             if (result) {
                 ad.setTitle(R.string.success);
@@ -596,7 +593,6 @@ public class ModPackageInstallHelper {
         @Override
         protected void onProgressUpdate(Integer[] values) {
             super.onProgressUpdate(values);
-            if (!fragment.isAdded()) return;
             if (totalcount == 0) {
                 totalcount = mpkgFile.size();
                 progressbar.setMax(totalcount);
@@ -712,7 +708,7 @@ public class ModPackageInstallHelper {
                         case Action.SHOW_WARNING:
                             //args:null
                             currentAction((Object) null);
-                            adb.setMessage((Integer) msg.obj);
+                            adb.setMessage((int) msg.obj);
                             adb.setCancelable(false);
                             adb.setPositiveButton(R.string.ok, (dialog, which) -> {
                                 currentAction((Object) null);
