@@ -703,7 +703,6 @@ public class ModPackageInstallHelper {
                                         // TODO: Implement this method
                                     });
                             adb.create().show();
-                            currentAction();
                             break;
                         case Action.SHOW_WARNING:
                             //args:null
@@ -783,10 +782,10 @@ public class ModPackageInstallHelper {
 
         private void currentAction(Object... args) {
             switch (pos) {
+                //Assume to satisfy version or types requirement
                 case 1:
                 case 2:
                 case 3:
-                    //Assume to satisfy version or types requirement
                     next();
                     break;
             }
