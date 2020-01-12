@@ -707,7 +707,6 @@ public class ModPackageInstallHelper {
                             break;
                         case Action.SHOW_WARNING:
                             //args:null
-                            currentAction((Object) null);
                             adb.setMessage((int) msg.obj);
                             adb.setCancelable(false);
                             adb.setPositiveButton(R.string.ok, (dialog, which) -> {
@@ -755,7 +754,7 @@ public class ModPackageInstallHelper {
                     break;
                 case 1:
                     if (!parent.mmpi.hasAllFeature()) {
-                        UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_WARNING, Integer.valueOf(R.string.modpkg_ver_warning)));
+                        UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_WARNING, R.string.modpkg_ver_warning));
                     } else {
                         next();
                     }
@@ -771,7 +770,7 @@ public class ModPackageInstallHelper {
                 case 3:
                     ModPackageManager.QueryResult result = ModPackageManager.getInstance().checkConflict(parent.getModPackageInfo().getModType(), parent.getModPackageInfo().getModName(), 0, getSubType(isCVpack ? subtype : SUBTYPE_NULL), null);
                     if (result.getResult() == ModPackageManager.QueryResult.RESULT_CONFLICT) {
-                        UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_WARNING, "Conflict detected.Do you want to continue?"));
+                        UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_WARNING, R.string.modpkg_conflict));
                     } else {
                         next();
                     }
