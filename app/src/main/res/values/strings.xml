@@ -115,4 +115,5 @@
     <string name="email">Email</string>
     <string name="register">Register</string>
     <string name="login">login</string>
+	<string name="modpkg_space_warning">No enough space left on device,this mod package requires %1$d bytes.However,there\'s only %2$d bytes left on this device.</string>
 </resources>

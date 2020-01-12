@@ -57,7 +57,7 @@
 	<string name="mod_not_installed">mod未安装</string>
 	<string name="install">安装</string>
 	<string name="bgfrag_intro">使用说明:\n加载背景，地图加载背景，匹配背景三个选项下都必须放入1,2,3三张图片才能生效，选择替换内容和图片后点击应用即可</string>
-	<string name="crewpicfrag_intro">使用说明:\n每个国家有15-16个头像可供替换，替换部分即可生效，不必全部替换，替换后可通过修改成员名字选择所替换的头像\n流程：选择所替换国家和头像序号后选择图片然后点击替换\n点击清空更改清空该船员头像更改，长按清空更改清空该国家所有船员头像更改</string>
+	<string name="crewpicfrag_intro">使用说明:\n每个国家有15–16个头像可供替换，替换部分即可生效，不必全部替换，替换后可通过修改成员名字选择所替换的头像\n流程：选择所替换国家和头像序号后选择图片然后点击替换\n点击清空更改清空该船员头像更改，长按清空更改清空该国家所有船员头像更改</string>
 	<string name="modpkg_ver_warning">目前软件版本可能无法实现mod包里所有功能，是否继续？</string>
 	<string name="modpkg_interface_warning">该mod包使用了已经被弃用的接口，如需继续安装请前往禁用mod管理系统</string>
 	<string name="modpkg_already_installed_warning">当前已安装了相同类型的mod包，请先去mod包管理器卸载后再安装</string>
@@ -114,5 +114,6 @@
     <string name="email">邮箱</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
+	<string name="modpkg_space_warning">剩余空间不足!这个mod包需要%1$d字节,但是设备上只有%2$d字节空间剩余</string>
 
 </resources>
