@@ -28,21 +28,22 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 100
-        versionName "build-2019121000"
+        versionName "build-2020011200"
         flavorDimensions "versionCode"
-        buildConfigField "int", "BuildVersion", "10040"
+        buildConfigField "int", "BuildVersion", "10041"
     }
+
+    flavorDimensions("Nyanpasu")
     productFlavors {
         common {
-            dimension "versionCode"
+            dimension "Nyanpasu"
             versionNameSuffix "-common"
         }
         ffmpeg {
-            dimension "versionCode"
+            dimension "Nyanpasu"
             versionNameSuffix "-ffmpeg"
         }
     }
-	viewBinding.enabled = true
 
     buildTypes {
         release {
@@ -63,7 +64,7 @@ android {
 
 dependencies {
     //noinspection GradleCompatible
-    implementation 'com.google.android.material:material:1.2.0-alpha02'
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
     //implementation 'cn.bmob.android:bmob-sdk:3.7.4'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'

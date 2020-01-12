@@ -715,7 +715,7 @@ public class ModPackageInstallHelper {
                             adb.setMessage((Integer) msg.obj);
                             adb.setCancelable(false);
                             adb.setPositiveButton(R.string.ok, (dialog, which) -> {
-                                currentAction(null);
+                                currentAction((Object) null);
                             });
                             adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
                                 close();
