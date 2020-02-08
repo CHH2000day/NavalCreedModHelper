@@ -1,11 +1,10 @@
 package com.CHH2000day.navalcreed.modhelper
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import okio.buffer
 import okio.sink
 import okio.source
 import java.io.File
+import kotlin.concurrent.thread
 
 object ModPackageManagerV2 {
     private const val managerVer = 2
@@ -298,7 +297,7 @@ object ModPackageManagerV2 {
     }
 
     private fun writeConfig() {
-        GlobalScope.launch {
+        thread {
             val mods = modSet.toSet()
             synchronized(duplicatedFileInfo) {}
             val config = Config(version = managerVer, isOverride = isOverride, modInfos = modSet, duplicationInfos = duplicatedFileInfo)
