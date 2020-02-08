@@ -7,11 +7,13 @@ import java.io.File
 import kotlin.concurrent.thread
 
 object ModPackageManagerV2 {
+    public var override = false
+
     private const val managerVer = 2
     private lateinit var dataFile: File
     private var inited = false
-    private var isOverride = false
-    private var modSet = mutableSetOf<ModInstallationInfo>()
+
+    private var modList = mutableListOf<ModInstallationInfo>()
     private var pendingTask: PendingInstallation? = null
     private var installationFiles: MutableSet<String> = mutableSetOf();
     private const val CONFLICT_SUFFIX = ".old"
@@ -41,7 +43,7 @@ object ModPackageManagerV2 {
      */
     public fun checkInstall(name: String, type: String, subType: String, version: Int, files: MutableSet<String>): QueryResult {
         val result = QueryResult(result = QueryResult.RESULT_OK, conflictList = mutableSetOf())
-        for (mod in modSet) {
+        for (mod in modList) {
             lateinit var resultSet: Set<String>
             if (mod.type == type) {
                 if (mod.name == name && mod.version <= version) {
@@ -67,7 +69,7 @@ object ModPackageManagerV2 {
         for (file in installation.files) {
             recoverFileFromConflict(file, installation)
         }
-        modSet.remove(installation)
+        modList.remove(installation)
         refresh()
         return 0;
     }
@@ -157,7 +159,7 @@ object ModPackageManagerV2 {
     private fun doRenameConflict(name: String) {
         val duplicationInfo = DuplicationInfo(name)
         duplicatedFileInfo.add(duplicationInfo)
-        marker@ for (mod in modSet) {
+        marker@ for (mod in modList) {
             for (file in mod.files) {
                 if (name == file) {
                     duplicationInfo.files.add(DuplicatedFile(mod.name, name))
@@ -198,10 +200,10 @@ object ModPackageManagerV2 {
         return getBasePath(pendingTask!!.type, pendingTask!!.subType)
     }
 
-    public fun getMods(): Set<ModInstallationInfo> = modSet.toSet()
+    public fun getMods(): Set<ModInstallationInfo> = modList.toSet()
 
     public fun getInstallation(name: String): ModInstallationInfo? {
-        for (mod in modSet) {
+        for (mod in modList) {
             if (mod.name == name) {
                 return mod
             }
@@ -210,7 +212,7 @@ object ModPackageManagerV2 {
     }
 
     public fun getInstallation(type: String, subType: String): ModInstallationInfo? {
-        for (mod in modSet) {
+        for (mod in modList) {
             if (mod.type == type) {
                 if (mod.type != ModPackageInfo.MODTYPE_CV || (type == ModPackageInfo.MODTYPE_CV && subType == mod.subType)) {
                     return mod
@@ -229,7 +231,7 @@ object ModPackageManagerV2 {
     public fun requestInstall(name: String, type: String, subType: String): Boolean {
         if (pendingTask == null) {
             var isUpdate = false
-            for (mod in modSet) {
+            for (mod in modList) {
                 if (mod.name == name) {
                     isUpdate = true
                     mod.status = Status.INSTALLING.status
@@ -258,10 +260,10 @@ object ModPackageManagerV2 {
                 val installation: ModInstallationInfo? = getInstallation(pendingTask!!.name)
                 installation?.status = Status.INSTALLED.status
                 installation?.files?.plusAssign(installationFiles!!)
-                modSet.add(installation!!)
+                modList.add(installation!!)
             } else {
                 val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED.status, files = installationFiles!!)
-                modSet.add(installationInfo)
+                modList.add(installationInfo)
             }
         }
         pendingTask = null
@@ -289,8 +291,8 @@ object ModPackageManagerV2 {
         val source = dataFile.source().buffer()
 //        val type = object : TypeToken<List<ModInstallationInfo>>() {}.type
         val config = GsonHelper.getGson().fromJson(source.readUtf8(), Config::class.javaObjectType)
-        isOverride = config.isOverride
-        modSet = config.modInfos
+        override = config.isOverride
+        modList = config.modInfos
         duplicatedFileInfo = config.duplicationInfos
         source.close()
         inited = true
@@ -298,9 +300,9 @@ object ModPackageManagerV2 {
 
     private fun writeConfig() {
         thread {
-            val mods = modSet.toSet()
+            val mods = modList.toSet()
             synchronized(duplicatedFileInfo) {}
-            val config = Config(version = managerVer, isOverride = isOverride, modInfos = modSet, duplicationInfos = duplicatedFileInfo)
+            val config = Config(version = managerVer, isOverride = override, modInfos = modList, duplicationInfos = duplicatedFileInfo)
             val sink = dataFile.sink().buffer()
             sink.writeUtf8(GsonHelper.getGson().toJson(config))
             sink.close()
@@ -314,7 +316,7 @@ object ModPackageManagerV2 {
     }
 
     data class ModInstallationInfo(val name: String, var type: String, var subType: String, var version: Int, var status: Int, var files: MutableSet<String>) {}
-    data class Config(var version: Int = managerVer, var isOverride: Boolean, var modInfos: MutableSet<ModInstallationInfo>, var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf())
+    data class Config(var version: Int = managerVer, var isOverride: Boolean, var modInfos: MutableList<ModInstallationInfo>, var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf())
     data class QueryResult(var result: Int = 0, var conflictList: Set<String>) {
         companion object {
             const val RESULT_OK = 0
