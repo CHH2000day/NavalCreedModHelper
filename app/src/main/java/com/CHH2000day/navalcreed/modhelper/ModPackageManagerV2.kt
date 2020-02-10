@@ -66,7 +66,6 @@ object ModPackageManagerV2 {
 
     @Synchronized
     public fun uninstall(name: String): Int {
-        var a = 2
         val installation = getInstallation(name) ?: return -10
         for (file in installation.files) {
             recoverFileFromConflict(file, installation)
@@ -275,7 +274,7 @@ object ModPackageManagerV2 {
                 installation?.files?.plusAssign(installationFiles)
                 modList.add(installation!!)
             } else {
-                val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED, files = installationFiles!!)
+                val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED, files = installationFiles)
                 modList.add(installationInfo)
             }
         }
@@ -317,13 +316,14 @@ object ModPackageManagerV2 {
     private fun writeConfig() {
         thread(start = true) {
             Logger.i("Writing mod config...")
-            val mods = modList.toSet()
-            synchronized(duplicatedFileInfo) {}
-            val config = Config(version = managerVer, isOverride = override, modInfos = modList, duplicationInfos = duplicatedFileInfo)
+            synchronized(duplicatedFileInfo) {
+                val config = Config(version = managerVer, isOverride = override, modInfos = modList, duplicationInfos = duplicatedFileInfo)
 
-            val sink = dataFile.sink().buffer()
-            sink.writeUtf8(GsonHelper.getGson().toJson(config))
-            sink.close()
+                val sink = dataFile.sink().buffer()
+                sink.writeUtf8(GsonHelper.getGson().toJson(config))
+                sink.close()
+            }
+
         }
 
     }
