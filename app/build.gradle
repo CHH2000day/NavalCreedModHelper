@@ -31,7 +31,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 100
-        versionName 'build-202021000preview'
+        versionName 'build-2020021001preview'
         flavorDimensions "versionCode"
         buildConfigField "int", "BuildVersion", "10045"
     }
