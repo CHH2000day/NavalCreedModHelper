@@ -116,5 +116,6 @@
     <string name="login">登录</string>
 	<string name="modpkg_space_warning">剩余空间不足!这个mod包需要%1$d字节,但是设备上只有%2$d字节空间剩余</string>
 	<string name="modpkg_conflict">检测到与已有文件的冲突,是否继续?</string>
+    <string name="mod_uninstall_warning">确定要移除mod:%1$s吗?</string>
 
 </resources>

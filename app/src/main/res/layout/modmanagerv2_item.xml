@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/modmanageritemV2RelativeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="4dp">
+
+    <TextView
+        android:id="@+id/modmanageritemV2ModName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:text="mod名字咕咕咕"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/modmanageritemV2Memo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modmanageritemV2ModName"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/long_click_to_uninstall"
+        android:textAlignment="viewEnd" />
+
+    <TextView
+        android:id="@+id/modmanageritemV2ModStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/modmanageritemV2ModName"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/modmanageritemV2ModName"
+        android:gravity="right"
+        android:text="mod状态天知道"
+        android:textSize="12sp"
+        tools:text="mod状态天知道" />
+
+    <TextView
+        android:id="@+id/modmanageritemV2ModType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modmanageritemV2ModName"
+        android:layout_alignParentStart="true"
+        android:text="mod类型没想好"
+        tools:text="mod类型没想好" />
+</RelativeLayout>

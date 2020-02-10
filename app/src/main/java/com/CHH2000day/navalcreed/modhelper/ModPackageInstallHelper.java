@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -96,6 +97,42 @@ public class ModPackageInstallHelper {
         msrcFile = pkgFile;
     }
 
+    public static int getSubTypeId(String subtype) {
+        int subt = 0;
+        switch (subtype) {
+            case ModPackageInfo.SUB_MODTYPE_CV_CN:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_CN;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_EN:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_EN;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_JP_BB:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_JP_BB;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_JP_CA:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_JP_CA;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_JP_CV:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_JP_CV;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_JP_DD:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_JP_DD;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_DE:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_DE;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_RU:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_RU;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_RU_VLAD;
+                break;
+            case ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_RU_BEARD;
+                break;
+        }
+        return subt;
+    }
     private static String getSubType(int msubtype) {
         String s = "";
         switch (msubtype) {
@@ -427,6 +464,7 @@ public class ModPackageInstallHelper {
         private File msrcFile;
         private ZipFile mpkgFile;
         private int mSubType;
+        private HashSet<String> fileSet = new HashSet<String>();
 
         protected InstallTask(int subType, Activity activity, ModPackageInfo mpi, File srcFile, ZipFile pkgFile) {
             mSubType = subType;
@@ -515,6 +553,9 @@ public class ModPackageInstallHelper {
                     else {
                         //写出文件
                         targetFile = new File(mainPath, ze.getName());
+                        if (targetFile.exists()) {
+                            ModPackageManagerV2.INSTANCE.renameConflict(ze.getName());
+                        }
                         Logger.i("Writing file:%s", targetFile.getPath());
                         Utils.ensureFileParent(targetFile);
                         //若写出的目标文件已为目录，删除
@@ -526,9 +567,11 @@ public class ModPackageInstallHelper {
                         BufferedSink bs = Okio.buffer(s);
                         source = Okio.source(mpkgFile.getInputStream(ze));
                         bs.writeAll(source);
+                        ModPackageManagerV2.INSTANCE.onFileInstalled(ze.getName());
                         bs.flush();
                         bs.close();
                         source.close();
+                        fileSet.add(ze.getName());
                         count++;
                         publishProgress(count);
                     }
@@ -540,6 +583,7 @@ public class ModPackageInstallHelper {
                 e.printStackTrace();
                 Logger.d(e);
                 this.e = e;
+                ModPackageManagerV2.INSTANCE.rollback();
                 return false;
             }
             // TODO: Implement this method
@@ -576,14 +620,15 @@ public class ModPackageInstallHelper {
                 ad.setTitle(R.string.success);
                 stat.setText(R.string.success);
                 ModPackageManager.getInstance().postInstall(mmpi.getModType(), getSubType(mSubType), mmpi.getModName());
+                ModPackageManagerV2.INSTANCE.postInstall(mmpi.getVersion());
             } else {
-
                 ad.setTitle(R.string.error);
                 String s = new StringBuilder().append(mactivity.getText(R.string.failed))
                         .append(":")
                         .append("\n")
                         .append(e.getMessage()).toString();
                 stat.setText(s);
+                ModPackageManagerV2.INSTANCE.onInstallFail();
             }
 
             // TODO: Implement this method
@@ -624,7 +669,6 @@ public class ModPackageInstallHelper {
             public void onShow(DialogInterface p1) {
                 button = alertdialog.getButton(ad.BUTTON_POSITIVE);
                 button.setOnClickListener(new OnClickListener() {
-
                                               @Override
                                               public void onClick(View p1) {
                                                   ad.dismiss();
@@ -775,7 +819,11 @@ public class ModPackageInstallHelper {
                     }
                     break;
                 case 4:
-                    parent.install(activity);
+                    if (ModPackageManagerV2.INSTANCE.requestInstall(parent.mmpi.getModName(), parent.mmpi.getModType(), getSubType(subtype))) {
+                        parent.install(activity);
+                    } else {
+                        UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_ERROR, new ErrorMsg("Installation in progress!", false)));
+                    }
                     break;
             }
         }

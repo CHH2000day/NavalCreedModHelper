@@ -150,6 +150,11 @@ public class ModPackageInfo
 	{
 		return checkIsAbandoned ( getModType ( ) );
 	}
+
+    public int getVersion() {
+        return 0;
+        //TODO:Add this in mod.info
+    }
 	private Bitmap doGetModPreview ( )
 	{
 		if ( modPreview == null )

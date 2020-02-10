@@ -25,6 +25,7 @@ public class ModHelperApplication extends Application {
     private File resfilesdir;
     public static final String[] pkgnames;
     private static final String STOREDFILE_NAME = "mod.install";
+    private static final String STOREDFILEV2_NAME = "modInstall.conf";
     //never used
     //private android.os.Handler merrmsghdl;
     private File resDir;
@@ -145,6 +146,7 @@ public class ModHelperApplication extends Application {
 		*/
         //ModPackageInstallHelper.init(this);
         ModPackageManager.getInstance().init(this);
+        ModPackageManagerV2.INSTANCE.config(new File(getResFilesDir(), STOREDFILEV2_NAME), this);
         reconfigModPackageManager();
         RDCpplict.init(this, QyBuilder.create()
                 .setAppId("2ad00775ded9d2484606c0ad466387d0") //APPID
@@ -180,6 +182,7 @@ public class ModHelperApplication extends Application {
     public void reconfigModPackageManager() {
         try {
             ModPackageManager.getInstance().config(new File(getResFilesDir(), STOREDFILE_NAME));
+            ModPackageManagerV2.INSTANCE.config(new File(getResFilesDir(), STOREDFILEV2_NAME), this);
             Logger.i("Mod package manager configured.");
         } catch (Exception e) {
             Logger.d(e);

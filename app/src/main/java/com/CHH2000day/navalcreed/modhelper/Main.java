@@ -137,7 +137,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         mBGMReplacerFragment = new BGMReplacerFragment();
 
         ModPackageInstallerFragment mModpkgInstallerFragment = new ModPackageInstallerFragment();
-        ModPackageManagerFragment mModPackageManagerFragment = new ModPackageManagerFragment();
+        ModPackageManagerFragmentV2 mModPackageManagerFragment = new ModPackageManagerFragmentV2();
         //进行数据配置
         List<Fragment> fragments = new ArrayList<Fragment>();
         fragments.add(mBGReplacerFragment);

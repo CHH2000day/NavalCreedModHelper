@@ -1,5 +1,6 @@
 package com.CHH2000day.navalcreed.modhelper
 
+import com.orhanobut.logger.Logger
 import okio.buffer
 import okio.sink
 import okio.source
@@ -17,7 +18,7 @@ object ModPackageManagerV2 {
     private var pendingTask: PendingInstallation? = null
     private var installationFiles: MutableSet<String> = mutableSetOf();
     private const val CONFLICT_SUFFIX = ".old"
-    private lateinit var duplicatedFileInfo: MutableSet<DuplicationInfo>
+    private var duplicatedFileInfo: MutableSet<DuplicationInfo> = mutableSetOf()
     private lateinit var application: ModHelperApplication
     private val installConflictFiles = mutableSetOf<String>()
     private var onDataChangedListener: OnDataChangedListener? = null
@@ -65,6 +66,7 @@ object ModPackageManagerV2 {
 
     @Synchronized
     public fun uninstall(name: String): Int {
+        var a = 2
         val installation = getInstallation(name) ?: return -10
         for (file in installation.files) {
             recoverFileFromConflict(file, installation)
@@ -81,24 +83,31 @@ object ModPackageManagerV2 {
 
     private fun recoverFileFromConflict(fileName: String, installation: ModInstallationInfo) {
         val basePath = getBasePath(installation)
+        val rawName = fileName.replace(CONFLICT_SUFFIX, "")
         for (info in duplicatedFileInfo) {
-            if (info.fileName == fileName) {
-                for (fileInfo in info.files.asReversed()) {
-                    if (fileInfo.currFileName.endsWith(CONFLICT_SUFFIX)) {
-                        File(basePath, fileInfo.currFileName).renameTo(File(basePath, fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)))
-                        //Update installation record(1/2)
-                        getInstallation(fileInfo.modName)?.files?.remove(fileInfo.currFileName)
-                        //Update conflict record
-                        fileInfo.currFileName = fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
-                        //Update installation record(2/2)
-                        getInstallation(fileInfo.modName)?.files?.add(fileInfo.currFileName)
-                    } else {
-                        //remove file as it's the last item in list.No necessary to modify installation info
-                        File(basePath, fileInfo.currFileName).delete()
-                        info.files.remove(fileInfo)
-                        if (info.fileName.isEmpty()) {
-                            duplicatedFileInfo.remove(info)
-                        }
+            if (info.fileName == rawName) {
+                var pos = info.files.size - 1
+                for (i in 0 until info.files.size) {
+                    if (info.files[i].currFileName == fileName) {
+                        pos = i
+                        //Delete current file
+                        File(basePath, info.files[pos].currFileName).delete()
+                        info.files.removeAt(pos)
+                    }
+                }
+                //Remove a suffix for all elements before this effected
+                for (i in pos downTo 0) {
+                    File(basePath, info.files[pos].currFileName).renameTo(File(basePath, info.files[pos].currFileName.removeSuffix(CONFLICT_SUFFIX)))
+                    //Update installation record(1/2)
+                    getInstallation(info.files[pos].modName)?.files?.remove(info.files[pos].currFileName)
+                    //Update conflict record
+                    info.files[pos].currFileName = info.files[pos].currFileName.removeSuffix(CONFLICT_SUFFIX)
+                    //Update installation record(2/2)
+                    getInstallation(info.files[pos].modName)?.files?.add(info.files[pos].currFileName)
+                    //Remove info if only one element is left in the list
+                    if (info.files.size == 1) {
+                        duplicatedFileInfo.remove(info)
+                        getInstallation(info.files[pos].modName)?.status = Status.INSTALLED
                     }
                 }
                 //End this method
@@ -125,15 +134,15 @@ object ModPackageManagerV2 {
                         fileInfo.currFileName = fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
                         //Update installation record(2/2)
                         getInstallation(fileInfo.modName)?.files?.add(fileInfo.currFileName)
+                        if (info.files.size == 1) {
+                            getInstallation(info.files[0].modName)?.status = Status.INSTALLED
+                            duplicatedFileInfo.remove(info)
+                        }
                     } else {
                         //remove file as it's the last item in list.
                         //Modify installation info to partly working
                         File(basePath, fileInfo.currFileName).delete()
                         info.files.remove(fileInfo)
-                        if (info.files.size == 1) {
-                            getInstallation(info.files[0].modName)?.status = Status.INSTALLED.status
-                            duplicatedFileInfo.remove(info)
-                        }
                     }
                 }
                 //End this method
@@ -158,7 +167,6 @@ object ModPackageManagerV2 {
 
     private fun doRenameConflict(name: String) {
         val duplicationInfo = DuplicationInfo(name)
-        duplicatedFileInfo.add(duplicationInfo)
         marker@ for (mod in modList) {
             for (file in mod.files) {
                 if (name == file) {
@@ -167,7 +175,11 @@ object ModPackageManagerV2 {
                 }
             }
         }
-        doRenameConflict(name, duplicationInfo)
+        duplicatedFileInfo.add(duplicationInfo)
+        if (duplicationInfo.files.size > 1) {
+            doRenameConflict(name, duplicationInfo)
+        }
+
     }
 
     private fun doRenameConflict(name: String, info: DuplicationInfo) {
@@ -183,7 +195,7 @@ object ModPackageManagerV2 {
             duplicatedFile.currFileName += CONFLICT_SUFFIX
             installation.files.add(duplicatedFile.currFileName)
             //Set status to partly working
-            installation.status = Status.PARTLY_WORKING.status
+            installation.status = Status.PARTLY_WORKING
         }
         info.files.add(DuplicatedFile(pendingTask!!.name, name))
     }
@@ -200,7 +212,7 @@ object ModPackageManagerV2 {
         return getBasePath(pendingTask!!.type, pendingTask!!.subType)
     }
 
-    public fun getMods(): Set<ModInstallationInfo> = modList.toSet()
+    public fun getMods(): List<ModInstallationInfo> = modList.toList()
 
     public fun getInstallation(name: String): ModInstallationInfo? {
         for (mod in modList) {
@@ -234,7 +246,7 @@ object ModPackageManagerV2 {
             for (mod in modList) {
                 if (mod.name == name) {
                     isUpdate = true
-                    mod.status = Status.INSTALLING.status
+                    mod.status = Status.INSTALLING
                 }
             }
             pendingTask = PendingInstallation(name = name, type = type, subType = subType, isUpdate = isUpdate)
@@ -255,14 +267,15 @@ object ModPackageManagerV2 {
      * Call this once installation is done
      */
     public fun postInstall(version: Int) {
+        Logger.i("Mod installation completed")
         if (pendingTask != null) {
             if (pendingTask!!.isUpdate) {
                 val installation: ModInstallationInfo? = getInstallation(pendingTask!!.name)
-                installation?.status = Status.INSTALLED.status
-                installation?.files?.plusAssign(installationFiles!!)
+                installation?.status = Status.INSTALLED
+                installation?.files?.plusAssign(installationFiles)
                 modList.add(installation!!)
             } else {
-                val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED.status, files = installationFiles!!)
+                val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED, files = installationFiles!!)
                 modList.add(installationInfo)
             }
         }
@@ -278,6 +291,7 @@ object ModPackageManagerV2 {
 
     @Synchronized
     public fun rollback() {
+        Logger.i("Rolling back current installation")
         for (filename in installConflictFiles) {
             recoverFileFromConflict(filename)
         }
@@ -288,6 +302,7 @@ object ModPackageManagerV2 {
     }
 
     private fun init() {
+        if (!dataFile.exists()) return
         val source = dataFile.source().buffer()
 //        val type = object : TypeToken<List<ModInstallationInfo>>() {}.type
         val config = GsonHelper.getGson().fromJson(source.readUtf8(), Config::class.javaObjectType)
@@ -296,18 +311,20 @@ object ModPackageManagerV2 {
         duplicatedFileInfo = config.duplicationInfos
         source.close()
         inited = true
+        Logger.i("ModPackageManagerV2 initialized")
     }
 
     private fun writeConfig() {
-        thread {
+        thread(start = true) {
+            Logger.i("Writing mod config...")
             val mods = modList.toSet()
             synchronized(duplicatedFileInfo) {}
             val config = Config(version = managerVer, isOverride = override, modInfos = modList, duplicationInfos = duplicatedFileInfo)
+
             val sink = dataFile.sink().buffer()
             sink.writeUtf8(GsonHelper.getGson().toJson(config))
             sink.close()
-
-        }.start()
+        }
 
     }
 
@@ -315,7 +332,7 @@ object ModPackageManagerV2 {
         fun onChange()
     }
 
-    data class ModInstallationInfo(val name: String, var type: String, var subType: String, var version: Int, var status: Int, var files: MutableSet<String>) {}
+    data class ModInstallationInfo(val name: String, var type: String, var subType: String, var version: Int, var status: Status, var files: MutableSet<String>) {}
     data class Config(var version: Int = managerVer, var isOverride: Boolean, var modInfos: MutableList<ModInstallationInfo>, var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf())
     data class QueryResult(var result: Int = 0, var conflictList: Set<String>) {
         companion object {

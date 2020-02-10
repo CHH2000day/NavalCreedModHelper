@@ -427,14 +427,6 @@ public class ModPackageManager {
         void onChange();
     }
 
-    public interface OnCheckListener {
-        void nextCheck(Object... args);
-
-        void onFail(boolean couldContinue);
-
-        void onQuestion(int reason);
-    }
-
     public static final class QueryResult {
         public static final int RESULT_OK = 0;
         public static final int RESULT_UPDATE = 1;
