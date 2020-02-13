@@ -52,7 +52,9 @@ object ModPackageManagerV2 {
                     return result
                 }
                 if ((type != ModPackageInfo.MODTYPE_CV) || (type == ModPackageInfo.MODTYPE_CV && subType == mod.subType)) {
-                    resultSet = mod.files intersect files
+                    resultSet = mod.files.filter {
+                        files.contains(it)
+                    }.toSet()
                     if (resultSet.isNotEmpty()) {
                         result.result = QueryResult.RESULT_CONFLICT
                         result.conflictList = resultSet

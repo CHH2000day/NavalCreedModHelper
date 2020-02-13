@@ -88,6 +88,7 @@ public class ModPackageInstallHelper {
     private ZipFile mpkgFile;
     private ModPackageInfo mmpi;
     private ModPackageChecker modPackageChecker;
+    private HashSet<String> filesSet;
 
     /*public static void init ( Context ctx )
      {
@@ -317,7 +318,9 @@ public class ModPackageInstallHelper {
 
     }
 
+    //Also adds file to set
     private long calculateTotalSize() {
+        filesSet = new HashSet<>();
         Enumeration<? extends ZipEntry> en = mpkgFile.entries();
         long totalsize = 0;
         while (en.hasMoreElements()) {
@@ -326,6 +329,7 @@ public class ModPackageInstallHelper {
                 continue;
             }
             totalsize += entry.getSize();
+            filesSet.add(entry.getName());
         }
         en = null;
         Logger.i("mod size:%d bytes", totalsize);
@@ -811,8 +815,8 @@ public class ModPackageInstallHelper {
                     }
                     break;
                 case 3:
-                    ModPackageManager.QueryResult result = ModPackageManager.getInstance().checkConflict(parent.getModPackageInfo().getModType(), parent.getModPackageInfo().getModName(), 0, getSubType(isCVpack ? subtype : SUBTYPE_NULL), null);
-                    if (result.getResult() == ModPackageManager.QueryResult.RESULT_CONFLICT) {
+                    ModPackageManagerV2.QueryResult result = ModPackageManagerV2.INSTANCE.checkInstall(parent.getModPackageInfo().getModName(), parent.getModPackageInfo().getModType(), getSubType(isCVpack ? subtype : SUBTYPE_NULL), parent.getModPackageInfo().getVersion(), parent.filesSet);
+                    if (result.getResult() == ModPackageManagerV2.QueryResult.RESULT_CONFLICT) {
                         UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_WARNING, R.string.modpkg_conflict));
                     } else {
                         next();
