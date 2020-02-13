@@ -90,7 +90,7 @@
 	<string name="modtype_soundeffect">音效(已棄用)</string>
 	<string name="modtype_soundeffect_prim">主音效</string>
 	<string name="modtype_soundeffect_sec">副音效</string>
-	<string name="modtype_unknown">未知</string>
+	<string name="unknown">未知</string>
 	<string name="modtype_captainvoice">艦長語音</string>
 	<string name="modtype_captainvoice_cn">艦長語音-中文</string>
 	<string name="modtype_captainvoice_en">艦長語音-英語</string>

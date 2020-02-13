@@ -56,8 +56,86 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         ModPackageManagerV2.unregisterOnDataChangeListener()
     }
 
+    private fun getLocalizedStatus(status: ModPackageManagerV2.Status): String {
+        return when (status) {
+            ModPackageManagerV2.Status.UNKNOWN -> {
+                getString(R.string.unknown)
+            }
+            ModPackageManagerV2.Status.INSTALLING -> {
+                getString(R.string.installing)
+            }
+            ModPackageManagerV2.Status.INSTALLED -> {
+                getString(R.string.installed)
+            }
+            ModPackageManagerV2.Status.PARTLY_WORKING -> {
+                getString(R.string.partly_working)
+            }
+        }
+    }
     private fun getLocalizedModType(type: String, subType: String): String {
-        return "$type-$subType"
+        return when (type) {
+            ModPackageInfo.MODTYPE_CV -> {
+                when (subType) {
+                    ModPackageInfo.SUB_MODTYPE_CV_CN -> {
+                        getString(R.string.modtype_captainvoice_cn)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_EN -> {
+                        getString(R.string.modtype_captainvoice_en)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_DE -> {
+                        getString(R.string.modtype_captainvoice_de)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_RU -> {
+                        getString(R.string.modtype_captainvoice_ru)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD -> {
+                        getString(R.string.modtype_captainvoice_ru_beard)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD -> {
+                        getString(R.string.modtype_captainvoice_ru_vlad)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_JP_BB -> {
+                        getString(R.string.modtype_captainvoice_ja_bb)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_JP_CA -> {
+                        getString(R.string.modtype_captainvoice_ja_ca)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_JP_CV -> {
+                        getString(R.string.modtype_captainvoice_ja_cv)
+                    }
+                    ModPackageInfo.SUB_MODTYPE_CV_JP_DD -> {
+                        getString(R.string.modtype_captainvoice_ja_dd)
+                    }
+                    else -> {
+                        getString(R.string.unknown)
+                    }
+                }
+            }
+            ModPackageInfo.MODTYPE_BACKGROUND -> {
+                getString(R.string.modtype_background)
+            }
+            ModPackageInfo.MODTYPE_BGM -> {
+                getString(R.string.modtype_backgroundmusic)
+            }
+            ModPackageInfo.MODTYPE_CREWPIC -> {
+                getString(R.string.modtype_crewpic)
+            }
+            ModPackageInfo.MODTYPE_OTHER -> {
+                getString(R.string.unknown)
+            }
+            ModPackageInfo.MODTYPE_SOUNDEFFECT -> {
+                getString(R.string.modtype_soundeffect)
+            }
+            ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM -> {
+                getString(R.string.modtype_soundeffect_prim)
+            }
+            ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC -> {
+                getString(R.string.modtype_soundeffect_sec)
+            }
+            else -> {
+                getString(R.string.unknown)
+            }
+        }
     }
 
     private class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
@@ -87,7 +165,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
             relativeLayout.setOnLongClickListener(listener)
             modName.text = modList[position].name
             modType.text = getLocalizedModType(modList[position].type, modList[position].subType)
-            modStatus.text = modList[position].status.name
+            modStatus.text = getLocalizedStatus(modList[position].status)
             // TODO: Implement this method
         }
 

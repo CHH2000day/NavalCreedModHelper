@@ -97,7 +97,7 @@
 	<string name="modtype_soundeffect">Soundeffect(abandoned)</string>
 	<string name="modtype_soundeffect_prim">Sounde ffect(PRIM)</string>
 	<string name="modtype_soundeffect_sec">Sound effect(SEC)</string>
-	<string name="modtype_unknown">Unknown</string>
+	<string name="unknown">Unknown</string>
 	<string name="modtype_captainvoice">Captain voice</string>
 	<string name="modtype_captainvoice_cn">Captain voice(Chinese)</string>
 	<string name="modtype_captainvoice_en">Captain voice(English)</string>
@@ -118,4 +118,6 @@
 	<string name="modpkg_space_warning">No enough space left on device,this mod package requires %1$d bytes.However,there\'s only %2$d bytes left on this device.</string>
     <string name="modpkg_conflict">Conflict with current file detected.Do you want to continue?</string>
     <string name="mod_uninstall_warning">Confirm to remove mod : %1$s ?</string>
+	<string name="partly_working">Partly Working</string>
+	<string name="installed">Installed</string>
 </resources>

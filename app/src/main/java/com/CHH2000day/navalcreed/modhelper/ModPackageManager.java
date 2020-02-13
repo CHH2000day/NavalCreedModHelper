@@ -62,7 +62,7 @@ public class ModPackageManager {
     public void init(Context context) {
         Resources res = context.getResources();
         modType = new HashMap<String, String>();
-        modType.put(UNKNOWN, res.getString(R.string.modtype_unknown));
+        modType.put(UNKNOWN, res.getString(R.string.unknown));
         modType.put(ModPackageInfo.MODTYPE_BACKGROUND, res.getString(R.string.modtype_background));
         modType.put(ModPackageInfo.MODTYPE_BGM, res.getString(R.string.modtype_backgroundmusic));
         modType.put(ModPackageInfo.MODTYPE_CREWPIC, res.getString(R.string.modtype_crewpic));

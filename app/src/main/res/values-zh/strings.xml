@@ -96,7 +96,7 @@
 	<string name="modtype_soundeffect">音效(已弃用)</string>
 	<string name="modtype_soundeffect_prim">主音效</string>
 	<string name="modtype_soundeffect_sec">副音效</string>
-	<string name="modtype_unknown">未知</string>
+	<string name="unknown">未知</string>
 	<string name="modtype_captainvoice">舰长语音</string>
 	<string name="modtype_captainvoice_cn">舰长语音-中文</string>
 	<string name="modtype_captainvoice_en">舰长语音-英语</string>
@@ -117,5 +117,7 @@
 	<string name="modpkg_space_warning">剩余空间不足!这个mod包需要%1$d字节,但是设备上只有%2$d字节空间剩余</string>
 	<string name="modpkg_conflict">检测到与已有文件的冲突,是否继续?</string>
     <string name="mod_uninstall_warning">确定要移除mod:%1$s吗?</string>
+	<string name="partly_working">部分工作</string>
+	<string name="installed">已安装</string>
 
 </resources>
