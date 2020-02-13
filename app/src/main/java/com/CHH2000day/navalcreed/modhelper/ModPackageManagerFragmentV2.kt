@@ -187,17 +187,13 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                     var work = false
                     for (mod in modList) {
                         if (mod.name == it.name) {
-                            diffMap[it] = DiffReason.REASON_ADD
+                            diffMap[it] = DiffReason.REASON_MODIFY
                             work = true
                             break
                         }
                     }
-                    if (modList.isEmpty()) {
-                        diffMap[it] = DiffReason.REASON_ADD
-                        work = true
-                    }
                     if (!work) {
-                        diffMap[it] = DiffReason.REASON_MODIFY
+                        diffMap[it] = DiffReason.REASON_ADD
                     }
                 }
             } else {
@@ -207,17 +203,13 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                     var work = false
                     for (mod in mods) {
                         if (mod.name == it.name) {
-                            diffMap[it] = DiffReason.REASON_REMOVE
+                            diffMap[it] = DiffReason.REASON_MODIFY
                             work = true
                             break
                         }
                     }
-                    if (mods.isEmpty()) {
-                        diffMap[it] = DiffReason.REASON_REMOVE
-                        work = true
-                    }
                     if (!work) {
-                        diffMap[it] = DiffReason.REASON_MODIFY
+                        diffMap[it] = DiffReason.REASON_REMOVE
                     }
                 }
             }
