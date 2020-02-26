@@ -187,6 +187,11 @@ object ModPackageManagerV2 {
         for (duplicatedFile in info.files) {
             //Get installation info of existed mod,return if has null
             val installation = getInstallation(duplicatedFile.modName) ?: return
+            //Not keep this if it's a update
+            if (installation.name == name) {
+                installConflictFiles.remove(name)
+                return
+            }
             //Get base path
             val basePath = getBasePath(installation)
             //Rename it to $OLDNAME.old
@@ -336,6 +341,9 @@ object ModPackageManagerV2 {
 
     data class ModInstallationInfo(val name: String, var type: String, var subType: String, var version: Int, var status: Status, var files: MutableSet<String>) {}
     data class Config(var version: Int = managerVer, var isOverride: Boolean, var modInfos: MutableList<ModInstallationInfo>, var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf())
+    /**
+     * conflictList :list of files duplicated
+     */
     data class QueryResult(var result: Int = 0, var conflictList: Set<String>) {
         companion object {
             const val RESULT_OK = 0
