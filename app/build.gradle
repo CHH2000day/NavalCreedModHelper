@@ -31,9 +31,9 @@ android {
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 100
-        versionName 'build-2020021300preview'
+        versionName 'build-2020022600preview'
         flavorDimensions "versionCode"
-        buildConfigField "int", "BuildVersion", "10046"
+        buildConfigField "int", "BuildVersion", "10047"
     }
 
     flavorDimensions("Nyanpasu")
@@ -67,7 +67,7 @@ android {
 
 dependencies {
     //noinspection GradleCompatible
-    implementation 'com.google.android.material:material:1.2.0-alpha04'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
     //implementation 'cn.bmob.android:bmob-sdk:3.7.4'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
