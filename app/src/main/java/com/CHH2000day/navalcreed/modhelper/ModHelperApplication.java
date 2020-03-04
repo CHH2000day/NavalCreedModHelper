@@ -16,34 +16,46 @@ import com.qy.sdk.RDSDK;
 import com.qy.sdk.Utils.ErrorCode;
 import com.tencent.bugly.crashreport.CrashReport;
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 public class ModHelperApplication extends Application {
     public static final String CN = "CN";//num0
-    private File resfilesdir;
     public static final String[] pkgnames;
-    private static final String STOREDFILE_NAME = "mod.install";
-    private static final String STOREDFILEV2_NAME = "modInstall.conf";
-    //never used
-    //private android.os.Handler merrmsghdl;
-    private File resDir;
     //public static final String GAME_PKGNAME="com.loong.warship.zl";
     protected static final String KEY_PKGNAME = "pkgName";
+    private static final String STOREDFILE_NAME = "mod.install";
+    private static final String STOREDFILEV2_NAME = "modInstall.conf";
     private static final String GAME_PKGNAME_CN_SERVER = "com.loong.warship.zl";
     private static final String GAME_PKGNAME_EU_SERVER = "com.zloong.eu.nc";
     private static final String GAME_PKGNAME_TW_SERVER = "hk.com.szn.zj";
     private static final String EU = "EU";//num1
-    private String resfilePath = "";
     private static final String TW = "TW";//num2
-    private SharedPreferences mainpref;
     private static MainSharedPreferencesChangeListener preflistener;
+
+    static {
+        pkgnames = new String[3];
+        pkgnames[0] = CN;
+        pkgnames[1] = EU;
+        pkgnames[2] = TW;
+    }
+
+    private File resfilesdir;
+    //never used
+    //private android.os.Handler merrmsghdl;
+    private File resDir;
+    private String resfilePath = "";
+    private SharedPreferences mainpref;
     private String pkgnameinuse = GAME_PKGNAME_CN_SERVER;//CN EU TW
     private boolean isMainPage = true;
     private String versionName = "unknown";
     private String customShipnamePath = null;
     private File customShipNameFile = null;
+
+    private File oldConfigFile = null;
 
     public File getCustomShipNameFile() {
         return customShipNameFile;
@@ -55,13 +67,6 @@ public class ModHelperApplication extends Application {
 
     public String getVersionName() {
         return versionName;
-    }
-
-    static {
-        pkgnames = new String[3];
-        pkgnames[0] = CN;
-        pkgnames[1] = EU;
-        pkgnames[2] = TW;
     }
 
     public void setIsMainPage(boolean isMainPage) {
@@ -99,7 +104,7 @@ public class ModHelperApplication extends Application {
             versionName = packageInfo.versionName;
             CrashReport.initCrashReport(this, "a21f3fab2a", BuildConfig.DEBUG, strategy);
             Logger.i("Bugly inited");
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (PackageManager.NameNotFoundException ignored) {
 
         }
 
@@ -145,9 +150,16 @@ public class ModHelperApplication extends Application {
 		{e.printStackTrace();}
 		*/
         //ModPackageInstallHelper.init(this);
-        ModPackageManager.getInstance().init(this);
-        ModPackageManagerV2.INSTANCE.config(new File(getResFilesDir(), STOREDFILEV2_NAME), this);
         reconfigModPackageManager();
+        oldConfigFile = new File(getResFilesDir(), STOREDFILE_NAME);
+        if (oldConfigFile.exists()) {
+            ModPackageManager.getInstance().init(this);
+            try {
+                ModPackageManager.getInstance().config(oldConfigFile);
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
         RDCpplict.init(this, QyBuilder.create()
                 .setAppId("2ad00775ded9d2484606c0ad466387d0") //APPID
                 .setChannel("channel")     //渠道ID，可在后台配置开关
@@ -181,7 +193,6 @@ public class ModHelperApplication extends Application {
 
     public void reconfigModPackageManager() {
         try {
-            ModPackageManager.getInstance().config(new File(getResFilesDir(), STOREDFILE_NAME));
             ModPackageManagerV2.INSTANCE.config(new File(getResFilesDir(), STOREDFILEV2_NAME), this);
             Logger.i("Mod package manager configured.");
         } catch (Exception e) {
@@ -238,6 +249,10 @@ public class ModHelperApplication extends Application {
     public int getPkgNameNum(String name) {
         //防止返回-1发生越界问题
         return Math.max(0, Arrays.binarySearch(pkgnames, name));
+    }
+
+    public File getOldConfigFile() {
+        return oldConfigFile;
     }
 
     public SharedPreferences getMainSharedPreferences() {

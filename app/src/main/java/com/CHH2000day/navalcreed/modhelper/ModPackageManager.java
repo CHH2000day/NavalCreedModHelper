@@ -40,6 +40,7 @@ public class ModPackageManager {
     private boolean isOverride = false;
     private OnDataChangedListener OnDataChangedListener;
     private HashMap<String, String> modType;
+    public boolean inited = false;
 
     private ModPackageManager() {
     }
@@ -60,6 +61,7 @@ public class ModPackageManager {
     }
 
     public void init(Context context) {
+        inited = true;
         Resources res = context.getResources();
         modType = new HashMap<String, String>();
         modType.put(UNKNOWN, res.getString(R.string.unknown));

@@ -1,5 +1,8 @@
 package com.CHH2000day.navalcreed.modhelper
 
+import android.app.ProgressDialog
+import android.os.AsyncTask
+import androidx.annotation.NonNull
 import com.orhanobut.logger.Logger
 import okio.buffer
 import okio.sink
@@ -332,7 +335,6 @@ object ModPackageManagerV2 {
             }
 
         }
-
     }
 
     interface OnDataChangedListener {
@@ -363,4 +365,68 @@ object ModPackageManagerV2 {
      * and the latest will be the last
      */
     data class DuplicationInfo(val fileName: String, var files: MutableList<DuplicatedFile> = mutableListOf())
+
+
+    class MigrationHelper(private val application: ModHelperApplication) : AsyncTask<File, String, Boolean>() {
+        private lateinit var progressDialog: ProgressDialog
+        override fun onPreExecute() {
+            super.onPreExecute()
+            progressDialog = ProgressDialog(application)
+            progressDialog.setTitle("Migrating")
+            progressDialog.setMessage(application.getString(R.string.please_wait))
+            progressDialog.max = ModPackageManager.PUBLIC_KEYS.size
+            progressDialog.setCancelable(false)
+            progressDialog.setCanceledOnTouchOutside(false)
+            progressDialog.show()
+        }
+
+        override fun doInBackground(@NonNull vararg params: File?): Boolean {
+            val mods = ModPackageManager.getInstance().modList
+            mods.forEach {
+                if (!it.value.isBlank()) {
+                    var type = it.key
+                    var subType = ModPackageInfo.SUBTYPE_EMPTY
+                    if (it.key.startsWith("SUB")) {
+                        type = ModPackageInfo.MODTYPE_CV
+                        subType = it.key
+                    }
+                    val parentDirPath = ModPackageInstallHelper.getPath(type, ModPackageInstallHelper.getSubTypeId(subType), application)
+                    val fileNames = listFiles(File(parentDirPath))
+                    val files = mutableSetOf<String>()
+                    fileNames.forEach {
+                        files.add(it.removePrefix(parentDirPath))
+                    }
+                    modList.add(ModInstallationInfo(it.value, type, subType, -1, ModPackageManagerV2.Status.INSTALLED, files))
+                }
+                publishProgress()
+            }
+            @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            params[0]?.delete()
+            return true
+        }
+
+        private fun listFiles(dir: File): MutableSet<String> {
+            val filenames = mutableSetOf<String>()
+            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            for (file in dir.listFiles()) {
+                if (file.isFile) {
+                    filenames.add(file.path)
+                } else {
+                    filenames += listFiles(file)
+                }
+            }
+            return filenames
+        }
+
+        override fun onProgressUpdate(vararg values: String?) {
+            super.onProgressUpdate(*values)
+            progressDialog.incrementProgressBy(1)
+        }
+
+        override fun onPostExecute(result: Boolean?) {
+            super.onPostExecute(result)
+            progressDialog.dismiss()
+        }
+
+    }
 }

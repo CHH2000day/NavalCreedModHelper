@@ -50,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import okhttp3.Call;
@@ -150,8 +151,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         fragments.add(mModpkgInstallerFragment);
         fragments.add(mModPackageManagerFragment);
         fragments.add(new AboutFragment());
-        List<String> titles = new ArrayList<String>();
-		/*
+        /*
 		 titles.add ( "背景替换" );
 		 titles.add ( "登录动画修改" );
 		 titles.add ( "船员头像修改" );
@@ -161,9 +161,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 		 titles.add ( "Mod包管理" );
 		 titles.add ( "关于" );*/
         String[] fragment_titles = getResources().getStringArray(R.array.fragment_titles);
-        for (String title : fragment_titles) {
-            titles.add(title);
-        }
+        List<String> titles = new ArrayList<String>(Arrays.asList(fragment_titles));
         FragmentPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -181,7 +179,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
             mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
         }
-
+        if (ModPackageManager.getInstance().inited) {
+            new ModPackageManagerV2.MigrationHelper(getModHelperApplication()).execute(getModHelperApplication().getOldConfigFile());
+        }
     }
 
     @Override
@@ -555,22 +555,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         } else {
             exit();
         }
-    }
-
-    public BGReplacerFragment getBGReplacerFragment() {
-        return mBGReplacerFragment;
-    }
-
-    public BGMReplacerFragment getBGMReplacerFragment() {
-        return mBGMReplacerFragment;
-    }
-
-    public CrewPicReplacerFragment getCrewPicReplacerFragment() {
-        return mCrewPicReplacerFragment;
-    }
-
-    public CustomShipNameFragment getCustomShipNameFragment() {
-        return mAntiHexieFragment;
     }
 
     public void exit() {
