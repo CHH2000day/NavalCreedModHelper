@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -79,8 +78,6 @@ public class ModPackageInstallHelper {
     private onModPackageLoadDoneListener mlistener;
     private long totalFileSize;
     private Handler mHandler;
-    //private static String[] CV_COUNTRY={};
-
 
     private int msubtype = SUBTYPE_NULL;
     private ModHelperApplication mmha;
@@ -90,10 +87,6 @@ public class ModPackageInstallHelper {
     private ModPackageChecker modPackageChecker;
     private HashSet<String> filesSet;
 
-    /*public static void init ( Context ctx )
-     {
-     //CV_COUNTRY = ctx.getResources ( ).getStringArray ( R.array.cv_types );
-     }*/
     public ModPackageInstallHelper(File pkgFile) {
         msrcFile = pkgFile;
     }
@@ -134,6 +127,7 @@ public class ModPackageInstallHelper {
         }
         return subt;
     }
+
     private static String getSubType(int msubtype) {
         String s = "";
         switch (msubtype) {
@@ -339,55 +333,6 @@ public class ModPackageInstallHelper {
     public long getTotalSize() {
         return totalFileSize;
     }
-//
-//    private void checkModType(final Fragment fragment) {
-//        //检查mod包类型
-//        //如果mod包类型为语音包，确认安装位置
-//        if (mmpi.getModType().equals(mmpi.MODTYPE_CV)) {
-//
-//            msubtype = SUBTYPE_CV_OFFSET;
-//            AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
-//            adb.setTitle(R.string.modpkg_cv_to_replace)
-//                    .setSingleChoiceItems(R.array.cv_types, 0, (p1, p2) -> {
-//                        msubtype = p2 + SUBTYPE_CV_OFFSET;
-//                        // TODO: Implement this method
-//                    })
-//                    .setNegativeButton(R.string.cancel, null)
-//                    .setPositiveButton(R.string.ok, (p1, p2) -> {
-//                        checkInstall(fragment);
-//                        // TODO: Implement this method
-//                    });
-//            adb.create().show();
-//
-//        } else {
-//            checkInstall(fragment);
-//        }
-//
-//
-//    }
-//
-//    private void checkInstall(final Fragment fragment) {
-//        ModPackageManager mpm = ModPackageManager.getInstance();
-//        if (mpm.checkInstalled(mmpi.getModType(), getSubType(msubtype))) {
-//            AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
-//            adb.setTitle(R.string.error)
-//                    .setMessage(R.string.modpkg_already_installed_warning);
-//            adb.create().show();
-//
-//        } else if (mmpi.isAbandoned()) {
-//            if (ModPackageManager.getInstance().isOverride()) {
-//                install(fragment);
-//            } else {
-//                AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
-//                adb.setTitle(R.string.error)
-//                        .setMessage(R.string.modpkg_interface_warning);
-//                adb.create().show();
-//            }
-//        } else {
-//            install(activity);
-//        }
-//
-//    }
 
     /**
      * Check whether app satisfies all function
@@ -395,23 +340,6 @@ public class ModPackageInstallHelper {
      * @return null if everything goes normal
      */
     private ErrorMsg checkVersion() {
-//		//检查是否能实现mod包的所有功能
-//		if (!mmpi.hasAllFeature())
-//		{
-//            AlertDialog.Builder adb = new AlertDialog.Builder(fragment.getActivity());
-//			adb.setTitle(R.string.notice)
-//				.setMessage(R.string.modpkg_ver_warning)
-//				.setNegativeButton(R.string.cancel, null)
-//				.setPositiveButton(R.string.cont, (p1, p2) -> {
-//                    checkAvailSpace(fragment);
-//				// TODO: Implement this method
-//			});
-//			adb.create().show();
-//		}
-//		else
-//		{
-//            checkAvailSpace(fragment);
-//		}
         if (mmpi.hasAllFeature()) {
             return null;
         }
@@ -498,7 +426,6 @@ public class ModPackageInstallHelper {
 
         private boolean patchShipName() {
             publishProgress(0);
-
             ZipFile zipFile = null;
             try {
                 zipFile = new ZipFile(msrcFile);
@@ -590,7 +517,6 @@ public class ModPackageInstallHelper {
                 ModPackageManagerV2.INSTANCE.rollback();
                 return false;
             }
-            // TODO: Implement this method
             return true;
         }
 
@@ -600,7 +526,6 @@ public class ModPackageInstallHelper {
             dialogView = mactivity.getLayoutInflater().inflate(R.layout.dialog_installmodpkg, null);
             stat = dialogView.findViewById(R.id.dialoginstallmodpkgStatus);
             progressbar = dialogView.findViewById(R.id.dialoginstallmodpkgProgress);
-            // TODO: Implement this method
             AlertDialog.Builder adb = new AlertDialog.Builder(mactivity);
             adb.setTitle(R.string.please_wait)
                     .setView(dialogView)
@@ -634,8 +559,6 @@ public class ModPackageInstallHelper {
                 stat.setText(s);
                 ModPackageManagerV2.INSTANCE.onInstallFail();
             }
-
-            // TODO: Implement this method
             super.onPostExecute(result);
         }
 
@@ -651,7 +574,6 @@ public class ModPackageInstallHelper {
             }
             progressbar.setProgress(values[0]);
 
-            // TODO: Implement this method
 
         }
 
@@ -672,23 +594,12 @@ public class ModPackageInstallHelper {
             @Override
             public void onShow(DialogInterface p1) {
                 button = alertdialog.getButton(ad.BUTTON_POSITIVE);
-                button.setOnClickListener(new OnClickListener() {
-                                              @Override
-                                              public void onClick(View p1) {
-                                                  ad.dismiss();
-                                                  // TODO: Implement this method
-                                              }
-                                          }
+                button.setOnClickListener(view -> ad.dismiss()
                 );
                 color = button.getCurrentTextColor();
                 button.setClickable(false);
                 button.setTextColor(Color.GRAY);
-
-                // TODO: Implement this method
-
             }
-
-
         }
 
     }
