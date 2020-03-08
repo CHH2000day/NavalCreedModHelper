@@ -179,15 +179,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
             mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
         }
-        if (ModPackageManager.getInstance().inited) {
-            new ModPackageManagerV2.MigrationHelper(getModHelperApplication()).execute(getModHelperApplication().getOldConfigFile());
-        }
+
     }
 
     @Override
     protected void onStart() {
         // TODO: Implement this method
         super.onStart();
+        if (ModPackageManager.getInstance().inited) {
+            new ModPackageManagerV2.MigrationHelper(getModHelperApplication()).execute(getModHelperApplication().getOldConfigFile());
+            ModPackageManager.getInstance().inited = false;
+        }
     }
 
     public boolean isShowAd() {
