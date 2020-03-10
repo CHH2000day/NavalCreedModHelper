@@ -187,7 +187,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         // TODO: Implement this method
         super.onStart();
         if (ModPackageManager.getInstance().inited) {
-            new ModPackageManagerV2.MigrationHelper(getModHelperApplication()).execute(getModHelperApplication().getOldConfigFile());
+            new ModPackageManagerV2.MigrationHelper(this).execute(getModHelperApplication().getOldConfigFile());
             ModPackageManager.getInstance().inited = false;
         }
     }
