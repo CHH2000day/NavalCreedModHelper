@@ -107,7 +107,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                         getString(R.string.modtype_captainvoice_ja_dd)
                     }
                     else -> {
-                        getString(R.string.unknown)
+                        getString(R.string.modtype_captainvoice)
                     }
                 }
             }

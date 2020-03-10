@@ -233,7 +233,7 @@ public class ModPackageInstallerFragment extends Fragment {
                         .append(Utils.convertFileSize(modsize))
                         .append("\n")
                         .append(getString(R.string.modtype))
-                        .append(ModPackageManager.getInstance().resolveModType(mpi.getModType()))
+                        .append(ModPackageManagerV2.INSTANCE.getModTypeName(mpi.getModType()))
                         .append("\n")
                         .append(getText(R.string.modauthor))
                         .append(mpi.getModAuthor())

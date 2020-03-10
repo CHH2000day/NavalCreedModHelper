@@ -25,12 +25,12 @@ object ModPackageManagerV2 {
     private lateinit var application: ModHelperApplication
     private val installConflictFiles = mutableSetOf<String>()
     private var onDataChangedListener: OnDataChangedListener? = null
-
+    private var modType = mutableMapOf<String, String>()
 
     public fun config(file: File, application: ModHelperApplication): Boolean {
         dataFile = file
         this.application = application
-        init()
+        init(application)
         return true
     }
 
@@ -310,7 +310,7 @@ object ModPackageManagerV2 {
         }
     }
 
-    private fun init() {
+    private fun init(application: ModHelperApplication) {
         if (!dataFile.exists()) return
         val source = dataFile.source().buffer()
 //        val type = object : TypeToken<List<ModInstallationInfo>>() {}.type
@@ -320,7 +320,36 @@ object ModPackageManagerV2 {
         duplicatedFileInfo = config.duplicationInfos
         source.close()
         inited = true
+        val res = application.resources
+        modType[ModPackageInfo.MODTYPE_OTHER] = res.getString(R.string.unknown)
+        modType[ModPackageInfo.MODTYPE_BACKGROUND] = res.getString(R.string.modtype_background)
+        modType[ModPackageInfo.MODTYPE_BGM] = res.getString(R.string.modtype_backgroundmusic)
+        modType[ModPackageInfo.MODTYPE_CREWPIC] = res.getString(R.string.modtype_crewpic)
+        modType[ModPackageInfo.MODTYPE_SOUNDEFFECT] = res.getString(R.string.modtype_soundeffect)
+        modType[ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM] = res.getString(R.string.modtype_soundeffect_prim)
+        modType[ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC] = res.getString(R.string.modtype_soundeffect_sec)
+        modType[ModPackageInfo.MODTYPE_CV] = res.getString(R.string.modtype_captainvoice)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_CN] = res.getString(R.string.modtype_captainvoice_cn)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_EN] = res.getString(R.string.modtype_captainvoice_en)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_JP_CV] = res.getString(R.string.modtype_captainvoice_ja_cv)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_JP_BB] = res.getString(R.string.modtype_captainvoice_ja_bb)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_JP_CA] = res.getString(R.string.modtype_captainvoice_ja_ca)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_JP_DD] = res.getString(R.string.modtype_captainvoice_ja_dd)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_DE] = res.getString(R.string.modtype_captainvoice_de)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_RU] = res.getString(R.string.modtype_captainvoice_ru)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD] = res.getString(R.string.modtype_captainvoice_ru_vlad)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD] = res.getString(R.string.modtype_captainvoice_ru_beard)
+        modType[ModPackageInfo.MOSTYPE_CUSTOMSHIPNAME] = res.getString(R.string.modtype_customshipname)
+
+        inited = true
         Logger.i("ModPackageManagerV2 initialized")
+    }
+
+    public fun getModTypeName(type: String): String? {
+        if (modType.containsKey(type)) {
+            return modType[type]
+        }
+        return modType[ModPackageInfo.MODTYPE_OTHER]
     }
 
     private fun writeConfig() {
@@ -343,6 +372,7 @@ object ModPackageManagerV2 {
 
     data class ModInstallationInfo(val name: String, var type: String, var subType: String, var version: Int, var status: Status, var files: MutableSet<String>) {}
     data class Config(var version: Int = managerVer, var isOverride: Boolean, var modInfos: MutableList<ModInstallationInfo>, var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf())
+
     /**
      * conflictList :list of files duplicated
      */
@@ -360,6 +390,7 @@ object ModPackageManagerV2 {
     }
 
     data class DuplicatedFile(val modName: String, var currFileName: String)
+
     /**
      * the oldest will be the first item in the list
      * and the latest will be the last
