@@ -548,14 +548,13 @@ public class ModPackageInstallHelper {
             if (result) {
                 ad.setTitle(R.string.success);
                 stat.setText(R.string.success);
-                ModPackageManager.getInstance().postInstall(mmpi.getModType(), getSubType(mSubType), mmpi.getModName());
                 ModPackageManagerV2.INSTANCE.postInstall(mmpi.getVersion());
             } else {
                 ad.setTitle(R.string.error);
-                String s = new StringBuilder().append(mactivity.getText(R.string.failed))
-                        .append(":")
-                        .append("\n")
-                        .append(e.getMessage()).toString();
+                String s = mactivity.getText(R.string.failed) +
+                        ":" +
+                        "\n" +
+                        e.getMessage();
                 stat.setText(s);
                 ModPackageManagerV2.INSTANCE.onInstallFail();
             }

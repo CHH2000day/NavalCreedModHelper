@@ -72,8 +72,8 @@ object ModPackageManagerV2 {
     @Synchronized
     public fun uninstall(name: String): Int {
         val installation = getInstallation(name) ?: return -10
-        for (file in installation.files) {
-            recoverFileFromConflict(file, installation)
+        installConflictFiles.forEach {
+            recoverFileFromConflict(it, installation)
         }
         modList.remove(installation)
         refresh()
@@ -91,7 +91,7 @@ object ModPackageManagerV2 {
         for (info in duplicatedFileInfo) {
             if (info.fileName == rawName) {
                 var pos = info.files.size - 1
-                for (i in 0 until info.files.size) {
+                for (i in 0 until info.files.size - 1) {
                     if (info.files[i].currFileName == fileName) {
                         pos = i
                         //Delete current file
@@ -282,7 +282,6 @@ object ModPackageManagerV2 {
                 val installation: ModInstallationInfo? = getInstallation(pendingTask!!.name)
                 installation?.status = Status.INSTALLED
                 installation?.files?.plusAssign(installationFiles)
-                modList.add(installation!!)
             } else {
                 val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED, files = installationFiles)
                 modList.add(installationInfo)
