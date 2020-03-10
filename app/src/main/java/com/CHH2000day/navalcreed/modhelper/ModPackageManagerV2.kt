@@ -367,11 +367,11 @@ object ModPackageManagerV2 {
     data class DuplicationInfo(val fileName: String, var files: MutableList<DuplicatedFile> = mutableListOf())
 
 
-    class MigrationHelper(private val application: ModHelperApplication) : AsyncTask<File, String, Boolean>() {
+    class MigrationHelper(private val activity: Main) : AsyncTask<File, String, Boolean>() {
         private lateinit var progressDialog: ProgressDialog
         override fun onPreExecute() {
             super.onPreExecute()
-            progressDialog = ProgressDialog(application)
+            progressDialog = ProgressDialog(activity)
             progressDialog.setTitle("Migrating")
             progressDialog.setMessage(application.getString(R.string.please_wait))
             progressDialog.max = ModPackageManager.PUBLIC_KEYS.size
