@@ -253,7 +253,7 @@ object ModPackageManagerV2 {
         if (pendingTask == null) {
             var isUpdate = false
             for (mod in modList) {
-                if (mod.name == name) {
+                if (mod.name == name && mod.type == type && mod.subType == subType) {
                     isUpdate = true
                     mod.status = Status.INSTALLING
                 }
