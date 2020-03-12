@@ -735,6 +735,7 @@ public class ModPackageInstallHelper {
                 case 4:
                     if (ModPackageManagerV2.INSTANCE.requestInstall(parent.mmpi.getModName(), parent.mmpi.getModType(), getSubType(subtype))) {
                         parent.install(activity);
+                        pos = 0;
                     } else {
                         UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_ERROR, new ErrorMsg("Installation in progress!", false)));
                     }
