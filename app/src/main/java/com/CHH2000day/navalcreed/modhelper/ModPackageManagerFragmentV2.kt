@@ -253,7 +253,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
 
     private inner class UninstallListener : View.OnLongClickListener {
         override fun onLongClick(v: View?): Boolean {
-            var name = v?.tag as String
+            val name = v?.tag as String
             val adb = context?.let { AlertDialog.Builder(it) }
             adb?.setTitle(R.string.notice)
                     ?.setMessage(getString(R.string.mod_uninstall_warning, name))

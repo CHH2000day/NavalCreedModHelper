@@ -81,6 +81,13 @@ object ModPackageManagerV2 {
     }
 
     public fun refresh() {
+        if (duplicatedFileInfo.isNotEmpty()) {
+            duplicatedFileInfo.filter {
+                it.files.size <= 2
+            }.forEach {
+                duplicatedFileInfo.remove(it)
+            }
+        }
         onDataChangedListener?.onChange()
         writeConfig()
     }
@@ -109,7 +116,7 @@ object ModPackageManagerV2 {
                     //Update installation record(2/2)
                     getInstallation(info.files[pos].modName)?.files?.add(info.files[pos].currFileName)
                     //Remove info if only one element is left in the list
-                    if (info.files.size == 1) {
+                    if (info.files.size <= 1) {
                         duplicatedFileInfo.remove(info)
                         getInstallation(info.files[pos].modName)?.status = Status.INSTALLED
                     }
@@ -138,9 +145,8 @@ object ModPackageManagerV2 {
                         fileInfo.currFileName = fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
                         //Update installation record(2/2)
                         getInstallation(fileInfo.modName)?.files?.add(fileInfo.currFileName)
-                        if (info.files.size == 1) {
+                        if (info.files.size <= 1) {
                             getInstallation(info.files[0].modName)?.status = Status.INSTALLED
-                            duplicatedFileInfo.remove(info)
                         }
                     } else {
                         //remove file as it's the last item in list.
@@ -195,16 +201,19 @@ object ModPackageManagerV2 {
                 installConflictFiles.remove(name)
                 return
             }
-            //Get base path
-            val basePath = getBasePath(installation)
-            //Rename it to $OLDNAME.old
-            File(basePath, duplicatedFile.currFileName).renameTo(File(basePath, duplicatedFile.currFileName + CONFLICT_SUFFIX))
-            //Update name in existed installation info
-            installation.files.remove(duplicatedFile.currFileName)
-            duplicatedFile.currFileName += CONFLICT_SUFFIX
-            installation.files.add(duplicatedFile.currFileName)
-            //Set status to partly working
-            installation.status = Status.PARTLY_WORKING
+            if ((installation.type == ModPackageInfo.MODTYPE_OTHER || (installation.type == pendingTask?.type && installation.subType == pendingTask?.subType))) {
+                //Get base path
+                val basePath = getBasePath(installation)
+                //Rename it to $OLDNAME.old
+                File(basePath, duplicatedFile.currFileName).renameTo(File(basePath, duplicatedFile.currFileName + CONFLICT_SUFFIX))
+                //Update name in existed installation info
+                installation.files.remove(duplicatedFile.currFileName)
+                duplicatedFile.currFileName += CONFLICT_SUFFIX
+                installation.files.add(duplicatedFile.currFileName)
+                //Set status to partly working
+                installation.status = Status.PARTLY_WORKING
+            }
+
         }
         info.files.add(DuplicatedFile(pendingTask!!.name, name))
     }

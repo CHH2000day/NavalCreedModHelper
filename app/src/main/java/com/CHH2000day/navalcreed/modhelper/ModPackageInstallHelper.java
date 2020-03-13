@@ -630,6 +630,7 @@ public class ModPackageInstallHelper {
         private ModPackageInstallHelper parent;
         private boolean isCVpack = false;
         private int subtype = 0;
+        private String mod_name = null;
 
         @SuppressLint("HandlerLeak")
         public ModPackageChecker(Activity activity, ModPackageInstallHelper parent) {
@@ -646,11 +647,14 @@ public class ModPackageInstallHelper {
                         case Action.SHOW_CV_SELECTION:
                             //args:type
                             subtype = SUBTYPE_CV_OFFSET;
+                            mod_name = parent.mmpi.getModName() + '-' + ModPackageInfo.SUB_MODTYPE_CV_EN;
                             adb.setTitle(R.string.modpkg_cv_to_replace)
                                     .setSingleChoiceItems(R.array.cv_types, 0, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            mod_name = parent.mmpi.getModName();
                                             subtype += which;
+                                            mod_name += ('-' + getSubType(subtype));
                                         }
                                     })
                                     .setNegativeButton(R.string.cancel, (dialog, which) -> {
@@ -691,6 +695,12 @@ public class ModPackageInstallHelper {
                     }
                 }
             };
+            reset();
+        }
+
+        void reset() {
+            pos = 0;
+            mod_name = parent.mmpi.getModName();
         }
 
         void next() {
@@ -725,7 +735,7 @@ public class ModPackageInstallHelper {
                     }
                     break;
                 case 3:
-                    ModPackageManagerV2.QueryResult result = ModPackageManagerV2.INSTANCE.checkInstall(parent.getModPackageInfo().getModName(), parent.getModPackageInfo().getModType(), getSubType(isCVpack ? subtype : SUBTYPE_NULL), parent.getModPackageInfo().getVersion(), parent.filesSet);
+                    ModPackageManagerV2.QueryResult result = ModPackageManagerV2.INSTANCE.checkInstall(mod_name, parent.getModPackageInfo().getModType(), getSubType(isCVpack ? subtype : SUBTYPE_NULL), parent.getModPackageInfo().getVersion(), parent.filesSet);
                     if (result.getResult() == ModPackageManagerV2.QueryResult.RESULT_CONFLICT) {
                         UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_WARNING, R.string.modpkg_conflict));
                     } else {
@@ -733,9 +743,9 @@ public class ModPackageInstallHelper {
                     }
                     break;
                 case 4:
-                    if (ModPackageManagerV2.INSTANCE.requestInstall(parent.mmpi.getModName(), parent.mmpi.getModType(), getSubType(subtype))) {
+                    if (ModPackageManagerV2.INSTANCE.requestInstall(mod_name, parent.mmpi.getModType(), getSubType(subtype))) {
                         parent.install(activity);
-                        pos = 0;
+                        reset();
                     } else {
                         UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_ERROR, new ErrorMsg("Installation in progress!", false)));
                     }
