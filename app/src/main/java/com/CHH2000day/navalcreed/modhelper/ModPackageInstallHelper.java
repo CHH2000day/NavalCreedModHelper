@@ -79,7 +79,6 @@ public class ModPackageInstallHelper {
     private long totalFileSize;
     private Handler mHandler;
 
-    private int msubtype = SUBTYPE_NULL;
     private ModHelperApplication mmha;
     private File msrcFile;
     private ZipFile mpkgFile;
@@ -356,9 +355,9 @@ public class ModPackageInstallHelper {
         }
     }
 
-    private void install(Activity activity) {
+    private void install(Activity activity, int subType) {
 
-        InstallTask it = new InstallTask(msubtype, activity, getModPackageInfo(), msrcFile, mpkgFile);
+        InstallTask it = new InstallTask(subType, activity, getModPackageInfo(), msrcFile, mpkgFile);
         it.execute();
 
 
@@ -744,7 +743,7 @@ public class ModPackageInstallHelper {
                     break;
                 case 4:
                     if (ModPackageManagerV2.INSTANCE.requestInstall(mod_name, parent.mmpi.getModType(), getSubType(subtype))) {
-                        parent.install(activity);
+                        parent.install(activity, subtype);
                         reset();
                     } else {
                         UIHandler.sendMessage(UIHandler.obtainMessage(Action.SHOW_ERROR, new ErrorMsg("Installation in progress!", false)));
