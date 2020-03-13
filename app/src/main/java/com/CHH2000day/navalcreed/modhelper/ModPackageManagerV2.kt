@@ -31,6 +31,7 @@ object ModPackageManagerV2 {
         dataFile = file
         this.application = application
         init(application)
+        Logger.d("ModPackageManagerV2 configured")
         return true
     }
 
@@ -46,12 +47,14 @@ object ModPackageManagerV2 {
      * Check if there's a conflict with existing mod
      */
     public fun checkInstall(name: String, type: String, subType: String, version: Int, files: MutableSet<String>): QueryResult {
+        Logger.d("Checking installation status for mod $name-$type-$subType version$version")
         val result = QueryResult(result = QueryResult.RESULT_OK, conflictList = mutableSetOf())
         for (mod in modList) {
             lateinit var resultSet: Set<String>
             if (mod.type == type) {
                 if (mod.name == name && mod.version <= version) {
                     result.result = QueryResult.RESULT_UPDATE
+                    Logger.d("Result:update")
                     return result
                 }
                 if ((type != ModPackageInfo.MODTYPE_CV) || (type == ModPackageInfo.MODTYPE_CV && subType == mod.subType)) {
@@ -61,22 +64,26 @@ object ModPackageManagerV2 {
                     if (resultSet.isNotEmpty()) {
                         result.result = QueryResult.RESULT_CONFLICT
                         result.conflictList = resultSet
+                        Logger.d("Result:conflict")
                         return result
                     }
                 }
             }
         }
+        Logger.d("Result:OK")
         return result
     }
 
     @Synchronized
     public fun uninstall(name: String): Int {
+        Logger.d("Start to uninstall mod:$name")
         val installation = getInstallation(name) ?: return -10
         installConflictFiles.forEach {
             recoverFileFromConflict(it, installation)
         }
         modList.remove(installation)
         refresh()
+        Logger.d("Mod uninstall complete!")
         return 0;
     }
 
@@ -85,6 +92,7 @@ object ModPackageManagerV2 {
             duplicatedFileInfo.filter {
                 it.files.size <= 2
             }.forEach {
+                Logger.d("Remove duplication info:${it.fileName}")
                 duplicatedFileInfo.remove(it)
             }
         }
@@ -95,6 +103,7 @@ object ModPackageManagerV2 {
     private fun recoverFileFromConflict(fileName: String, installation: ModInstallationInfo) {
         val basePath = getBasePath(installation)
         val rawName = fileName.replace(CONFLICT_SUFFIX, "")
+        Logger.d("Remove conflict for file:$rawName")
         for (info in duplicatedFileInfo) {
             if (info.fileName == rawName) {
                 var pos = info.files.size - 1
@@ -102,7 +111,9 @@ object ModPackageManagerV2 {
                     if (info.files[i].currFileName == fileName) {
                         pos = i
                         //Delete current file
-                        File(basePath, info.files[pos].currFileName).delete()
+                        val file = File(basePath, info.files[pos].currFileName)
+                        file.delete()
+                        Logger.d("Deleted file:${file.path}")
                         info.files.removeAt(pos)
                     }
                 }
@@ -117,6 +128,7 @@ object ModPackageManagerV2 {
                     getInstallation(info.files[pos].modName)?.files?.add(info.files[pos].currFileName)
                     //Remove info if only one element is left in the list
                     if (info.files.size <= 1) {
+                        Logger.d("Setting status of mod \'${info.files[pos].modName}\' to INSTALLED")
                         duplicatedFileInfo.remove(info)
                         getInstallation(info.files[pos].modName)?.status = Status.INSTALLED
                     }
@@ -126,7 +138,9 @@ object ModPackageManagerV2 {
             }
         }
         //If no duplication
-        File(basePath, fileName).delete()
+        val f = File(basePath, fileName)
+        f.delete()
+        Logger.d("Deleted file:${f.path}")
     }
 
     /**
@@ -165,6 +179,7 @@ object ModPackageManagerV2 {
 
     @Synchronized
     public fun renameConflict(name: String) {
+        Logger.d("Prepare to rename conflict file $name")
         installConflictFiles.add(name)
         for (info in duplicatedFileInfo) {
             if (info.fileName == name) {
@@ -199,12 +214,14 @@ object ModPackageManagerV2 {
             //Not keep this if it's a update
             if (installation.name == name) {
                 installConflictFiles.remove(name)
+                Logger.d("File :$name is a update,not add it to list")
                 return
             }
             if ((installation.type == ModPackageInfo.MODTYPE_OTHER || (installation.type == pendingTask?.type && installation.subType == pendingTask?.subType))) {
                 //Get base path
                 val basePath = getBasePath(installation)
                 //Rename it to $OLDNAME.old
+                Logger.d("Renaming file for affected mod:${installation.name}")
                 File(basePath, duplicatedFile.currFileName).renameTo(File(basePath, duplicatedFile.currFileName + CONFLICT_SUFFIX))
                 //Update name in existed installation info
                 installation.files.remove(duplicatedFile.currFileName)
@@ -212,6 +229,7 @@ object ModPackageManagerV2 {
                 installation.files.add(duplicatedFile.currFileName)
                 //Set status to partly working
                 installation.status = Status.PARTLY_WORKING
+                Logger.d("Mod:${installation.name} is PARTLY_WORKING")
             }
 
         }
@@ -259,6 +277,7 @@ object ModPackageManagerV2 {
      */
     @Synchronized
     public fun requestInstall(name: String, type: String, subType: String): Boolean {
+        Logger.d("Requesting mod install:$name")
         if (pendingTask == null) {
             var isUpdate = false
             for (mod in modList) {
@@ -285,7 +304,7 @@ object ModPackageManagerV2 {
      * Call this once installation is done
      */
     public fun postInstall(version: Int) {
-        Logger.i("Mod installation completed")
+        Logger.d("Mod installation completed")
         if (pendingTask != null) {
             if (pendingTask!!.isUpdate) {
                 val installation: ModInstallationInfo? = getInstallation(pendingTask!!.name)
