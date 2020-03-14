@@ -487,6 +487,7 @@ object ModPackageManagerV2 {
 
         override fun onPostExecute(result: Boolean?) {
             super.onPostExecute(result)
+            refresh()
             progressDialog.dismiss()
         }
 
