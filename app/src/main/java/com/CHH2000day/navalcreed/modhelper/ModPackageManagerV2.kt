@@ -444,7 +444,7 @@ object ModPackageManagerV2 {
                 if (!it.value.isBlank()) {
                     var type = it.key
                     var subType = ModPackageInfo.SUBTYPE_EMPTY
-                    if (it.key.startsWith("SUB")) {
+                    if (it.key.startsWith("CV")) {
                         type = ModPackageInfo.MODTYPE_CV
                         subType = it.key
                     }
@@ -465,6 +465,10 @@ object ModPackageManagerV2 {
 
         private fun listFiles(dir: File): MutableSet<String> {
             val filenames = mutableSetOf<String>()
+            @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+            if (!dir.exists()) {
+                return mutableSetOf()
+            }
             @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
             for (file in dir.listFiles()) {
                 if (file.isFile) {
