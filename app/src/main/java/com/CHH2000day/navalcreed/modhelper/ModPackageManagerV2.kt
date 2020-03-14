@@ -311,7 +311,7 @@ object ModPackageManagerV2 {
                 installation?.status = Status.INSTALLED
                 installation?.files?.plusAssign(installationFiles)
             } else {
-                val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED, files = installationFiles)
+                val installationInfo = ModInstallationInfo(name = pendingTask!!.name, type = pendingTask!!.type, subType = pendingTask!!.subType, version = version, status = Status.INSTALLED, files = installationFiles.toMutableSet())
                 modList.add(installationInfo)
             }
         }
@@ -449,10 +449,11 @@ object ModPackageManagerV2 {
                         subType = it.key
                     }
                     val parentDirPath = ModPackageInstallHelper.getPath(type, ModPackageInstallHelper.getSubTypeId(subType), application)
+                    val prefix = parentDirPath + File.separatorChar
                     val fileNames = listFiles(File(parentDirPath))
                     val files = mutableSetOf<String>()
                     fileNames.forEach {
-                        files.add(it.removePrefix(parentDirPath))
+                        files.add(it.removePrefix(prefix))
                     }
                     modList.add(ModInstallationInfo(it.value, type, subType, -1, ModPackageManagerV2.Status.INSTALLED, files))
                 }
