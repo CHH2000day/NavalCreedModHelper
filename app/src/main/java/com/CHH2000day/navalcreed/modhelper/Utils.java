@@ -1,19 +1,35 @@
 package com.CHH2000day.navalcreed.modhelper;
-import java.io.*;
-import java.nio.channels.*;
-import java.util.zip.*;
-import java.util.*;
-import android.net.*;
-import android.os.*;
-import android.database.*;
-import android.content.*;
-import android.provider.*;
+
+import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 
 import com.orhanobut.logger.Logger;
 
-import java.security.*;
-import okio.*;
-import okhttp3.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.channels.FileChannel;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+
+import okhttp3.Request;
+import okhttp3.Response;
+import okio.BufferedSink;
+import okio.BufferedSource;
+import okio.Okio;
+import okio.Sink;
+import okio.Source;
 
 public class Utils
 {
@@ -226,28 +242,27 @@ public class Utils
 		}
 		//对特殊机型的Uri进行解析
 		//解析华为机型
-		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.huawei.hidisk.fileprovider" ) )
-		{
-			String[] val=uri.getPath ( ).split ( "/root", 2 );
-			return val [ 1 ];
+		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.huawei.hidisk.fileprovider" ) ) {
+			String[] val = uri.getPath().split("/root", 2);
+			return val[1];
 		}
 		//解析金立机型
-		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.gionee.filemanager.fileprovider" ) )
-		{
-			String[] val=uri.getPath ( ).split ( "/external_path", 2 );
-			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + val [ 1 ];
+		if (uri.getAuthority().equalsIgnoreCase("com.gionee.filemanager.fileprovider")) {
+			String[] val = uri.getPath().split("/external_path", 2);
+			return Environment.getExternalStorageDirectory().getAbsolutePath() + val[1];
 		}
-
-		String string =uri.toString ( );
-		String path[]=new String[2];
+		//If using MIUI file selector
+		if (uri.getAuthority().equals("com.android.fileexplorer.myprovider")) {
+			return Environment.getExternalStorageDirectory().getAbsolutePath() + uri.getPath().replaceFirst("/external_files", "");
+		}
+		String string = uri.toString();
+		String path[] = new String[2];
 		//判断文件是否在sd卡中
-		if (string.contains(String.valueOf(Environment.getExternalStorageDirectory())))
-		{
+		if (string.contains(String.valueOf(Environment.getExternalStorageDirectory()))) {
 			//对Uri进行切割
-			path = string.split ( String.valueOf ( Environment.getExternalStorageDirectory ( ) ) );
-			return Environment.getExternalStorageDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
-		} else if (string.contains(String.valueOf(Environment.getDataDirectory())))
-		{ //判断文件是否在手机内存中
+			path = string.split(String.valueOf(Environment.getExternalStorageDirectory()));
+			return Environment.getExternalStorageDirectory().getAbsolutePath() + path[1];
+		} else if (string.contains(String.valueOf(Environment.getDataDirectory()))) { //判断文件是否在手机内存中
 			//对Uri进行切割
 			path = string.split ( String.valueOf ( Environment.getDataDirectory ( ) ) );
 			return Environment.getDataDirectory ( ).getAbsolutePath ( ) + path [ 1 ];
