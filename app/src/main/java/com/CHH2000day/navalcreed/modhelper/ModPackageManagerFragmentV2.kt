@@ -25,7 +25,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
     private lateinit var modList: List<ModPackageManagerV2.ModInstallationInfo>
     private lateinit var adapter: MyAdapter
     override fun onChange() {
-        adapter.onDataChange(ModPackageManagerV2.getMods())
+        adapter.onDataChange(ModPackageManagerV2.getMods().toMutableList())
     }
 
     @SuppressLint("InflateParams")
@@ -181,9 +181,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
             //Get differences
             var diffMap = mutableMapOf<ModPackageManagerV2.ModInstallationInfo, DiffReason>()
             if (mods.size >= modList.size) {
-                mods.filter {
-                    !modList.contains(it)
-                }.forEach {
+                mods.forEach {
                     var work = false
                     for (mod in modList) {
                         if (mod.name == it.name) {
@@ -197,9 +195,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                     }
                 }
             } else {
-                modList.filter {
-                    !mods.contains(it)
-                }.forEach {
+                modList.forEach {
                     var work = false
                     for (mod in mods) {
                         if (mod.name == it.name) {
@@ -218,7 +214,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
             }.associateBy(
                     { it.key }, { it.value }
             ).toMutableMap()
-            val cacheList = modList
+            val cacheList = modList.toMutableList()
             modList = mods
             diffMap.forEach {
                 when (it.value) {
