@@ -229,20 +229,21 @@ public class Utils
 				{
 					return System.getenv ( "SECONDARY_STORAGE" ) + File.separator + split [ 1 ];
 				}
-				else
-				{
-					String[] vol_id=split [ 0 ].split ( String.valueOf ( File.separatorChar ) );
-					String vol=vol_id [ vol_id.length - 1 ];
-					if ( vol.contains ( "-" ) )
-					{
-						return new StringBuilder ( ).append ( File.separatorChar ).append ( "storage" ).append ( File.separatorChar ).append ( vol ).append ( File.separatorChar ).append ( split [ 1 ] ).toString ( );
+				else {
+					String[] vol_id = split[0].split(String.valueOf(File.separatorChar));
+					String vol = vol_id[vol_id.length - 1];
+					if (vol.contains("-")) {
+						return new StringBuilder().append(File.separatorChar).append("storage").append(File.separatorChar).append(vol).append(File.separatorChar).append(split[1]).toString();
 					}
 				}
 			}
 		}
+		if (uri.getAuthority().equalsIgnoreCase("com.android.providers.downloads.documents")) {
+			return uri.getPath().split("raw:", 2)[1];
+		}
 		//对特殊机型的Uri进行解析
 		//解析华为机型
-		if ( uri.getAuthority ( ).equalsIgnoreCase ( "com.huawei.hidisk.fileprovider" ) ) {
+		if (uri.getAuthority().equalsIgnoreCase("com.huawei.hidisk.fileprovider")) {
 			String[] val = uri.getPath().split("/root", 2);
 			return val[1];
 		}
