@@ -78,7 +78,7 @@ object ModPackageManagerV2 {
     public fun uninstall(name: String): Int {
         Logger.d("Start to uninstall mod:$name")
         val installation = getInstallation(name) ?: return -10
-        installation.files.forEach {
+        installation.files.toList().forEach {
             recoverFileFromConflict(it, installation)
         }
         modList.remove(installation)
@@ -104,34 +104,34 @@ object ModPackageManagerV2 {
         val basePath = getBasePath(installation)
         val rawName = fileName.replace(CONFLICT_SUFFIX, "")
         Logger.d("Remove conflict for file:$rawName")
-        duplicatedFileInfo.forEach { info ->
-            if (info.fileName == rawName) {
-                var pos = info.files.size - 1
-                info.files.forEach { f ->
-                    if (f.currFileName == fileName) {
-                        //Delete current file
-                        val file = File(basePath, f.currFileName)
-                        file.delete()
-                        Logger.d("Deleted file:${file.path}")
-                        info.files.remove(f)
+        if (duplicatedFileInfo.isNotEmpty()) {
+            duplicatedFileInfo.toList().forEach { info ->
+                if (info.fileName == rawName) {
+                    info.files.toList().forEach { f ->
+                        if (f.currFileName == fileName) {
+                            //Delete current file
+                            val file = File(basePath, f.currFileName)
+                            file.delete()
+                            Logger.d("Deleted file:${file.path}")
+                            info.files.remove(f)
+                        }
                     }
-                }
-                //Remove a suffix for all elements before this effected
-                info.files.forEach {
-                    File(basePath, it.currFileName).renameTo(File(basePath, it.currFileName.removeSuffix(CONFLICT_SUFFIX)))
-                    //Update installation record(1/2)
-                    getInstallation(it.modName)?.files?.remove(it.currFileName)
-                    //Update conflict record
-                    it.currFileName = it.currFileName.removeSuffix(CONFLICT_SUFFIX)
-                    //Update installation record(2/2)
-                    getInstallation(it.modName)?.files?.add(it.currFileName)
-                    //Remove info if only one element is left in the list
-                    if (info.files.size <= 1) {
-                        Logger.d("Setting status of mod \'${it.modName}\' to INSTALLED")
-                        duplicatedFileInfo.remove(info)
-                        getInstallation(it.modName)?.status = Status.INSTALLED
+                    //Remove a suffix for all elements before this effected
+                    info.files.toList().forEach {
+                        File(basePath, it.currFileName).renameTo(File(basePath, it.currFileName.removeSuffix(CONFLICT_SUFFIX)))
+                        //Update installation record(1/2)
+                        getInstallation(it.modName)?.files?.remove(it.currFileName)
+                        //Update conflict record
+                        it.currFileName = it.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                        //Update installation record(2/2)
+                        getInstallation(it.modName)?.files?.add(it.currFileName)
+                        //Remove info if only one element is left in the list
+                        if (info.files.size <= 1) {
+                            Logger.d("Setting status of mod \'${it.modName}\' to INSTALLED")
+                            duplicatedFileInfo.remove(info)
+                            getInstallation(it.modName)?.status = Status.INSTALLED
+                        }
                     }
-                }
 //                for (i in pos downTo 0) {
 //                    File(basePath, info.files[pos].currFileName).renameTo(File(basePath, info.files[pos].currFileName.removeSuffix(CONFLICT_SUFFIX)))
 //                    //Update installation record(1/2)
@@ -147,9 +147,11 @@ object ModPackageManagerV2 {
 //                        getInstallation(info.files[pos].modName)?.status = Status.INSTALLED
 //                    }
 //                }
-                //End this method
-                return
+                    //End this method
+                    return
+                }
             }
+
         }
         //If no duplication
         val f = File(basePath, fileName)
