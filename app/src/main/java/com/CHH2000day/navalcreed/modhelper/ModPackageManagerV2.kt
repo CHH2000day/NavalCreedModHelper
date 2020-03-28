@@ -402,7 +402,7 @@ object ModPackageManagerV2 {
             Logger.i("Writing mod config...")
             synchronized(duplicatedFileInfo) {
                 val config = Config(version = managerVer, isOverride = override, modInfos = modList, duplicationInfos = duplicatedFileInfo)
-
+                Utils.ensureFileParent(dataFile)
                 val sink = dataFile.sink().buffer()
                 sink.writeUtf8(GsonHelper.getGson().toJson(config))
                 sink.close()
