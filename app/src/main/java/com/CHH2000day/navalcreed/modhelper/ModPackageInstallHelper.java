@@ -277,6 +277,9 @@ public class ModPackageInstallHelper {
                 mpkgFile = null;
             }
             mlistener = null;
+            if (modPackageChecker != null) {
+                modPackageChecker.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -657,7 +660,7 @@ public class ModPackageInstallHelper {
                                         }
                                     })
                                     .setNegativeButton(R.string.cancel, (dialog, which) -> {
-                                        close();
+                                        reset();
                                     })
                                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                                         currentAction(subtype);
@@ -673,7 +676,7 @@ public class ModPackageInstallHelper {
                                 currentAction((Object) null);
                             });
                             adb.setNegativeButton(R.string.cancel, (dialog, which) -> {
-                                close();
+                                reset();
                             });
                             ad = adb.create();
                             ad.setCanceledOnTouchOutside(false);
@@ -685,7 +688,7 @@ public class ModPackageInstallHelper {
                             adb.setMessage(((ErrorMsg) msg.obj).getMessage());
                             adb.setCancelable(false);
                             adb.setNegativeButton(R.string.close, (dialog, which) -> {
-                                close();
+                                reset();
                             });
                             ad = adb.create();
                             ad.setCanceledOnTouchOutside(false);
