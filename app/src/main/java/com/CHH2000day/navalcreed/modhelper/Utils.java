@@ -239,13 +239,14 @@ public class Utils
 			}
 		}
 		if (uri.getAuthority().equalsIgnoreCase("com.android.providers.downloads.documents")) {
-			return uri.getPath().split("raw:", 2)[1];
+			String[] paths = uri.getPath().split("raw:", 2);
+			if (paths.length == 2) return paths[1];
 		}
 		//对特殊机型的Uri进行解析
 		//解析华为机型
 		if (uri.getAuthority().equalsIgnoreCase("com.huawei.hidisk.fileprovider")) {
-			String[] val = uri.getPath().split("/root", 2);
-			return val[1];
+			String[] paths = uri.getPath().split("/root", 2);
+			if (paths.length == 2) return paths[1];
 		}
 		//解析金立机型
 		if (uri.getAuthority().equalsIgnoreCase("com.gionee.filemanager.fileprovider")) {
