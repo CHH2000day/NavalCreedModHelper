@@ -401,13 +401,12 @@ object ModPackageManagerV2 {
         thread(start = true) {
             Logger.i("Writing mod config...")
             synchronized(duplicatedFileInfo) {
-                val config = Config(version = managerVer, isOverride = override, modInfos = modList, duplicationInfos = duplicatedFileInfo)
+                val config = Config(version = managerVer, isOverride = override, modInfos = modList.toMutableList(), duplicationInfos = duplicatedFileInfo.toMutableSet())
                 Utils.ensureFileParent(dataFile)
                 val sink = dataFile.sink().buffer()
                 sink.writeUtf8(GsonHelper.getGson().toJson(config))
                 sink.close()
             }
-
         }
     }
 
