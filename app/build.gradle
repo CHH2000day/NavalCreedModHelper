@@ -44,10 +44,10 @@ android {
         applicationId "com.CHH2000day.navalcreed.modhelper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 101
-        versionName 'build-2020032800'
+        versionCode 102
+        versionName 'build-2020042300'
         flavorDimensions "versionCode"
-        buildConfigField "int", "BuildVersion", "10060"
+        buildConfigField "int", "BuildVersion", "10061"
     }
 
     flavorDimensions("Nyanpasu")
