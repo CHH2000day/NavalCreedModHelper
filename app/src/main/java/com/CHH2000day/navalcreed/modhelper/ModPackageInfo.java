@@ -201,11 +201,11 @@ public class ModPackageInfo {
                 ModPackageInfo mpi = new ModPackageInfo();
                 //检查最低兼容版本
                 if (PKGVER < jo.getInt(KEY_MINSUPPORTVER)) {
-                    throw new IllegalModInfoException(new StringBuilder().append("Installer version is too low.This mod package requires a minimum version of ")
+                    throw new IllegalModInfoException(new StringBuilder().append("Installer version is too low.This mod package requires minimum version:")
                             .append(" ")
                             .append(jo.getInt(KEY_MINSUPPORTVER))
                             .append(".")
-                            .append("But this mod requires a installer version of ")
+                            .append("But installer version is:")
                             .append(" ")
                             .append(PKGVER)
                             .append(".")

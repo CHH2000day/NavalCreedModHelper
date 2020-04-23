@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">NavalCreedModHelper</string>
+	<string name="app_name">NavalCreedModHelper</string>
 	<string name="modpkginstaller_name">NavalCreedModPackageInstaller</string>
-    <string name="modpkg_info_empty">Please select a mod package first</string>
-    <string name="about_license">About license</string>
+	<string name="modpkg_info_empty">Please select a mod package first</string>
+	<string name="about_license">license</string>
 	<string name="ok">OK</string>
 	<string name="cancel">Cancel</string>
-	<string name="select_target_package">SelectTargetPackage</string>
+	<string name="select_target_package">Select target package</string>
 	<string name="notice">Notice</string>
 	<string name="confirm_to_remove_changes_to_parta">Confirm to remove changes to </string>
 	<string name="confirm_to_remove_changes_to_partb"> \?</string>
@@ -24,16 +24,16 @@
 	<string name="transcode_transcoding">Transcoding</string>
 	<string name="transcode_writing">Writing</string>
 	<string name="timeused">Time used:</string>
-	<string name="aboutmsg">This app according to Apache License 2.0 Open Source Agreement open source，you can go to this website: https://github.com/CHH2000day/NavalCreedModHelper to get the source code of this app\nDeveloper:CHH2000day\nInstruction author:此生 天津风\nIcon provided:猫咪要保护所有人\nTranslator:CHH2000day JimLi\nQQ group:702884712\nOfficial website of this app https://nc.CHH2000day.com</string>
-	<string name="modpkg_install_ovwtmsg">"Already installed a mod package with sametype，confirm to uninstall the one installed and continue</string>
-	<string name="bgm_transcode_disabled">Android version is lower than 5.1(Lollipop),wav transcode diaabled.</string>
+	<string name="aboutmsg">This app is licensed according to Apache License 2.0 Open Source Agreement open source，you can go to this website: https://github.com/CHH2000day/NavalCreedModHelper to get the source code of this app\nDeveloper:CHH2000day\nInstruction author:此生 天津风\nIcon provided:猫咪要保护所有人\nTranslator:CHH2000day JimLi\nQQ group:702884712\nOfficial website of this app https://nc.CHH2000day.com\nIf you have any problem,please contact navalcreed@chh2000day.com</string>
+	<string name="modpkg_install_ovwtmsg">"Already installed a mod package with the same type，confirm to uninstall the one installed and continue?</string>
+	<string name="bgm_transcode_disabled">Android version is lower than 5.1(Lollipop),wav transcode disabled.</string>
 	<string name="not_a_wavfile">Incorrect file format,it\'s NOT a wav file.</string>
 	<string name="select_a_scene">Select a scene</string>
 	<string name="select">Select</string>
 	<string name="unselected">Unselected</string>
 	<string name="apply">Apply</string>
 	<string name="remove_changes">Remove changes</string>
-	<string name="bgmreplacer_info">Instructions:\nthere are some music in each scene,you have to change ALL the music in this scene,the change will be effective,Mainstream format music supported.If you want to remove one of the music,press Remove changes to delete the music what you have chosen in this scene,Press longer to remove all the music in each scene.</string>
+	<string name="bgmreplacer_info">Instructions:\nthere are some music in each scene,you have to change ALL the music in this scene and the change will be effective.Mainstream music format supported.If you want to remove one of the music,press \"Remove Changes\" to delete the music you have chosen in this scene,long press to remove all the music in all scenes.</string>
 	<string name="select_music_to_replace">Select the music to replace</string>
 	<string name="exit">Exit</string>
 	<string name="exitmsg">Confirm to exit?</string>
@@ -41,15 +41,15 @@
 	<string name="permission_request_msg">NavalCreedModhelper needs permission \"Storage\" to run normally</string>
 	<string name="grant_permission">Grant</string>
 	<string name="cancel_and_exit">Cancel and Exit</string>
-	<string name="tester_authority_verify">Please verify your tester authority</string>
+	<string name="tester_authority_verify">Please verify your test authority</string>
 	<string name="verifying_tester_authority">Checking authority</string>
 	<string name="failed_to_check_tester_authority">Failed to check authority</string>
 	<string name="network_err">Network error</string>
 	<string name="enter_reg_key">Show me your register key:</string>
-	<string name="confirm_to_remove_changes">Comfirm to remove changes?</string>
+	<string name="confirm_to_remove_changes">Confirm to remove changes?</string>
 	<string name="confirm_to_remove_all_changes">Confirm to remove all changes？</string>
 	<string name="not_a_ogv_file">Incorrect file format,it\'s NOT a ogv file</string>
-	<string name="select_pic">select a pictire</string>
+	<string name="select_pic">select a picture</string>
 	<string name="select_country">select the country</string>
 	<string name="select_target_pic">select target picture</string>
 	<string name="select_file">select a file</string>
@@ -59,17 +59,17 @@
 	<string name="long_click_to_uninstall">Touch and hold to uninstall</string>
 	<string name="mod_not_installed">mod not installed</string>
 	<string name="install">Install</string>
-	<string name="bgfrag_intro">Instructions:\nloading picture,loadingmap picture,matching picture each scene have to change ALL pictures to effective,select what scene,picture and press Apply</string>
+	<string name="bgfrag_intro">Instructions:\nThere are 3 scenes :loading picture,loading picture,matching picture.\nEach scene has some pictures that you can replace,select a scene,a picture and press Apply</string>
 	<string name="crewpicfrag_intro">Instructions:\nEach country has 15 to 16 pictures to change you can change only one of these pictures,doesn\'t need to change all，you can find the picture what you have changed in crew file\nWhat to do:Choose what country and picture number,then choose what picture you want to change and press to change Apply\nPress RemoveChange to remove the picture what you chose,press longer to remove ALL the picture in which country you chose</string>
 	<string name="modpkg_ver_warning">The current software version may not be able to implement all the functions in the mod package. Continue?</string>
 	<string name="modpkg_interface_warning">An abandoned interface was used by the mod package.You need to disable the "mod package management system" to install it if you want.</string>
-	<string name="modpkg_already_installed_warning">A mod paakage which is the same type of this package was already installed.You need to uninstall it in mod package manager to install this package.</string>
+	<string name="modpkg_already_installed_warning">A mod package which is the same type of this package was already installed.You need to uninstall it in mod package manager to install this package.</string>
 	<string name="modpkg_cv_to_replace">Select the captain voice to replace</string>
 	<string name="invalid_mod_info">Invalid mod description file </string>
 	<string name="failed_to_resolve_pth">Filed to resolve actual path of the selected file.\nTake a screenshot and send it to the developer please.</string>
 	<string name="ovrd_warning">Mod package management system would not work after disable it,continue? </string>
 	<string name="mod_pkg_management_sys">Mod package management system</string>
-	<string name="loginmovie_intro">Introduction:\nLogin movie can only be replaced with a fllowing format video:\nFile format:ogv\nVideo encoding:theora\nWe recommend that you transcode it on a PC and then send it to your device.\nNotice that the audio in the video would not be played,custom it in BGM page.</string>
+	<string name="loginmovie_intro">Introduction:\nLogin movie can only be replaced with a following format video:\nFile format:ogv\nVideo encoder:theora\nWe recommend that you transcode it on a PC and then send it to your device.\nNotice that the audio in the video would not be played,custom it in BGM page.</string>
 	<string name="dont_show">Don\'t show</string>
 	<string name="update">Update</string>
 	<string name="announcement">Announcement</string>
@@ -95,7 +95,7 @@
 	<string name="modtype_backgroundmusic">Background Music</string>
 	<string name="modtype_crewpic">Crew pic</string>
 	<string name="modtype_soundeffect">Soundeffect(abandoned)</string>
-	<string name="modtype_soundeffect_prim">Sounde ffect(PRIM)</string>
+	<string name="modtype_soundeffect_prim">Sounde effect(PRIM)</string>
 	<string name="modtype_soundeffect_sec">Sound effect(SEC)</string>
 	<string name="unknown">Unknown</string>
 	<string name="modtype_captainvoice">Captain voice</string>
