@@ -166,14 +166,12 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
             modName.text = modList[position].name
             modType.text = getLocalizedModType(modList[position].type, modList[position].subType)
             modStatus.text = getLocalizedStatus(modList[position].status)
-            // TODO: Implement this method
         }
 
         override fun getItemCount(): Int {
             return if (ModPackageManagerV2.override) {
                 0
             } else modList.size
-            // TODO: Implement this method
         }
 
         @Synchronized
@@ -258,7 +256,6 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                         run {
                             ModPackageManagerV2.uninstall(name)
                         }
-
                     }
                     ?.create()
                     ?.show()

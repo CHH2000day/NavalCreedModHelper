@@ -37,14 +37,12 @@ public class ModPackageInstallerFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        // TODO: Implement this method
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        // TODO: Implement this method
         v = inflater.inflate(R.layout.modinfopage, null);
         preview = v.findViewById(R.id.modinfopageImageView);
         info = v.findViewById(R.id.modinfopageTextView);
@@ -57,7 +55,6 @@ public class ModPackageInstallerFragment extends Fragment {
 
     @Override
     public void onResume() {
-        // TODO: Implement this method
         super.onResume();
         if (loader != null && loader.getUri() != null) {
             selectFile(loader.getUri());
@@ -71,17 +68,13 @@ public class ModPackageInstallerFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // TODO: Implement this method
         select.setOnClickListener(p1 -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(intent.CATEGORY_OPENABLE);
             startActivityForResult(intent.createChooser(intent, getString(R.string.select_file)), QUERY_CODE);
-
-            // TODO: Implement this method
         });
         select.setOnLongClickListener(p1 -> {
-            // TODO: Implement this method
             final String pkg = "com.android.documentsui";
             Uri packageURI = Uri.parse("package:" + pkg);
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI);
@@ -90,7 +83,6 @@ public class ModPackageInstallerFragment extends Fragment {
         });
         cancel.setOnClickListener(p1 -> {
             clear();
-            // TODO: Implement this method
         });
         update.setOnClickListener(p1 -> {
             if (mpih == null) {
@@ -98,13 +90,11 @@ public class ModPackageInstallerFragment extends Fragment {
                 return;
             }
             mpih.beginInstall(getActivity());
-            // TODO: Implement this method
         });
     }
 
     @Override
     public void onDestroyView() {
-        // TODO: Implement this method
         super.onDestroyView();
         if (mpih != null) {
             mpih.recycle();
@@ -115,8 +105,6 @@ public class ModPackageInstallerFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-
-        // TODO: Implement this method
         super.onAttach(activity);
         if (activity != null) {
             loader = (UriLoader) activity;
@@ -133,9 +121,7 @@ public class ModPackageInstallerFragment extends Fragment {
                 }
                 mpih.recycle();
             }
-
         }
-
         preview.setImageResource(R.drawable.no_preview);
         info.setText(R.string.modpkg_info_empty);
         mpih = null;
@@ -187,11 +173,8 @@ public class ModPackageInstallerFragment extends Fragment {
                                 } catch (Throwable t) {
                                     h.sendMessage(h.obtainMessage(-1, t));
                                 }
-
-                                // TODO: Implement this method
                             }
                         }.start();
-                        // TODO: Implement this method
                     });
             adb.create().show();
             return;
@@ -211,18 +194,14 @@ public class ModPackageInstallerFragment extends Fragment {
         final AlertDialog ad = adb.create();
         ad.setCanceledOnTouchOutside(false);
         ad.show();
-
-
         mpih = new ModPackageInstallHelper(source);
         final AppCompatActivity act = (Main) getActivity();
         mpih.load(new ModPackageInstallHelper.onModPackageLoadDoneListener() {
-
             @Override
             public void onSuccess() {
                 if (!isAdded()) {
                     return;
                 }
-
                 ModPackageInfo mpi = mpih.getModPackageInfo();
                 long modsize = mpih.getTotalSize();
                 StringBuilder sb = new StringBuilder();
@@ -249,7 +228,6 @@ public class ModPackageInstallerFragment extends Fragment {
                     preview.setImageBitmap(mpi.getModPreview());
                 }
                 ad.dismiss();
-                // TODO: Implement this method
             }
 
             @Override
@@ -266,12 +244,10 @@ public class ModPackageInstallerFragment extends Fragment {
                     Utils.delDir(source);
                 }
                 mpih = null;
-                // TODO: Implement this method
             }
 
             @Override
             public AppCompatActivity getActivity() {
-                // TODO: Implement this method
                 return act;
             }
         });
@@ -280,7 +256,6 @@ public class ModPackageInstallerFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO: Implement this method
         super.onActivityResult(requestCode, resultCode, data);
         if (QUERY_CODE == requestCode && AppCompatActivity.RESULT_OK == resultCode && data != null) {
             if (data.getData() == null) {

@@ -665,7 +665,6 @@ public class ModPackageInstallHelper {
                                     })
                                     .setPositiveButton(R.string.ok, (dialog, which) -> {
                                         currentAction(subtype);
-                                        // TODO: Implement this method
                                     });
                             adb.create().show();
                             break;
