@@ -105,23 +105,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
             }
         };
-
-		/*禁用FloatingActionButton
-		 FloatingActionButton fab = (FloatingActionButton) findViewById ( R.id.fab );
-		 fab.setOnClickListener ( new View.OnClickListener ( ) {
-		 @Override
-		 public void onClick ( View view )
-		 {
-		 Snackbar.make ( view, "Replace with your own action", Snackbar.LENGTH_LONG )
-		 .setAction ( "Action", null ).show ( );
-		 }
-		 } );
-		 */
-		/*DrawerLayout drawer = (DrawerLayout) findViewById ( R.id.drawer_layout );
-		 ActionBarDrawerToggle toggle = new ActionBarDrawerToggle (
-		 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
-		 toggle.syncState ( );
-		 drawer.setDrawerListener ( toggle );*/
         LayoutInflater li = LayoutInflater.from(this);
 		/*禁用NavigationView
 		 NavigationView navigationView = (NavigationView) findViewById ( R.id.nav_view );
@@ -151,30 +134,17 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         fragments.add(mModpkgInstallerFragment);
         fragments.add(mModPackageManagerFragment);
         fragments.add(new AboutFragment());
-        /*
-		 titles.add ( "背景替换" );
-		 titles.add ( "登录动画修改" );
-		 titles.add ( "船员头像修改" );
-		 titles.add ( "反和谐" );
-		 titles.add ( "BGM替换" );
-		 titles.add ( "Mod包安装" );
-		 titles.add ( "Mod包管理" );
-		 titles.add ( "关于" );*/
+
         String[] fragment_titles = getResources().getStringArray(R.array.fragment_titles);
         List<String> titles = new ArrayList<String>(Arrays.asList(fragment_titles));
         FragmentPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(mAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
-        checkVality();
+        checkValidity();
         new UpdateThread().start();
         new AnnouncementThread().start();
         new AdThread(findViewById(R.id.adlayout)).start();
-        //禁用测试版Mod包安装
-		/*
-		 if ( Intent.ACTION_VIEW.equals ( getIntent ( ).getAction ( ) ) )
-		 {
-		 installModPackageBeta(getIntent().getData().getPath());	
-		 }*/
+
         if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
 
             mTabLayout.getTabAt(fragments.indexOf(mModpkgInstallerFragment)).select();
@@ -184,7 +154,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     @Override
     protected void onStart() {
-        // TODO: Implement this method
         super.onStart();
         if (ModPackageManager.getInstance().inited) {
             new ModPackageManagerV2.MigrationHelper(this).execute(getModHelperApplication().getOldConfigFile());
@@ -198,14 +167,13 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     @Override
     protected void onResume() {
-        // TODO: Implement this method
         super.onResume();
         checkPermission();
 
     }
 
     @SuppressLint("HandlerLeak")
-    private void checkVality() {
+    private void checkValidity() {
         //Perform check
         String key = ((ModHelperApplication) getApplication()).getMainSharedPreferences().getString(KEY_AUTHKEY, "");
         if (BuildConfig.DEBUG || (!TextUtils.isEmpty(key) && KeyUtil.checkKeyFormat(key))) {
@@ -230,14 +198,8 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                             Snackbar.make(mViewPager, R.string.network_err, Snackbar.LENGTH_LONG).show();
                             ad.setButton(ad.BUTTON_POSITIVE, getText(R.string.exit), (p1, p2) -> {
                                 doExit();
-                                // TODO: Implement this method
                             });
                             break;
-							/*case -8:
-							 Snackbar.make(mViewPager,"权限验证成功",Sackbar.LENGTH_LONG).show();
-							 ad.dismiss();
-							 break;
-							 */
                         default:
                             Snackbar.make(mViewPager, R.string.failed_to_check_tester_authority, Snackbar.LENGTH_LONG).show();
                             ad.dismiss();
@@ -251,7 +213,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
                 @Override
                 public void onSuccess() {
-                    // TODO: Implement this method
                     ad.dismiss();
                 }
 
@@ -262,7 +223,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                         ((ModHelperApplication) getApplication()).getMainSharedPreferences().edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY, "").apply();
                     }
                     mveronboothandler.sendEmptyMessage(reason);
-                    // TODO: Implement this method
                 }
             });
         }
@@ -298,19 +258,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                         mContentView.removeView(view);
                     }
                 };
-//                new Thread() {
-//                    @Override
-//                    public void run() {
-//                        super.run();
-//                        try {
-//                            Thread.sleep(2500);
-//                        } catch (Exception e) {
-//                            Logger.e(e, "");
-//                        } finally {
-//                            adcloseer.sendEmptyMessage(0);
-//                        }
-//                    }
-//                }.start();
             }
 
         });
@@ -356,62 +303,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     }
                 }
             });
-//			/*
-//			 BmobQuery<TesterInfo> query_emptydevice=new BmobQuery<TesterInfo> ( );
-//			 query_emptydevice.addWhereEqualTo ( "deviceId", "" );
-//			 BmobQuery<TesterInfo> query_currdevice=new BmobQuery<TesterInfo> ( );
-//			 query_currdevice.addWhereEqualTo ( "deviceId", getDevId ( ) );
-//			 List<BmobQuery<TesterInfo>> ors=new ArrayList<BmobQuery<TesterInfo>> ( );
-//			 ors.add ( query_emptydevice );
-//			 ors.add ( query_currdevice );
-//			 BmobQuery<TesterInfo> tmp=new BmobQuery<TesterInfo> ( );
-//			 BmobQuery<TesterInfo> or=tmp.or ( ors );
-//			 List<BmobQuery<TesterInfo>> finaldata=new ArrayList<BmobQuery<TesterInfo>> ( );
-//			 finaldata.add ( or );
-//			 finaldata.add ( query_key );
-//			 BmobQuery<TesterInfo> and=new BmobQuery<TesterInfo> ( );
-//			 BmobQuery<TesterInfo> main=and.and ( finaldata );
-//			 main.setLimit ( 1 );
-//			 main.findObjects ( new FindListener<TesterInfo> ( ){
-//
-//			 @Override
-//			 public void done ( List<TesterInfo> p1, BmobException p2 )
-//			 {
-//			 if ( p2 == null )
-//			 {
-//			 if ( p1.size ( ) > 0 )
-//			 {
-//			 final TesterInfo info=p1.get ( 0 );
-//			 info.setdeviceId ( getDevId ( ) );
-//			 info.setModel(Build.MODEL);
-//			 info.update ( info.getObjectId(),new UpdateListener ( ){
-//
-//			 @Override
-//			 public void done ( BmobException p1 )
-//			 {
-//
-//			 if ( p1 == null )
-//			 {
-//			 ( (ModHelperApplication)getApplication ( ) ).getMainSharedPreferences ( ).edit ( ).putString ( KEY_OBJID, info.getObjectId ( ) ).apply ( );
-//			 listener.onSuccess ( );
-//			 }
-//			 else
-//			 {
-//			 listener.onFail ( 1, p1.getMessage ( ) );
-//			 return;
-//			 }
-//			 }
-//			 } );
-//			 }
-//			 }
-//			 else
-//			 {
-//			 listener.onFail ( 1, p2.getMessage ( ) );
-//			 return;
-//			 }
-//			 // TODO: Implement this method
-//			 }
-//			 } );*/
         } else {
             //密钥格式验证失败
             listener.onFail(0, "Invalid Key");
@@ -420,42 +311,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     }
 
     private void performStartTesterPermissionCheck(final OnCheckResultListener listener) {
-        //
-        //remove old bmob mode
-        //
-
-//
-//        String objid = ((ModHelperApplication) getApplication()).getMainSharedPreferences().getString(KEY_OBJID, "");
-//        if (TextUtils.isEmpty(objid)) {
-//            listener.onFail(2, "Unregistered！");
-//            return;
-//        }
-//        BmobQuery<TesterInfo> query = new BmobQuery<TesterInfo>();
-//        query.getObject(objid, new QueryListener<TesterInfo>() {
-//
-//            @Override
-//            public void done(TesterInfo p1, BmobException p2) {
-//                if (p2 != null) {
-//                    if (p2.getErrorCode() == 9010 || p2.getErrorCode() == 9016) {
-//                        listener.onFail(9010, "Network error");
-//                        return;
-//                    } else {
-//                        listener.onFail(1, p2.getMessage());
-//                        return;
-//                    }
-//                }
-//                if (TextUtils.isEmpty(p1.getSSAID()) || TextUtils.isEmpty(p1.getdeviceId()) || p1.getdeviceId().equals(getDevId()) || p1.getSSAID().equals(getDevId())) {
-//                    listener.onSuccess();
-//                    return;
-//                } else {
-//                    listener.onFail(0, "Device mismatch,please contact developer to reset your key");
-//                    return;
-//                }
-//
-//
-//
-//            }
-//        });
         String key = getModHelperApplication().getMainSharedPreferences().getString(KEY_AUTHKEY, "");
         if (!KeyUtil.checkKeyFormat(key)) {
             listener.onFail(2, "Invalid local key!");
@@ -499,7 +354,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
     }
 
     public String getDevId() {
-        String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        @SuppressLint("HardwareIds") String android_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         return android_id;
         //return Build.SERIAL;
     }
@@ -512,11 +367,9 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                         .setMessage(R.string.permission_request_msg)
                         .setNegativeButton(R.string.cancel_and_exit, (p1, p2) -> {
                             finish();
-                            // TODO: Implement this method
                         })
                         .setPositiveButton(R.string.grant_permission, (p1, p2) -> {
                             ActivityCompat.requestPermissions(Main.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_CHECK_CODE);
-                            // TODO: Implement this method
                         })
                         .setCancelable(false);
                 AlertDialog ad = adb.create();
@@ -610,43 +463,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
 
     }
-//    /*
-//	 @SuppressWarnings("StatementWithEmptyBody")
-//	 @Override
-//	 public boolean onNavigationItemSelected(MenuItem item)
-//	 {
-//	 // Handle navigation view item clicks here.
-//	 int id = item.getItemId();
-//
-//	 if (id == R.id.nav_camera)
-//	 {
-//	 // Handle the camera action
-//	 }
-//	 else if (id == R.id.nav_gallery)
-//	 {
-//
-//	 }
-//	 else if (id == R.id.nav_slideshow)
-//	 {
-//
-//	 }
-//	 else if (id == R.id.nav_manage)
-//	 {
-//
-//	 }
-//	 else if (id == R.id.nav_share)
-//	 {
-//
-//	 }
-//	 else if (id == R.id.nav_send)
-//	 {
-//
-//	 }
-//
-//	 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//	 drawer.closeDrawer(GravityCompat.START);
-//	 return true;
-//	 }*/
 
     public boolean isUseAlphaChannel() {
         return useAlphaChannel;
@@ -659,7 +475,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     @Override
     public Uri getUri() {
-        // TODO: Implement this method
         if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
             return getIntent().getData();
 
@@ -808,8 +623,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                                                                         ad.dismiss();
                                                                         if (isOK) installApk();
                                                                     }
-
-
                                                                 }
                                                             });
                                                         }
@@ -839,74 +652,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
             } catch (Exception e) {
                 Logger.e(e, e.getLocalizedMessage());
             }
-//            BmobQuery<UniversalObject> query = new BmobQuery<UniversalObject>();
-//            String dataid = useAlphaChannel ? StaticData.DATAID_ALPHA : StaticData.DATAID_RELEASE;
-//            //If user want to use Alpha Ch,check it
-//
-//            query.getObject(dataid, new QueryListener<UniversalObject>() {
-//
-//                @Override
-//                public void done(final UniversalObject universalobj, BmobException p2) {
-//                    if (p2 != null) {
-//                        Log.w("Updater", "Failed to get update data");
-//                        return;
-//                    }
-//                    int serverver = universalobj.getVersion();
-//                    int currver = 0;
-//                    try {
-//                        currver = useAlphaChannel ? getModHelperApplication().BUILDVER : getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
-//                    } catch (Exception ignored) {
-//                    }
-//                    try {
-//                        if (serverver <= currver) {
-//                            return;
-//                        }
-//                        AlertDialog.Builder adb = new AlertDialog.Builder(Main.this);
-//                        adb.setTitle(R.string.update)
-//                                .setMessage(universalobj.getChangelog())
-//                                .setPositiveButton(R.string.update, (p1, p21) -> {
-//                                    Snackbar.make(mViewPager, R.string.downloading, Snackbar.LENGTH_LONG).show();
-//                                    AlertDialog.Builder db = new AlertDialog.Builder(Main.this);
-//                                    db.setTitle(R.string.please_wait)
-//                                            .setMessage(R.string.downloading)
-//                                            .setCancelable(false);
-//                                    final AlertDialog d = db.create();
-//                                    d.setCanceledOnTouchOutside(false);
-//                                    d.show();
-//                                    String url = universalobj.getDownload();
-//                                    new Thread() {
-//                                        public void run() {
-//                                            File f = new File(getExternalCacheDir(), "update.apk");
-//                                            try {
-//                                                Utils.downloadFile(url, f);
-//                                                updateApk = f;
-//                                                installApk();
-//                                            } catch (IOException e) {
-//                                                Logger.e(e, "download failed");
-//                                            }
-//                                            Looper.prepare();
-//                                            d.dismiss();
-//                                            Looper.loop();
-//                                        }
-//                                    }.start();
-//                                });
-//                        //final File destfile=new File ( new File ( getExternalCacheDir ( ), "download" ), "update.apk" );
-//                        if (currver >= universalobj.getMinVer()) {
-//                            adb.setCancelable(true);
-//                            adb.setNegativeButton(R.string.cancel, null);
-//                        }
-//                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(0, adb));
-//                        // TODO: Implement this method
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-            // TODO: Implement this method
-
         }
-
-
     }
 
     private class AnnouncementThread extends Thread {
@@ -944,7 +690,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                                         .setNeutralButton(R.string.dont_show, (p1, p212) -> {
                                             getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
 
-                                            // TODO: Implement this method
                                         })
                                         .setNegativeButton(R.string.copy, (p1, p21) -> {
                                             ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -952,7 +697,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                                             if (!TextUtils.isEmpty(bean.getToCopy())) {
                                                 cmb.setText(bean.getToCopy().trim());
                                             }
-                                            // TODO: Implement this method
                                         });
 
                                 mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
@@ -966,47 +710,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     }
                 }
             });
-//            BmobQuery<BmobMessage> query = new BmobQuery<BmobMessage>();
-//            query.getObject(StaticData.DATA_ID_ANNOUNCEMENT, new QueryListener<BmobMessage>() {
-//
-//                @Override
-//                public void done(final BmobMessage bmobmsg, BmobException p2) {
-//                    if (p2 != null) {
-//                        p2.printStackTrace();
-//                        return;
-//                    }
-//                    final int id = bmobmsg.getmsgid();
-//                    int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
-//                    AlertDialog.Builder adb0 = new AlertDialog.Builder(Main.this);
-//
-//                    if (id > currid) {
-//                        adb0.setTitle(R.string.announcement)
-//                                .setMessage(bmobmsg.getMessage())
-//                                .setPositiveButton(R.string.ok, null)
-//                                .setNeutralButton(R.string.dont_show, (p1, p212) -> {
-//                                    getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
-//
-//                                    // TODO: Implement this method
-//                                })
-//                                .setNegativeButton(R.string.copy, (p1, p21) -> {
-//                                    ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-//                                    getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply();
-//                                    if (!TextUtils.isEmpty(bmobmsg.tocopy())) {
-//                                        cmb.setText(bmobmsg.tocopy().trim());
-//                                    }
-//                                    // TODO: Implement this method
-//                                });
-//
-//                        mupdateHandler.sendMessage(mupdateHandler.obtainMessage(1, adb0));
-//                    }
-//                    // TODO: Implement this method
-//                }
-//            });
-            // TODO: Implement this method
-
-
         }
-
     }
 
     private class KeyDialogListener implements AlertDialog.OnShowListener {
@@ -1038,28 +742,21 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     @Override
                     public void onSuccess() {
                         ad.dismiss();
-                        // TODO: Implement this method
                     }
 
                     @Override
                     public void onFail(int reason, String errorrmsg) {
                         Snackbar.make(mViewPager, errorrmsg, Snackbar.LENGTH_LONG).show();
-                        // TODO: Implement this method
                     }
                 });
-                // TODO: Implement this method
             });
             keyinput.getEditableText().append(getModHelperApplication().getMainSharedPreferences().getString(KEY_AUTHKEY, ""));
             btnEnter.setOnLongClickListener(listener -> {
                 ClipboardManager cmb = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(getDevId());
-                // TODO: Implement this method
                 return true;
             });
-            // TODO: Implement this method
         }
-
-
     }
 
     private class AdThread extends Thread {
@@ -1079,7 +776,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 return;
             }
             if (!showAd) return;
-
             BannerView ad = new BannerView();
             ad.setInterface(Main.this, new RDInterface() {
                 @Override
