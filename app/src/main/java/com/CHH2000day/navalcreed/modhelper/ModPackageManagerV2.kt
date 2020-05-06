@@ -404,6 +404,9 @@ object ModPackageManagerV2 {
                 synchronized(modList) {
                     val config = Config(version = managerVer, isOverride = override, modInfos = modList.toMutableList(), duplicationInfos = duplicatedFileInfo.toMutableSet())
                     Utils.ensureFileParent(dataFile)
+                    if (!dataFile.canWrite()) {
+                        return@thread
+                    }
                     val sink = dataFile.sink().buffer()
                     sink.writeUtf8(GsonHelper.getGson().toJson(config))
                     sink.close()
