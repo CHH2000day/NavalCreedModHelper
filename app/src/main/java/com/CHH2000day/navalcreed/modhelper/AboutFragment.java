@@ -58,7 +58,7 @@ public class AboutFragment extends ModFragment {
                         ad.show();
                     }
                 });
-		ad.load();
+                ad.load();
                 return true;
             });
             donate.setOnClickListener(p1 -> {
@@ -96,7 +96,6 @@ public class AboutFragment extends ModFragment {
                         default:
                             break;
                     }
-                    // TODO: Implement this method
                     return true;
                 };
                 ali.setOnLongClickListener(listener);
@@ -105,7 +104,6 @@ public class AboutFragment extends ModFragment {
                         .setView(diaView)
                         .setPositiveButton(R.string.ok, null);
                 adb.create().show();
-                // TODO: Implement this method
             });
 
         }
@@ -119,7 +117,6 @@ public class AboutFragment extends ModFragment {
                 ClipboardManager cmb = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                 cmb.setText(deviceId);
                 Snackbar.make(v, "Device id has been copied", Snackbar.LENGTH_LONG).show();
-                // TODO: Implement this method
             });
         }
         mtextview.setText(new StringBuilder().append(getMainActivity().getModHelperApplication().getVersionName())
@@ -139,15 +136,13 @@ public class AboutFragment extends ModFragment {
                         .setPositiveButton(R.string.ok, null);
                 bs.close();
                 adb.create().show();
-            } catch (IOException e) {
+            } catch (IOException ignored) {
             }
-            // TODO: Implement this method
         });
         license.setOnLongClickListener(new OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View p1) {
-                // TODO: Implement this method
                 SharedPreferences sp = getMainActivity().getModHelperApplication().getMainSharedPreferences();
                 if (KeyUtil.checkKeyFormat(sp.getString(Main.KEY_AUTHKEY, ""))) {
                     //If local key is avail
@@ -163,7 +158,6 @@ public class AboutFragment extends ModFragment {
         });
 
         pkgname.setOnClickListener(p1 -> {
-
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setTitle(R.string.select_target_package);
             adb.setSingleChoiceItems(getMainActivity().getModHelperApplication().pkgnames, getMainActivity().getModHelperApplication().getPkgNameNum(getMainActivity().getModHelperApplication().getMainSharedPreferences().getString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().CN)), new DialogInterface.OnClickListener() {
@@ -171,20 +165,14 @@ public class AboutFragment extends ModFragment {
                 @Override
                 public void onClick(DialogInterface p1, int p2) {
                     selectedItem = p2;
-                    // TODO: Implement this method
                 }
             });
             adb.setPositiveButton(R.string.ok, (dialogInterface, p2) -> {
                 getMainActivity().getModHelperApplication().getMainSharedPreferences().edit().putString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().getPkgNameByNum(selectedItem)).apply();
-                // TODO: Implement this method
             });
             adb.setNegativeButton(R.string.cancel, null);
             adb.create().show();
-
-            // TODO: Implement this method
         });
-
-        // TODO: Implement this method
         return v;
     }
 
@@ -194,7 +182,6 @@ public class AboutFragment extends ModFragment {
 
     @Override
     public void onResume() {
-        // TODO: Implement this method
         super.onResume();
         selectedItem = getMainActivity().getModHelperApplication().getPkgNameNum(getMainActivity().getModHelperApplication().getMainSharedPreferences().getString(getMainActivity().getModHelperApplication().KEY_PKGNAME, getMainActivity().getModHelperApplication().CN));
     }
