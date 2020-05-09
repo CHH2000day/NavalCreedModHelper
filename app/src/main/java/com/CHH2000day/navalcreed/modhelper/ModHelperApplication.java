@@ -273,6 +273,7 @@ public class ModHelperApplication extends Application {
         }
     }
 
+
     private class MainSharedPreferencesChangeListener implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         @Override
