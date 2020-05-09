@@ -27,7 +27,7 @@ object ModPackageManagerV2 {
     private var onDataChangedListener: OnDataChangedListener? = null
     private var modType = mutableMapOf<String, String>()
 
-    public fun config(file: File, application: ModHelperApplication): Boolean {
+    fun config(file: File, application: ModHelperApplication): Boolean {
         dataFile = file
         this.application = application
         init(application)
@@ -35,18 +35,18 @@ object ModPackageManagerV2 {
         return true
     }
 
-    public fun registerOnDataChangeListener(listener: OnDataChangedListener) {
+    fun registerOnDataChangeListener(listener: OnDataChangedListener) {
         onDataChangedListener = listener
     }
 
-    public fun unregisterOnDataChangeListener() {
+    fun unregisterOnDataChangeListener() {
         onDataChangedListener = null
     }
 
     /**
      * Check if there's a conflict with existing mod
      */
-    public fun checkInstall(name: String, type: String, subType: String, version: Int, files: MutableSet<String>): QueryResult {
+    fun checkInstall(name: String, type: String, subType: String, version: Int, files: MutableSet<String>): QueryResult {
         Logger.d("Checking installation status for mod $name-$type-$subType version$version")
         val result = QueryResult(result = QueryResult.RESULT_OK, conflictList = mutableSetOf())
         for (mod in modList) {
@@ -75,7 +75,7 @@ object ModPackageManagerV2 {
     }
 
     @Synchronized
-    public fun uninstall(name: String): Int {
+    fun uninstall(name: String): Int {
         Logger.d("Start to uninstall mod:$name")
         val installation = getInstallation(name) ?: return -10
         installation.files.toList().forEach {
@@ -84,10 +84,10 @@ object ModPackageManagerV2 {
         modList.remove(installation)
         refresh()
         Logger.d("Mod uninstall complete!")
-        return 0;
+        return 0
     }
 
-    public fun refresh() {
+    fun refresh() {
         if (duplicatedFileInfo.isNotEmpty()) {
             duplicatedFileInfo.filter {
                 (it.files.size <= 2)
@@ -132,22 +132,6 @@ object ModPackageManagerV2 {
                             getInstallation(it.modName)?.status = Status.INSTALLED
                         }
                     }
-//                for (i in pos downTo 0) {
-//                    File(basePath, info.files[pos].currFileName).renameTo(File(basePath, info.files[pos].currFileName.removeSuffix(CONFLICT_SUFFIX)))
-//                    //Update installation record(1/2)
-//                    getInstallation(info.files[pos].modName)?.files?.remove(info.files[pos].currFileName)
-//                    //Update conflict record
-//                    info.files[pos].currFileName = info.files[pos].currFileName.removeSuffix(CONFLICT_SUFFIX)
-//                    //Update installation record(2/2)
-//                    getInstallation(info.files[pos].modName)?.files?.add(info.files[pos].currFileName)
-//                    //Remove info if only one element is left in the list
-//                    if (info.files.size <= 1) {
-//                        Logger.d("Setting status of mod \'${info.files[pos].modName}\' to INSTALLED")
-//                        duplicatedFileInfo.remove(info)
-//                        getInstallation(info.files[pos].modName)?.status = Status.INSTALLED
-//                    }
-//                }
-                    //End this method
                     return
                 }
             }
@@ -194,7 +178,7 @@ object ModPackageManagerV2 {
     }
 
     @Synchronized
-    public fun renameConflict(name: String) {
+    fun renameConflict(name: String) {
         Logger.d("Prepare to rename conflict file $name")
         installConflictFiles.add(name)
         for (info in duplicatedFileInfo) {
@@ -266,9 +250,9 @@ object ModPackageManagerV2 {
         return getBasePath(pendingTask!!.type, pendingTask!!.subType)
     }
 
-    public fun getMods(): List<ModInstallationInfo> = modList.toList()
+    fun getMods(): List<ModInstallationInfo> = modList.toList()
 
-    public fun getInstallation(name: String): ModInstallationInfo? {
+    fun getInstallation(name: String): ModInstallationInfo? {
         for (mod in modList) {
             if (mod.name == name) {
                 return mod
@@ -277,7 +261,7 @@ object ModPackageManagerV2 {
         return null
     }
 
-    public fun getInstallation(type: String, subType: String): ModInstallationInfo? {
+    fun getInstallation(type: String, subType: String): ModInstallationInfo? {
         for (mod in modList) {
             if (mod.type == type) {
                 if (mod.type != ModPackageInfo.MODTYPE_CV || (type == ModPackageInfo.MODTYPE_CV && subType == mod.subType)) {
@@ -294,7 +278,7 @@ object ModPackageManagerV2 {
      * Returns false if another installation is being done
      */
     @Synchronized
-    public fun requestInstall(name: String, type: String, subType: String): Boolean {
+    fun requestInstall(name: String, type: String, subType: String): Boolean {
         Logger.d("Requesting mod install:$name")
         if (pendingTask == null) {
             var isUpdate = false
@@ -314,14 +298,14 @@ object ModPackageManagerV2 {
     /**
      * Call this fun when a file is extracted.
      */
-    public fun onFileInstalled(name: String) {
+    fun onFileInstalled(name: String) {
         installationFiles.add(name)
     }
 
     /**
      * Call this once installation is done
      */
-    public fun postInstall(version: Int) {
+    fun postInstall(version: Int) {
         Logger.d("Mod installation completed")
         if (pendingTask != null) {
             if (pendingTask!!.isUpdate) {
@@ -338,13 +322,13 @@ object ModPackageManagerV2 {
         refresh()
     }
 
-    public fun onInstallFail() {
+    fun onInstallFail() {
         pendingTask = null
         refresh()
     }
 
     @Synchronized
-    public fun rollback() {
+    fun rollback() {
         Logger.i("Rolling back current installation")
         for (filename in installConflictFiles) {
             recoverFileFromConflict(filename)
@@ -395,7 +379,7 @@ object ModPackageManagerV2 {
         Logger.i("ModPackageManagerV2 initialized")
     }
 
-    public fun getModTypeName(type: String): String? {
+    fun getModTypeName(type: String): String? {
         if (modType.containsKey(type)) {
             return modType[type]
         }
