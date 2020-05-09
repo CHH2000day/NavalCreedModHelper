@@ -230,7 +230,7 @@ object ModPackageManagerV2 {
             //Get installation info of existed mod,return if has null
             val installation = getInstallation(duplicatedFile.modName) ?: return
             //Not keep this if it's a update
-            if (installation.name == name) {
+            if (installation.name == pendingTask?.name) {
                 installConflictFiles.remove(name)
                 Logger.d("File :$name is a update,not add it to list")
                 return
@@ -356,14 +356,19 @@ object ModPackageManagerV2 {
     }
 
     private fun init(application: ModHelperApplication) {
-        if (!dataFile.exists()) return
-        val source = dataFile.source().buffer()
-//        val type = object : TypeToken<List<ModInstallationInfo>>() {}.type
-        val config = GsonHelper.getGson().fromJson(source.readUtf8(), Config::class.javaObjectType)
-        override = config.isOverride
-        modList = config.modInfos
-        duplicatedFileInfo = config.duplicationInfos
-        source.close()
+        try {
+            if (dataFile.exists()) {
+                val source = dataFile.source().buffer()
+                val config = GsonHelper.getGson().fromJson(source.readUtf8(), Config::class.javaObjectType)
+                override = config.isOverride
+                modList = config.modInfos
+                duplicatedFileInfo = config.duplicationInfos
+                source.close()
+            }
+        } catch (e: Exception) {
+            Logger.d("Failed to load config")
+        }
+
         inited = true
         val res = application.resources
         modType[ModPackageInfo.MODTYPE_OTHER] = res.getString(R.string.unknown)
@@ -404,7 +409,7 @@ object ModPackageManagerV2 {
                 synchronized(modList) {
                     val config = Config(version = managerVer, isOverride = override, modInfos = modList.toMutableList(), duplicationInfos = duplicatedFileInfo.toMutableSet())
                     Utils.ensureFileParent(dataFile)
-                    if (!dataFile.canWrite()) {
+                    if (!dataFile.parentFile.canWrite()) {
                         return@thread
                     }
                     val sink = dataFile.sink().buffer()
