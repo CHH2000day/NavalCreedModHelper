@@ -136,7 +136,6 @@ public class BGReplacerFragment extends ModFragment {
                 }
             }
         });
-        showAd(v);
         return v;
     }
 

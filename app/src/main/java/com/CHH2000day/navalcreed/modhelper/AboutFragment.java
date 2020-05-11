@@ -19,8 +19,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.qy.sdk.Interfaces.RDInterface;
-import com.qy.sdk.rds.VideoView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,19 +46,6 @@ public class AboutFragment extends ModFragment {
         if (!isChineseEnvironment()) {
             donate.setVisibility(View.GONE);
         } else {
-            donate.setOnLongClickListener(listener -> {
-                Snackbar.make(v, "Loading ad", Snackbar.LENGTH_LONG).show();
-                VideoView ad = new VideoView();
-                ad.setInterface(getActivity(), new RDInterface() {
-                    @Override
-                    public void onLoadSuccess() {
-                        super.onLoadSuccess();
-                        ad.show();
-                    }
-                });
-                ad.load();
-                return true;
-            });
             donate.setOnClickListener(p1 -> {
                 AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
                 View diaView = inflater.inflate(R.layout.dialog_donate, null);

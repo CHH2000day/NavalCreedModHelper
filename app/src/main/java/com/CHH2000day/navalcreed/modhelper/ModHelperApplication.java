@@ -9,11 +9,6 @@ import android.os.Environment;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.Logger;
-import com.qy.sdk.Datas.QyBuilder;
-import com.qy.sdk.Interfaces.ISDKinitialize;
-import com.qy.sdk.RDCpplict;
-import com.qy.sdk.RDSDK;
-import com.qy.sdk.Utils.ErrorCode;
 import com.tencent.bugly.crashreport.CrashReport;
 
 import org.json.JSONException;
@@ -160,20 +155,7 @@ public class ModHelperApplication extends Application {
                 e.printStackTrace();
             }
         }
-        RDCpplict.init(this, QyBuilder.create()
-                .setAppId("2ad00775ded9d2484606c0ad466387d0") //APPID
-                .setChannel("channel")     //渠道ID，可在后台配置开关
-                .build(), new ISDKinitialize() {//初始化接口，不需要设为null即可
-            @Override
-            public void initSucceed(RDSDK rdsdk) {
-                System.out.println("初始化完成");
-            }
 
-            @Override
-            public void initError(ErrorCode errorCode) {
-                System.out.println("初始化异常：" + errorCode.toString());
-            }
-        });
 
         super.onCreate();
     }

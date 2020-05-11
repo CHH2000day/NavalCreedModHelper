@@ -14,8 +14,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +27,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -41,9 +38,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
-import com.qy.sdk.Interfaces.RDInterface;
-import com.qy.sdk.rds.BannerView;
-import com.qy.sdk.rds.SplashView;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -143,7 +137,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         checkValidity();
         new UpdateThread().start();
         new AnnouncementThread().start();
-        new AdThread(findViewById(R.id.adlayout)).start();
 
         if (Intent.ACTION_VIEW.equals(getIntent().getAction())) {
 
@@ -180,8 +173,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
             //If a test key is found,disable ad
             showAd = false;
             useAlphaChannel = getModHelperApplication().getMainSharedPreferences().getBoolean(KEY_USEALPHACHANNEL, BuildConfig.DEBUG);
-        } else {
-            showSplashAd();
         }
 
         if (BuildConfig.DEBUG) {
@@ -229,42 +220,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
 
     }
 
-    private void showSplashAd() {
-        SplashView ad = new SplashView();
-        ad.setInterface(this, new RDInterface() {
-            @Override
-            public void onLoadSuccess() {
-                super.onLoadSuccess();
-                ad.show();//在isReady或onLoadSuccess准备后再调用
-            }
-
-            @Override
-            public void rdView(ViewGroup view) {
-                super.rdView(view);
-                TypedValue tv = new TypedValue();
-                int actionBarHeight = 0;
-                if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-                    actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics());
-                }
-                CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                params.gravity = Gravity.BOTTOM;
-                params.height = mContentView.getHeight() - 2 * actionBarHeight;
-                view.setLayoutParams(params);//设置开屏广告的大小，建议全屏或占70%以上
-                mContentView.addView(view);//将广告元素放入布局
-                @SuppressLint("HandlerLeak") Handler adcloseer = new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        super.handleMessage(msg);
-                        mContentView.removeView(view);
-                    }
-                };
-            }
-
-        });
-
-        ad.load();
-
-    }
 
 
     public void performkeycheck(String key, final OnCheckResultListener listener) {
@@ -758,35 +713,4 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
             });
         }
     }
-
-    private class AdThread extends Thread {
-        private ViewGroup v;
-
-        public AdThread(ViewGroup v) {
-            this.v = v;
-        }
-
-        @Override
-        public void run() {
-            super.run();
-            try {
-                Thread.sleep(600);
-            } catch (InterruptedException e) {
-                Logger.e(e, "Failed to delay ad load,canceling");
-                return;
-            }
-            if (!showAd) return;
-            BannerView ad = new BannerView();
-            ad.setInterface(Main.this, new RDInterface() {
-                @Override
-                public void rdView(ViewGroup benner) {
-                    super.rdView(benner);
-                    v.addView(benner); //layout是你自己定义的布局
-                }
-            });
-            ad.load();
-            ad.show();
-        }
-    }
-
 }

@@ -109,7 +109,6 @@ public class LoginMovieReplacer extends ModFragment {
                 Snackbar.make(v, (ModPackageManagerV2.INSTANCE.uninstall(MOD_NAME) == 0 ? R.string.success : R.string.failed), Snackbar.LENGTH_LONG).show();
             }
         });
-        showAd(v);
         return v;
     }
 

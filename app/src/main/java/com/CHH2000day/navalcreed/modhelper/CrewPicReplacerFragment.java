@@ -158,7 +158,6 @@ public class CrewPicReplacerFragment extends ModFragment {
             }
         });
         selectedpic = v.findViewById(R.id.crewpicreplacerSelectedFile);
-        showAd(v);
         return v;
     }
 

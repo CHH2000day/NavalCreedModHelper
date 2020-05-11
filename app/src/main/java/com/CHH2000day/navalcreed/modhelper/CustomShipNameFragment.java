@@ -98,7 +98,6 @@ public class CustomShipNameFragment extends ModFragment {
                     .show();
             return true;
         });
-        showAd(v);
 
         return v;
     }
