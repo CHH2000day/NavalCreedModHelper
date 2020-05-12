@@ -90,11 +90,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
-        <provider
-            android:name="com.wq.rx.TProvider"
-            android:authorities="com.CHH2000day.navalcreed.modhelper.TTMultiProvider"
-            android:exported="false" />
-
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
