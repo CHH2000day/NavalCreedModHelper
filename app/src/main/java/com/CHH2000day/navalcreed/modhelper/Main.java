@@ -511,7 +511,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                     @Override
                     public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                         try {
-                            VersionBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), VersionBean.class);
+                            VersionBean bean = GsonHelper.INSTANCE.getGson().fromJson(response.body().charStream(), VersionBean.class);
 
                             if (bean.resultCode >= 0) {
                                 //If result code is greater than 0,it means there exists memo
@@ -632,7 +632,7 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     try {
-                        AnnouncementBean bean = GsonHelper.getGson().fromJson(response.body().charStream(), AnnouncementBean.class);
+                        AnnouncementBean bean = GsonHelper.INSTANCE.getGson().fromJson(response.body().charStream(), AnnouncementBean.class);
                         if (bean.getResultCode() >= 0) {
                             final int id = bean.getId();
                             int currid = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1);
