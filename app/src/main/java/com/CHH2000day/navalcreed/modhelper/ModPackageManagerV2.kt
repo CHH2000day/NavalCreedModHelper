@@ -11,7 +11,7 @@ import java.io.File
 import kotlin.concurrent.thread
 
 object ModPackageManagerV2 {
-    public var override = false
+    var override = false
 
     private const val managerVer = 2
     private lateinit var dataFile: File
@@ -19,7 +19,7 @@ object ModPackageManagerV2 {
 
     private var modList = mutableListOf<ModInstallationInfo>()
     private var pendingTask: PendingInstallation? = null
-    private var installationFiles: MutableSet<String> = mutableSetOf();
+    private var installationFiles: MutableSet<String> = mutableSetOf()
     private const val CONFLICT_SUFFIX = ".old"
     private var duplicatedFileInfo: MutableSet<DuplicationInfo> = mutableSetOf()
     private lateinit var application: ModHelperApplication
@@ -343,7 +343,7 @@ object ModPackageManagerV2 {
         try {
             if (dataFile.exists()) {
                 val source = dataFile.source().buffer()
-                val config = GsonHelper.getGson().fromJson(source.readUtf8(), Config::class.javaObjectType)
+                val config = GsonHelper.gson.fromJson(source.readUtf8(), Config::class.javaObjectType)
                 override = config.isOverride
                 modList = config.modInfos
                 duplicatedFileInfo = config.duplicationInfos
@@ -397,7 +397,7 @@ object ModPackageManagerV2 {
                         return@thread
                     }
                     val sink = dataFile.sink().buffer()
-                    sink.writeUtf8(GsonHelper.getGson().toJson(config))
+                    sink.writeUtf8(GsonHelper.gson.toJson(config))
                     sink.close()
                 }
             }
@@ -436,6 +436,7 @@ object ModPackageManagerV2 {
     data class DuplicationInfo(val fileName: String, var files: MutableList<DuplicatedFile> = mutableListOf())
 
 
+    @Suppress("DEPRECATION")
     class MigrationHelper(private val activity: Main) : AsyncTask<File, String, Boolean>() {
         private lateinit var progressDialog: ProgressDialog
         override fun onPreExecute() {
