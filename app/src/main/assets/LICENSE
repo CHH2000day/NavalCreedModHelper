@@ -1,13 +1,34 @@
-
-Copyright (c) 2017, CHH2000day,Licensed under the Apache License, Version 2.0 (the "License");
+Copyright (c) 2017-2020, CHH2000day,Licensed under the Apache License, Version 2.0 (the "License");
 http://www.apache.org/licenses/LICENSE-2.0
 
-**
+-----
+file:app/src/main/res/mipmap-anydpi-v26/icon_new.xml
+file:app/src/main/res/mipmap-anydpi-v26/icon_new_round.xml
+file:app/src/main/res/mipmap-hdpi/icon_new.png
+file:app/src/main/res/mipmap-hdpi/icon_new_foreground.png
+file:app/src/main/res/mipmap-hdpi/icon_new_round.png
+file:app/src/main/res/mipmap-mdpi/icon_new.png
+file:app/src/main/res/mipmap-mdpi/icon_new_foreground.png
+file:app/src/main/res/mipmap-mdpi/icon_new_round.png
+file:app/src/main/res/mipmap-xhdpi/icon_new.png
+file:app/src/main/res/mipmap-xhdpi/icon_new_foreground.png
+file:app/src/main/res/mipmap-xhdpi/icon_new_round.png
+file:app/src/main/res/mipmap-xxhdpi/icon_new.png
+file:app/src/main/res/mipmap-xxhdpi/icon_new_foreground.png
+file:app/src/main/res/mipmap-xxhdpi/icon_new_round.png
+file:app/src/main/res/mipmap-xxxhdpi/icon_new.png
+file:app/src/main/res/mipmap-xxxhdpi/icon_new_foreground.png
+file:app/src/main/res/mipmap-xxxhdpi/icon_new_round.png
+Copyright (c) 2020, 心空未空,Licensed under the Apache License, Version 2.0 (the "License");
+http://www.apache.org/licenses/LICENSE-2.0
+
+
+-----
 res:no_pereview_tiny.png
 res:no_pereview.png
 Copyright (c),2016,战舰少女R魔盒团队,未经战舰少女R魔盒团队许可的情况下禁止包括但不限于修改或分发的行为
 
-**
+-----
 Android Open Source Project
 lib:android.support.*
 **
@@ -16,7 +37,7 @@ Copyright (c) 2005-2013, The Android Open Source Project
    Licensed under the Apache License, Version 2.0 (the "License");
 http://www.apache.org/licenses/LICENSE-2.0
 
-**
+-----
 Okio,OkHttp
 lib:com.squareup.okio 
 https://github.com/square/okio
@@ -27,13 +48,15 @@ Copyright(C) 2013,Square,Inc,
  Licensed under the Apache License, Version 2.0 (the "License");
 http://www.apache.org/licenses/LICENSE-2.0
 
-**ffmpeg-android
+-----
+ffmpeg-android
 lib:com.writingminds:FFmpegAndroid:0.3.2
 from:https://github.com/WritingMinds/ffmpeg-android-java
 Licensed under the GNU General Public License v3.0
 license:http://www.gnu.org/licenses
 
-**logger
+-----
+logger
 src/main/java/com/orhanobut/logger/
 
 Copyright 2018 Orhan Obut
