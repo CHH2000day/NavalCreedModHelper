@@ -186,7 +186,6 @@ public class BGMReplacerFragment extends ModFragment {
             }
         });
         update.setOnClickListener(new OnClickListener() {
-
             View dialogView;
             TextView progress;
             ProgressBar pb;
@@ -207,13 +206,7 @@ public class BGMReplacerFragment extends ModFragment {
                     adb.setTitle(R.string.notice)
                             .setMessage(R.string.modpkg_install_ovwtmsg)
                             .setNegativeButton(R.string.cancel, null)
-                            .setPositiveButton(R.string.uninstall_and_continue, new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface p1, int p2) {
-                                    install(name, path);
-                                }
-                            });
+                            .setPositiveButton(R.string.uninstall_and_continue, (p11, p2) -> install(name, path));
                     adb.create().show();
                 } else {
                     install(name, path);
@@ -272,8 +265,6 @@ public class BGMReplacerFragment extends ModFragment {
                                 mon.ondone();
                                 break;
                             case 1:
-                                //停用该功能以避免IllegalArgumentException
-                                //Snackbar.make ( v, (String)msg.obj, Snackbar.LENGTH_LONG ).show ( );
                                 break;
                         }
                     }
@@ -282,11 +273,7 @@ public class BGMReplacerFragment extends ModFragment {
                 final AudioFormatHelper afh = FormatHelperFactory.getAudioFormatHelper(srcfile, getActivity());
                 new Thread() {
                     public void run() {
-                        //try
-                        //{
-							/*音频转码，移除原代码
-							 Utils.copyFile ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ) );
-							 */
+                        starttime = System.currentTimeMillis();
                         if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY)) {
                             File file = getTargetFile(curr_scene, curr_type, curr_music, Utils.FORMAT_WAV);
                             Utils.ensureFileParent(file);
@@ -307,12 +294,6 @@ public class BGMReplacerFragment extends ModFragment {
                         } else {
                             h.sendMessage(h.obtainMessage(AudioFormatHelper.STATUS_ERROR, "Start error"));
                         }
-                        //}
-							/*catch (IOException e)
-							 {
-							 h.sendMessage ( h.obtainMessage ( 1, e ) );
-							 }*/
-
                     }
                 }.start();
 
@@ -434,10 +415,8 @@ public class BGMReplacerFragment extends ModFragment {
         return true;
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO: Implement this method
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK) {
             if (data != null) {
@@ -445,28 +424,8 @@ public class BGMReplacerFragment extends ModFragment {
                     Snackbar.make(v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG).show();
                     return;
                 }
-				/*测试音频转码,跳过音频格式验证
-				 try
-				 {
-				 s = identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ), true ) ;
-				 }
-				 catch (IOException e)
-				 {Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
-				 if ( !Utils.FORMAT_WAV.equals ( s ) )
-				 {
-				 Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
-				 return;
-				 }
-				 else
-				 {
-				 srcfile = data.getData ( );
-				 //fileformat=s;
-				 mtextview.setText ( new StringBuilder ( ).append ( srcfile.getPath ( ) ).toString ( ) );
-				 }*/
                 srcfile = data.getData();
-                mtextview.setText(new StringBuilder().append(srcfile.getPath()).toString());
-
-
+                mtextview.setText(srcfile.getPath());
             } else {
                 Snackbar.make(v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG).show();
                 return;
@@ -492,19 +451,9 @@ public class BGMReplacerFragment extends ModFragment {
             super(context, textViewResourceId, data);
         }
 
-        /*
-         public void reconfigure (int type)
-         {
-         this.clear ( );
-         this.data = getFileNameStringsToShow ( type );
-         this.act_data = getFileNameStrings ( type );
-         this.addAll(data);
-         }*/
         public String[] getCurrentData() {
             return this.act_data;
         }
-
-
     }
 
     public class Monitor implements DialogInterface.OnShowListener {
@@ -535,8 +484,5 @@ public class BGMReplacerFragment extends ModFragment {
             button.setClickable(false);
             button.setTextColor(Color.GRAY);
         }
-
-
     }
-
 }
