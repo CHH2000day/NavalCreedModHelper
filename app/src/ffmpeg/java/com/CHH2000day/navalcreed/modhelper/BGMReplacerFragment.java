@@ -94,10 +94,8 @@ public class BGMReplacerFragment extends ModFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FormatHelperFactory.loadFFmpeg(getContext());
         initValues();
         initview();
-
     }
 
     @Override

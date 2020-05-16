@@ -1,102 +1,48 @@
 package com.CHH2000day.navalcreed.modhelper;
-import android.net.*;
-import android.content.*;
-import java.util.*;
-import java.io.*;
-import com.github.hiteshsondhi88.libffmpeg.*;
-import com.github.hiteshsondhi88.libffmpeg.exceptions.*;
 
-public class FormatHelperFactory
-{
-	private static HashMap<Uri,AudioFormatHelper> audiohelpers;
-	private static boolean loadedFFmpeg=false,loadingFFmpeg=false;
-	public static AudioFormatHelper getAudioFormatHelper ( Uri file, Context ctx )
-	{
-		AudioFormatHelper afh=null;
-		if(!loadedFFmpeg&&!loadingFFmpeg){
-			loadFFmpeg(ctx);
-		}
-		if ( audiohelpers == null )
-		{
-			audiohelpers = new HashMap<Uri,AudioFormatHelper> ( );
-		}
-		afh = audiohelpers.get ( file );
-		if ( afh == null )
-		{
-			afh = new AudioFormatHelper ( file, ctx );
-			audiohelpers.put ( file, afh );
-		}
-		return afh;
-	}
-	public synchronized static void refreshCache ( File file )
-	{
-		if ( audiohelpers == null )
-		{
-			return;
-		}
-		Collection c=audiohelpers.values ( );
-		Iterator i=c.iterator ( );
-		while ( i.hasNext ( ) )
-		{
-			AudioFormatHelper afh=(AudioFormatHelper)i.next ( );
-			afh.denyCache ( file );
-		}
+import android.content.Context;
+import android.net.Uri;
 
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
 
-	}
-	public synchronized static void denyAllCaches ( )
-	{
-		if ( audiohelpers == null )
-		{
-			return;
-		}
-		Collection c=audiohelpers.values ( );
-		Iterator i=c.iterator ( );
-		while ( i.hasNext ( ) )
-		{
-			AudioFormatHelper afh=(AudioFormatHelper)i.next ( );
-			afh.denyCache ( null, afh.MODE_DENY_ALL_CACHE );
-		}
+public class FormatHelperFactory {
+    private static HashMap<Uri, AudioFormatHelper> audioHelperMap;
 
-	}
-	public static void loadFFmpeg(Context ctx){
-		try
-		{
-			FFmpeg.getInstance(ctx).loadBinary(new FFmpegLoadBinaryResponseHandler(){
+    public static AudioFormatHelper getAudioFormatHelper(Uri file, Context ctx) {
+        AudioFormatHelper afh = null;
 
-					@Override
-					public void onFailure()
-					{
-						loadedFFmpeg=false;
-						throw new RuntimeException("Filed to load ffmpeg lib");
-						// TODO: Implement this method
-					}
+        if (audioHelperMap == null) {
+            audioHelperMap = new HashMap<>();
+        }
+        afh = audioHelperMap.get(file);
+        if (afh == null) {
+            afh = new AudioFormatHelper(file, ctx);
+            audioHelperMap.put(file, afh);
+        }
+        return afh;
+    }
 
-					@Override
-					public void onSuccess()
-					{
-						loadedFFmpeg=true;
-						// TODO: Implement this method
-					}
+    public synchronized static void refreshCache(File file) {
+        if (audioHelperMap == null) {
+            return;
+        }
+        Collection c = audioHelperMap.values();
+        for (Object o : c) {
+            AudioFormatHelper afh = (AudioFormatHelper) o;
+            afh.invalidCache(file);
+        }
+    }
 
-					@Override
-					public void onStart()
-					{
-						loadingFFmpeg=true;
-						// TODO: Implement this method
-					}
-
-					@Override
-					public void onFinish()
-					{
-						loadingFFmpeg=false;
-						// TODO: Implement this method
-					}
-				});
-		}
-		catch (FFmpegNotSupportedException e)
-		{
-			loadedFFmpeg=false;
-		}
-	}
+    public synchronized static void denyAllCaches() {
+        if (audioHelperMap == null) {
+            return;
+        }
+        Collection c = audioHelperMap.values();
+        for (Object o : c) {
+            AudioFormatHelper afh = (AudioFormatHelper) o;
+            afh.invalidCache(null, AudioFormatHelper.MODE_DENY_ALL_CACHE);
+        }
+    }
 }
