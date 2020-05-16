@@ -19,6 +19,7 @@ import okio.Okio;
 import okio.Sink;
 import okio.Source;
 
+@SuppressWarnings("SynchronizeOnNonFinalField")
 public class CustomShipNameHelper {
     private static final String HOF = "return\n{\n";
     private static final String EOC = "}";
@@ -28,8 +29,8 @@ public class CustomShipNameHelper {
     public static CustomShipNameHelper mcsh;
     private static boolean inited = false;
     private HashMap<Integer, String> shipnames;
-    private ArrayList idList;
-    private File luafile;
+    private ArrayList<Integer> idList;
+    private File luaFile;
 
     public synchronized static CustomShipNameHelper getInstance() {
         if (mcsh == null) {
@@ -48,8 +49,9 @@ public class CustomShipNameHelper {
     }
 
     public boolean patch(BufferedSource src) {
-        return patch(src, this.luafile);
+        return patch(src, this.luaFile);
     }
+
     /**
      * @param src  patch data
      * @param dest customshipnames.lua
@@ -80,12 +82,12 @@ public class CustomShipNameHelper {
         src.close();
         //Explain and execute it
         synchronized (shipnames) {
-            String[] cmd = null;
+            String[] cmd;
             HashMap<Integer, String> buffer = shipnames;
 
             for (int i = 0; i < lines.length && err_pos < 1; i++) {
                 try {
-                    lines[i].trim();
+                    lines[i] = lines[i].trim();
                     //"#" is a mark of comment,no need to process it
                     if (lines[i].length() < 2 || lines[i].startsWith("#")) {
                         continue;
@@ -119,7 +121,7 @@ public class CustomShipNameHelper {
 
     void syncIDList() {
         synchronized (idList) {
-            idList = new ArrayList(shipnames.keySet());
+            idList = new ArrayList<>(shipnames.keySet());
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 Collections.sort(idList);
             } else {
@@ -135,11 +137,12 @@ public class CustomShipNameHelper {
             }
         }
     }
+
     private void doInit(File src) throws IOException {
-        this.luafile = src;
+        this.luaFile = src;
         if (shipnames == null || idList == null) {
-            shipnames = new HashMap<Integer, String>();
-            idList = new ArrayList();
+            shipnames = new HashMap<>();
+            idList = new ArrayList<>();
         }
         shipnames.clear();
         idList.clear();
@@ -152,32 +155,35 @@ public class CustomShipNameHelper {
             return;
         }
         String[] raw = orig.split("\n");
-        char[] line = null;
-        String str = null;
-        ArrayList ids = new ArrayList();
-        String id = null;
-        String name = null;
-        ;
-        boolean isInId = false;
-        boolean isInName = false;
-        for (int i = 0; i < raw.length; i++) {
-            str = raw[i].trim();
-            if (str.startsWith("--") || str.startsWith("]]") || str.startsWith("return") || str.startsWith("{") || str.startsWith("}")) {
-                continue;
-            }
-            id = str.substring(str.indexOf('[') + 1, str.indexOf(']'));
-            name = str.substring(str.indexOf('\"') + 1, str.lastIndexOf('"'));
-            //end of each line's resolve
-            int shipId = Integer.valueOf(id);
-            ids.add(shipId);
-            shipnames.put(shipId, name);
+        String str;
+        ArrayList<Integer> ids = new ArrayList<>();
+        String id;
+        String name;
 
-            id = null;
-            name = null;
+        for (int i = 0; i < raw.length; i++) {
+            try {
+                str = raw[i].trim();
+                if (str.startsWith("--") || str.startsWith("]]") || str.startsWith("return") || str.startsWith("{") || str.startsWith("}")) {
+                    continue;
+                }
+                if (str.indexOf('[') < 0) {
+                    continue;
+                }
+                id = str.substring(str.indexOf('[') + 1, str.indexOf(']'));
+                name = str.substring(str.indexOf('\"') + 1, str.lastIndexOf('"'));
+                //end of each line's resolve
+                int shipId = Integer.parseInt(id);
+                ids.add(shipId);
+                shipnames.put(shipId, name);
+            } catch (RuntimeException e) {
+                Logger.e(e, "Error reading line " + (i + 1));
+            } finally {
+                id = null;
+                name = null;
+            }
             //reset StringBuilders after each loop
         }
         //end of all loops
-
         idList = ids;
         syncIDList();
         inited = true;
@@ -186,19 +192,18 @@ public class CustomShipNameHelper {
     private void writeToFile(File dest) throws IOException {
         Sink s = Okio.sink(dest);
         BufferedSink bs = Okio.buffer(s);
-        ListIterator li = idList.listIterator();
-        String name = "";
+        ListIterator<Integer> li = idList.listIterator();
+        String name;
         String empty = "";
         bs.writeUtf8(HOF);
         while (li.hasNext()) {
-            int i = (Integer) li.next();
+            int i = li.next();
             name = shipnames.get(i);
-            if (name.equals(empty)) {
+            if (name != null && name.equals(empty)) {
                 continue;
             }
             bs.writeUtf8(String.format(STATEMENT, i, shipnames.get(i)));
             bs.writeUtf8("\n");
-
         }
         bs.writeUtf8(EOC);
         bs.writeUtf8("\n");
@@ -207,7 +212,7 @@ public class CustomShipNameHelper {
         s.close();
     }
 
-    private class UnknownActionException extends Exception {
+    private static class UnknownActionException extends Exception {
         public UnknownActionException(String msg) {
             super(msg);
         }
