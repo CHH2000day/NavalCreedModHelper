@@ -49,11 +49,12 @@ Copyright(C) 2013,Square,Inc,
 http://www.apache.org/licenses/LICENSE-2.0
 
 -----
-ffmpeg-android
-lib:com.writingminds:FFmpegAndroid:0.3.2
-from:https://github.com/WritingMinds/ffmpeg-android-java
-Licensed under the GNU General Public License v3.0
-license:http://www.gnu.org/licenses
+mobile-ffmpeg
+lib:com.arthenica:mobile-ffmpeg-video
+Copyright (c) 2018-2020 MobileFFmpeg
+licensed under the LGPL v3.0
+license:http://www.gnu.org/licenses/lgpl-3.0
+https://github.com/tanersener/mobile-ffmpeg
 
 -----
 logger
@@ -73,4 +74,4 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-You can download this modified library from https://github.com/CHH2000day/logger
+You can download this modified library along with this project
