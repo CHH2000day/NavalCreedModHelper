@@ -406,19 +406,6 @@ public class Main extends AppCompatActivity implements ModPackageInstallerFragme
         return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        try {
-            Intent adKiller = new Intent(this, getClassLoader().loadClass("com.qy.selfrd.services.QyService"));
-            stopService(adKiller);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
     public boolean isUseAlphaChannel() {
         return useAlphaChannel;
     }
