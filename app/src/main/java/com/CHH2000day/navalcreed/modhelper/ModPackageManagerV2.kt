@@ -82,6 +82,19 @@ object ModPackageManagerV2 {
             recoverFileFromConflict(it, installation)
         }
         modList.remove(installation)
+        //Cleanup remaining mod info caused by previous version
+        if (modList.isEmpty()) {
+            duplicatedFileInfo.forEach { info ->
+                info.files.forEach { fileInfo ->
+                    File(fileInfo.currFileName).also {
+                        if (it.exists()) {
+                            it.delete()
+                        }
+                    }
+                }
+            }
+            duplicatedFileInfo.clear()
+        }
         refresh()
         Logger.d("Mod uninstall complete!")
         return 0
@@ -190,33 +203,33 @@ object ModPackageManagerV2 {
         doRenameConflict(name)
     }
 
-    private fun doRenameConflict(name: String) {
-        val duplicationInfo = DuplicationInfo(name)
+    private fun doRenameConflict(fileName: String) {
+        val duplicationInfo = DuplicationInfo(fileName)
         marker@ for (mod in modList) {
             if (pendingTask?.type == ModPackageInfo.MODTYPE_OTHER || (mod.type == pendingTask?.type && mod.subType == pendingTask?.subType))
                 for (file in mod.files) {
-                    if (name == file) {
-                        duplicationInfo.files.add(DuplicatedFile(mod.name, name))
+                    if (fileName == file && mod.name != pendingTask?.name) {
+                        duplicationInfo.files.add(DuplicatedFile(mod.name, fileName))
                         break@marker
                     }
                 }
         }
         duplicatedFileInfo.add(duplicationInfo)
         if (duplicationInfo.files.isNotEmpty()) {
-            duplicationInfo.files.add(DuplicatedFile(pendingTask!!.name, name))
-            doRenameConflict(name, duplicationInfo)
+            duplicationInfo.files.add(DuplicatedFile(pendingTask!!.name, fileName))
+            doRenameConflict(fileName, duplicationInfo)
         }
 
     }
 
-    private fun doRenameConflict(name: String, info: DuplicationInfo) {
+    private fun doRenameConflict(fileName: String, info: DuplicationInfo) {
         for (duplicatedFile in info.files) {
             //Get installation info of existed mod,return if has null
             val installation = getInstallation(duplicatedFile.modName) ?: return
             //Not keep this if it's a update
             if (installation.name == pendingTask?.name) {
-                installConflictFiles.remove(name)
-                Logger.d("File :$name is a update,not add it to list")
+                installConflictFiles.remove(fileName)
+                Logger.d("File :$fileName is a update,not add it to list")
                 return
             }
             if ((installation.type == ModPackageInfo.MODTYPE_OTHER || (installation.type == pendingTask?.type && installation.subType == pendingTask?.subType))) {
@@ -233,9 +246,8 @@ object ModPackageManagerV2 {
                 installation.status = Status.PARTLY_WORKING
                 Logger.d("Mod:${installation.name} is PARTLY_WORKING")
             }
-
         }
-        info.files.add(DuplicatedFile(pendingTask!!.name, name))
+        info.files.add(DuplicatedFile(pendingTask!!.name, fileName))
     }
 
     private fun getBasePath(installation: ModInstallationInfo): String {
