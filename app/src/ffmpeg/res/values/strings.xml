@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Put flavor specific strings here -->
+	<!-- Put flavor specific strings here -->
 	<string name="buildtype" translatable="false">ffmpeg</string>
 	<string name="app_name">NavalCreedModHelper(FFmpeg)</string>
+	<string name="loginmovie_intro">Introduction:\nWe recommend that you transcode it to .gov using theora codec on a PC and then send it to your device as transcoding it your phone would take a long time.\nNotice that the audio in the video would not be played,custom it in BGM page.</string>
+
 </resources>

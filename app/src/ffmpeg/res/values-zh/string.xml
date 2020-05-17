@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<resources>
-	<string name="app_name">战舰联盟mod助手(FFmpeg)</string>
+		<string name="app_name">战舰联盟mod助手(FFmpeg)</string>
+		<string name="loginmovie_intro">使用说明:\n受制于移动端的性能,我们建议在电脑端使用ffmpeg2theora转码为.ogv(theora)后再放到手机里\n注意，视频里的音频不会被播放，请在BGM替换器里替换</string>
 	</resources>
