@@ -87,6 +87,8 @@ class LoginMovieReplacer : ModFragment() {
                                     if (source != null) {
                                         sink.writeAll(source)
                                         source.close()
+                                        sink.flush()
+                                        sink.close()
                                         hasCache = true
                                     }
                                 }
