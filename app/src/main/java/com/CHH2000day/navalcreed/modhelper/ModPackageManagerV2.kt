@@ -49,6 +49,9 @@ object ModPackageManagerV2 {
     fun checkInstall(name: String, type: String, subType: String, version: Int, files: MutableSet<String>): QueryResult {
         Logger.d("Checking installation status for mod $name-$type-$subType version$version")
         val result = QueryResult(result = QueryResult.RESULT_OK, conflictList = mutableSetOf())
+        if (override) {
+            return result
+        }
         for (mod in modList) {
             lateinit var resultSet: Set<String>
             if (mod.type == type) {
@@ -192,6 +195,9 @@ object ModPackageManagerV2 {
 
     @Synchronized
     fun renameConflict(name: String) {
+        if (override) {
+            return
+        }
         Logger.d("Prepare to rename conflict file $name")
         installConflictFiles.add(name)
         for (info in duplicatedFileInfo) {
