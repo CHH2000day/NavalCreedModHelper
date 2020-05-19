@@ -52,7 +52,11 @@ class LoginMovieReplacer : ModFragment() {
             }
             val adb = AlertDialog.Builder(activity!!)
             adb.setTitle(R.string.please_wait)
-                    .setMessage(R.string.transcode_writing)
+                    .setMessage(if (requiresTranscode) {
+                        R.string.transcode_transcoding
+                    } else {
+                        R.string.transcode_writing
+                    })
                     .setCancelable(false)
             val ad = adb.create()
             ad.setCancelable(false)
