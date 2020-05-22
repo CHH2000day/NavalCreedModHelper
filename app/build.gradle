@@ -46,7 +46,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 103
-        versionName 'build-2020052200'
+        versionName '3.5.0-release'
         flavorDimensions "versionCode"
         buildConfigField "int", "BuildVersion", "10069"
         ndk{
