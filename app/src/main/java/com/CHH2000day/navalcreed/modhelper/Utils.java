@@ -136,7 +136,7 @@ public class Utils {
                     String[] vol_id = split[0].split(String.valueOf(File.separatorChar));
                     String vol = vol_id[vol_id.length - 1];
                     if (vol.contains("-")) {
-                        return new StringBuilder().append(File.separatorChar).append("storage").append(File.separatorChar).append(vol).append(File.separatorChar).append(split[1]).toString();
+                        return File.separatorChar + "storage" + File.separatorChar + vol + File.separatorChar + split[1];
                     }
                 }
             }
@@ -182,7 +182,9 @@ public class Utils {
                 final int column_index = cursor.getColumnIndex(column);
                 if (column_index >= 0) {
                     String s = cursor.getString(column_index);
-                    if (s != null) {
+                    //A path starts with /data is incorrect,hardcoding it to /sdcard/Android/data may cause problem.
+                    //Return null to use failsafe
+                    if (s != null && !s.startsWith("/data")) {
                         return s;
                     }
                 }
@@ -204,15 +206,14 @@ public class Utils {
         return err.getName() + "\n" + t.getMessage();
     }
 
-    public static String convertFileSize(long origsize) {
-        float size = origsize;
+    public static String convertFileSize(long originalSize) {
         StringBuilder sb = new StringBuilder();
-        if (origsize <= 1024) {
-            sb.append(size).append("B");
-        } else if (origsize < 1024 * 1024) {
-            sb.append((float) (Math.round((size / 1024) * 100)) / 100).append("KB");
+        if (originalSize <= 1024) {
+            sb.append((float) originalSize).append("B");
+        } else if (originalSize < 1024 * 1024) {
+            sb.append((float) (Math.round(((float) originalSize / 1024) * 100)) / 100).append("KB");
         } else {
-            sb.append((float) (Math.round(((size / (1024 * 1024)) * 100))) / 100).append("MB");
+            sb.append((float) (Math.round((((float) originalSize / (1024 * 1024)) * 100))) / 100).append("MB");
         }
         return sb.toString();
     }
