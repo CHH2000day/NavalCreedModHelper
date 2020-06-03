@@ -76,7 +76,7 @@ public class ModHelperApplication extends Application {
     public void onCreate() {
         //if in debug mode,write log to storage
         if (BuildConfig.DEBUG) {
-            Logger.addLogAdapter(new DiskLogAdapter());
+            Logger.addLogAdapter(new DiskLogAdapter(getExternalFilesDir("").getAbsolutePath()));
         }
         Logger.addLogAdapter(new AndroidLogAdapter());
         Logger.i("Logger inited");

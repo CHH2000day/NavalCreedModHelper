@@ -364,7 +364,6 @@ public class ModPackageInstallHelper {
         InstallTask it = new InstallTask(subType, activity, getModPackageInfo(), msrcFile, mpkgFile);
         it.execute();
 
-
     }
 
     public ModPackageInfo getModPackageInfo() {
