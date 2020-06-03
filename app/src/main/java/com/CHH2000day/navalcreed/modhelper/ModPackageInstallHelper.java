@@ -350,7 +350,7 @@ public class ModPackageInstallHelper {
 
     private ErrorMsg checkAvailSpace() {
         Utils.ensureFileParent(mmha.getResFilesDir());
-        StatFs fs = new StatFs(mmha.getResFilesDir().getParent());
+        StatFs fs = new StatFs(mmha.getResFilesDir().getParentFile().getParentFile().getParent());
         long avail = fs.getAvailableBytes();
         if (getTotalSize() > avail) {
             return new ErrorMsg(mmha.getResources().getString(R.string.modpkg_space_warning, getTotalSize(), avail), false);
