@@ -1,15 +1,6 @@
 package com.CHH2000day.navalcreed.modhelper;
 
-import android.app.*;
-import android.os.*;
-import java.io.*;
-import android.widget.*;
-import android.view.View.*;
-import android.view.*;
-import android.content.*;
-import android.graphics.*;
-import android.graphics.drawable.*;
-import android.widget.AdapterView.*;
+import android.app.Activity;
 
 public class MainActivity extends Activity 
 {/*

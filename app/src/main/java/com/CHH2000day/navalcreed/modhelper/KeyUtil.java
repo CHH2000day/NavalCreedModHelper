@@ -1,25 +1,26 @@
 package com.CHH2000day.navalcreed.modhelper;
-import java.util.*;
 
-public class KeyUtil
-{
-	private static final int BLOCKSIZE=5;
-	private static final char SEPARATERCHAR='-';
+import java.util.Arrays;
+
+public class KeyUtil {
+	private static final int BLOCKSIZE = 5;
+	private static final char SEPARATERCHAR = '-';
 	private static char[] chars;
-	static{
+
+	static {
 		chars = new char[36];
-		chars [ 0 ] = 'A';
-		chars [ 1 ] = 'B';
-		chars [ 2 ] = 'C';
-		chars [ 3 ] = 'D';
-		chars [ 4 ] = 'E';
-		chars [ 5 ] = 'F';
-		chars [ 6 ] = 'G';
-		chars [ 7 ] = 'H';
-		chars [ 8 ] = 'I';
-		chars [ 9 ] = 'J';
-		chars [ 10 ] = 'K';
-		chars [ 11 ] = 'L';
+		chars[0] = 'A';
+		chars[1] = 'B';
+		chars[2] = 'C';
+		chars[3] = 'D';
+		chars[4] = 'E';
+		chars[5] = 'F';
+		chars[6] = 'G';
+		chars[7] = 'H';
+		chars[8] = 'I';
+		chars[9] = 'J';
+		chars[10] = 'K';
+		chars[11] = 'L';
 		chars [ 12 ] = 'M';
 		chars [ 13 ] = 'N';
 		chars [ 14 ] = 'O';

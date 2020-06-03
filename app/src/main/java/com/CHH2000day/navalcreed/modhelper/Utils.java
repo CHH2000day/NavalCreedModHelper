@@ -118,8 +118,14 @@ public class Utils {
     }
 
     public static String resolveFilePath(Uri uri, Context ctx) {
+        if (BuildConfig.DEBUG) {
+            Logger.d("Resolving uri:" + uri.getPath() + " authority:" + uri.getAuthority());
+        }
         //如果path已为绝对路径，直接返回
         if (uri.getEncodedPath().startsWith("/storage")) {
+            if (BuildConfig.DEBUG) {
+                Logger.d("Method:return directly");
+            }
             return uri.getPath();
         }
         //如果为SAF返回的数据，解码
@@ -129,13 +135,22 @@ public class Utils {
             if (split.length >= 2) {
                 String type = split[0];
                 if ("primary".equalsIgnoreCase(type)) {
+                    if (BuildConfig.DEBUG) {
+                        Logger.d("Method:SAF prim");
+                    }
                     return Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + split[1];
                 } else if ("secondary".equalsIgnoreCase(type)) {
+                    if (BuildConfig.DEBUG) {
+                        Logger.d("Method:SAF sec");
+                    }
                     return System.getenv("SECONDARY_STORAGE") + File.separator + split[1];
                 } else {
                     String[] vol_id = split[0].split(String.valueOf(File.separatorChar));
                     String vol = vol_id[vol_id.length - 1];
                     if (vol.contains("-")) {
+                        if (BuildConfig.DEBUG) {
+                            Logger.d("Method:SAF altn");
+                        }
                         return File.separatorChar + "storage" + File.separatorChar + vol + File.separatorChar + split[1];
                     }
                 }
@@ -143,21 +158,37 @@ public class Utils {
         }
         if (uri.getAuthority().equalsIgnoreCase("com.android.providers.downloads.documents")) {
             String[] paths = uri.getPath().split("raw:", 2);
-            if (paths.length == 2) return paths[1];
+            if (paths.length == 2) {
+                if (BuildConfig.DEBUG) {
+                    Logger.d("Method:DOC download");
+                }
+                return paths[1];
+            }
         }
         //对特殊机型的Uri进行解析
         //解析华为机型
         if (uri.getAuthority().equalsIgnoreCase("com.huawei.hidisk.fileprovider")) {
             String[] paths = uri.getPath().split("/root", 2);
-            if (paths.length == 2) return paths[1];
+            if (paths.length == 2) {
+                if (BuildConfig.DEBUG) {
+                    Logger.d("Method:Huawei");
+                }
+                return paths[1];
+            }
         }
         //解析金立机型
         if (uri.getAuthority().equalsIgnoreCase("com.gionee.filemanager.fileprovider")) {
             String[] val = uri.getPath().split("/external_path", 2);
+            if (BuildConfig.DEBUG) {
+                Logger.d("Method:Gionee");
+            }
             return Environment.getExternalStorageDirectory().getAbsolutePath() + val[1];
         }
         //If using MIUI file selector
         if (uri.getAuthority().equals("com.android.fileexplorer.myprovider")) {
+            if (BuildConfig.DEBUG) {
+                Logger.d("Method:System ALTN");
+            }
             return Environment.getExternalStorageDirectory().getAbsolutePath() + uri.getPath().replaceFirst("/external_files", "");
         }
         String string = uri.toString();
@@ -184,6 +215,9 @@ public class Utils {
                     String s = cursor.getString(column_index);
                     //A path starts with /data is incorrect,hardcoding it to /sdcard/Android/data may cause problem.
                     //Return null to use failsafe
+                    if (BuildConfig.DEBUG) {
+                        Logger.d("Method:ALTN");
+                    }
                     if (s != null && !s.startsWith("/data")) {
                         return s;
                     }
@@ -197,7 +231,6 @@ public class Utils {
             }
         }
         return null;
-
     }
 
     public static String getErrMsg(Throwable t) {
