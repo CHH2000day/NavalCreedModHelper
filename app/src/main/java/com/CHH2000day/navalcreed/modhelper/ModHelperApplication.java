@@ -134,7 +134,7 @@ public class ModHelperApplication extends Application {
                 e.printStackTrace();
             }
         }
-        CustomShipNameHelper.getInstance().init(customShipNameFile);
+        CustomShipNameHelper.INSTANCE.init(customShipNameFile);
 		/*try
 		{
 			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
@@ -155,8 +155,6 @@ public class ModHelperApplication extends Application {
                 e.printStackTrace();
             }
         }
-
-
         super.onCreate();
     }
 	

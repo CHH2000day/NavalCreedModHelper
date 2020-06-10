@@ -53,7 +53,7 @@ public class CustomShipNameFragment extends ModFragment {
                         try {
                             Request r = new Request.Builder().url(res_url).build();
                             Response response = OKHttpHelper.getClient().newCall(r).execute();
-                            if (CustomShipNameHelper.getInstance().patch(response.body().source(), getMainActivity().getModHelperApplication().getCustomShipNameFile())) {
+                            if (CustomShipNameHelper.INSTANCE.patch(response.body().source(), getMainActivity().getModHelperApplication().getCustomShipNameFile())) {
                                 adb.setMessage(R.string.success)
                                         .setTitle(R.string.success).
                                         setPositiveButton(R.string.ok, null)

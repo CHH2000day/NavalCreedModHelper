@@ -440,7 +440,7 @@ public class ModPackageInstallHelper {
                     throw new IOException("Failed to read patch from file");
                 }
                 BufferedSource bufferedSource = Okio.buffer(source);
-                return CustomShipNameHelper.getInstance().patch(bufferedSource);
+                return CustomShipNameHelper.INSTANCE.patch(bufferedSource);
             } catch (Exception ex) {
                 Logger.e(ex, null);
                 ex.printStackTrace();
