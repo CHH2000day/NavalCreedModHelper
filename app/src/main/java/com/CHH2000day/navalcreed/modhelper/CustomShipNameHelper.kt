@@ -68,7 +68,7 @@ object CustomShipNameHelper {
             var i = 0
             while (i < lines.size && errPos < 1) {
                 try {
-                    lines[i] = lines[i].trim { it <= ' ' }
+                    lines[i] = lines[i].trim()
                     //"#" is a mark of comment,no need to process it
                     if (lines[i].length < 2 || lines[i].startsWith("#")) {
                         i++
