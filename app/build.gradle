@@ -47,9 +47,9 @@ android {
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 103
-        versionName 'build-2020061100'
+        versionName 'build-2020061200'
         flavorDimensions "versionCode"
-        buildConfigField "int", "BuildVersion", "10072"
+        buildConfigField "int", "BuildVersion", "10073"
         ndk{
             abiFilters 'x86_64', 'arm64-v8a'
         }
