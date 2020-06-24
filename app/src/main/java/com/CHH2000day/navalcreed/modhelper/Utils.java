@@ -119,10 +119,10 @@ public class Utils {
 
     public static String resolveFilePath(Uri uri, Context ctx) {
         if (BuildConfig.DEBUG) {
-            Logger.d("Resolving uri:" + uri.getPath() + " authority:" + uri.getAuthority());
+            Logger.d("Resolving uri:" + uri.getPath() + " raw uri:" + uri.getEncodedPath() + " authority:" + uri.getAuthority());
         }
         //如果path已为绝对路径，直接返回
-        if (uri.getEncodedPath().startsWith("/storage")) {
+        if (uri.getPath().startsWith("/storage")) {
             if (BuildConfig.DEBUG) {
                 Logger.d("Method:return directly");
             }
@@ -191,16 +191,22 @@ public class Utils {
             }
             return Environment.getExternalStorageDirectory().getAbsolutePath() + uri.getPath().replaceFirst("/external_files", "");
         }
-        String string = uri.toString();
+        String string = uri.getPath();
         String path[] = new String[2];
         //判断文件是否在sd卡中
         if (string.contains(String.valueOf(Environment.getExternalStorageDirectory()))) {
             //对Uri进行切割
             path = string.split(String.valueOf(Environment.getExternalStorageDirectory()));
+            if (BuildConfig.DEBUG) {
+                Logger.d("Method:Split external");
+            }
             return Environment.getExternalStorageDirectory().getAbsolutePath() + path[1];
         } else if (string.contains(String.valueOf(Environment.getDataDirectory()))) { //判断文件是否在手机内存中
             //对Uri进行切割
             path = string.split(String.valueOf(Environment.getDataDirectory()));
+            if (BuildConfig.DEBUG) {
+                Logger.d("Method:Split data");
+            }
             return Environment.getDataDirectory().getAbsolutePath() + path[1];
         }
         //遍历查询
