@@ -4,6 +4,9 @@ import android.app.ProgressDialog
 import android.os.AsyncTask
 import androidx.annotation.NonNull
 import com.orhanobut.logger.Logger
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import okio.buffer
 import okio.sink
 import okio.source
@@ -26,7 +29,7 @@ object ModPackageManagerV2 {
     private val installConflictFiles = mutableSetOf<String>()
     private var onDataChangedListener: OnDataChangedListener? = null
     private var modType = mutableMapOf<String, String>()
-
+    private val json = Json(JsonConfiguration(ignoreUnknownKeys = true))
     fun config(file: File, application: ModHelperApplication): Boolean {
         dataFile = file
         this.application = application
@@ -361,7 +364,8 @@ object ModPackageManagerV2 {
         try {
             if (dataFile.exists()) {
                 val source = dataFile.source().buffer()
-                val config = GsonHelper.gson.fromJson(source.readUtf8(), Config::class.javaObjectType)
+                val dataStr = source.readUtf8()
+                val config = json.parse(Config.serializer(), dataStr)
                 override = config.isOverride
                 modList = config.modInfos
                 duplicatedFileInfo = config.duplicationInfos
@@ -415,7 +419,7 @@ object ModPackageManagerV2 {
                         return@thread
                     }
                     val sink = dataFile.sink().buffer()
-                    sink.writeUtf8(GsonHelper.gson.toJson(config))
+                    sink.writeUtf8(json.stringify(Config.serializer(), config))
                     sink.close()
                 }
             }
@@ -426,7 +430,10 @@ object ModPackageManagerV2 {
         fun onChange()
     }
 
+    @Serializable
     data class ModInstallationInfo(val name: String, var type: String, var subType: String, var version: Int, var status: Status, var files: MutableSet<String>) {}
+
+    @Serializable
     data class Config(var version: Int = managerVer, var isOverride: Boolean, var modInfos: MutableList<ModInstallationInfo>, var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf())
 
     /**
@@ -445,12 +452,14 @@ object ModPackageManagerV2 {
         INSTALLING(10), INSTALLED(20), PARTLY_WORKING(21), UNKNOWN(-2);
     }
 
+    @Serializable
     data class DuplicatedFile(val modName: String, var currFileName: String)
 
     /**
      * the oldest will be the first item in the list
      * and the latest will be the last
      */
+    @Serializable
     data class DuplicationInfo(val fileName: String, var files: MutableList<DuplicatedFile> = mutableListOf())
 
 

@@ -32,13 +32,16 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.CHH2000day.navalcreed.modhelper.GsonHelper.gson
 import com.CHH2000day.navalcreed.modhelper.ModPackageInstallerFragment.UriLoader
 import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.MigrationHelper
+import com.chh2000day.navalcreedmodhelper_v2.structs.AnnouncementResult
+import com.chh2000day.navalcreedmodhelper_v2.structs.ServerResult
+import com.chh2000day.navalcreedmodhelper_v2.structs.VersionCheckResult
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
-import com.google.gson.Gson
 import com.orhanobut.logger.Logger
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.*
 import okio.Sink
 import okio.buffer
@@ -55,6 +58,7 @@ open class Main : AppCompatActivity(), UriLoader {
     private var useAlphaChannel = BuildConfig.DEBUG
     private var updateApk: File? = null
     private lateinit var mContentView: ViewGroup
+    private val json = Json(JsonConfiguration(ignoreUnknownKeys = true, allowStructuredMapKeys = true))
 
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -183,6 +187,7 @@ open class Main : AppCompatActivity(), UriLoader {
                     .add(ServerActions.VALUE_KEY, key!!)
                     .add(ServerActions.VALUE_SSAID, devId)
                     .add(ServerActions.VALUE_DEVICE, Build.MODEL)
+                    .add(ServerActions.VALUE_LEGACY, "1")
                     .build()
             builder.url(ServerActions.REQUEST_URL)
             builder.post(body)
@@ -194,13 +199,18 @@ open class Main : AppCompatActivity(), UriLoader {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     try {
-                        val bean = Gson().fromJson(response.body!!.charStream(), DataBean::class.java)
-                        if (bean.getResultCode() >= 0) {
-                            if (bean.getResultCode() > 0) Logger.d(bean.getMessage())
+                        val resultStr = response.body?.source()?.readUtf8()
+                        if (resultStr == null) {
+                            listener.onFail(-1, "Empty reply")
+                            return
+                        }
+                        val bean = json.parse(ServerResult.serializer(), resultStr)
+                        if (bean is ServerResult.Success) {
                             modHelperApplication.mainSharedPreferences.edit().putString(KEY_AUTHKEY, key).apply()
                             listener.onSuccess()
                         } else {
-                            listener.onFail(bean.getResultCode(), bean.getMessage())
+                            bean as ServerResult.Fail
+                            listener.onFail(bean.errorCode.code, bean.message)
                         }
                     } catch (ignored: IllegalStateException) {
                     } finally {
@@ -227,6 +237,7 @@ open class Main : AppCompatActivity(), UriLoader {
                 .add(ServerActions.VALUE_KEY, key!!)
                 .add(ServerActions.VALUE_SSAID, devId)
                 .add(ServerActions.VALUE_DEVICE, Build.MODEL)
+                .add(ServerActions.VALUE_LEGACY, "0")
                 .build()
         builder.url(ServerActions.REQUEST_URL)
         builder.post(body)
@@ -238,13 +249,18 @@ open class Main : AppCompatActivity(), UriLoader {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
                 try {
-                    val bean = Gson().fromJson(response.body!!.charStream(), DataBean::class.java)
-                    if (bean.getResultCode() >= 0) {
+                    val resultStr = response.body?.source()?.readUtf8()
+                    if (resultStr == null) {
+                        listener.onFail(-1, "Empty reply")
+                        return
+                    }
+                    val bean = json.parse(ServerResult.serializer(), resultStr)
+                    if (bean is ServerResult.Success) {
+                        modHelperApplication.mainSharedPreferences.edit().putString(KEY_AUTHKEY, key).apply()
                         listener.onSuccess()
-                        if (bean.getResultCode() > 0) Logger.d(bean.getMessage())
                     } else {
-                        listener.onFail(bean.getResultCode(), bean.getMessage())
-                        Logger.w(bean.getMessage())
+                        bean as ServerResult.Fail
+                        listener.onFail(bean.errorCode.code, bean.message)
                     }
                 } catch (ignored: IllegalStateException) {
                     listener.onFail(-20, "Invalid response")
@@ -400,6 +416,7 @@ open class Main : AppCompatActivity(), UriLoader {
                 val body: RequestBody = FormBody.Builder()
                         .add(ServerActions.ACTION, ServerActions.ACTION_CHECKUPDATE)
                         .add(ServerActions.VALUE_BUILD_TYPE, if (useAlphaChannel) ServerActions.BUILD_TYPE_ALPHA else ServerActions.BUILD_TYPE_RELEASE)
+                        .add(ServerActions.VALUE_LEGACY, "0")
                         .build()
                 val builder = Request.Builder()
                 builder.url(ServerActions.REQUEST_URL)
@@ -415,78 +432,81 @@ open class Main : AppCompatActivity(), UriLoader {
                     @Throws(IOException::class)
                     override fun onResponse(call: Call, response: Response) {
                         try {
-                            val bean = gson.fromJson(response.body!!.charStream(), VersionBean::class.java)
+                            val resultStr = response.body?.source()?.readUtf8() ?: return
                             @Suppress("ConstantConditionIf")
-                            if (bean.resultCode >= 0) {
-                                //Handle normal situation
-                                //Type is either ffmpeg or common
-                                val versionInfo = if (BuildConfig.FLAVOR == TYPE_COMMON) bean.commonInfo else bean.ffmpegInfo
-                                //If any update is available
-                                if (versionInfo.buildCode > currentVer) {
-                                    val adb = AlertDialog.Builder(this@Main)
-                                    adb.setTitle(R.string.update)
-                                            .setMessage(versionInfo.changelog)
-                                            .setPositiveButton(R.string.update) { _, _ ->
-                                                //Downloading
-                                                val alertDialogBuilder = AlertDialog.Builder(this@Main)
-                                                alertDialogBuilder.setCancelable(false)
-                                                        .setTitle(R.string.please_wait)
-                                                        .setMessage(R.string.downloading)
-                                                val ad = alertDialogBuilder.create()
-                                                ad.show()
-                                                object : Thread() {
-                                                    override fun run() {
-                                                        super.run()
-                                                        //Open connection
-                                                        val requestBuilder = Request.Builder()
-                                                        requestBuilder.url(versionInfo.url)
-                                                        client.newCall(requestBuilder.build()).enqueue(object : Callback {
-                                                            override fun onFailure(call: Call, e: IOException) {
-                                                                ad.dismiss()
-                                                                Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show()
-                                                                Logger.e(e, "FAiled to download update")
-                                                            }
-
-                                                            @Throws(IOException::class)
-                                                            override fun onResponse(call: Call, response: Response) {
-                                                                var isOK = false
-                                                                try {
-                                                                    //Ensure target file is accessible
-                                                                    val f = File(externalCacheDir, "update.apk")
-                                                                    Utils.ensureFileParent(f)
-                                                                    val sink: Sink = f.sink()
-                                                                    //Write to file
-                                                                    val bufferedSink = sink.buffer()
-                                                                    bufferedSink.writeAll(response.body!!.source())
-                                                                    bufferedSink.flush()
-                                                                    bufferedSink.close()
-                                                                    sink.close()
-                                                                    updateApk = f
-                                                                    isOK = true
-                                                                } catch (e: Exception) {
-                                                                    e.printStackTrace()
-                                                                    Logger.e(e, "Error while downloading")
-                                                                } finally {
+                            when (val bean = json.parse(ServerResult.serializer(), resultStr)) {
+                                is VersionCheckResult.Success -> {
+                                    val versionInfo = (if (BuildConfig.FLAVOR == TYPE_COMMON) bean.commonInfo else bean.ffmpegInfo)
+                                            ?: return
+                                    if (versionInfo.buildCode > currentVer) {
+                                        val adb = AlertDialog.Builder(this@Main)
+                                        adb.setTitle(R.string.update)
+                                                .setMessage(versionInfo.changelog)
+                                                .setPositiveButton(R.string.update) { _, _ ->
+                                                    //Downloading
+                                                    val alertDialogBuilder = AlertDialog.Builder(this@Main)
+                                                    alertDialogBuilder.setCancelable(false)
+                                                            .setTitle(R.string.please_wait)
+                                                            .setMessage(R.string.downloading)
+                                                    val ad = alertDialogBuilder.create()
+                                                    ad.show()
+                                                    object : Thread() {
+                                                        override fun run() {
+                                                            super.run()
+                                                            //Open connection
+                                                            val requestBuilder = Request.Builder()
+                                                            requestBuilder.url(versionInfo.url)
+                                                            client.newCall(requestBuilder.build()).enqueue(object : Callback {
+                                                                override fun onFailure(call: Call, e: IOException) {
                                                                     ad.dismiss()
-                                                                    if (isOK) installApk()
+                                                                    Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show()
+                                                                    Logger.e(e, "Failed to download update")
                                                                 }
-                                                            }
-                                                        })
-                                                    }
-                                                }.start()
-                                            }
-                                            .setCancelable(false)
-                                    //If update is not forced
-                                    if (currentVer >= versionInfo.minVer) {
-                                        adb.setNegativeButton(R.string.cancel, null)
-                                        adb.setCancelable(true)
-                                        mUpdateHandler.sendMessage(mUpdateHandler.obtainMessage(0, adb))
+
+                                                                @Throws(IOException::class)
+                                                                override fun onResponse(call: Call, response: Response) {
+                                                                    var isOK = false
+                                                                    try {
+                                                                        //Ensure target file is accessible
+                                                                        val f = File(externalCacheDir, "update.apk")
+                                                                        Utils.ensureFileParent(f)
+                                                                        val sink: Sink = f.sink()
+                                                                        //Write to file
+                                                                        val bufferedSink = sink.buffer()
+                                                                        bufferedSink.writeAll(response.body!!.source())
+                                                                        bufferedSink.flush()
+                                                                        bufferedSink.close()
+                                                                        sink.close()
+                                                                        updateApk = f
+                                                                        isOK = true
+                                                                    } catch (e: Exception) {
+                                                                        e.printStackTrace()
+                                                                        Logger.e(e, "Error while downloading")
+                                                                    } finally {
+                                                                        ad.dismiss()
+                                                                        if (isOK) installApk()
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                    }.start()
+                                                }
+                                                .setCancelable(false)
+                                        //If update is not forced
+                                        if (currentVer >= versionInfo.minVer) {
+                                            adb.setNegativeButton(R.string.cancel, null)
+                                            adb.setCancelable(true)
+                                            mUpdateHandler.sendMessage(mUpdateHandler.obtainMessage(0, adb))
+                                        }
+                                        //Post dialog builder
                                     }
-                                    //Post dialog builder
                                 }
-                            } else {
-                                Logger.d("Server return result code")
-                                //Server returns an error
+                                is ServerResult.Fail -> {
+                                    Logger.d("Failed to check update:${bean.errorCode}  ${bean.message}")
+                                }
+                                else -> {
+                                    Logger.w("Unexpected case")
+                                }
                             }
                         } catch (ignored: IllegalStateException) {
                         } finally {
@@ -508,6 +528,7 @@ open class Main : AppCompatActivity(), UriLoader {
             val formBuilder = FormBody.Builder()
             formBuilder.add(ServerActions.ACTION, ServerActions.ACTION_GET_ANNOUNCEMENT)
             formBuilder.add(ServerActions.VALUE_BUILD_TYPE, if (BuildConfig.DEBUG) ServerActions.BUILD_TYPE_ALPHA else ServerActions.BUILD_TYPE_RELEASE)
+            formBuilder.add(ServerActions.VALUE_LEGACY, "0")
             builder.url(ServerActions.REQUEST_URL)
             builder.post(formBuilder.build())
             client.newCall(builder.build()).enqueue(object : Callback {
@@ -519,8 +540,9 @@ open class Main : AppCompatActivity(), UriLoader {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     try {
-                        val bean = gson.fromJson(response.body!!.charStream(), AnnouncementBean::class.java)
-                        if (bean.getResultCode() >= 0) {
+                        val resultStr = response.body?.source()?.readUtf8() ?: return
+                        val bean = json.parse(ServerResult.serializer(), resultStr)
+                        if (bean is AnnouncementResult.Success) {
                             val id = bean.id
                             val localAnnouncementId = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1)
                             val adb0 = AlertDialog.Builder(this@Main)
@@ -538,8 +560,8 @@ open class Main : AppCompatActivity(), UriLoader {
                                         }
                                 mUpdateHandler.sendMessage(mUpdateHandler.obtainMessage(1, adb0))
                             }
-                        } else {
-                            Snackbar.make(mContentView, bean.getMessage(), Snackbar.LENGTH_LONG).show()
+                        } else if (bean is ServerResult.Fail) {
+                            Logger.d("Failed to get Announcement:${bean.errorCode}  ${bean.message}")
                         }
                     } catch (ignored: IllegalStateException) {
                     } finally {

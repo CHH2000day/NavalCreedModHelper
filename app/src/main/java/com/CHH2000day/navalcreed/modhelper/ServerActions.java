@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class ServerActions {
+    public static final String VALUE_LEGACY = "legacy";
     public static final String ACTION = "action";
     public static final String ACTION_CHECKTEST = "checkTest";
     public static final String VALUE_KEY = "key";
