@@ -53,8 +53,8 @@ class ModPackageInstallerFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (loader != null && loader!!.uri != null) {
-            selectFile(loader!!.uri)
+        if (loader != null && loader!!.getUri_() != null) {
+            selectFile(loader!!.getUri_())
             //注销接口防止被重复使用
             loader = null
         }
@@ -240,7 +240,7 @@ class ModPackageInstallerFragment : Fragment() {
     }
 
     interface UriLoader {
-        val uri: Uri?
+        fun getUri_(): Uri?
     }
 
     companion object {

@@ -358,7 +358,7 @@ open class Main : AppCompatActivity(), UriLoader {
         modHelperApplication.mainSharedPreferences.edit().putBoolean(KEY_USEALPHACHANNEL, this.useAlphaChannel).apply()
     }
 
-    override fun getUri(): Uri? {
+    override fun getUri_(): Uri? {
         return if (Intent.ACTION_VIEW == intent.action) {
             intent.data!!
         } else null
@@ -615,4 +615,5 @@ open class Main : AppCompatActivity(), UriLoader {
         private const val TYPE_COMMON = "common"
         private const val TYPE_FFMPEG = "ffmpeg"
     }
+
 }
