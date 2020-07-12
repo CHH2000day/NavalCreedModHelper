@@ -293,7 +293,7 @@ public class BGMReplacerFragment extends ModFragment {
                                 ad.setTitle(R.string.success);
                                 if (isAdded()) {
                                     progress.setText(getString(R.string.transcode_success, usedtime));
-                                    mon.ondone();
+                                    mon.onDone();
                                 } else {
                                     ad.dismiss();
                                 }
@@ -306,7 +306,7 @@ public class BGMReplacerFragment extends ModFragment {
                                 pb.setIndeterminate(false);
                                 pb.setProgress(100);
                                 ad.setTitle(R.string.failed);
-                                mon.ondone();
+                                mon.onDone();
                                 break;
                             case 1:
                                 //停用该功能以避免IllegalArgumentException
@@ -516,7 +516,7 @@ public class BGMReplacerFragment extends ModFragment {
             ad = dialog;
         }
 
-        public void ondone() {
+        public void onDone() {
             if (!ad.isShowing()) return;
             button.setTextColor(color);
             button.setClickable(true);

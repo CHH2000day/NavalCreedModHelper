@@ -252,7 +252,7 @@ public class BGMReplacerFragment extends ModFragment {
                                 pb.setProgress(100);
                                 progress.setText(getString(R.string.transcode_success, usedtime));
                                 ad.setTitle(R.string.success);
-                                mon.ondone();
+                                mon.onDone();
                                 break;
                             case AudioFormatHelper.STATUS_ERROR:
                                 String s = progress.getText().toString();
@@ -262,7 +262,7 @@ public class BGMReplacerFragment extends ModFragment {
                                 pb.setIndeterminate(false);
                                 pb.setProgress(100);
                                 ad.setTitle(R.string.failed);
-                                mon.ondone();
+                                mon.onDone();
                                 break;
                             case 1:
                                 break;
@@ -274,12 +274,14 @@ public class BGMReplacerFragment extends ModFragment {
                 new Thread() {
                     public void run() {
                         starttime = System.currentTimeMillis();
+                        h.sendEmptyMessage(AudioFormatHelper.STATUS_START);
                         if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY)) {
                             File file = getTargetFile(curr_scene, curr_type, curr_music, Utils.FORMAT_WAV);
                             Utils.ensureFileParent(file);
                             if (file.exists()) {
                                 ModPackageManagerV2.INSTANCE.renameConflict(path);
                             }
+                            h.sendEmptyMessage(AudioFormatHelper.STATUS_TRANSCODING);
                             String result = afh.compressToWav(file, h);
                             afh.recycle();
                             boolean isSuccess = AudioFormatHelper.RESULT_OK.equals(result);
@@ -290,7 +292,7 @@ public class BGMReplacerFragment extends ModFragment {
                             } else {
                                 ModPackageManagerV2.INSTANCE.onInstallFail();
                             }
-                            h.sendMessage(h.obtainMessage(1, result));
+                            h.sendMessage(h.obtainMessage(AudioFormatHelper.STATUS_DONE, result));
                         } else {
                             h.sendMessage(h.obtainMessage(AudioFormatHelper.STATUS_ERROR, "Start error"));
                         }
@@ -465,7 +467,7 @@ public class BGMReplacerFragment extends ModFragment {
             ad = dialog;
         }
 
-        public void ondone() {
+        public void onDone() {
             button.setTextColor(color);
             button.setClickable(true);
         }
