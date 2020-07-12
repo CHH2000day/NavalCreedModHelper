@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 
 class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChangedListener {
     private lateinit var fragmentView: View
@@ -30,7 +31,6 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
 
     @SuppressLint("InflateParams")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // TODO: Implement this method
         super.onCreateView(inflater, container, savedInstanceState)
         fragmentView = inflater.inflate(R.layout.modmanagerfragmemt, null)
         recyclerView = fragmentView.findViewById(R.id.modmanagerfragmemtRecyclerView) as RecyclerView
@@ -49,6 +49,9 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         recyclerView.addItemDecoration(VerticalSpaceItemDecoration())
         recyclerView.adapter = adapter
         ModPackageManagerV2.registerOnDataChangeListener(this)
+        if (ModPackageManagerV2.isFault()) {
+            Snackbar.make(fragmentView, "ModManager is Fault", Snackbar.LENGTH_LONG).show()
+        }
     }
 
     override fun onDestroyView() {
@@ -72,6 +75,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
             }
         }
     }
+
     private fun getLocalizedModType(type: String, subType: String): String {
         return when (type) {
             ModPackageInfo.MODTYPE_CV -> {
@@ -169,7 +173,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         }
 
         override fun getItemCount(): Int {
-            return if (ModPackageManagerV2.override) {
+            return if (ModPackageManagerV2.override || ModPackageManagerV2.isFault()) {
                 0
             } else modList.size
         }
