@@ -79,7 +79,7 @@ public class CrewPicReplacerFragment extends ModFragment {
             adb.setTitle(R.string.notice)
                     .setMessage(R.string.confirm_to_remove_changes)
                     .setPositiveButton(R.string.remove_changes, (dialogInterface, p2) -> {
-                        if (ModPackageManagerV2.INSTANCE.uninstall(getName(selectedcountry, selectedcrew)) == 0) {
+                        if (ModPackageManagerV2.INSTANCE.uninstall(getName(selectedcountry, selectedcrew))) {
                             Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
                         } else {
                             Snackbar.make(v, R.string.failed, Snackbar.LENGTH_LONG).show();

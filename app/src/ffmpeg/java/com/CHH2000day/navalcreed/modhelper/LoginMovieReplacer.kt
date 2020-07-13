@@ -123,7 +123,7 @@ class LoginMovieReplacer : ModFragment() {
                 }
             }.start()
         }
-        remove.setOnClickListener { Snackbar.make(v, if (uninstall(MOD_NAME) == 0) R.string.success else R.string.failed, Snackbar.LENGTH_LONG).show() }
+        remove.setOnClickListener { Snackbar.make(v, if (uninstall(MOD_NAME)) R.string.success else R.string.failed, Snackbar.LENGTH_LONG).show() }
         return v
     }
 
