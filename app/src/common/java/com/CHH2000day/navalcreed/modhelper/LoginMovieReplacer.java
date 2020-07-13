@@ -106,7 +106,7 @@ public class LoginMovieReplacer extends ModFragment {
 
             @Override
             public void onClick(View p1) {
-                Snackbar.make(v, (ModPackageManagerV2.INSTANCE.uninstall(MOD_NAME) == 0 ? R.string.success : R.string.failed), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(v, (ModPackageManagerV2.INSTANCE.uninstall(MOD_NAME) ? R.string.success : R.string.failed), Snackbar.LENGTH_LONG).show();
             }
         });
         return v;
