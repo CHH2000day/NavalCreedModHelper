@@ -101,7 +101,7 @@ class LoginMovieReplacer : ModFragment() {
                                 } else {
                                     File(path)
                                 }
-                                val result = FFmpeg.execute(arrayOf("-y", "-i", srcFile.absolutePath, "-an", "-vcodec", "theora", targetFile.absolutePath))
+                                val result = FFmpeg.execute(arrayOf("-y", "-i", srcFile.absolutePath, "-an", "-vcodec", "theora", "-qscale", "7", "-threads", Runtime.getRuntime().availableProcessors().toString(), targetFile.absolutePath))
                                 if (result != Config.RETURN_CODE_SUCCESS) {
                                     throw IOException("Transcode failed")
                                 }
