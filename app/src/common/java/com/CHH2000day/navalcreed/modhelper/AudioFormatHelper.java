@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -229,7 +230,7 @@ public class AudioFormatHelper {
                 role++;
                 int len = me.readSampleData(p1.getInputBuffer(p2), 0);
                 if (len < 0) {//如果数据读完，通知解码器
-                    p1.queueInputBuffer(p2, 0, 0, 0, p1.BUFFER_FLAG_END_OF_STREAM);
+                    p1.queueInputBuffer(p2, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                 } else {
                     p1.queueInputBuffer(p2, 0, len, 0, 0);
                 }
@@ -239,7 +240,7 @@ public class AudioFormatHelper {
 
             @Override
             public void onOutputBufferAvailable(MediaCodec p1, int p2, MediaCodec.BufferInfo p3) {
-                if (p3.flags == p1.BUFFER_FLAG_END_OF_STREAM) {//如果解码器提示数据读完，停止输入数据，关闭输出流，通知主线程
+                if (p3.flags == MediaCodec.BUFFER_FLAG_END_OF_STREAM) {//如果解码器提示数据读完，停止输入数据，关闭输出流，通知主线程
                     try {
                         bs.close();
                     } catch (IOException e) {//忽略
@@ -247,13 +248,12 @@ public class AudioFormatHelper {
                     isdecoded = true;
                 } else {
                     //从解码器读取数据
-                    byte[] b = new byte[p1.getOutputBuffer(p2).remaining()];
-                    p1.getOutputBuffer(p2).get(b, 0, b.length);
-                    p1.getOutputBuffer(p2).clear();
-                    p1.releaseOutputBuffer(p2, false);
                     //将解码后数据写入本地缓存
                     try {
-                        bs.write(b, 0, b.length);
+                        ByteBuffer buffer=p1.getOutputBuffer(p2);
+                        bs.write(buffer);
+                        buffer.clear();
+                        p1.releaseOutputBuffer(p2, false);
                     } catch (IOException e) {
                         UIHandler.sendMessage(UIHandler.obtainMessage(STATUS_ERROR, e));
                     }

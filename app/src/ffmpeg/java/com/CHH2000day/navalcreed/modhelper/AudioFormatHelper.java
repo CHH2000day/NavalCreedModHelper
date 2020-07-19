@@ -133,7 +133,7 @@ public class AudioFormatHelper {
                 }
                 int result = FFmpeg.execute(new String[]{"-y", "-i", srcFile.getAbsolutePath(), targetFile.getAbsolutePath()});
                 if (RETURN_CODE_SUCCESS == result) {
-                    UIHandler.sendEmptyMessage(STATUS_DONE);
+//                    UIHandler.sendEmptyMessage(STATUS_DONE);
                     activeCache(targetFile);
                     isProcessed = true;
                 } else {
