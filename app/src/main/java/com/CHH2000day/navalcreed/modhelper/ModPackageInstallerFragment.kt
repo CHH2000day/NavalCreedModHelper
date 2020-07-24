@@ -139,9 +139,11 @@ class ModPackageInstallerFragment : Fragment() {
                     val source = activity!!.getSource(uri!!)
                     if (source != null) {
                         if (sink.writeAll(source) > 0) {
+                            sink.close()
                             isCache = true
                             true
                         } else {
+                            sink.close()
                             false
                         }
                     } else {

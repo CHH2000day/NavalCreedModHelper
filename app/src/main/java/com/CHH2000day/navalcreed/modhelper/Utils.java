@@ -201,14 +201,15 @@ public class Utils {
                 Logger.d("Method:Split external");
             }
             return Environment.getExternalStorageDirectory().getAbsolutePath() + path[1];
-        } else if (string.contains(String.valueOf(Environment.getDataDirectory()))) { //判断文件是否在手机内存中
-            //对Uri进行切割
-            path = string.split(String.valueOf(Environment.getDataDirectory()));
-            if (BuildConfig.DEBUG) {
-                Logger.d("Method:Split data");
-            }
-            return Environment.getDataDirectory().getAbsolutePath() + path[1];
         }
+//        else if (string.contains(String.valueOf(Environment.getDataDirectory()))) { //判断文件是否在手机内存中
+//            //对Uri进行切割
+//            path = string.split(String.valueOf(Environment.getDataDirectory()));
+//            if (BuildConfig.DEBUG) {
+//                Logger.d("Method:Split data");
+//            }
+//            return Environment.getDataDirectory().getAbsolutePath() + path[1];
+//        }
         //遍历查询
         Cursor cursor = null;
         final String column = "_data";
