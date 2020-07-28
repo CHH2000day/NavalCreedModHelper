@@ -1,6 +1,7 @@
 package com.CHH2000day.navalcreed.modhelper;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -11,10 +12,7 @@ import com.orhanobut.logger.DiskLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
 
-import org.json.JSONException;
-
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 
 public class ModHelperApplication extends Application {
@@ -22,7 +20,7 @@ public class ModHelperApplication extends Application {
     public static final String[] pkgnames;
     //public static final String GAME_PKGNAME="com.loong.warship.zl";
     protected static final String KEY_PKGNAME = "pkgName";
-    private static final String STOREDFILE_NAME = "mod.install";
+    public static final String STOREDFILE_NAME = "mod.install";
     private static final String STOREDFILEV2_NAME = "modInstall.conf";
     private static final String GAME_PKGNAME_CN_SERVER = "com.loong.warship.zl";
     private static final String GAME_PKGNAME_EU_SERVER = "com.zloong.eu.nc";
@@ -119,42 +117,6 @@ public class ModHelperApplication extends Application {
         cleanPathCache();
         updateTargetPackageName(getMainSharedPreferences().getString(KEY_PKGNAME, CN));
         Logger.i("Target package:%s", pkgnameinuse);
-        customShipnamePath = new StringBuilder()
-                .append(getResFilesDirPath())
-                .append(File.separatorChar)
-                .append("datas")
-                .append(File.separatorChar)
-                .append("customnames.lua").toString();
-        customShipNameFile = new File(customShipnamePath);
-        if (!customShipNameFile.exists()) {
-            Utils.ensureFileParent(customShipNameFile);
-            try {
-                customShipNameFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        CustomShipNameHelper.INSTANCE.init(customShipNameFile);
-		/*try
-		{
-			ModPackageManager.getInstance ( ).init ( new File ( getResFilesDir ( ), STOREDFILE_NAME ) );
-		}
-		catch (IOException e)
-		{e.printStackTrace();}
-		catch (JSONException e)
-		{e.printStackTrace();}
-		*/
-        //ModPackageInstallHelper.init(this);
-        reconfigModPackageManager();
-        oldConfigFile = new File(getResFilesDir(), STOREDFILE_NAME);
-        if (oldConfigFile.exists()) {
-            ModPackageManager.getInstance().init(this);
-            try {
-                ModPackageManager.getInstance().config(oldConfigFile);
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-        }
         super.onCreate();
     }
 	
@@ -179,7 +141,6 @@ public class ModHelperApplication extends Application {
             Logger.d(e);
             Logger.w("failed to configure mod package manager.");
         }
-
     }
 
     public File getResDir() {
@@ -261,12 +222,11 @@ public class ModHelperApplication extends Application {
             if (KEY_PKGNAME.equals(key)) {
                 cleanPathCache();
                 updateTargetPackageName(p1.getString(KEY_PKGNAME, key));
-                reconfigModPackageManager();
+//                reconfigModPackageManager();
+                final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
-            // TODO: Implement this method
         }
-
-
     }
-
 }

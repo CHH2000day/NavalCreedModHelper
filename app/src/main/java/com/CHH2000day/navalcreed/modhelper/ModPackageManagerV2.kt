@@ -30,7 +30,7 @@ object ModPackageManagerV2 {
     private var onDataChangedListener: OnDataChangedListener? = null
     private var modType = mutableMapOf<String, String>()
     private val json = Json(JsonConfiguration(ignoreUnknownKeys = true))
-    private var faultMark = false
+    private var faultFlag = false
 
 
     fun config(file: File, application: ModHelperApplication): Boolean {
@@ -55,7 +55,7 @@ object ModPackageManagerV2 {
     fun checkInstall(name: String, type: String, subType: String, version: Int, files: MutableSet<String>): QueryResult {
         Logger.d("Checking installation status for mod $name-$type-$subType version$version")
         val result = QueryResult(result = QueryResult.RESULT_OK, conflictList = mutableSetOf())
-        if (faultMark) {
+        if (faultFlag) {
             return QueryResult(result = QueryResult.RESULT_CONFLICT, conflictList = setOf())
         }
         if (override) {
@@ -88,7 +88,7 @@ object ModPackageManagerV2 {
 
     @Synchronized
     fun uninstall(name: String): Boolean {
-        if (faultMark) {
+        if (faultFlag) {
             Logger.w("Fault.Uninstall failed")
             return false
         }
@@ -208,7 +208,7 @@ object ModPackageManagerV2 {
 
     @Synchronized
     fun renameConflict(name: String) {
-        if (override || faultMark) {
+        if (override || faultFlag) {
             return
         }
         Logger.d("Prepare to rename conflict file $name")
@@ -284,7 +284,7 @@ object ModPackageManagerV2 {
     fun getMods(): List<ModInstallationInfo> = modList.toList()
 
     fun getInstallation(name: String): ModInstallationInfo? {
-        if (faultMark) {
+        if (faultFlag) {
             return null
         }
         for (mod in modList) {
@@ -313,7 +313,7 @@ object ModPackageManagerV2 {
      */
     @Synchronized
     fun requestInstall(name: String, type: String, subType: String): Boolean {
-        if (faultMark) {
+        if (faultFlag) {
             return false
         }
         Logger.d("Requesting mod install:$name")
@@ -377,6 +377,14 @@ object ModPackageManagerV2 {
     }
 
     private fun init(application: ModHelperApplication) {
+        if (inited) {
+            modList.clear()
+            pendingTask = null
+            installConflictFiles.clear()
+            duplicatedFileInfo.clear()
+            installationFiles.clear()
+            faultFlag = false
+        }
         try {
             if (dataFile.exists()) {
                 val source = dataFile.source().buffer()
@@ -432,7 +440,7 @@ object ModPackageManagerV2 {
                     val config = Config(version = managerVer, isOverride = override, modInfos = modList.toMutableList(), duplicationInfos = duplicatedFileInfo.toMutableSet())
                     Utils.ensureFileParent(dataFile)
                     if (!dataFile.parentFile.canWrite()) {
-                        faultMark = true
+                        faultFlag = true
                         return@thread
                     }
                     val sink = dataFile.sink().buffer()
@@ -444,7 +452,7 @@ object ModPackageManagerV2 {
     }
 
     fun isFault(): Boolean {
-        return faultMark
+        return faultFlag
     }
 
     interface OnDataChangedListener {

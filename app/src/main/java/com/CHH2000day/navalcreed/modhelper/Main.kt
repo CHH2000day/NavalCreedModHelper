@@ -2,11 +2,8 @@ package com.CHH2000day.navalcreed.modhelper
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.DialogInterface
+import android.content.*
 import android.content.DialogInterface.OnShowListener
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -32,6 +29,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.CHH2000day.navalcreed.modhelper.CustomShipNameHelper.init
 import com.CHH2000day.navalcreed.modhelper.ModPackageInstallerFragment.UriLoader
 import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.MigrationHelper
 import com.chh2000day.navalcreedmodhelper_v2.structs.AnnouncementResult
@@ -46,6 +44,7 @@ import okhttp3.*
 import okio.Sink
 import okio.buffer
 import okio.sink
+import org.json.JSONException
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -63,6 +62,34 @@ open class Main : AppCompatActivity(), UriLoader {
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val customShipnamePath = StringBuilder()
+                .append(modHelperApplication.resFilesDirPath)
+                .append(File.separatorChar)
+                .append("datas")
+                .append(File.separatorChar)
+                .append("customnames.lua").toString()
+        val customShipNameFile = File(customShipnamePath)
+        if (!customShipNameFile.exists()) {
+            Utils.ensureFileParent(customShipNameFile)
+            try {
+                customShipNameFile.createNewFile()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+        init(customShipNameFile)
+        modHelperApplication.reconfigModPackageManager()
+        val oldConfigFile = File(modHelperApplication.resFilesDir, ModHelperApplication.STOREDFILE_NAME)
+        if (oldConfigFile.exists()) {
+            ModPackageManager.getInstance().init(this)
+            try {
+                ModPackageManager.getInstance().config(oldConfigFile)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        }
         setContentView(R.layout.main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -555,7 +582,7 @@ open class Main : AppCompatActivity(), UriLoader {
                                             val cmb = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                             getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply()
                                             if (!TextUtils.isEmpty(bean.toCopy)) {
-                                                cmb.text = bean.toCopy.trim()
+                                                cmb.setPrimaryClip(ClipData.newPlainText("label", bean.toCopy.trim()))
                                             }
                                         }
                                 mUpdateHandler.sendMessage(mUpdateHandler.obtainMessage(1, adb0))
@@ -597,7 +624,7 @@ open class Main : AppCompatActivity(), UriLoader {
             keyinput.editableText.append(modHelperApplication.mainSharedPreferences.getString(KEY_AUTHKEY, ""))
             btnEnter.setOnLongClickListener(OnLongClickListener {
                 val cmb = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                cmb.text = devId
+                cmb.setPrimaryClip(ClipData.newPlainText("SSAID", devId))
                 true
             })
         }
