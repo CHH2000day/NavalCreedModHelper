@@ -38,6 +38,10 @@ import com.chh2000day.navalcreedmodhelper_v2.structs.VersionCheckResult
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.orhanobut.logger.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.*
@@ -51,7 +55,6 @@ import java.util.*
 
 open class Main : AppCompatActivity(), UriLoader {
     private lateinit var mViewPager: ViewPager
-    private lateinit var mUpdateHandler: Handler
     private lateinit var mAlphaCheckHandler: Handler
 
     private var useAlphaChannel = BuildConfig.DEBUG
@@ -93,14 +96,7 @@ open class Main : AppCompatActivity(), UriLoader {
         setContentView(R.layout.main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        mUpdateHandler = object : Handler() {
-            override fun handleMessage(msg: Message) {
-                val adb = msg.obj as AlertDialog.Builder
-                val ad = adb.create()
-                ad.setCanceledOnTouchOutside(false)
-                ad.show()
-            }
-        }
+
         //配置ViewPager与TabLayout
         mContentView = findViewById(R.id.maincontentview)
         mViewPager = findViewById(R.id.viewPager)
@@ -128,7 +124,6 @@ open class Main : AppCompatActivity(), UriLoader {
                 fragments.add(mCustomShipNameFragment)
             }
         }
-
         fragments.add(mBGMReplacerFragment)
         fragments.add(mModPkgInstallerFragment)
         fragments.add(mModPackageManagerFragment)
@@ -436,7 +431,7 @@ open class Main : AppCompatActivity(), UriLoader {
 
     protected inner class UpdateThread : Thread() {
         override fun run() {
-            try {
+            CoroutineScope(Dispatchers.IO).launch {
                 //Get current version
                 val currentVer = if (useAlphaChannel) BuildConfig.BuildVersion else packageManager.getPackageInfo(packageName, 0).versionCode
                 //Generate request
@@ -450,26 +445,22 @@ open class Main : AppCompatActivity(), UriLoader {
                         .post(body)
                 val client = OKHttpHelper.getClient()
                 //Send request
-                client.newCall(builder.build()).enqueue(object : Callback {
-                    override fun onFailure(call: Call, e: IOException) {
-                        //Failed to connect to server
-                        Logger.w("Failed to get update data.")
-                    }
+                val response = client.newCall(builder.build()).execute()
+                if (response.isSuccessful) {
+                    try {
+                        val resultStr = response.body?.source()?.readUtf8() ?: return@launch
+                        @Suppress("ConstantConditionIf")
+                        when (val bean = json.parse(ServerResult.serializer(), resultStr)) {
+                            is VersionCheckResult.Success -> {
+                                val versionInfo = (if (BuildConfig.FLAVOR == TYPE_COMMON) bean.commonInfo else bean.ffmpegInfo)
+                                        ?: return@launch
+                                if (versionInfo.buildCode > currentVer) {
 
-                    @Throws(IOException::class)
-                    override fun onResponse(call: Call, response: Response) {
-                        try {
-                            val resultStr = response.body?.source()?.readUtf8() ?: return
-                            @Suppress("ConstantConditionIf")
-                            when (val bean = json.parse(ServerResult.serializer(), resultStr)) {
-                                is VersionCheckResult.Success -> {
-                                    val versionInfo = (if (BuildConfig.FLAVOR == TYPE_COMMON) bean.commonInfo else bean.ffmpegInfo)
-                                            ?: return
-                                    if (versionInfo.buildCode > currentVer) {
-                                        val adb = AlertDialog.Builder(this@Main)
-                                        adb.setTitle(R.string.update)
-                                                .setMessage(versionInfo.changelog)
-                                                .setPositiveButton(R.string.update) { _, _ ->
+                                    val adb = AlertDialog.Builder(this@Main)
+                                    adb.setTitle(R.string.update)
+                                            .setMessage(versionInfo.changelog)
+                                            .setPositiveButton(R.string.update) { _, _ ->
+                                                CoroutineScope(Dispatchers.Main).launch {
                                                     //Downloading
                                                     val alertDialogBuilder = AlertDialog.Builder(this@Main)
                                                     alertDialogBuilder.setCancelable(false)
@@ -477,72 +468,76 @@ open class Main : AppCompatActivity(), UriLoader {
                                                             .setMessage(R.string.downloading)
                                                     val ad = alertDialogBuilder.create()
                                                     ad.show()
-                                                    object : Thread() {
-                                                        override fun run() {
-                                                            super.run()
-                                                            //Open connection
-                                                            val requestBuilder = Request.Builder()
-                                                            requestBuilder.url(versionInfo.url)
-                                                            client.newCall(requestBuilder.build()).enqueue(object : Callback {
-                                                                override fun onFailure(call: Call, e: IOException) {
+                                                    withContext(Dispatchers.IO) {
+                                                        val requestBuilder = Request.Builder()
+                                                        requestBuilder.url(versionInfo.url)
+                                                        val response = client.newCall(requestBuilder.build()).execute()
+                                                        if (response.isSuccessful) {
+                                                            var isOK = false
+                                                            try {
+                                                                //Ensure target file is accessible
+                                                                val f = File(externalCacheDir, "update.apk")
+                                                                Utils.ensureFileParent(f)
+                                                                val sink: Sink = f.sink()
+                                                                //Write to file
+                                                                val bufferedSink = sink.buffer()
+                                                                bufferedSink.writeAll(response.body!!.source())
+                                                                bufferedSink.flush()
+                                                                bufferedSink.close()
+                                                                sink.close()
+                                                                updateApk = f
+                                                                isOK = true
+                                                            } catch (e: Exception) {
+                                                                e.printStackTrace()
+                                                                Logger.e(e, "Error while downloading")
+                                                            } finally {
+                                                                withContext(Dispatchers.Main) {
                                                                     ad.dismiss()
-                                                                    Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show()
-                                                                    Logger.e(e, "Failed to download update")
+                                                                    if (isOK) installApk()
                                                                 }
-
-                                                                @Throws(IOException::class)
-                                                                override fun onResponse(call: Call, response: Response) {
-                                                                    var isOK = false
-                                                                    try {
-                                                                        //Ensure target file is accessible
-                                                                        val f = File(externalCacheDir, "update.apk")
-                                                                        Utils.ensureFileParent(f)
-                                                                        val sink: Sink = f.sink()
-                                                                        //Write to file
-                                                                        val bufferedSink = sink.buffer()
-                                                                        bufferedSink.writeAll(response.body!!.source())
-                                                                        bufferedSink.flush()
-                                                                        bufferedSink.close()
-                                                                        sink.close()
-                                                                        updateApk = f
-                                                                        isOK = true
-                                                                    } catch (e: Exception) {
-                                                                        e.printStackTrace()
-                                                                        Logger.e(e, "Error while downloading")
-                                                                    } finally {
-                                                                        ad.dismiss()
-                                                                        if (isOK) installApk()
-                                                                    }
-                                                                }
-                                                            })
+                                                            }
+                                                        } else {
+                                                            withContext(Dispatchers.Main) {
+                                                                ad.dismiss()
+                                                                Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show()
+                                                            }
+                                                            Logger.e("Failed to download update")
                                                         }
-                                                    }.start()
+                                                    }
                                                 }
-                                                .setCancelable(false)
-                                        //If update is not forced
-                                        if (currentVer >= versionInfo.minVer) {
-                                            adb.setNegativeButton(R.string.cancel, null)
-                                            adb.setCancelable(true)
-                                            mUpdateHandler.sendMessage(mUpdateHandler.obtainMessage(0, adb))
+                                            }
+                                            .setCancelable(false)
+                                    //If update is not forced
+                                    val isForceUpdate = currentVer < versionInfo.minVer
+                                    if (!isForceUpdate) {
+                                        adb.setNegativeButton(R.string.cancel, null)
+                                        adb.setCancelable(true)
+                                    }
+                                    //Post dialog builder
+                                    withContext(Dispatchers.Main) {
+                                        val alertDialog = adb.create()
+                                        if (isForceUpdate) {
+                                            alertDialog.setCanceledOnTouchOutside(false)
+                                            alertDialog.show()
                                         }
-                                        //Post dialog builder
                                     }
                                 }
-                                is ServerResult.Fail -> {
-                                    Logger.d("Failed to check update:${bean.errorCode}  ${bean.message}")
-                                }
-                                else -> {
-                                    Logger.w("Unexpected case")
-                                }
                             }
-                        } catch (ignored: IllegalStateException) {
-                        } finally {
-                            response.close()
+                            is ServerResult.Fail -> {
+                                Logger.d("Failed to check update:${bean.errorCode}  ${bean.message}")
+                            }
+                            else -> {
+                                Logger.w("Unexpected case")
+                            }
                         }
+                    } catch (ignored: IllegalStateException) {
+                    } finally {
+                        response.close()
                     }
-                })
-            } catch (e: Exception) {
-                Logger.e(e, e.localizedMessage)
+                } else {
+                    //Failed to connect to server
+                    Logger.w("Failed to get update data.${response.message}")
+                }
             }
         }
     }
@@ -550,31 +545,26 @@ open class Main : AppCompatActivity(), UriLoader {
     private inner class AnnouncementThread : Thread() {
         override fun run() {
             super.run()
-            val client = OKHttpHelper.getClient()
-            val builder = Request.Builder()
-            val formBuilder = FormBody.Builder()
-            formBuilder.add(ServerActions.ACTION, ServerActions.ACTION_GET_ANNOUNCEMENT)
-            formBuilder.add(ServerActions.VALUE_BUILD_TYPE, if (BuildConfig.DEBUG) ServerActions.BUILD_TYPE_ALPHA else ServerActions.BUILD_TYPE_RELEASE)
-            formBuilder.add(ServerActions.VALUE_LEGACY, "0")
-            builder.url(ServerActions.REQUEST_URL)
-            builder.post(formBuilder.build())
-            client.newCall(builder.build()).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show()
-                    Logger.e(e, "Failed to get announcement")
-                }
-
-                @Throws(IOException::class)
-                override fun onResponse(call: Call, response: Response) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val client = OKHttpHelper.getClient()
+                val builder = Request.Builder()
+                val formBuilder = FormBody.Builder()
+                formBuilder.add(ServerActions.ACTION, ServerActions.ACTION_GET_ANNOUNCEMENT)
+                formBuilder.add(ServerActions.VALUE_BUILD_TYPE, if (BuildConfig.DEBUG) ServerActions.BUILD_TYPE_ALPHA else ServerActions.BUILD_TYPE_RELEASE)
+                formBuilder.add(ServerActions.VALUE_LEGACY, "0")
+                builder.url(ServerActions.REQUEST_URL)
+                builder.post(formBuilder.build())
+                val response = client.newCall(builder.build()).execute()
+                if (response.isSuccessful) {
                     try {
-                        val resultStr = response.body?.source()?.readUtf8() ?: return
+                        val resultStr = response.body?.source()?.readUtf8() ?: return@launch
                         val bean = json.parse(ServerResult.serializer(), resultStr)
                         if (bean is AnnouncementResult.Success) {
                             val id = bean.id
                             val localAnnouncementId = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1)
-                            val adb0 = AlertDialog.Builder(this@Main)
+                            val adb = AlertDialog.Builder(this@Main)
                             if (id > localAnnouncementId) {
-                                adb0.setTitle(bean.title)
+                                adb.setTitle(bean.title)
                                         .setMessage(bean.announcement)
                                         .setPositiveButton(R.string.ok, null)
                                         .setNeutralButton(R.string.dont_show) { _: DialogInterface?, _: Int -> getSharedPreferences(GENERAL, 0).edit().putInt(ANNOU_VER, id).apply() }
@@ -585,7 +575,9 @@ open class Main : AppCompatActivity(), UriLoader {
                                                 cmb.setPrimaryClip(ClipData.newPlainText("label", bean.toCopy.trim()))
                                             }
                                         }
-                                mUpdateHandler.sendMessage(mUpdateHandler.obtainMessage(1, adb0))
+                                withContext(Dispatchers.Main) {
+                                    adb.show()
+                                }
                             }
                         } else if (bean is ServerResult.Fail) {
                             Logger.d("Failed to get Announcement:${bean.errorCode}  ${bean.message}")
@@ -594,8 +586,13 @@ open class Main : AppCompatActivity(), UriLoader {
                     } finally {
                         response.close()
                     }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Snackbar.make(mContentView, R.string.failed, Snackbar.LENGTH_LONG).show()
+                        Logger.e("Failed to get announcement.${response.message}")
+                    }
                 }
-            })
+            }
         }
     }
 
@@ -628,7 +625,6 @@ open class Main : AppCompatActivity(), UriLoader {
                 true
             })
         }
-
     }
 
     companion object {
@@ -642,5 +638,4 @@ open class Main : AppCompatActivity(), UriLoader {
         private const val TYPE_COMMON = "common"
         private const val TYPE_FFMPEG = "ffmpeg"
     }
-
 }
