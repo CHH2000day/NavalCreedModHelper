@@ -8,8 +8,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.provider.Settings
 import android.text.TextUtils
 import android.view.Menu
@@ -38,13 +36,12 @@ import com.chh2000day.navalcreedmodhelper_v2.structs.VersionCheckResult
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.orhanobut.logger.Logger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
-import okhttp3.*
+import okhttp3.FormBody
+import okhttp3.Request
+import okhttp3.RequestBody
 import okio.Sink
 import okio.buffer
 import okio.sink
@@ -55,7 +52,6 @@ import java.util.*
 
 open class Main : AppCompatActivity(), UriLoader {
     private lateinit var mViewPager: ViewPager
-    private lateinit var mAlphaCheckHandler: Handler
 
     private var useAlphaChannel = BuildConfig.DEBUG
     private var updateApk: File? = null
@@ -163,134 +159,79 @@ open class Main : AppCompatActivity(), UriLoader {
             useAlphaChannel = modHelperApplication.mainSharedPreferences.getBoolean(KEY_USEALPHACHANNEL, BuildConfig.DEBUG)
         }
         if (BuildConfig.DEBUG) {
-            val adb = AlertDialog.Builder(this@Main)
-            adb.setTitle(R.string.verifying_tester_authority)
-                    .setMessage(R.string.please_wait)
-                    .setCancelable(false)
-            val ad = adb.create()
-            ad.setCanceledOnTouchOutside(false)
-            mAlphaCheckHandler = object : Handler() {
-                override fun handleMessage(msg: Message) {
-                    when (msg.what) {
-                        9010 -> {
-                            Snackbar.make(mViewPager, R.string.network_err, Snackbar.LENGTH_LONG).show()
-                            ad.setButton(DialogInterface.BUTTON_POSITIVE, getText(R.string.exit)) { _: DialogInterface?, _: Int -> doExit() }
-                        }
-                        else -> {
-                            Snackbar.make(mViewPager, R.string.failed_to_check_tester_authority, Snackbar.LENGTH_LONG).show()
+            GlobalScope.launch(Dispatchers.Main) {
+                val adb = AlertDialog.Builder(this@Main)
+                adb.setTitle(R.string.verifying_tester_authority)
+                        .setMessage(R.string.please_wait)
+                        .setCancelable(false)
+                val ad = adb.create()
+                ad.setCanceledOnTouchOutside(false)
+                ad.show()
+                when (val result = performStartTesterPermissionCheck()) {
+                    keyCheckResult.KeyCheckSuccess -> {
+                        withContext(Dispatchers.Main) {
                             ad.dismiss()
-                            showKeyDialog()
                         }
+                    }
+                    is keyCheckResult.KeyCheckFail -> {
+                        Snackbar.make(mViewPager, result.msg, Snackbar.LENGTH_LONG).show()
+                        showKeyDialog()
                     }
                 }
             }
-            ad.show()
-            performStartTesterPermissionCheck(object : OnCheckResultListener {
-                override fun onSuccess() {
-                    ad.dismiss()
-                }
 
-                override fun onFail(reason: Int, errorMsg: String?) {
-                    if (reason == 0) {
-                        //如果设备不匹配，清除本地许可数据
-                        (application as ModHelperApplication).mainSharedPreferences.edit().putString(KEY_OBJID, "").putString(KEY_AUTHKEY, "").apply()
-                    }
-                    mAlphaCheckHandler.sendEmptyMessage(reason)
-                }
-            })
         }
     }
 
-    fun doKeyCheck(key: String?, listener: OnCheckResultListener) {
-        if (KeyUtil.checkKeyFormat(key)) {
-            val builder = Request.Builder()
-            val body: RequestBody = FormBody.Builder()
-                    .add(ServerActions.ACTION, ServerActions.ACTION_CHECKTEST)
-                    .add(ServerActions.VALUE_KEY, key!!)
-                    .add(ServerActions.VALUE_SSAID, devId)
-                    .add(ServerActions.VALUE_DEVICE, Build.MODEL)
-                    .add(ServerActions.VALUE_LEGACY, "1")
-                    .build()
-            builder.url(ServerActions.REQUEST_URL)
-            builder.post(body)
-            OKHttpHelper.getClient().newCall(builder.build()).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    listener.onFail(1, "Failed to connect to server")
-                }
+    sealed class keyCheckResult {
+        object KeyCheckSuccess : keyCheckResult()
+        data class KeyCheckFail(val msg: String) : keyCheckResult()
+    }
 
-                @Throws(IOException::class)
-                override fun onResponse(call: Call, response: Response) {
+    suspend fun doKeyCheck(key: String?): keyCheckResult {
+        return withContext(Dispatchers.IO) {
+            if (KeyUtil.checkKeyFormat(key)) {
+                val builder = Request.Builder()
+                val body: RequestBody = FormBody.Builder()
+                        .add(ServerActions.ACTION, ServerActions.ACTION_CHECKTEST)
+                        .add(ServerActions.VALUE_KEY, key!!)
+                        .add(ServerActions.VALUE_SSAID, devId)
+                        .add(ServerActions.VALUE_DEVICE, Build.MODEL)
+                        .add(ServerActions.VALUE_LEGACY, "0")
+                        .build()
+                builder.url(ServerActions.REQUEST_URL)
+                builder.post(body)
+                val response = OKHttpHelper.getClient().newCall(builder.build()).execute()
+                if (response.isSuccessful) {
                     try {
                         val resultStr = response.body?.source()?.readUtf8()
-                        if (resultStr == null) {
-                            listener.onFail(-1, "Empty reply")
-                            return
+                        if (resultStr.isNullOrBlank()) {
+
+                            return@withContext keyCheckResult.KeyCheckFail("Empty reply")
                         }
                         val bean = json.parse(ServerResult.serializer(), resultStr)
                         if (bean is ServerResult.Success) {
                             modHelperApplication.mainSharedPreferences.edit().putString(KEY_AUTHKEY, key).apply()
-                            listener.onSuccess()
+                            return@withContext keyCheckResult.KeyCheckSuccess
                         } else {
                             bean as ServerResult.Fail
-                            listener.onFail(bean.errorCode.code, bean.message)
+                            return@withContext keyCheckResult.KeyCheckFail(bean.errorCode.name + " " + bean.message)
                         }
                     } catch (ignored: IllegalStateException) {
                     } finally {
                         response.close()
                     }
+                } else {
+                    return@withContext keyCheckResult.KeyCheckFail("Unknown")
                 }
-            })
-        } else {
-            //密钥格式验证失败
-            listener.onFail(0, "Invalid Key")
-            return
+            }
+            return@withContext keyCheckResult.KeyCheckFail("Unknown")
         }
     }
 
-    private fun performStartTesterPermissionCheck(listener: OnCheckResultListener) {
+    private suspend fun performStartTesterPermissionCheck(): keyCheckResult {
         val key = modHelperApplication.mainSharedPreferences.getString(KEY_AUTHKEY, "")
-        if (!KeyUtil.checkKeyFormat(key)) {
-            listener.onFail(2, "Invalid local key!")
-            return
-        }
-        val builder = Request.Builder()
-        val body: RequestBody = FormBody.Builder()
-                .add(ServerActions.ACTION, ServerActions.ACTION_CHECKTEST)
-                .add(ServerActions.VALUE_KEY, key!!)
-                .add(ServerActions.VALUE_SSAID, devId)
-                .add(ServerActions.VALUE_DEVICE, Build.MODEL)
-                .add(ServerActions.VALUE_LEGACY, "0")
-                .build()
-        builder.url(ServerActions.REQUEST_URL)
-        builder.post(body)
-        OKHttpHelper.getClient().newCall(builder.build()).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                listener.onFail(1, "Failed to connect to server")
-            }
-
-            @Throws(IOException::class)
-            override fun onResponse(call: Call, response: Response) {
-                try {
-                    val resultStr = response.body?.source()?.readUtf8()
-                    if (resultStr == null) {
-                        listener.onFail(-1, "Empty reply")
-                        return
-                    }
-                    val bean = json.parse(ServerResult.serializer(), resultStr)
-                    if (bean is ServerResult.Success) {
-                        modHelperApplication.mainSharedPreferences.edit().putString(KEY_AUTHKEY, key).apply()
-                        listener.onSuccess()
-                    } else {
-                        bean as ServerResult.Fail
-                        listener.onFail(bean.errorCode.code, bean.message)
-                    }
-                } catch (ignored: IllegalStateException) {
-                    listener.onFail(-20, "Invalid response")
-                } finally {
-                    response.close()
-                }
-            }
-        })
+        return doKeyCheck(key)
     }
 
     //return Build.SERIAL;
@@ -422,11 +363,6 @@ open class Main : AppCompatActivity(), UriLoader {
             startActivity(i)
             updateApk = null
         }
-    }
-
-    interface OnCheckResultListener {
-        fun onSuccess()
-        fun onFail(reason: Int, errorMsg: String?)
     }
 
     protected inner class UpdateThread : Thread() {
@@ -604,19 +540,20 @@ open class Main : AppCompatActivity(), UriLoader {
             btnEnter = ad.getButton(DialogInterface.BUTTON_POSITIVE)
             btnCancel.setOnClickListener(View.OnClickListener { doExit() })
             btnEnter.setOnClickListener(View.OnClickListener {
-                val key = keyinput.editableText.toString().toUpperCase(Locale.ROOT).trim()
-                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(keyinput.windowToken, 0)
+                GlobalScope.launch(Dispatchers.Main) {
+                    val key = keyinput.editableText.toString().toUpperCase(Locale.ROOT).trim()
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(keyinput.windowToken, 0)
+                    when (val result = doKeyCheck(key)) {
+                        keyCheckResult.KeyCheckSuccess -> {
+                            ad.dismiss()
+                        }
+                        is keyCheckResult.KeyCheckFail -> {
+                            Snackbar.make(mViewPager, result.msg, Snackbar.LENGTH_LONG).show()
+                        }
+                    }
+                }
                 //imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-                doKeyCheck(key, object : OnCheckResultListener {
-                    override fun onSuccess() {
-                        ad.dismiss()
-                    }
-
-                    override fun onFail(reason: Int, errorMsg: String?) {
-                        Snackbar.make(mViewPager, errorMsg!!, Snackbar.LENGTH_LONG).show()
-                    }
-                })
             })
             keyinput.editableText.append(modHelperApplication.mainSharedPreferences.getString(KEY_AUTHKEY, ""))
             btnEnter.setOnLongClickListener(OnLongClickListener {
