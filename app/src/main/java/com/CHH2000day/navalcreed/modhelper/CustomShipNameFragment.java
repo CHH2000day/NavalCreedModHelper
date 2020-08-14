@@ -21,7 +21,7 @@ import okhttp3.Response;
 
 public class CustomShipNameFragment extends ModFragment {
 
-    private static final String res_url = "https://static.CHH2000day.com/nc/customshipname_v22.patch";
+    private static final String res_url = "https://static.CHH2000day.com/nc/customshipname_latest.patch";
     private View v;
 
     @Override
@@ -53,7 +53,7 @@ public class CustomShipNameFragment extends ModFragment {
                         try {
                             Request r = new Request.Builder().url(res_url).build();
                             Response response = OKHttpHelper.getClient().newCall(r).execute();
-                            if (CustomShipNameHelper.INSTANCE.patch(response.body().source(), getMainActivity().getModHelperApplication().getCustomShipNameFile())) {
+                            if (CustomShipNameHelper.INSTANCE.patch(response.body().source())) {
                                 adb.setMessage(R.string.success)
                                         .setTitle(R.string.success).
                                         setPositiveButton(R.string.ok, null)
