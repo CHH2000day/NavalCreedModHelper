@@ -168,12 +168,12 @@ open class Main : AppCompatActivity(), UriLoader {
                 ad.setCanceledOnTouchOutside(false)
                 ad.show()
                 when (val result = performStartTesterPermissionCheck()) {
-                    keyCheckResult.KeyCheckSuccess -> {
+                    KeyCheckResult.KeyCheckSuccess -> {
                         withContext(Dispatchers.Main) {
                             ad.dismiss()
                         }
                     }
-                    is keyCheckResult.KeyCheckFail -> {
+                    is KeyCheckResult.KeyCheckFail -> {
                         Snackbar.make(mViewPager, result.msg, Snackbar.LENGTH_LONG).show()
                         showKeyDialog()
                     }
@@ -183,12 +183,12 @@ open class Main : AppCompatActivity(), UriLoader {
         }
     }
 
-    sealed class keyCheckResult {
-        object KeyCheckSuccess : keyCheckResult()
-        data class KeyCheckFail(val msg: String) : keyCheckResult()
+    sealed class KeyCheckResult {
+        object KeyCheckSuccess : KeyCheckResult()
+        data class KeyCheckFail(val msg: String) : KeyCheckResult()
     }
 
-    suspend fun doKeyCheck(key: String?): keyCheckResult {
+    suspend fun doKeyCheck(key: String?): KeyCheckResult {
         return withContext(Dispatchers.IO) {
             if (KeyUtil.checkKeyFormat(key)) {
                 val builder = Request.Builder()
@@ -207,29 +207,29 @@ open class Main : AppCompatActivity(), UriLoader {
                         val resultStr = response.body?.source()?.readUtf8()
                         if (resultStr.isNullOrBlank()) {
 
-                            return@withContext keyCheckResult.KeyCheckFail("Empty reply")
+                            return@withContext KeyCheckResult.KeyCheckFail("Empty reply")
                         }
                         val bean = json.parse(ServerResult.serializer(), resultStr)
                         if (bean is ServerResult.Success) {
                             modHelperApplication.mainSharedPreferences.edit().putString(KEY_AUTHKEY, key).apply()
-                            return@withContext keyCheckResult.KeyCheckSuccess
+                            return@withContext KeyCheckResult.KeyCheckSuccess
                         } else {
                             bean as ServerResult.Fail
-                            return@withContext keyCheckResult.KeyCheckFail(bean.errorCode.name + " " + bean.message)
+                            return@withContext KeyCheckResult.KeyCheckFail(bean.errorCode.name + " " + bean.message)
                         }
                     } catch (ignored: IllegalStateException) {
                     } finally {
                         response.close()
                     }
                 } else {
-                    return@withContext keyCheckResult.KeyCheckFail("Unknown")
+                    return@withContext KeyCheckResult.KeyCheckFail("Unknown")
                 }
             }
-            return@withContext keyCheckResult.KeyCheckFail("Unknown")
+            return@withContext KeyCheckResult.KeyCheckFail("Unknown")
         }
     }
 
-    private suspend fun performStartTesterPermissionCheck(): keyCheckResult {
+    private suspend fun performStartTesterPermissionCheck(): KeyCheckResult {
         val key = modHelperApplication.mainSharedPreferences.getString(KEY_AUTHKEY, "")
         return doKeyCheck(key)
     }
@@ -545,10 +545,10 @@ open class Main : AppCompatActivity(), UriLoader {
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(keyinput.windowToken, 0)
                     when (val result = doKeyCheck(key)) {
-                        keyCheckResult.KeyCheckSuccess -> {
+                        KeyCheckResult.KeyCheckSuccess -> {
                             ad.dismiss()
                         }
-                        is keyCheckResult.KeyCheckFail -> {
+                        is KeyCheckResult.KeyCheckFail -> {
                             Snackbar.make(mViewPager, result.msg, Snackbar.LENGTH_LONG).show()
                         }
                     }
