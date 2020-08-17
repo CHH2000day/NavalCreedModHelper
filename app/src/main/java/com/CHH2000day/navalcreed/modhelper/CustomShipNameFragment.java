@@ -88,7 +88,7 @@ public class CustomShipNameFragment extends ModFragment {
                     .setMessage(R.string.confirm_to_remove_all_changes)
                     .setNegativeButton(R.string.cancel, null)
                     .setPositiveButton(R.string.remove_changes, (dialogInterface, p2) -> {
-                        if (f.isFile()) {
+                        if (f != null && f.isFile()) {
                             //noinspection ResultOfMethodCallIgnored
                             f.delete();
                         }
