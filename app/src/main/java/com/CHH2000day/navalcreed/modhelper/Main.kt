@@ -201,7 +201,12 @@ open class Main : AppCompatActivity(), UriLoader {
                         .build()
                 builder.url(ServerActions.REQUEST_URL)
                 builder.post(body)
-                val response = OKHttpHelper.getClient().newCall(builder.build()).execute()
+                val response = try {
+                    OKHttpHelper.getClient().newCall(builder.build()).execute()
+                } catch (e: Exception) {
+                    Logger.e(e, "Network error")
+                    return@withContext KeyCheckResult.KeyCheckFail("Network error")
+                }
                 if (response.isSuccessful) {
                     try {
                         val resultStr = response.body?.source()?.readUtf8()
@@ -381,7 +386,12 @@ open class Main : AppCompatActivity(), UriLoader {
                         .post(body)
                 val client = OKHttpHelper.getClient()
                 //Send request
-                val response = client.newCall(builder.build()).execute()
+                val response = try {
+                    client.newCall(builder.build()).execute()
+                } catch (e: Exception) {
+                    Logger.e(e, "Network error")
+                    return@launch
+                }
                 if (response.isSuccessful) {
                     try {
                         val resultStr = response.body?.source()?.readUtf8() ?: return@launch
@@ -407,7 +417,13 @@ open class Main : AppCompatActivity(), UriLoader {
                                                     withContext(Dispatchers.IO) {
                                                         val requestBuilder = Request.Builder()
                                                         requestBuilder.url(versionInfo.url)
-                                                        val response = client.newCall(requestBuilder.build()).execute()
+                                                        val response = try {
+                                                            client.newCall(requestBuilder.build()).execute()
+                                                        } catch (e: Exception) {
+                                                            Logger.e(e, "Network error")
+                                                            return@withContext
+
+                                                        }
                                                         if (response.isSuccessful) {
                                                             var isOK = false
                                                             try {
@@ -490,7 +506,12 @@ open class Main : AppCompatActivity(), UriLoader {
                 formBuilder.add(ServerActions.VALUE_LEGACY, "0")
                 builder.url(ServerActions.REQUEST_URL)
                 builder.post(formBuilder.build())
-                val response = client.newCall(builder.build()).execute()
+                val response = try {
+                    client.newCall(builder.build()).execute()
+                } catch (e: Exception) {
+                    Logger.e(e, "Network error")
+                    return@launch
+                }
                 if (response.isSuccessful) {
                     try {
                         val resultStr = response.body?.source()?.readUtf8() ?: return@launch
