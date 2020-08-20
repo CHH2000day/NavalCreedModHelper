@@ -67,6 +67,7 @@ class ModPackageInstallerFragment : Fragment() {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
             intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             startActivityForResult(Intent.createChooser(intent, getString(R.string.select_file)), QUERY_CODE)
         }
         selectButton.setOnLongClickListener {
