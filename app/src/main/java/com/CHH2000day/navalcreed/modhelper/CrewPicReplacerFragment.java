@@ -70,6 +70,7 @@ public class CrewPicReplacerFragment extends ModFragment {
         selpic.setOnClickListener(p1 -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivityForResult(intent, 2);
 
         });

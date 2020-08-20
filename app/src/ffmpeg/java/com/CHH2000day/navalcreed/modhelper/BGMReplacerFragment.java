@@ -119,7 +119,7 @@ public class BGMReplacerFragment extends ModFragment {
             public void onClick(View p1) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("*/*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 startActivityForResult(Intent.createChooser(intent, getString(R.string.select_a_file_selector)), QUERY_CODE);
             }
         });

@@ -45,12 +45,11 @@ public class LoginMovieReplacer extends ModFragment {
         Button select = v.findViewById(R.id.loginmoviereplacerfragmentButtonSelect);
         Button update = v.findViewById(R.id.loginmoviereplacerfragmentButtonUpdate);
         Button remove = v.findViewById(R.id.loginmoviereplacerfragmentButtonRemove);
-        // TODO: Implement this method
 
         select.setOnClickListener(p1 -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             startActivityForResult(Intent.createChooser(intent, getText(R.string.select_a_file_selector)), QUERY_CODE);
         });
         update.setOnClickListener(view -> {

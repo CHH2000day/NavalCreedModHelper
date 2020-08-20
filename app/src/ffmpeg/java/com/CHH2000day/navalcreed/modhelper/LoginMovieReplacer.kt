@@ -42,7 +42,7 @@ class LoginMovieReplacer : ModFragment() {
         select.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             startActivityForResult(Intent.createChooser(intent, getText(R.string.select_a_file_selector)), QUERY_CODE)
         }
         update.setOnClickListener {
