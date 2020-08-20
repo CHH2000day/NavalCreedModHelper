@@ -368,7 +368,7 @@ object ModPackageManagerV2 {
     @Synchronized
     fun rollback() {
         Logger.i("Rolling back current installation")
-        for (filename in installConflictFiles) {
+        for (filename in installConflictFiles.toList()) {
             recoverFileFromConflict(filename)
         }
         val basePath = getBasePath()
