@@ -38,7 +38,6 @@ import com.google.android.material.tabs.TabLayout
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import okhttp3.FormBody
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -56,7 +55,10 @@ open class Main : AppCompatActivity(), UriLoader {
     private var useAlphaChannel = BuildConfig.DEBUG
     private var updateApk: File? = null
     private lateinit var mContentView: ViewGroup
-    private val json = Json(JsonConfiguration(ignoreUnknownKeys = true, allowStructuredMapKeys = true))
+    private val json = Json {
+        allowStructuredMapKeys = true
+        ignoreUnknownKeys
+    }
 
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -214,7 +216,7 @@ open class Main : AppCompatActivity(), UriLoader {
 
                             return@withContext KeyCheckResult.KeyCheckFail("Empty reply")
                         }
-                        val bean = json.parse(ServerResult.serializer(), resultStr)
+                        val bean = json.decodeFromString(ServerResult.serializer(), resultStr)
                         if (bean is ServerResult.Success) {
                             modHelperApplication.mainSharedPreferences.edit().putString(KEY_AUTHKEY, key).apply()
                             return@withContext KeyCheckResult.KeyCheckSuccess
@@ -371,6 +373,7 @@ open class Main : AppCompatActivity(), UriLoader {
     }
 
     protected inner class UpdateThread : Thread() {
+        @Suppress("DEPRECATION")
         override fun run() {
             CoroutineScope(Dispatchers.IO).launch {
                 //Get current version
@@ -396,7 +399,7 @@ open class Main : AppCompatActivity(), UriLoader {
                     try {
                         val resultStr = response.body?.source()?.readUtf8() ?: return@launch
                         @Suppress("ConstantConditionIf")
-                        when (val bean = json.parse(ServerResult.serializer(), resultStr)) {
+                        when (val bean = json.decodeFromString(ServerResult.serializer(), resultStr)) {
                             is VersionCheckResult.Success -> {
                                 val versionInfo = (if (BuildConfig.FLAVOR == TYPE_COMMON) bean.commonInfo else bean.ffmpegInfo)
                                         ?: return@launch
@@ -417,14 +420,14 @@ open class Main : AppCompatActivity(), UriLoader {
                                                     withContext(Dispatchers.IO) {
                                                         val requestBuilder = Request.Builder()
                                                         requestBuilder.url(versionInfo.url)
-                                                        val response = try {
+                                                        val downloadResponse = try {
                                                             client.newCall(requestBuilder.build()).execute()
                                                         } catch (e: Exception) {
                                                             Logger.e(e, "Network error")
                                                             return@withContext
 
                                                         }
-                                                        if (response.isSuccessful) {
+                                                        if (downloadResponse.isSuccessful) {
                                                             var isOK = false
                                                             try {
                                                                 //Ensure target file is accessible
@@ -433,7 +436,7 @@ open class Main : AppCompatActivity(), UriLoader {
                                                                 val sink: Sink = f.sink()
                                                                 //Write to file
                                                                 val bufferedSink = sink.buffer()
-                                                                bufferedSink.writeAll(response.body!!.source())
+                                                                bufferedSink.writeAll(downloadResponse.body!!.source())
                                                                 bufferedSink.flush()
                                                                 bufferedSink.close()
                                                                 sink.close()
@@ -515,7 +518,7 @@ open class Main : AppCompatActivity(), UriLoader {
                 if (response.isSuccessful) {
                     try {
                         val resultStr = response.body?.source()?.readUtf8() ?: return@launch
-                        val bean = json.parse(ServerResult.serializer(), resultStr)
+                        val bean = json.decodeFromString(ServerResult.serializer(), resultStr)
                         if (bean is AnnouncementResult.Success) {
                             val id = bean.id
                             val localAnnouncementId = getSharedPreferences(GENERAL, 0).getInt(ANNOU_VER, -1)

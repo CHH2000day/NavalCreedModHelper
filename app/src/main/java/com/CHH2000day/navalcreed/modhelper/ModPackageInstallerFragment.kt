@@ -1,6 +1,7 @@
 package com.CHH2000day.navalcreed.modhelper
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -93,8 +94,8 @@ class ModPackageInstallerFragment : Fragment() {
         }
     }
 
-    override fun onAttach(activity: Activity) {
-        super.onAttach(activity)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         loader = activity as UriLoader
     }
 
@@ -131,10 +132,9 @@ class ModPackageInstallerFragment : Fragment() {
                 val alertDialog = alertDialogBuilder?.create()
                 alertDialog?.setCanceledOnTouchOutside(false)
                 alertDialog?.show()
-                var file: File? = null
+                var file: File?
                 val isSuccess = withContext(Dispatchers.IO) {
                     file = File(activity!!.externalCacheDir, "cachedmodfile.ncmod")
-                    var isSuccess = false
                     val sink = file!!.sink().buffer()
                     val source = activity!!.getSource(uri!!)
                     if (source != null) {

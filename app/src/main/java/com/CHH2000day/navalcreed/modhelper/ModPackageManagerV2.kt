@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.CHH2000day.navalcreed.modhelper
 
 import android.app.ProgressDialog
@@ -6,7 +8,6 @@ import androidx.annotation.NonNull
 import com.orhanobut.logger.Logger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import okio.buffer
 import okio.sink
 import okio.source
@@ -29,7 +30,7 @@ object ModPackageManagerV2 {
     private val installConflictFiles = mutableSetOf<String>()
     private var onDataChangedListener: OnDataChangedListener? = null
     private var modType = mutableMapOf<String, String>()
-    private val json = Json(JsonConfiguration(ignoreUnknownKeys = true))
+    private val json = Json { ignoreUnknownKeys = true }
     private var faultFlag = false
 
 
@@ -389,7 +390,7 @@ object ModPackageManagerV2 {
             if (dataFile.exists()) {
                 val source = dataFile.source().buffer()
                 val dataStr = source.readUtf8()
-                val config = json.parse(Config.serializer(), dataStr)
+                val config = json.decodeFromString(Config.serializer(), dataStr)
                 override = config.isOverride
                 modList = config.modInfos
                 duplicatedFileInfo = config.duplicationInfos
@@ -439,12 +440,12 @@ object ModPackageManagerV2 {
                 synchronized(modList) {
                     val config = Config(version = managerVer, isOverride = override, modInfos = modList.toMutableList(), duplicationInfos = duplicatedFileInfo.toMutableSet())
                     Utils.ensureFileParent(dataFile)
-                    if (!dataFile.parentFile.canWrite()) {
+                    if (!dataFile.parentFile!!.canWrite()) {
                         faultFlag = true
                         return@thread
                     }
                     val sink = dataFile.sink().buffer()
-                    sink.writeUtf8(json.stringify(Config.serializer(), config))
+                    sink.writeUtf8(json.encodeToString(Config.serializer(), config))
                     sink.close()
                 }
             }
