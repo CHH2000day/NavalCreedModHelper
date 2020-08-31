@@ -117,7 +117,11 @@ class ModPackageInstallerFragment : Fragment() {
 
     private suspend fun Activity.getSource(uri: Uri): Source? {
         return withContext(Dispatchers.IO) {
-            activity!!.contentResolver.openInputStream(uri)?.source()
+            try {
+                activity!!.contentResolver.openInputStream(uri)?.source()
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 
