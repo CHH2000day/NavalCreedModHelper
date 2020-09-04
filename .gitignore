@@ -7,5 +7,9 @@ local.properties
 /.gradle/
 /build/
 CHH2000day.keystore
-app/build/
+app/build
 *.sh
+.idea
+*.trace
+app/common
+app/ffmpeg
