@@ -372,7 +372,7 @@ object ModPackageManagerV2 {
             recoverFileFromConflict(filename)
         }
         val basePath = getBasePath()
-        for (filename in installationFiles) {
+        for (filename in installationFiles.toList()) {
             File(basePath, filename).delete()
         }
     }
