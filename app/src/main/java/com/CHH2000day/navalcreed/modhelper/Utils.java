@@ -121,6 +121,9 @@ public class Utils {
         if (BuildConfig.DEBUG) {
             Logger.d("Resolving uri:" + uri.getPath() + " raw uri:" + uri.getEncodedPath() + " authority:" + uri.getAuthority());
         }
+        if (uri.getPath() == null || uri.getAuthority() == null) {
+            return null;
+        }
         //如果path已为绝对路径，直接返回
         if (uri.getPath().startsWith("/storage")) {
             if (BuildConfig.DEBUG) {
