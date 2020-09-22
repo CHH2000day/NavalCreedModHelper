@@ -228,7 +228,7 @@ public class BGMReplacerFragment extends ModFragment {
                 final Monitor mon = new Monitor(ad);
                 ad.setOnShowListener(mon);
                 ad.setCancelable(false);
-                @SuppressLint("HandlerLeak") final Handler h = new Handler() {
+                @SuppressLint("HandlerLeak") final Handler uiHandler = new Handler() {
                     public void handleMessage(Message msg) {
                         if (!isAdded()) return;
                         switch (msg.what) {
@@ -274,15 +274,15 @@ public class BGMReplacerFragment extends ModFragment {
                 new Thread() {
                     public void run() {
                         starttime = System.currentTimeMillis();
-                        h.sendEmptyMessage(AudioFormatHelper.STATUS_START);
+                        uiHandler.sendEmptyMessage(AudioFormatHelper.STATUS_START);
                         if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY)) {
                             File file = getTargetFile(curr_scene, curr_type, curr_music, Utils.FORMAT_WAV);
                             Utils.ensureFileParent(file);
                             if (file.exists()) {
                                 ModPackageManagerV2.INSTANCE.renameConflict(path);
                             }
-                            h.sendEmptyMessage(AudioFormatHelper.STATUS_TRANSCODING);
-                            String result = afh.compressToWav(file, h);
+                            uiHandler.sendEmptyMessage(AudioFormatHelper.STATUS_TRANSCODING);
+                            String result = afh.compressToWav(file, uiHandler);
                             afh.recycle();
                             boolean isSuccess = AudioFormatHelper.RESULT_OK.equals(result);
                             result = isSuccess ? getString(R.string.success) : result;
@@ -292,9 +292,9 @@ public class BGMReplacerFragment extends ModFragment {
                             } else {
                                 ModPackageManagerV2.INSTANCE.onInstallFail();
                             }
-                            h.sendMessage(h.obtainMessage(AudioFormatHelper.STATUS_DONE, result));
+                            uiHandler.sendMessage(uiHandler.obtainMessage(AudioFormatHelper.STATUS_DONE, result));
                         } else {
-                            h.sendMessage(h.obtainMessage(AudioFormatHelper.STATUS_ERROR, "Start error"));
+                            uiHandler.sendMessage(uiHandler.obtainMessage(AudioFormatHelper.STATUS_ERROR, new IOException("Failed to start")));
                         }
                     }
                 }.start();
