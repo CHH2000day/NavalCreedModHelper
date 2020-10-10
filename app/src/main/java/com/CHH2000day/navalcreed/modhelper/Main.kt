@@ -57,7 +57,7 @@ open class Main : AppCompatActivity(), UriLoader {
     private lateinit var mContentView: ViewGroup
     private val json = Json {
         allowStructuredMapKeys = true
-        ignoreUnknownKeys
+        ignoreUnknownKeys = true
     }
 
     @SuppressLint("HandlerLeak")
