@@ -144,7 +144,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
 
     private class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
-    private inner class MyAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private inner class MyAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
         private val listener: OnLongClickListener
 
@@ -159,7 +159,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         }
 
 
-        override fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int): Unit {
+        override fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int) {
             val v = (holder as ViewHolder).view
             val relativeLayout = v.findViewById<RelativeLayout>(R.id.modmanageritemV2RelativeLayout)
             val modName = v.findViewById<TextView>(R.id.modmanageritemV2ModName)
@@ -217,7 +217,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                     { it.key }, { it.value }
             ).toMutableMap()
             val cacheList = modList.toMutableList()
-            modList = mods
+            modList = mods.toMutableList()
             diffMap.forEach {
                 when (it.value) {
                     DiffReason.REASON_REMOVE -> {
@@ -249,7 +249,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         REASON_ADD(10), REASON_REMOVE(20), REASON_MODIFY(30);
     }
 
-    private inner class UninstallListener : View.OnLongClickListener {
+    private inner class UninstallListener : OnLongClickListener {
         override fun onLongClick(v: View?): Boolean {
             val name = v?.tag as String
             val adb = context?.let { AlertDialog.Builder(it) }
