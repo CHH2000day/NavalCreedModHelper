@@ -119,5 +119,6 @@
     <string name="mod_uninstall_warning">确定要移除mod:%1$s吗?</string>
 	<string name="partly_working">部分工作</string>
 	<string name="installed">已安装</string>
+    <string name="version_too_high">不支持的设备!\n安卓11起强制执行的分区储存使的我们无法获取所需的权限,因此我们无法对这些系统进行适配</string>
 
 </resources>

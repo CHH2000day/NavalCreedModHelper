@@ -120,4 +120,5 @@
     <string name="mod_uninstall_warning">Confirm to remove mod : %1$s ?</string>
 	<string name="partly_working">Partly Working</string>
 	<string name="installed">Installed</string>
+    <string name="version_too_high">This device is not suppported.\nDue to the limitation of scoped storage which is introduced sice Android 11,we can\'t get permission needed to do modifications.</string>
 </resources>
