@@ -128,7 +128,8 @@ open class Main : AppCompatActivity(), UriLoader {
         fragments.add(AboutFragment())
         val fragmentTitles = resources.getStringArray(R.array.fragment_titles)
         val titles: List<String> = ArrayList(listOf(*fragmentTitles))
-        val mAdapter: FragmentPagerAdapter = ViewPagerAdapter(supportFragmentManager, fragments, titles)
+        val mAdapter: FragmentPagerAdapter =
+            ViewPagerAdapter(supportFragmentManager, fragments, titles)
         mViewPager.adapter = mAdapter
         mTabLayout.setupWithViewPager(mViewPager)
         checkValidity()
@@ -137,20 +138,20 @@ open class Main : AppCompatActivity(), UriLoader {
         if (Intent.ACTION_VIEW == intent.action) {
             mTabLayout.getTabAt(fragments.indexOf(mModPkgInstallerFragment))!!.select()
         }
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            val dialogBuilder = AlertDialog.Builder(this)
-            dialogBuilder.also {
-                it.setTitle(R.string.error)
-                it.setMessage(R.string.version_too_high)
-                it.setCancelable(false)
-                it.setPositiveButton(R.string.exit) { _: DialogInterface, _: Int ->
-                    exit()
-                }
-            }
-            val dialog = dialogBuilder.create()
-            dialog.setCanceledOnTouchOutside(false)
-            dialog.show()
-        }
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
+//            val dialogBuilder = AlertDialog.Builder(this)
+//            dialogBuilder.also {
+//                it.setTitle(R.string.error)
+//                it.setMessage(R.string.version_too_high)
+//                it.setCancelable(false)
+//                it.setPositiveButton(R.string.exit) { _: DialogInterface, _: Int ->
+//                    exit()
+//                }
+//            }
+//            val dialog = dialogBuilder.create()
+//            dialog.setCanceledOnTouchOutside(false)
+//            dialog.show()
+//        }
     }
 
     override fun onStart() {
