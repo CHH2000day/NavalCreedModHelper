@@ -19,6 +19,9 @@ private fun File.toDocumentFileUri(): Uri {
 fun File.toDocumentFile(context: Context = ModHelperApplication.getModHelperApplication()): DocumentFile =
     DocumentFile.fromSingleUri(context, toDocumentFileUri())!!
 
+fun File.toDocumentDir(context: Context = ModHelperApplication.getModHelperApplication()): DocumentFile =
+    DocumentFile.fromTreeUri(context, toDocumentFileUri())!!
+
 fun File.toBufferedSource(context: Context = ModHelperApplication.getModHelperApplication()): BufferedSource {
     return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
         context.contentResolver.openInputStream(

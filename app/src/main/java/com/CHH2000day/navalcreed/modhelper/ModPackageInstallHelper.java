@@ -33,7 +33,6 @@ import java.util.zip.ZipInputStream;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
-import okio.Sink;
 import okio.Source;
 
 public class ModPackageInstallHelper {
@@ -349,8 +348,8 @@ public class ModPackageInstallHelper {
     }
 
     private ErrorMsg checkAvailSpace() {
-        Utils.ensureFileParent(mmha.getResFilesDir());
-        StatFs fs = new StatFs(mmha.getResFilesDir().getParentFile().getParentFile().getParent());
+//        Utils.ensureFileParent(mmha.getExternalCacheDir());
+        StatFs fs = new StatFs(mmha.getExternalCacheDir().getPath());
         long avail = fs.getAvailableBytes();
         if (getTotalSize() > avail) {
             return new ErrorMsg(mmha.getResources().getString(R.string.modpkg_space_warning, getTotalSize(), avail), false);
@@ -474,11 +473,12 @@ public class ModPackageInstallHelper {
                         //若是，创建目录结构
                         targetFile = new File(mainPath, ze.getName());
                         Logger.i("Creating file path:%s", targetFile.getPath());
-                        Utils.ensureFileParent(targetFile);
+//                        Utils.ensureFileParent(targetFile);
                         if (targetFile.isFile()) {
                             targetFile.delete();
                         }
                         targetFile.mkdirs();
+                        _FileUtilsKt.toDocumentDir(targetFile, mactivity).getParentFile().createDirectory(ze.getName());
                         count++;
                         publishProgress(count);
                     }
@@ -490,14 +490,13 @@ public class ModPackageInstallHelper {
                             ModPackageManagerV2.INSTANCE.renameConflict(ze.getName());
                         }
                         Logger.i("Writing file:%s", targetFile.getPath());
-                        Utils.ensureFileParent(targetFile);
+//                        Utils.ensureFileParent(targetFile);
                         //若写出的目标文件已为目录，删除
-                        if (targetFile.isDirectory()) {
-                            Utils.delDir(targetFile);
-                        }
+//                        if (targetFile.isDirectory()) {
+//                            Utils.delDir(targetFile);
+//                        }
                         //输出文件，使用Okio
-                        Sink s = Okio.sink(targetFile);
-                        BufferedSink bs = Okio.buffer(s);
+                        BufferedSink bs = _FileUtilsKt.toBufferedSink(targetFile, mactivity);
                         source = Okio.source(mpkgFile.getInputStream(ze));
                         bs.writeAll(source);
                         ModPackageManagerV2.INSTANCE.onFileInstalled(ze.getName());
