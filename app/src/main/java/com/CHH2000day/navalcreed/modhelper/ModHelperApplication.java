@@ -29,6 +29,12 @@ public class ModHelperApplication extends Application {
     private static final String TW = "TW";//num2
     private static MainSharedPreferencesChangeListener preflistener;
 
+    private static ModHelperApplication modHelperApplication;
+
+    public static ModHelperApplication getModHelperApplication() {
+        return modHelperApplication;
+    }
+
     static {
         pkgnames = new String[3];
         pkgnames[0] = CN;
@@ -72,6 +78,7 @@ public class ModHelperApplication extends Application {
 
     @Override
     public void onCreate() {
+        modHelperApplication = this;
         Logger.addLogAdapter(new DiskLogAdapter(getExternalFilesDir("").getAbsolutePath()));
         Logger.addLogAdapter(new AndroidLogAdapter());
         Logger.i("Logger inited");
@@ -125,9 +132,9 @@ public class ModHelperApplication extends Application {
 
     @Override
     public void onTerminate() {
-        // TODO: Implement this method
         super.onTerminate();
         mainpref.unregisterOnSharedPreferenceChangeListener(preflistener);
+        modHelperApplication = null;
     }
 
     public void reconfigModPackageManager() {
