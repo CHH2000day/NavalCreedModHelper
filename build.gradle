@@ -1,6 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = '1.4.31'
+    ext.kotlin_version = '1.4.32'
     repositories {
         maven { url 'https://maven.aliyun.com/repository/central' }
         google()
@@ -11,7 +11,7 @@ buildscript {
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.0-alpha11'
+        classpath 'com.android.tools.build:gradle:4.2.2'
         classpath 'com.tencent.bugly:symtabfileuploader:2.2.1'
         //noinspection DifferentKotlinGradleVersion
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
