@@ -516,6 +516,7 @@ public class ModPackageInstallHelper {
                 Logger.d(e);
                 this.e = e;
                 ModPackageManagerV2.INSTANCE.rollback();
+                ModPackageManagerV2.INSTANCE.onInstallFail();
                 return false;
             }
             return true;
