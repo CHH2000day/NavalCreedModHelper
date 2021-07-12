@@ -48,10 +48,10 @@ import okhttp3.RequestBody
 import okio.Sink
 import okio.buffer
 import okio.sink
-import org.json.JSONException
 import java.io.File
 import java.io.IOException
 import java.util.*
+
 
 open class Main : AppCompatActivity(), UriLoader {
     private val android11Flag = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
@@ -83,14 +83,22 @@ open class Main : AppCompatActivity(), UriLoader {
                     this@Main,
                     Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata")
                 )
-                val uri = dataDirDocument!!.uri
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                intent.apply {
-                    flags =
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-                    putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
+                //Check permission
+                //CAUTION:NO EFFECT AT THIS MOMENT
+                if (dataDirDocument?.canWrite() == true) {
+                    setupConfig()
+                    setupUI()
+                } else {
+                    val uri = dataDirDocument!!.uri
+                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                    intent.apply {
+                        flags =
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                        putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
+                    }
+                    startActivityForResult(intent, ANDROID_11_PERMISSION_CHECK_CODE)
                 }
-                startActivityForResult(intent, ANDROID_11_PERMISSION_CHECK_CODE)
+
             }
         }
 
@@ -109,28 +117,31 @@ open class Main : AppCompatActivity(), UriLoader {
             .append(File.separatorChar)
             .append("customnames.lua").toString()
         val customShipNameFile = File(customShipnamePath)
-        if (!customShipNameFile.exists()) {
-            Utils.ensureFileParent(customShipNameFile)
+        customShipNameFile.mkdirCompatible()
+        if (!customShipNameFile.existsCompatible()) {
             try {
-                customShipNameFile.createNewFile()
+                customShipNameFile.createFileCompatible()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
         init(customShipNameFile)
         modHelperApplication.reconfigModPackageManager()
-        val oldConfigFile =
-            File(modHelperApplication.resFilesDir, ModHelperApplication.STOREDFILE_NAME)
-        if (oldConfigFile.exists()) {
-            ModPackageManager.getInstance().init(this)
-            try {
-                ModPackageManager.getInstance().config(oldConfigFile)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-        }
+        /**
+         * Drop support for ModPackageManagerV1
+         */
+//        val oldConfigFile =
+//            File(modHelperApplication.resFilesDir, ModHelperApplication.STOREDFILE_NAME)
+//        if (oldConfigFile.exists()) {
+//            ModPackageManager.getInstance().init(this)
+//            try {
+//                ModPackageManager.getInstance().config(oldConfigFile)
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            } catch (e: JSONException) {
+//                e.printStackTrace()
+//            }
+//        }
     }
 
     private fun setupUI() {
@@ -338,6 +349,11 @@ open class Main : AppCompatActivity(), UriLoader {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ANDROID_11_PERMISSION_CHECK_CODE && resultCode == Activity.RESULT_OK) {
+            //Do persistent
+            ModHelperApplication.getModHelperApplication().contentResolver.takePersistableUriPermission(
+                data?.data!!,
+                data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
             setupConfig()
             setupUI()
         }
