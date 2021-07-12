@@ -121,4 +121,5 @@
 	<string name="partly_working">Partly Working</string>
 	<string name="installed">Installed</string>
     <string name="version_too_high">This device is not suppported.\nDue to the limitation of scoped storage which is introduced sice Android 11,we can\'t get permission needed to do modifications.</string>
+    <string name="android11_saf_message">Please select the \"SELECT\" button at the bottom of the screen in the next scene</string>
 </resources>
