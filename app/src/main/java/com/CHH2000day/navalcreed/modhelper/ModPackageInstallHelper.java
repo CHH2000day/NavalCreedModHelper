@@ -477,8 +477,13 @@ public class ModPackageInstallHelper {
                         if (targetFile.isFile()) {
                             targetFile.delete();
                         }
+                        _FileUtilsKt.mkdirCompatible(targetFile);
                         targetFile.mkdirs();
-                        _FileUtilsKt.toDocumentDir(targetFile, mactivity).getParentFile().createDirectory(ze.getName());
+                        if (_FileUtilsKt.getAndroid11Flag()) {
+                            _FileUtilsKt.toDocumentDir(targetFile, mactivity);
+                        } else {
+                            targetFile.mkdirs();
+                        }
                         count++;
                         publishProgress(count);
                     }

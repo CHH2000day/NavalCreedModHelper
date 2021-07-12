@@ -153,13 +153,18 @@ object ModPackageManagerV2 {
                     }
                     //Remove a suffix for all elements before this effected
                     info.files.toList().forEach {
-                        //TODO:Check whether this would work on Android 11
-                        File(basePath, it.currFileName).renameTo(
-                            File(
-                                basePath,
-                                it.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                        if (android11Flag) {
+                            File(basePath, it.currFileName).toDocumentFile()
+                                .renameTo(it.currFileName.removeSuffix(CONFLICT_SUFFIX))
+                        } else {
+                            File(basePath, it.currFileName).renameTo(
+                                File(
+                                    basePath,
+                                    it.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                                )
                             )
-                        )
+                        }
+
                         //Update installation record(1/2)
                         getInstallation(it.modName)?.files?.remove(it.currFileName)
                         //Update conflict record

@@ -127,7 +127,11 @@ class ModPackageInstallerFragment : Fragment() {
 
     private fun selectFile(uri: Uri?) {
         clear()
-        val filepath = Utils.resolveFilePath(uri, activity)
+        val filepath = if (android11Flag) {
+            null
+        } else {
+            Utils.resolveFilePath(uri, activity)
+        }
         if (filepath == null) {
             CoroutineScope(Dispatchers.Main).launch(Dispatchers.Main) {
                 val alertDialogBuilder = activity?.let { AlertDialog.Builder(it) }

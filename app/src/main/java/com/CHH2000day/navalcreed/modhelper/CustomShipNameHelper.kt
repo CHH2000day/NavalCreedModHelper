@@ -3,9 +3,6 @@ package com.CHH2000day.navalcreed.modhelper
 import android.text.TextUtils
 import com.orhanobut.logger.Logger
 import okio.BufferedSource
-import okio.buffer
-import okio.sink
-import okio.source
 import java.io.File
 import java.io.IOException
 
@@ -106,7 +103,7 @@ object CustomShipNameHelper {
         luaFile = src
         shipNamesMap.clear()
         idList.clear()
-        val source = src.source().buffer()
+        val source = src.toBufferedSource()
         val rawData = source.readUtf8()
         source.close()
         source.close()
@@ -142,7 +139,7 @@ object CustomShipNameHelper {
 
     @Throws(IOException::class)
     private fun writeToFile(dest: File) {
-        val sink = dest.sink().buffer()
+        val sink = dest.toBufferedSink()
         val li: ListIterator<Int> = idList.listIterator()
         var name: String?
         sink.writeUtf8(HOF)
