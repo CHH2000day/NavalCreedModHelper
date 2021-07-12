@@ -69,7 +69,7 @@ fun File.getDocumentParentOrNull(context: Context = ModHelperApplication.getModH
 
 fun File.toDocumentFile(
     context: Context = ModHelperApplication.getModHelperApplication(),
-    mime: String = "application/json"
+    mime: String = "*/*"
 ): DocumentFile {
     if (!this.absolutePath.contains(Regex(".+/Android/data*"))) {
         throw UnsupportedOperationException("This method is only a compatible layer for Android only")
@@ -160,9 +160,9 @@ fun File.mkdirCompatible() {
     }
 }
 
-fun File.createFileCompatible() {
+fun File.createFileCompatible(mime: String = "*/*") {
     if (android11Flag) {
-        this.parentFile.toDocumentDir()
+        this.toDocumentFile(mime = mime)
     } else {
         this.createNewFile()
     }
