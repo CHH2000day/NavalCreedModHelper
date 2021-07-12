@@ -17,7 +17,7 @@ bugly {
 android {
 //flavorDimensions("common","ffmpeg")
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
     useLibrary 'org.apache.http.legacy'
     lintOptions { abortOnError false }
     applicationVariants.all { variant ->
