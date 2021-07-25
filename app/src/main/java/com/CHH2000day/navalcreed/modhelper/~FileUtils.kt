@@ -66,7 +66,7 @@ fun File.getDocumentParentOrNull(context: Context = ModHelperApplication.getModH
         }
     return docFile
 }
-
+@JvmOverloads
 fun File.toDocumentFile(
     context: Context = ModHelperApplication.getModHelperApplication(),
     mime: String = "*/*"

@@ -21,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -111,15 +111,14 @@ public class CrewPicReplacerFragment extends ModFragment {
             private void install(String name, String path) {
                 try {
                     if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_CREWPIC, ModPackageInfo.SUBTYPE_EMPTY)) {
-                        File out = new File(parent_path, path);
-                        Utils.ensureFileParent(out);
-                        if (out.exists()) {
+                        File outFile = new File(parent_path, path);
+                        if (_FileUtilsKt.existsCompatible(outFile)) {
                             ModPackageManagerV2.INSTANCE.renameConflict(path);
                         }
-                        FileOutputStream fos = new FileOutputStream(out);
-                        ba.compress(Bitmap.CompressFormat.PNG, 100, fos);
-                        fos.flush();
-                        fos.close();
+                        OutputStream fileOutputStream = getContext().getContentResolver().openOutputStream(_FileUtilsKt.toDocumentFile(outFile).getUri());
+                        ba.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
                         ModPackageManagerV2.INSTANCE.onFileInstalled(path);
                         ModPackageManagerV2.INSTANCE.postInstall(-10);
                         Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
@@ -149,7 +148,6 @@ public class CrewPicReplacerFragment extends ModFragment {
                                 @Override
                                 public void onClick(DialogInterface p1, int p2) {
                                     install(name, path);
-                                    // TODO: Implement this method
                                 }
                             });
                     adb.create().show();

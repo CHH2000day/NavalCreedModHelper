@@ -23,8 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
 import java.util.Objects;
@@ -96,13 +96,13 @@ public class BGReplacerFragment extends ModFragment {
                 Utils.ensureFileParent(target);
                 if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BACKGROUND, ModPackageInfo.SUBTYPE_EMPTY)) {
                     try {
-                        if (target.exists()) {
+                        if (_FileUtilsKt.existsCompatible(target)) {
                             ModPackageManagerV2.INSTANCE.renameConflict(path);
                         }
-                        FileOutputStream fos = new FileOutputStream(target);
-                        ba.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                        fos.flush();
-                        fos.close();
+                        OutputStream fileOutputStream = getContext().getContentResolver().openOutputStream(_FileUtilsKt.toDocumentFile(target).getUri());
+                        ba.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
+                        fileOutputStream.flush();
+                        fileOutputStream.close();
                         ModPackageManagerV2.INSTANCE.onFileInstalled(path);
                         ModPackageManagerV2.INSTANCE.postInstall(-10);
                         Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
