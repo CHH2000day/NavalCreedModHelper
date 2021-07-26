@@ -539,7 +539,7 @@ open class Main : AppCompatActivity(), UriLoader {
                                                             //Ensure target file is accessible
                                                             val f =
                                                                 File(externalCacheDir, "update.apk")
-                                                            Utils.ensureFileParent(f)
+                                                            f.mkdirCompatible()
                                                             val sink: Sink = f.sink()
                                                             //Write to file
                                                             val bufferedSink = sink.buffer()

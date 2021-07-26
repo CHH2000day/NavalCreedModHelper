@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -25,7 +24,6 @@ import java.util.HashMap;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
-import okio.Sink;
 
 public class AudioFormatHelper {
     public static final int STATUS_START = 1000;
@@ -63,6 +61,7 @@ public class AudioFormatHelper {
     //private int mSampleRate = 16000; //采样率，使用8000减少内存占用
     private int mSampleRate = 8000;
     private int mChannel = AudioFormat.CHANNEL_IN_STEREO; //立体声
+    private long byteCount = 0;
 
     public AudioFormatHelper(File audioFile, Context context) throws FileNotFoundException {
 
@@ -102,7 +101,7 @@ public class AudioFormatHelper {
     }
 
     public String compressToWav(final File targetFile, final Handler UIHandler) {
-        Utils.ensureFileParent(targetFile);
+        _FileUtilsKt.mkdirCompatible(targetFile);
         String errorcode = "";
         UIHandler.sendEmptyMessage(STATUS_START);
         BufferedSource bsource = null;
@@ -111,7 +110,7 @@ public class AudioFormatHelper {
             try {
                 //验证源文件是否已为wav格式
                 if (srcFile != null) {
-                    bsource = Okio.buffer(Okio.source(srcFile));
+                    bsource = _FileUtilsKt.toBufferedSource(cacheFile);
                 } else {
                     bsource = Okio.buffer(Okio.source(mcontext.getContentResolver().openInputStream(srcFileUri)));
                 }
@@ -138,26 +137,24 @@ public class AudioFormatHelper {
                 Utils.copyFile(cachedFile, targetFile);
 
             } else {
-                Sink s = Okio.sink(targetFile);
-                BufferedSink f = Okio.buffer(s);
+                BufferedSink bufferedSink = _FileUtilsKt.toBufferedSink(targetFile);
                 //添加文件头
                 //若源文件已为wav格式，直接读取源文件并写入
                 if (isNotNeedToCompress) {
-                    f.write(HEADER_WAV);
-                    f.writeAll(bsource);
+                    bufferedSink.write(HEADER_WAV);
+                    bufferedSink.writeAll(bsource);
                 } else {
                     //从缓存文件读取数据并处理
                     if (cacheFile == null || !cacheFile.exists()) {
                         throw new IOException("Unable to raed transcode cache,it may have been deleted by system");
                     }
-                    FileInputStream fis = new FileInputStream(cacheFile);
-                    BufferedSource bs = Okio.buffer(Okio.source(fis));
-                    f.write(getWavHeader(fis.available()));
-                    f.writeAll(bs);
+                    BufferedSource bs = _FileUtilsKt.toBufferedSource(cacheFile);
+                    bufferedSink.write(getWavHeader(byteCount));
+                    bufferedSink.writeAll(bs);
                     bs.close();
                 }
-                f.flush();
-                f.close();
+                bufferedSink.flush();
+                bufferedSink.close();
                 if (bsource != null) {
                     bsource.close();
                 }
@@ -184,7 +181,7 @@ public class AudioFormatHelper {
         cacheFile = new File(mcontext.getCacheDir(), "cache.pcm");
         //配置数据源，默认优先使用File
         if (srcFile != null) {
-            me.setDataSource(srcFile.getAbsolutePath());
+            me.setDataSource(mcontext.getContentResolver().openFileDescriptor(_FileUtilsKt.toDocumentFile(srcFile).getUri(), "r").getFileDescriptor());
         } else {
             me.setDataSource(mcontext, srcFileUri, null);
         }
@@ -214,8 +211,7 @@ public class AudioFormatHelper {
         UIHandler.sendEmptyMessage(STATUS_TRANSCODING);
 
         //创建缓存文件的输出流
-        Utils.ensureFileParent(cacheFile);
-        final BufferedSink bs = Okio.buffer(Okio.sink((cacheFile)));
+        final BufferedSink bs = _FileUtilsKt.toBufferedSink(cacheFile);
         mc.setCallback(new MediaCodec.Callback() {
 
             int role = 0;
@@ -233,6 +229,7 @@ public class AudioFormatHelper {
                     p1.queueInputBuffer(p2, 0, 0, 0, MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                 } else {
                     p1.queueInputBuffer(p2, 0, len, 0, 0);
+                    byteCount += len;
                 }
                 //读取完数据后，移入下一帧
                 me.advance();

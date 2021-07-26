@@ -93,7 +93,7 @@ public class BGReplacerFragment extends ModFragment {
 
             private void install(String name, String path) {
                 File target = new File(parent_path, path);
-                Utils.ensureFileParent(target);
+                _FileUtilsKt.mkdirCompatible(target);
                 if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BACKGROUND, ModPackageInfo.SUBTYPE_EMPTY)) {
                     try {
                         if (_FileUtilsKt.existsCompatible(target)) {

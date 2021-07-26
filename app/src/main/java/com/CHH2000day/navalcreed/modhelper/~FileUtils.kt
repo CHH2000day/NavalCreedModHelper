@@ -120,6 +120,7 @@ fun File.toDocumentDirOrNull(context: Context = ModHelperApplication.getModHelpe
     }
 }
 
+@JvmOverloads
 fun File.toBufferedSource(context: Context = ModHelperApplication.getModHelperApplication()): BufferedSource {
     return if (android11Flag) {
         context.contentResolver.openInputStream(
@@ -130,6 +131,7 @@ fun File.toBufferedSource(context: Context = ModHelperApplication.getModHelperAp
     }
 }
 
+@JvmOverloads
 fun File.toBufferedSink(context: Context = ModHelperApplication.getModHelperApplication()): BufferedSink {
     return if (android11Flag) {
         context.contentResolver.openOutputStream(

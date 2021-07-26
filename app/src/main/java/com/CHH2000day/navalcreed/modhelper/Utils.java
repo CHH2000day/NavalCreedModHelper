@@ -88,9 +88,17 @@ public class Utils {
     }
 
     public static void copyFile(File srcFile, File destFile) throws IOException {
-        ensureFileParent(destFile);
-        Source src = Okio.source(srcFile);
-        writeToFile(src, destFile);
+        if (!_FileUtilsKt.getAndroid11Flag()) {
+            ensureFileParent(destFile);
+            Source src = Okio.source(srcFile);
+            writeToFile(src, destFile);
+        } else {
+            BufferedSource source = _FileUtilsKt.toBufferedSource(srcFile);
+            BufferedSink sink = _FileUtilsKt.toBufferedSink(destFile);
+            sink.writeAll(source);
+            sink.close();
+            source.close();
+        }
     }
 
     public static void writeToFile(Source source, File destFile) throws IOException {
@@ -107,6 +115,7 @@ public class Utils {
         writeToFile(s, destFile);
     }
 
+    @Deprecated
     public static void ensureFileParent(File f) {
         if (!f.getParentFile().exists()) {
             f.getParentFile().mkdirs();

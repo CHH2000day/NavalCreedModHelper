@@ -327,8 +327,8 @@ public class BGMReplacerFragment extends ModFragment {
                         starttime = System.currentTimeMillis();
                         if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY)) {
                             File file = getTargetFile(curr_scene, curr_type, curr_music, Utils.FORMAT_WAV);
-                            Utils.ensureFileParent(file);
-                            if (file.exists()) {
+                            _FileUtilsKt.mkdirCompatible(file);
+                            if (_FileUtilsKt.existsCompatible(file)) {
                                 ModPackageManagerV2.INSTANCE.renameConflict(path);
                             }
                             String result = afh.compressToWav(file, h);

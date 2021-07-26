@@ -83,7 +83,7 @@ public class LoginMovieReplacer extends ModFragment {
                 public void run() {
                     try {
                         if (ModPackageManagerV2.INSTANCE.requestInstall(MOD_NAME, ModPackageInfo.MODTYPE_OTHER, ModPackageInfo.SUBTYPE_EMPTY)) {
-                            Utils.ensureFileParent(getTargetFile());
+                            _FileUtilsKt.mkdirCompatible(getTargetFile());
                             if (getTargetFile().exists()) {
                                 ModPackageManagerV2.INSTANCE.renameConflict(FILENAME);
                             }
