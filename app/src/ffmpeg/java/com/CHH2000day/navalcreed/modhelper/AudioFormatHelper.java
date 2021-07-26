@@ -131,7 +131,9 @@ public class AudioFormatHelper {
                 if (!targetFile.getParentFile().exists()) {
                     targetFile.getParentFile().mkdirs();
                 }
-                int result = FFmpeg.execute(new String[]{"-y", "-i", srcFile.getAbsolutePath(), targetFile.getAbsolutePath()});
+                File destFile = _FileUtilsKt.getAndroid11Flag() ? new File(mContext.getCacheDir(), "transCache.ogv") : targetFile;
+
+                int result = FFmpeg.execute(new String[]{"-y", "-i", srcFile.getAbsolutePath(), destFile.getAbsolutePath()});
                 if (RETURN_CODE_SUCCESS == result) {
 //                    UIHandler.sendEmptyMessage(STATUS_DONE);
                     activeCache(targetFile);
@@ -140,6 +142,10 @@ public class AudioFormatHelper {
                     hasError = true;
                     UIHandler.sendMessage(UIHandler.obtainMessage(STATUS_ERROR, new IOException("Failed to transcode")));
                     Config.printLastCommandOutput(Log.INFO);
+                }
+                if (_FileUtilsKt.getAndroid11Flag()) {
+                    Utils.copyFile(destFile, targetFile);
+                    _FileUtilsKt.toDocumentFile(destFile).delete();
                 }
                 isDone = true;
                 if (useCacheFile && srcFile != null) {
