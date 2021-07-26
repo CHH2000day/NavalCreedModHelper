@@ -46,9 +46,9 @@ android {
         //noinspection OldTargetApi
         targetSdkVersion 30
         versionCode 106
-        versionName 'build-2021072600'
+        versionName 'build-2021072601'
         flavorDimensions "versionCode"
-        buildConfigField "int", "BuildVersion", "10094"
+        buildConfigField "int", "BuildVersion", "10095"
         ndk{
             abiFilters 'x86', 'arm64-v8a'
         }
