@@ -143,7 +143,7 @@ public class AudioFormatHelper {
                 }
                 isDone = true;
                 if (useCacheFile && srcFile != null) {
-                    Utils.delDir(srcFile);
+                    _FileUtilsKt.toDocumentFile(srcFile).delete();
                 }
             }
         } catch (Throwable e) {
@@ -152,7 +152,7 @@ public class AudioFormatHelper {
             isDone = true;
             resultCode = e.getMessage();
             if (useCacheFile && srcFile != null) {
-                Utils.delDir(srcFile);
+                _FileUtilsKt.toDocumentFile(srcFile).delete();
             }
         }
 

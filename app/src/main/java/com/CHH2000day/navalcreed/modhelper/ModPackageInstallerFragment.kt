@@ -41,7 +41,11 @@ class ModPackageInstallerFragment : Fragment() {
     private var modPackageInstallHelper: ModPackageInstallHelper? = null
     private var isCache = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         v = inflater.inflate(R.layout.modinfopage, null)
         preview = v.findViewById(R.id.modinfopageImageView)
         infoView = v.findViewById(R.id.modinfopageTextView)
@@ -104,7 +108,7 @@ class ModPackageInstallerFragment : Fragment() {
         if (modPackageInstallHelper != null) {
             synchronized(modPackageInstallHelper!!) {
                 if (isCache) {
-                    Utils.delDir(modPackageInstallHelper!!.sourceFile)
+                    modPackageInstallHelper!!.sourceFile.toDocumentDirOrNull()?.delete()
                     isCache = false
                 }
                 modPackageInstallHelper!!.recycle()
@@ -118,7 +122,7 @@ class ModPackageInstallerFragment : Fragment() {
     private suspend fun Activity.getSource(uri: Uri): Source? {
         return withContext(Dispatchers.IO) {
             try {
-                activity!!.contentResolver.openInputStream(uri)?.source()
+                requireActivity().contentResolver.openInputStream(uri)?.source()
             } catch (e: Exception) {
                 null
             }
@@ -143,9 +147,9 @@ class ModPackageInstallerFragment : Fragment() {
                 alertDialog?.show()
                 var file: File?
                 val isSuccess = withContext(Dispatchers.IO) {
-                    file = File(activity!!.externalCacheDir, "cachedmodfile.ncmod")
+                    file = File(requireActivity().externalCacheDir, "cachedmodfile.ncmod")
                     val sink = file!!.sink().buffer()
-                    val source = activity!!.getSource(uri!!)
+                    val source = requireActivity().getSource(uri!!)
                     if (source != null) {
                         if (sink.writeAll(source) > 0) {
                             sink.close()
@@ -177,7 +181,7 @@ class ModPackageInstallerFragment : Fragment() {
     }
 
     private fun load(source: File) {
-        val adb = AlertDialog.Builder(activity!!)
+        val adb = AlertDialog.Builder(requireActivity())
         adb.setTitle(R.string.please_wait)
                 .setMessage(R.string.please_wait)
                 .setCancelable(false)
@@ -229,7 +233,7 @@ class ModPackageInstallerFragment : Fragment() {
                     ad.setMessage(Utils.getErrMsg(t))
                 }
                 if (isCache) {
-                    Utils.delDir(source)
+                    source.toDocumentFileOrNull()?.delete()
                 }
                 modPackageInstallHelper = null
             }

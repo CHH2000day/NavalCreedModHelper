@@ -50,7 +50,7 @@ class LoginMovieReplacer : ModFragment() {
                 Snackbar.make(v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
-            val adb = AlertDialog.Builder(activity!!)
+            val adb = AlertDialog.Builder(requireActivity())
             adb.setTitle(R.string.please_wait)
                     .setMessage(if (requiresTranscode) {
                         R.string.transcode_transcoding
@@ -84,9 +84,9 @@ class LoginMovieReplacer : ModFragment() {
                             }
                             if (requiresTranscode) {
                                 val path = Utils.resolveFilePath(srcFileUri, context)
-                                if (path == null) {
+                                if (path == null || android11Flag) {
                                     val source = getInStream(srcFileUri)?.source()
-                                    Utils.ensureFileParent(cacheFile)
+                                    cacheFile.mkdirCompatible()
                                     val sink = cacheFile.sink().buffer()
                                     if (source != null) {
                                         sink.writeAll(source)
@@ -101,9 +101,32 @@ class LoginMovieReplacer : ModFragment() {
                                 } else {
                                     File(path)
                                 }
-                                val result = FFmpeg.execute(arrayOf("-y", "-i", srcFile.absolutePath, "-an", "-vcodec", "theora", "-qscale", "7", "-threads", Runtime.getRuntime().availableProcessors().toString(), targetFile.absolutePath))
+                                val destFile = if (android11Flag) {
+                                    File(requireContext().cacheDir, "transCache.ogv")
+                                } else {
+                                    targetFile
+                                }
+                                val result = FFmpeg.execute(
+                                    arrayOf(
+                                        "-y",
+                                        "-i",
+                                        srcFile.absolutePath,
+                                        "-an",
+                                        "-vcodec",
+                                        "theora",
+                                        "-qscale",
+                                        "7",
+                                        "-threads",
+                                        Runtime.getRuntime().availableProcessors().toString(),
+                                        destFile.absolutePath
+                                    )
+                                )
                                 if (result != Config.RETURN_CODE_SUCCESS) {
                                     throw IOException("Transcode failed")
+                                }
+                                if (android11Flag) {
+                                    Utils.copyFile(destFile, targetFile)
+                                    destFile.toDocumentFile().delete()
                                 }
                             } else {
                                 Utils.copyFile(getInStream(srcFileUri), targetFile)
@@ -152,7 +175,7 @@ class LoginMovieReplacer : ModFragment() {
         val inputStream: InputStream?
         val path = Utils.resolveFilePath(uri, context)
         inputStream = path?.let { FileInputStream(it) }
-                ?: context!!.contentResolver.openInputStream(uri!!)
+            ?: requireContext().contentResolver.openInputStream(uri!!)
         return inputStream
     }
 

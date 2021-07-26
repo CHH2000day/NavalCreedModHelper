@@ -102,8 +102,7 @@ public class Utils {
     }
 
     public static void writeToFile(Source source, File destFile) throws IOException {
-        Sink sk = Okio.sink(destFile);
-        BufferedSink bs = Okio.buffer(sk);
+        BufferedSink bs = _FileUtilsKt.toBufferedSink(destFile);
         bs.writeAll(source);
         bs.flush();
         bs.close();
