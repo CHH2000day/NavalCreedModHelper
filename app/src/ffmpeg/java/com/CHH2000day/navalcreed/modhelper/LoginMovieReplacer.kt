@@ -33,7 +33,11 @@ class LoginMovieReplacer : ModFragment() {
     private lateinit var fileTextView: TextView
     private var target: File? = null
     private var requiresTranscode = true
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         v = inflater.inflate(R.layout.loginmoviereplacer_fragment, null)
         fileTextView = v.findViewById(R.id.loginmoviereplacerfragmentTextView)
         val select = v.findViewById<Button>(R.id.loginmoviereplacerfragmentButtonSelect)
@@ -43,7 +47,12 @@ class LoginMovieReplacer : ModFragment() {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "*/*"
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            startActivityForResult(Intent.createChooser(intent, getText(R.string.select_a_file_selector)), QUERY_CODE)
+            startActivityForResult(
+                Intent.createChooser(
+                    intent,
+                    getText(R.string.select_a_file_selector)
+                ), QUERY_CODE
+            )
         }
         update.setOnClickListener {
             if (srcFileUri == null) {
@@ -78,7 +87,7 @@ class LoginMovieReplacer : ModFragment() {
                     val cacheFile = File(context?.cacheDir, CACHE_FILE_NAME)
                     try {
                         if (requestInstall(MOD_NAME, ModPackageInfo.MODTYPE_OTHER, ModPackageInfo.SUBTYPE_EMPTY)) {
-                            Utils.ensureFileParent(targetFile)
+                            targetFile.mkdirCompatible()
                             if (targetFile.exists()) {
                                 renameConflict(FILENAME)
                             }
