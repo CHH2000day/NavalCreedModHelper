@@ -1,18 +1,18 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'bugly'
+//apply plugin: 'bugly'
 apply plugin: 'kotlinx-serialization'
 
 static def isWindows() {
     return org.gradle.internal.os.OperatingSystem.current().isWindows()
 }
-bugly {
-    appId = "2ad00775ded9d2484606c0ad466387d0"
-    appKey = "9d4cfb9a-aabb-41cd-9225-f4bce480853d"
-    if (isWindows()) {
-        execute = false
-    }
-}
+//bugly {
+//    appId = "2ad00775ded9d2484606c0ad466387d0"
+//    appKey = "9d4cfb9a-aabb-41cd-9225-f4bce480853d"
+//    if (isWindows()) {
+//        execute = false
+//    }
+//}
 
 android {
 //flavorDimensions("common","ffmpeg")
