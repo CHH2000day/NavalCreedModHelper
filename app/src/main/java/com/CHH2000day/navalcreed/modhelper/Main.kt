@@ -364,7 +364,10 @@ open class Main : AppCompatActivity(), UriLoader {
     @SuppressLint("WrongConstant")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ANDROID_11_PERMISSION_CHECK_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == ANDROID_11_PERMISSION_CHECK_CODE && resultCode == Activity.RESULT_OK && data?.data?.encodedPath?.endsWith(
+                "data"
+            ) == true
+        ) {
             //Do persistent
             ModHelperApplication.getModHelperApplication().contentResolver.takePersistableUriPermission(
                 data?.data!!,
