@@ -30,7 +30,8 @@ fun File.getDocumentParent(context: Context = ModHelperApplication.getModHelperA
     if (!this.absolutePath.contains(Regex(".+/Android/data*"))) {
         throw UnsupportedOperationException("This method is only a compatible layer for Android only")
     }
-    var docFile = DocumentFile.fromTreeUri(context, initialUri)
+    var docFile: DocumentFile? = DocumentFile.fromTreeUri(context, initialUri)
+        ?: throw IllegalStateException("Failed to access Android/data,PERMISSION DENIED")
     var pathBuffer = "/storage/emulated/0/Android/data"
     //Do mkdir
     this.parentFile!!.absolutePath.replace("/storage/emulated/0/Android/data", "").split("/")
