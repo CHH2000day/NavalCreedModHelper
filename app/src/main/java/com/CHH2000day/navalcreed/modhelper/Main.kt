@@ -14,8 +14,6 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.View.OnLongClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -30,7 +28,6 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.CHH2000day.navalcreed.modhelper.*
 import com.CHH2000day.navalcreed.modhelper.CustomShipNameHelper.init
 import com.CHH2000day.navalcreed.modhelper.ModPackageInstallerFragment.UriLoader
 import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.MigrationHelper
@@ -45,12 +42,14 @@ import kotlinx.serialization.json.Json
 import okhttp3.FormBody
 import okhttp3.Request
 import okhttp3.RequestBody
+import okhttp3.Response
 import okio.Sink
 import okio.buffer
 import okio.sink
 import java.io.File
 import java.io.IOException
 import java.util.*
+import kotlin.coroutines.resume
 
 
 open class Main : AppCompatActivity(), UriLoader {
@@ -64,11 +63,12 @@ open class Main : AppCompatActivity(), UriLoader {
 //        allowStructuredMapKeys = true
         ignoreUnknownKeys = true
     }
+    lateinit var coroutineScope: CoroutineScope
 
     @SuppressLint("HandlerLeak")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        coroutineScope = CoroutineScope(Dispatchers.Default)
         setContentView(R.layout.main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -208,6 +208,11 @@ open class Main : AppCompatActivity(), UriLoader {
 //        checkPermission()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineScope.cancel("Activity destroyed")
+    }
+
     @SuppressLint("HandlerLeak")
     private fun checkValidity() {
         //Perform check
@@ -221,7 +226,7 @@ open class Main : AppCompatActivity(), UriLoader {
             )
         }
         if (BuildConfig.DEBUG) {
-            GlobalScope.launch(Dispatchers.Main) {
+            coroutineScope.launch(Dispatchers.Main) {
                 val adb = AlertDialog.Builder(this@Main)
                 adb.setTitle(R.string.verifying_tester_authority)
                     .setMessage(R.string.please_wait)
@@ -250,6 +255,7 @@ open class Main : AppCompatActivity(), UriLoader {
         data class KeyCheckFail(val msg: String) : KeyCheckResult()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun doKeyCheck(key: String?): KeyCheckResult {
         return withContext(Dispatchers.IO) {
             if (KeyUtil.checkKeyFormat(key)) {
@@ -264,14 +270,19 @@ open class Main : AppCompatActivity(), UriLoader {
                 builder.url(ServerActions.REQUEST_URL)
                 builder.post(body)
                 val response = try {
-                    OKHttpHelper.getClient().newCall(builder.build()).execute()
+                    suspendCancellableCoroutine<Response> {
+                        val call = OKHttpHelper.getClient().newCall(builder.build())
+                        it.resume(call.execute())
+                    }
                 } catch (e: Exception) {
                     Logger.e(e, "Network error")
                     return@withContext KeyCheckResult.KeyCheckFail("Network error")
                 }
                 if (response.isSuccessful) {
                     try {
-                        val resultStr = response.body?.source()?.readUtf8()
+                        val resultStr = suspendCancellableCoroutine<String?> {
+                            it.resume(response.body?.source()?.readUtf8())
+                        }
                         if (resultStr.isNullOrBlank()) {
                             return@withContext KeyCheckResult.KeyCheckFail("Empty reply")
                         }
@@ -354,6 +365,7 @@ open class Main : AppCompatActivity(), UriLoader {
         }
     }
 
+    @SuppressLint("WrongConstant")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == ANDROID_11_PERMISSION_CHECK_CODE && resultCode == Activity.RESULT_OK) {
@@ -492,14 +504,19 @@ open class Main : AppCompatActivity(), UriLoader {
                 val client = OKHttpHelper.getClient()
                 //Send request
                 val response = try {
-                    client.newCall(builder.build()).execute()
+                    suspendCancellableCoroutine<Response> {
+                        it.resume(client.newCall(builder.build()).execute())
+                    }
                 } catch (e: Exception) {
                     Logger.e(e, "Network error")
                     return@launch
                 }
                 if (response.isSuccessful) {
                     try {
-                        val resultStr = response.body?.source()?.readUtf8() ?: return@launch
+                        val resultStr =
+                            suspendCancellableCoroutine<String?> {
+                                response.body?.source()?.readUtf8()
+                            } ?: return@launch
                         @Suppress("ConstantConditionIf")
                         when (val bean =
                             json.decodeFromString(ServerResult.serializer(), resultStr)) {
@@ -526,8 +543,12 @@ open class Main : AppCompatActivity(), UriLoader {
                                                     val requestBuilder = Request.Builder()
                                                     requestBuilder.url(versionInfo.url)
                                                     val downloadResponse = try {
-                                                        client.newCall(requestBuilder.build())
-                                                            .execute()
+                                                        suspendCancellableCoroutine<Response> {
+                                                            it.resume(
+                                                                client.newCall(requestBuilder.build())
+                                                                    .execute()
+                                                            )
+                                                        }
                                                     } catch (e: Exception) {
                                                         Logger.e(e, "Network error")
                                                         return@withContext
@@ -540,15 +561,19 @@ open class Main : AppCompatActivity(), UriLoader {
                                                             val f =
                                                                 File(externalCacheDir, "update.apk")
                                                             f.mkdirCompatible()
-                                                            val sink: Sink = f.sink()
-                                                            //Write to file
-                                                            val bufferedSink = sink.buffer()
-                                                            bufferedSink.writeAll(downloadResponse.body!!.source())
-                                                            bufferedSink.flush()
-                                                            bufferedSink.close()
-                                                            sink.close()
+                                                            isOK = suspendCancellableCoroutine {
+                                                                val sink: Sink = f.sink()
+                                                                //Write to file
+                                                                val bufferedSink = sink.buffer()
+                                                                bufferedSink.writeAll(
+                                                                    downloadResponse.body!!.source()
+                                                                )
+                                                                bufferedSink.flush()
+                                                                bufferedSink.close()
+                                                                sink.close()
+                                                                it.resume(true)
+                                                            }
                                                             updateApk = f
-                                                            isOK = true
                                                         } catch (e: Exception) {
                                                             e.printStackTrace()
                                                             Logger.e(e, "Error while downloading")
@@ -624,14 +649,18 @@ open class Main : AppCompatActivity(), UriLoader {
                 builder.url(ServerActions.REQUEST_URL)
                 builder.post(formBuilder.build())
                 val response = try {
-                    client.newCall(builder.build()).execute()
+                    suspendCancellableCoroutine<Response> {
+                        it.resume(client.newCall(builder.build()).execute())
+                    }
                 } catch (e: Exception) {
                     Logger.e(e, "Network error")
                     return@launch
                 }
                 if (response.isSuccessful) {
                     try {
-                        val resultStr = response.body?.source()?.readUtf8() ?: return@launch
+                        val resultStr = suspendCancellableCoroutine<String?> {
+                            it.resume(response.body?.source()?.readUtf8())
+                        } ?: return@launch
                         val bean = json.decodeFromString(ServerResult.serializer(), resultStr)
                         if (bean is AnnouncementResult.Success) {
                             val id = bean.id
@@ -692,10 +721,10 @@ open class Main : AppCompatActivity(), UriLoader {
         override fun onShow(p1: DialogInterface) {
             btnCancel = ad.getButton(DialogInterface.BUTTON_NEGATIVE)
             btnEnter = ad.getButton(DialogInterface.BUTTON_POSITIVE)
-            btnCancel.setOnClickListener(View.OnClickListener { doExit() })
-            btnEnter.setOnClickListener(View.OnClickListener {
-                GlobalScope.launch(Dispatchers.Main) {
-                    val key = keyinput.editableText.toString().toUpperCase(Locale.ROOT).trim()
+            btnCancel.setOnClickListener { doExit() }
+            btnEnter.setOnClickListener {
+                coroutineScope.launch(Dispatchers.Main) {
+                    val key = keyinput.editableText.toString().uppercase(Locale.ROOT).trim()
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(keyinput.windowToken, 0)
                     when (val result = doKeyCheck(key)) {
@@ -708,18 +737,18 @@ open class Main : AppCompatActivity(), UriLoader {
                     }
                 }
                 //imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
-            })
+            }
             keyinput.editableText.append(
                 modHelperApplication.mainSharedPreferences.getString(
                     KEY_AUTHKEY,
                     ""
                 )
             )
-            btnEnter.setOnLongClickListener(OnLongClickListener {
+            btnEnter.setOnLongClickListener {
                 val cmb = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 cmb.setPrimaryClip(ClipData.newPlainText("SSAID", devId))
                 true
-            })
+            }
         }
     }
 
