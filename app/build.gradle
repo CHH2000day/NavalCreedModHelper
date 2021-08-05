@@ -93,7 +93,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp-tls:4.9.0'
     implementation 'com.tencent.bugly:crashreport:3.2.3'
     implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21'
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-core:1.2.1" // JVM dependency
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
