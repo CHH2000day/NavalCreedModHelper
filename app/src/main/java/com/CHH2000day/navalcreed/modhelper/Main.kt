@@ -72,42 +72,38 @@ open class Main : AppCompatActivity(), UriLoader {
         setContentView(R.layout.main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        //Delay android 11 setup
-        if (!android11Flag) {
-            setupConfig()
-            setupUI()
-        } else {
-            //Something to bypass ScopedStorage
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                @Suppress("SpellCheckingInspection") val dataDirDocument = DocumentFile.fromTreeUri(
-                    this@Main,
-                    Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata")
-                )
-                //Check permission
-                //CAUTION:NO EFFECT AT THIS MOMENT
-                if (dataDirDocument?.canWrite() == true) {
-                    setupConfig()
-                    setupUI()
-                } else {
-                    AlertDialog.Builder(this).also {
-                        it.setMessage(R.string.android11_saf_message)
-                        it.setPositiveButton(R.string.ok) { _: DialogInterface, _: Int ->
-                            val uri = dataDirDocument!!.uri
-                            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-                            intent.apply {
-                                flags =
-                                    Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
-                                putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
-                            }
-                            startActivityForResult(intent, ANDROID_11_PERMISSION_CHECK_CODE)
+        //Delay for android 11 setup
+        //Something to bypass ScopedStorage
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            @Suppress("SpellCheckingInspection") val dataDirDocument = DocumentFile.fromTreeUri(
+                this@Main,
+                Uri.parse("content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fdata")
+            )
+            //Check permission
+            //CAUTION:NO EFFECT AT THIS MOMENT
+            if (dataDirDocument?.canWrite() == true) {
+                setupConfig()
+                setupUI()
+            } else {
+                AlertDialog.Builder(this).also {
+                    it.setMessage(R.string.android11_saf_message)
+                    it.setPositiveButton(R.string.ok) { _: DialogInterface, _: Int ->
+                        val uri = dataDirDocument!!.uri
+                        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
+                        intent.apply {
+                            flags =
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION or Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION or Intent.FLAG_GRANT_PREFIX_URI_PERMISSION
+                            putExtra(DocumentsContract.EXTRA_INITIAL_URI, uri)
                         }
-                        it.setNegativeButton(R.string.exit) { _: DialogInterface, _: Int ->
-                            finish()
-                        }
-                    }.create().show()
-                }
-
+                        startActivityForResult(intent, ANDROID_11_PERMISSION_CHECK_CODE)
+                    }
+                    it.setNegativeButton(R.string.exit) { _: DialogInterface, _: Int ->
+                        finish()
+                    }
+                }.create().show()
             }
+
+
         }
 
 //        checkValidity()
