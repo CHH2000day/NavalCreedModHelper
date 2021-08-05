@@ -28,7 +28,7 @@ private fun File.toDocumentFileUri(): Uri {
  */
 fun File.getDocumentParent(context: Context = ModHelperApplication.getModHelperApplication()): DocumentFile {
     if (!this.absolutePath.contains(Regex(".+/Android/data*"))) {
-        throw UnsupportedOperationException("This method is only a compatible layer for Android only")
+        throw UnsupportedOperationException("This method is only a compatible layer for Android only:path:$absolutePath")
     }
     var docFile: DocumentFile? = DocumentFile.fromTreeUri(context, initialUri)
         ?: throw IllegalStateException("Failed to access Android/data,PERMISSION DENIED")
