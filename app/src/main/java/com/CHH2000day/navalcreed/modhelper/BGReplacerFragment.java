@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ref.SoftReference;
 import java.util.HashSet;
-import java.util.Objects;
 
 public class BGReplacerFragment extends ModFragment {
 
@@ -107,7 +106,11 @@ public class BGReplacerFragment extends ModFragment {
                         ModPackageManagerV2.INSTANCE.postInstall(-10);
                         Snackbar.make(v, R.string.success, Snackbar.LENGTH_LONG).show();
                     } catch (Exception e) {
-                        Snackbar.make(v, Objects.requireNonNull(e.getMessage()), Snackbar.LENGTH_LONG).show();
+                        String message = e.getMessage();
+                        if (message == null) {
+                            message = "Unknown reason";
+                        }
+                        Snackbar.make(v, message, Snackbar.LENGTH_LONG).show();
                     }
                 }
             }
