@@ -370,7 +370,7 @@ open class Main : AppCompatActivity(), UriLoader {
         ) {
             //Do persistent
             ModHelperApplication.getModHelperApplication().contentResolver.takePersistableUriPermission(
-                data?.data!!,
+                data.data!!,
                 data.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             )
             setupConfig()
