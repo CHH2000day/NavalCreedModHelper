@@ -178,7 +178,7 @@ public class AudioFormatHelper {
         UIHandler.sendEmptyMessage(STATUS_LOADINGFILE);
         //配置音轨分离器
         final MediaExtractor me = new MediaExtractor();
-        cacheFile = new File(mcontext.getCacheDir(), "cache.pcm");
+        cacheFile = new File(mcontext.getExternalCacheDir(), "cache.pcm");
         //配置数据源，默认优先使用File
         if (srcFile != null) {
             me.setDataSource(mcontext.getContentResolver().openFileDescriptor(_FileUtilsKt.toDocumentFile(srcFile).getUri(), "r").getFileDescriptor());
