@@ -1,5 +1,7 @@
 package com.CHH2000day.navalcreed.modhelper;
 
+import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.AudioRecord;
@@ -24,8 +26,6 @@ import okio.BufferedSink;
 import okio.Okio;
 import okio.Sink;
 import okio.Source;
-
-import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
 
 public class AudioFormatHelper {
     //源文件
@@ -118,7 +118,7 @@ public class AudioFormatHelper {
                 isDone = true;
             } else {
                 if (useCacheFile) {
-                    srcFile = new File(mContext.getCacheDir(), "cache.audio");
+                    srcFile = new File(mContext.getExternalCacheDir(), "cache.audio");
                     Source source = Okio.source(mContext.getContentResolver().openInputStream(srcFileUri));
                     Sink sink = Okio.sink(srcFile);
                     BufferedSink bs = Okio.buffer(sink);
@@ -131,7 +131,7 @@ public class AudioFormatHelper {
                 if (!targetFile.getParentFile().exists()) {
                     targetFile.getParentFile().mkdirs();
                 }
-                File destFile = _FileUtilsKt.getAndroid11Flag() ? new File(mContext.getCacheDir(), "transCache.ogv") : targetFile;
+                File destFile = _FileUtilsKt.getAndroid11Flag() ? new File(mContext.getExternalCacheDir(), "transCache.ogv") : targetFile;
 
                 int result = FFmpeg.execute(new String[]{"-y", "-i", srcFile.getAbsolutePath(), destFile.getAbsolutePath()});
                 if (RETURN_CODE_SUCCESS == result) {
