@@ -110,16 +110,16 @@
 	<string name="modtype_captainvoice_ru_vlad">Captain voice(Russian-Serious)</string>
 	<string name="modtype_captainvoice_ru_beard">Captain voice(Russian-Heroic)</string>
 	<string name="modtype_customshipname">CustomShipName</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="email">Email</string>
-    <string name="register">Register</string>
-    <string name="login">login</string>
+	<string name="username">Username</string>
+	<string name="password">Password</string>
+	<string name="email">Email</string>
+	<string name="register">Register</string>
+	<string name="login">login</string>
 	<string name="modpkg_space_warning">No enough space left on device,this mod package requires %1$d bytes.However,there\'s only %2$d bytes left on this device.</string>
-    <string name="modpkg_conflict">Conflict with current file detected.Do you want to continue?</string>
-    <string name="mod_uninstall_warning">Confirm to remove mod : %1$s ?</string>
+	<string name="modpkg_conflict">Conflict with current file detected.Do you want to continue?</string>
+	<string name="mod_uninstall_warning">Confirm to remove mod : %1$s ?</string>
 	<string name="partly_working">Partly Working</string>
 	<string name="installed">Installed</string>
-    <string name="version_too_high">This device is not suppported.\nDue to the limitation of scoped storage which is introduced sice Android 11,we can\'t get permission needed to do modifications.</string>
-    <string name="android11_saf_message">Please select the \"SELECT\" button at the bottom of the screen in the next scene</string>
+	<string name="version_too_high">This device is not supported.\nDue to the limitation of scoped storage which is introduced sice Android 11,we can\'t get permission needed to do modifications.</string>
+	<string name="android11_saf_message">Please select the \"USE THIS FOLDER\" button at the bottom of the screen in the next scene</string>
 </resources>
