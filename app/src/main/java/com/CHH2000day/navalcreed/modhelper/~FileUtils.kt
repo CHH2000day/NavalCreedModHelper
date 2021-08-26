@@ -67,6 +67,7 @@ fun File.getDocumentParentOrNull(context: Context = ModHelperApplication.getModH
         }
     return docFile
 }
+
 @JvmOverloads
 fun File.toDocumentFile(
     context: Context = ModHelperApplication.getModHelperApplication(),
@@ -147,7 +148,7 @@ fun File.toBufferedSink(context: Context = ModHelperApplication.getModHelperAppl
  * Android 11 Compatible method
  */
 fun File.existsCompatible(): Boolean = if (android11Flag) {
-    toDocumentFile().exists()
+    toDocumentFileOrNull()?.exists() == true
 } else {
     exists()
 }

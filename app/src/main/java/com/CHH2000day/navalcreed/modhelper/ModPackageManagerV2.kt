@@ -434,7 +434,7 @@ object ModPackageManagerV2 {
             faultFlag = false
         }
         try {
-            if (dataFile.exists()) {
+            if (dataFile.existsCompatible()) {
                 val source = dataFile.toBufferedSource(application)
                 val dataStr = source.readUtf8()
                 val config = json.decodeFromString(Config.serializer(), dataStr)
