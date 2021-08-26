@@ -84,7 +84,7 @@ class LoginMovieReplacer : ModFragment() {
             object : Thread("LoginMovieIOThread") {
                 override fun run() {
                     var hasCache = false
-                    val cacheFile = File(context?.cacheDir, CACHE_FILE_NAME)
+                    val cacheFile = File(context?.externalCacheDir, CACHE_FILE_NAME)
                     try {
                         if (requestInstall(MOD_NAME, ModPackageInfo.MODTYPE_OTHER, ModPackageInfo.SUBTYPE_EMPTY)) {
                             targetFile.mkdirCompatible()
@@ -111,7 +111,7 @@ class LoginMovieReplacer : ModFragment() {
                                     File(path)
                                 }
                                 val destFile = if (android11Flag) {
-                                    File(requireContext().cacheDir, "transCache.ogv")
+                                    File(requireContext().externalCacheDir, "transCache.ogv")
                                 } else {
                                     targetFile
                                 }
