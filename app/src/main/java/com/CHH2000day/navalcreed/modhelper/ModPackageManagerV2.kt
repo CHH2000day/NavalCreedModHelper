@@ -109,8 +109,9 @@ object ModPackageManagerV2 {
             duplicatedFileInfo.forEach { info ->
                 info.files.forEach { fileInfo ->
                     File(fileInfo.currFileName).also {
-                        if (it.toDocumentFile().exists()) {
-                            it.toDocumentFile().delete()
+                        val file = it.toDocumentFileOrNull()
+                        if (file?.exists() == true) {
+                            file.delete()
                         }
                     }
                 }
@@ -146,7 +147,7 @@ object ModPackageManagerV2 {
                         if (f.currFileName == fileName) {
                             //Delete current file
                             val file = File(basePath, f.currFileName)
-                            file.toDocumentFile().delete()
+                            file.toDocumentFileOrNull()?.delete()
                             Logger.d("Deleted file:${file.path}")
                             info.files.remove(f)
                         }
@@ -154,8 +155,8 @@ object ModPackageManagerV2 {
                     //Remove a suffix for all elements before this effected
                     info.files.toList().forEach {
                         if (android11Flag) {
-                            File(basePath, it.currFileName).toDocumentFile()
-                                .renameTo(it.currFileName.removeSuffix(CONFLICT_SUFFIX))
+                            File(basePath, it.currFileName).toDocumentFileOrNull()
+                                ?.renameTo(it.currFileName.removeSuffix(CONFLICT_SUFFIX))
                         } else {
                             File(basePath, it.currFileName).renameTo(
                                 File(
@@ -185,7 +186,7 @@ object ModPackageManagerV2 {
         }
         //If no duplication
         val f = File(basePath, fileName)
-        f.delete()
+        f.toDocumentDirOrNull()?.delete()
         Logger.d("Deleted file:${f.path}")
     }
 
@@ -198,12 +199,18 @@ object ModPackageManagerV2 {
             if (info.fileName == fileName) {
                 for (fileInfo in info.files.asReversed()) {
                     if (fileInfo.currFileName.endsWith(CONFLICT_SUFFIX)) {
-                        File(basePath, fileInfo.currFileName).renameTo(
-                            File(
-                                basePath,
+                        if (android11Flag) {
+                            File(basePath, fileInfo.currFileName).toDocumentFileOrNull()?.renameTo(
                                 fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
                             )
-                        )
+                        } else {
+                            File(basePath, fileInfo.currFileName).renameTo(
+                                File(
+                                    basePath,
+                                    fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                                )
+                            )
+                        }
                         //Update installation record(1/2)
                         getInstallation(fileInfo.modName)?.files?.remove(fileInfo.currFileName)
                         //Update conflict record
@@ -216,7 +223,7 @@ object ModPackageManagerV2 {
                     } else {
                         //remove file as it's the last item in list.
                         //Modify installation info to partly working
-                        File(basePath, fileInfo.currFileName).toDocumentFile().delete()
+                        File(basePath, fileInfo.currFileName).toDocumentFileOrNull()?.delete()
                         info.files.remove(fileInfo)
                     }
                 }
