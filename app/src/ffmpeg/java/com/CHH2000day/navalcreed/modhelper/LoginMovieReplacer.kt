@@ -181,11 +181,7 @@ class LoginMovieReplacer : ModFragment() {
 
     @Throws(FileNotFoundException::class)
     private fun getInStream(uri: Uri?): InputStream? {
-        val inputStream: InputStream?
-        val path = Utils.resolveFilePath(uri, context)
-        inputStream = path?.let { FileInputStream(it) }
-            ?: requireContext().contentResolver.openInputStream(uri!!)
-        return inputStream
+        return requireContext().contentResolver.openInputStream(uri!!)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

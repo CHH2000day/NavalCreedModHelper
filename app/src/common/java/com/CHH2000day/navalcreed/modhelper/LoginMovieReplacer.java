@@ -20,7 +20,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -143,12 +142,8 @@ public class LoginMovieReplacer extends ModFragment {
 
     private InputStream getInStream(Uri uri) throws FileNotFoundException {
         InputStream in;
-        String path = Utils.resolveFilePath(uri, getContext());
-        if (path != null) {
-            in = new FileInputStream(path);
-        } else {
-            in = getContext().getContentResolver().openInputStream(uri);
-        }
+        //noinspection ConstantConditions
+        in = getContext().getContentResolver().openInputStream(uri);
         return in;
     }
 
