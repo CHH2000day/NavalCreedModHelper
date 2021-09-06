@@ -129,6 +129,9 @@ fun File.toBufferedSource(context: Context = ModHelperApplication.getModHelperAp
             toDocumentFile(context).uri
         )!!.source().buffer()
     } else {
+        if (parentFile?.exists() != true) {
+            parentFile?.mkdirs()
+        }
         source().buffer()
     }
 }
@@ -140,9 +143,13 @@ fun File.toBufferedSink(context: Context = ModHelperApplication.getModHelperAppl
             toDocumentFile(context).uri
         )!!.sink().buffer()
     } else {
+        if (parentFile?.exists() != true) {
+            parentFile?.mkdirs()
+        }
         sink().buffer()
     }
 }
+
 
 /**
  * Android 11 Compatible method
