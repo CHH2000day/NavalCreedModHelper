@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     id("kotlin-android")
     id("bugly")
+    kotlin("plugin.serialization")
 }
 android {
     compileSdk = 30
@@ -30,7 +31,7 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = true
+            isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             signingConfigs {
                 signingConfig = getByName("release")
@@ -56,7 +57,7 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
+//        viewBinding = true
     }
     dependencies {
 //        val ffmpeg by configurations
