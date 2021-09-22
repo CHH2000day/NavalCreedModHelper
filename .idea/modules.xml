@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NavalCreedModHelper.iml" filepath="$PROJECT_DIR$/NavalCreedModHelper.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/NavalCreedModHelper.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/NavalCreedModHelper.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/NavalCreedModHelper.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/NavalCreedModHelper.buildSrc.iml" />
     </modules>
   </component>
 </project>
