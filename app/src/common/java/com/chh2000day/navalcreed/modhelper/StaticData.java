@@ -3,8 +3,8 @@ package com.chh2000day.navalcreed.modhelper;
 public class StaticData
 {
 	public static final String API_KEY="1aea5425cdef9a5a7a17cafcd8df925b";
-	public static final String DATAID_ALPHA="tvUr2228";
-	public static final String DATAID_RELEASE="JNWw5557";
+	public static final String DATAID_ALPHA="dc1311a323";
+	public static final String DATAID_RELEASE="fb087fb234";
 	public static final String DATAID=BuildConfig.DEBUG?DATAID_ALPHA:DATAID_RELEASE;
 	public static final String DATA_ID_ANTIHEXIE="945119b17f";
 	//public static final String DATA_ID_ANNOUNCEMENT="ZeHyBBBP";

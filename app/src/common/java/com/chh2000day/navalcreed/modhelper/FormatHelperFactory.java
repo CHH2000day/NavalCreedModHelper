@@ -8,27 +8,26 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class FormatHelperFactory {
-    private static HashMap<Uri, AudioFormatHelper> audioHelperMap;
+    private static HashMap<Uri, AudioFormatHelper> audiohelpers;
 
     public static AudioFormatHelper getAudioFormatHelper(Uri file, Context ctx) {
         AudioFormatHelper afh = null;
-
-        if (audioHelperMap == null) {
-            audioHelperMap = new HashMap<>();
+        if (audiohelpers == null) {
+            audiohelpers = new HashMap<>();
         }
-        afh = audioHelperMap.get(file);
+        afh = audiohelpers.get(file);
         if (afh == null) {
             afh = new AudioFormatHelper(file, ctx);
-            audioHelperMap.put(file, afh);
+            audiohelpers.put(file, afh);
         }
         return afh;
     }
 
     public synchronized static void refreshCache(File file) {
-        if (audioHelperMap == null) {
+        if (audiohelpers == null) {
             return;
         }
-        Collection c = audioHelperMap.values();
+        Collection c = audiohelpers.values();
         for (Object o : c) {
             AudioFormatHelper afh = (AudioFormatHelper) o;
             afh.invalidCache(file);
@@ -36,13 +35,14 @@ public class FormatHelperFactory {
     }
 
     public synchronized static void denyAllCaches() {
-        if (audioHelperMap == null) {
+        if (audiohelpers == null) {
             return;
         }
-        Collection c = audioHelperMap.values();
+        Collection c = audiohelpers.values();
         for (Object o : c) {
             AudioFormatHelper afh = (AudioFormatHelper) o;
-            afh.invalidCache(null, AudioFormatHelper.MODE_DENY_ALL_CACHE);
+            afh.invalidCache(null, afh.MODE_DENY_ALL_CACHE);
         }
     }
+
 }
