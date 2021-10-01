@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.chh2000day.navalcreed.modhelper">
@@ -22,7 +22,7 @@
         tools:ignore="ProtectedPermissions" />
 
     <application
-        android:name="com.chh2000day.navalcreed.modhelper.ModHelperApplication"
+        android:name=".ModHelperApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon_new"
         android:label="@string/app_name"
@@ -33,15 +33,28 @@
         tools:ignore="HardcodedDebugMode"
         tools:targetApi="n">
         <activity
-            android:name="com.chh2000day.navalcreed.modhelper.Main"
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Main"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="file" />
@@ -51,6 +64,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="file" />
@@ -60,6 +74,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="content" />
@@ -69,6 +84,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:scheme="content" />
@@ -87,6 +103,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
@@ -103,8 +120,6 @@
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
             android:value="true" />
-
-
     </application>
 
 </manifest>

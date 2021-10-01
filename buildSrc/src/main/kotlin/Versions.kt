@@ -8,4 +8,5 @@ object Versions {
     const val kotlinxSerializationVersion = "1.2.2"
     const val okioVersion = "2.10.0"
     const val coroutineVersion = "1.5.1"
+    const val composeVersion = "1.0.1"
 }

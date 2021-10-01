@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NavalCreedModHelper.iml" filepath="$PROJECT_DIR$/NavalCreedModHelper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/CompatibleFile/NavalCreedModHelper.CompatibleFile.iml" filepath="$PROJECT_DIR$/.idea/modules/CompatibleFile/NavalCreedModHelper.CompatibleFile.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/NavalCreedModHelper.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/NavalCreedModHelper.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/NavalCreedModHelper.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/NavalCreedModHelper.buildSrc.iml" />
     </modules>
