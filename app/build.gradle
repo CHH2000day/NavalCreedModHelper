@@ -45,8 +45,8 @@ android {
         minSdkVersion 21
         //noinspection OldTargetApi
         targetSdkVersion 30
-        versionCode 109
-        versionName 'build-2021090800'
+        versionCode 110
+        versionName '3.5.9-release'
         flavorDimensions "versionCode"
         buildConfigField "int", "BuildVersion", "10105"
         ndk{
