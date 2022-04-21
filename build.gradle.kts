@@ -19,7 +19,7 @@ buildscript {
 }
 allprojects {
     repositories {
-        maven("https://maven.aliyun.com/repository/central")
+//        maven("https://maven.aliyun.com/repository/central")
         google()
         mavenCentral()
 //        maven { url "https://raw.github.com/bmob/bmob-android-sdk/master" }

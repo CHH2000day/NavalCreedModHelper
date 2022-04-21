@@ -6,12 +6,12 @@ plugins {
     kotlin("plugin.serialization")
 }
 android {
-    compileSdk = 30
-    buildToolsVersion = "30.0.3"
+    compileSdk = 31
+    buildToolsVersion = "31.0.0"
 
     defaultConfig {
         applicationId = "com.chh2000day.nacvalcreed.modhelper.v4"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 30
         versionCode = 110
         versionName = "build-2021092200"
@@ -111,7 +111,7 @@ android {
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.composeVersion}")
         debugImplementation("androidx.compose.ui:ui-tooling:${Versions.composeVersion}")
 
-        "ffmpegImplementation"("com.arthenica:mobile-ffmpeg-video:4.4.LTS")
+        "ffmpegImplementation"("com.arthenica:ffmpeg-kit-video:4.5.1")
     }
 }
 
