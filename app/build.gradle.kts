@@ -46,7 +46,7 @@ android {
             }
         }
     }
-    flavorDimensions("transcodeEngine")
+    flavorDimensions += listOf("transcodeEngine")
     productFlavors {
         create("common") {
             dimension = "transcodeEngine"
@@ -82,23 +82,28 @@ android {
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerializationVersion}") // JVM dependency
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerializationVersion}")
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineVersion}")
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutineVersion}")
 
-        implementation("com.google.android.material:material:1.4.0")
-        implementation("androidx.appcompat:appcompat:1.3.1")
+        implementation("com.google.android.material:material:1.5.0")
+        implementation("androidx.appcompat:appcompat:1.4.1")
         implementation("androidx.recyclerview:recyclerview:1.2.1")
         implementation("androidx.cardview:cardview:1.0.0")
-        implementation("androidx.core:core-ktx:1.6.0")
+        implementation("androidx.core:core-ktx:1.7.0")
 
         implementation("androidx.compose.ui:ui:${Versions.composeVersion}")
         implementation("androidx.compose.material:material:${Versions.composeVersion}")
         implementation("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
-        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-        implementation("androidx.activity:activity-compose:1.3.1")
+        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+        implementation("androidx.activity:activity-compose:1.4.0")
+        implementation("androidx.navigation:navigation-compose:2.5.0-beta01")
 
-        implementation("com.squareup.okio:okio:3.0.0-alpha.10")
-        implementation("com.squareup.okhttp3:okhttp:4.9.0")
-        implementation("com.squareup.okhttp3:okhttp-tls:4.9.0")
+
+        implementation("com.squareup.okio:okio:${Versions.okioVersion}")
+        implementation("com.squareup.okhttp3:okhttp:4.9.3")
+        implementation("com.squareup.okhttp3:okhttp-tls:4.9.3")
+        implementation("io.ktor:ktor-client-core:${Versions.ktorVersion}")
+        implementation("io.ktor:ktor-client-okhttp:${Versions.ktorVersion}")
+
 
         implementation("com.tencent.bugly:crashreport:3.4.4")
 

@@ -8,7 +8,7 @@ buildscript {
         maven("https://maven.aliyun.com/repository/google")
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.2")
+        classpath("com.android.tools.build:gradle:7.1.3")
         classpath("com.tencent.bugly:symtabfileuploader:2.2.1")
         //noinspection DifferentKotlinGradleVersion
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinVersion}")

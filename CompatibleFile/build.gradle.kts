@@ -28,18 +28,17 @@ android {
     }
 }
 dependencies {
-    compileOnly("androidx.core:core-ktx:1.6.0")
-    compileOnly("androidx.appcompat:appcompat:1.3.1")
-    compileOnly("com.google.android.material:material:1.4.0")
-    compileOnly("com.squareup.okio:okio:3.0.0-alpha.10")
+    compileOnly("androidx.core:core-ktx:1.7.0")
+    compileOnly("androidx.appcompat:appcompat:1.4.1")
+    compileOnly("com.google.android.material:material:1.5.0")
+    compileOnly("com.squareup.okio:okio:3.1.0")
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutineVersion}")
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
-
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
     compileOnly("androidx.compose.ui:ui:${Versions.composeVersion}")
     compileOnly("androidx.compose.material:material:${Versions.composeVersion}")
     compileOnly("androidx.compose.ui:ui-tooling-preview:${Versions.composeVersion}")
-    compileOnly("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    compileOnly("androidx.activity:activity-compose:1.3.1")
+    compileOnly("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    compileOnly("androidx.activity:activity-compose:1.4.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
