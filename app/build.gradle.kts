@@ -103,7 +103,8 @@ android {
         implementation("com.squareup.okhttp3:okhttp-tls:4.9.3")
         implementation("io.ktor:ktor-client-core:${Versions.ktorVersion}")
         implementation("io.ktor:ktor-client-okhttp:${Versions.ktorVersion}")
-
+        implementation("io.ktor:ktor-client-content-negotiation:${Versions.ktorVersion}")
+        implementation("io.ktor:ktor-serialization-kotlinx-json:${Versions.ktorVersion}")
 
         implementation("com.tencent.bugly:crashreport:3.4.4")
 
