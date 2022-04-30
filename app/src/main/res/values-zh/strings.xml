@@ -114,12 +114,21 @@
     <string name="email">邮箱</string>
     <string name="register">注册</string>
     <string name="login">登录</string>
-	<string name="modpkg_space_warning">剩余空间不足!这个mod包需要%1$d字节,但是设备上只有%2$d字节空间剩余</string>
-	<string name="modpkg_conflict">检测到与已有文件的冲突,是否继续?</string>
+    <string name="modpkg_space_warning">剩余空间不足!这个mod包需要%1$d字节,但是设备上只有%2$d字节空间剩余</string>
+    <string name="modpkg_conflict">检测到与已有文件的冲突,是否继续?</string>
     <string name="mod_uninstall_warning">确定要移除mod:%1$s吗?</string>
-	<string name="partly_working">部分工作</string>
-	<string name="installed">已安装</string>
+    <string name="partly_working">部分工作</string>
+    <string name="installed">已安装</string>
     <string name="version_too_high">不支持的设备!\n安卓11起强制执行的分区储存使的我们无法获取所需的权限,因此我们无法对这些系统进行适配</string>
     <string name="android11_saf_message">请在下个界面中直接选择屏幕下方的\"使用此文件夹\"</string>
+    <string name="background_img">背景图片</string>
+    <string name="background_music">背景音乐</string>
+    <string name="crew_profile_img">舰长头像</string>
+    <string name="custom_ship_name">自定义船名</string>
+    <string name="about">关于</string>
+    <string name="settings">设定</string>
+    <string name="login_movie">登录动画</string>
+    <string name="mod_manager">Mod管理器</string>
+    <string name="mod_installer">Mod安装器</string>
 
 </resources>

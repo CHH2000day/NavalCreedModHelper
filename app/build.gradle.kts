@@ -13,9 +13,9 @@ android {
         applicationId = "com.chh2000day.nacvalcreed.modhelper.v4"
         minSdk = 24
         targetSdk = 30
-        versionCode = 110
-        versionName = "build-2021092200"
-        buildConfigField("int", "BuildVersion", "10106")
+        versionCode = 111
+        versionName = "build-2022043000"
+        buildConfigField("int", "BuildVersion", "10107")
         ndk {
             abiFilters += setOf("arm64-v8a", "x86")
         }

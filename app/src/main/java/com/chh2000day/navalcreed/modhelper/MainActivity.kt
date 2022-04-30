@@ -7,6 +7,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.navigation.compose.rememberNavController
 import com.chh2000day.navalcreed.modhelper.ui.ActivityContent
 import com.chh2000day.navalcreed.modhelper.ui.MainTopBar
 import com.chh2000day.navalcreed.modhelper.ui.theme.NavalCreedModHelperTheme
@@ -31,6 +32,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NavalCreedModHelperTheme {
+                val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
                 val coroutineScope = rememberCoroutineScope()
                 // A surface container using the 'background' color from the theme
@@ -46,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         MainTopBar()
                     }
                 ) {
-                    ActivityContent()
+                    ActivityContent(navController)
                 }
             }
         }

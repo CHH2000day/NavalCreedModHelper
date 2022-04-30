@@ -123,4 +123,13 @@
     <string name="version_too_high">This device is not supported.\nDue to the limitation of scoped storage which is introduced sice Android 11,we can\'t get permission needed to do modifications.</string>
     <string name="android11_saf_message">Please select the \"USE THIS FOLDER\" button at the bottom of the screen in the next scene</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="background_img">Background image</string>
+    <string name="background_music">Background music</string>
+    <string name="crew_profile_img">Crew profile image</string>
+    <string name="custom_ship_name">Custom shipname</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="login_movie">Login movie</string>
+    <string name="mod_manager">Mod manager</string>
+    <string name="mod_installer">Mod installer</string>
 </resources>
