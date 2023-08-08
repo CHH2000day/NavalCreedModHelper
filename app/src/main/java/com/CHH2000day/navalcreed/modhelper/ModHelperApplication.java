@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.app.Application;
 import android.content.Intent;

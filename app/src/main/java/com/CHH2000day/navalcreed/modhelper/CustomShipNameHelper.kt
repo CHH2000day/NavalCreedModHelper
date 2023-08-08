@@ -1,6 +1,8 @@
-package com.CHH2000day.navalcreed.modhelper
+package com.chh2000day.navalcreed.modhelper
 
 import android.text.TextUtils
+import com.chh2000day.navalcreed.modhelper.toBufferedSink
+import com.chh2000day.navalcreed.modhelper.toBufferedSource
 import com.orhanobut.logger.Logger
 import okio.BufferedSource
 import java.io.File

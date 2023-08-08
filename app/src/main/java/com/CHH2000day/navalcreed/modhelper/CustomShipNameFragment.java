@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.os.Bundle;
 import android.os.Looper;
@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.CHH2000day.navalcreed.modhelper.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
 

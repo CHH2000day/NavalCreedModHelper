@@ -1,14 +1,14 @@
 @file:Suppress("DEPRECATION")
 
-package com.CHH2000day.navalcreed.modhelper
+package com.chh2000day.navalcreed.modhelper
 
 import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.os.Build
-import androidx.annotation.NonNull
-import com.orhanobut.logger.Logger
+import com.CHH2000day.navalcreed.modhelper.R
 import kotlinx.serialization.Serializable
+import com.orhanobut.logger.Logger
 import kotlinx.serialization.json.Json
 import java.io.File
 import kotlin.concurrent.thread
@@ -53,11 +53,11 @@ object ModPackageManagerV2 {
      * Check if there's a conflict with existing mod
      */
     fun checkInstall(
-        name: String,
-        type: String,
-        subType: String,
-        version: Int,
-        files: MutableSet<String>
+            name: String,
+            type: String,
+            subType: String,
+            version: Int,
+            files: MutableSet<String>
     ): QueryResult {
         Logger.d("Checking installation status for mod $name-$type-$subType version$version")
         val result = QueryResult(result = QueryResult.RESULT_OK, conflictList = mutableSetOf())
@@ -156,13 +156,13 @@ object ModPackageManagerV2 {
                     info.files.toList().forEach {
                         if (android11Flag) {
                             File(basePath, it.currFileName).toDocumentFileOrNull()
-                                ?.renameTo(it.currFileName.removeSuffix(CONFLICT_SUFFIX))
+                                    ?.renameTo(it.currFileName.removeSuffix(CONFLICT_SUFFIX))
                         } else {
                             File(basePath, it.currFileName).renameTo(
-                                File(
-                                    basePath,
-                                    it.currFileName.removeSuffix(CONFLICT_SUFFIX)
-                                )
+                                    File(
+                                            basePath,
+                                            it.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                                    )
                             )
                         }
 
@@ -201,14 +201,14 @@ object ModPackageManagerV2 {
                     if (fileInfo.currFileName.endsWith(CONFLICT_SUFFIX)) {
                         if (android11Flag) {
                             File(basePath, fileInfo.currFileName).toDocumentFileOrNull()?.renameTo(
-                                fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                                    fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
                             )
                         } else {
                             File(basePath, fileInfo.currFileName).renameTo(
-                                File(
-                                    basePath,
-                                    fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
-                                )
+                                    File(
+                                            basePath,
+                                            fileInfo.currFileName.removeSuffix(CONFLICT_SUFFIX)
+                                    )
                             )
                         }
                         //Update installation record(1/2)
@@ -286,10 +286,10 @@ object ModPackageManagerV2 {
                 //Rename it to $OLDNAME.old
                 Logger.d("Renaming file for affected mod:${installation.name}")
                 File(basePath, duplicatedFile.currFileName).renameTo(
-                    File(
-                        basePath,
-                        duplicatedFile.currFileName + CONFLICT_SUFFIX
-                    )
+                        File(
+                                basePath,
+                                duplicatedFile.currFileName + CONFLICT_SUFFIX
+                        )
                 )
                 //Update name in existed installation info
                 installation.files.remove(duplicatedFile.currFileName)
@@ -305,17 +305,17 @@ object ModPackageManagerV2 {
 
     private fun getBasePath(installation: ModInstallationInfo): String {
         return ModPackageInstallHelper.getPath(
-            installation.type,
-            ModPackageInstallHelper.getSubTypeId(installation.subType),
-            application
+                installation.type,
+                ModPackageInstallHelper.getSubTypeId(installation.subType),
+                application
         )
     }
 
     private fun getBasePath(type: String, subType: String): String {
         return ModPackageInstallHelper.getPath(
-            type,
-            ModPackageInstallHelper.getSubTypeId(subType),
-            application
+                type,
+                ModPackageInstallHelper.getSubTypeId(subType),
+                application
         )
     }
 
@@ -369,10 +369,10 @@ object ModPackageManagerV2 {
                 }
             }
             pendingTask = PendingInstallation(
-                name = name,
-                type = type,
-                subType = subType,
-                isUpdate = isUpdate
+                    name = name,
+                    type = type,
+                    subType = subType,
+                    isUpdate = isUpdate
             )
             installationFiles = mutableSetOf()
             return true
@@ -399,12 +399,12 @@ object ModPackageManagerV2 {
                 installation?.files?.plusAssign(installationFiles)
             } else {
                 val installationInfo = ModInstallationInfo(
-                    name = pendingTask!!.name,
-                    type = pendingTask!!.type,
-                    subType = pendingTask!!.subType,
-                    version = version,
-                    status = Status.INSTALLED,
-                    files = installationFiles.toMutableSet()
+                        name = pendingTask!!.name,
+                        type = pendingTask!!.type,
+                        subType = pendingTask!!.subType,
+                        version = version,
+                        status = Status.INSTALLED,
+                        files = installationFiles.toMutableSet()
                 )
                 modList.add(installationInfo)
             }
@@ -462,28 +462,29 @@ object ModPackageManagerV2 {
         modType[ModPackageInfo.MODTYPE_CREWPIC] = res.getString(R.string.modtype_crewpic)
         modType[ModPackageInfo.MODTYPE_SOUNDEFFECT] = res.getString(R.string.modtype_soundeffect)
         modType[ModPackageInfo.MODTYPE_SOUNDEFFECT_PRIM] =
-            res.getString(R.string.modtype_soundeffect_prim)
+                res.getString(R.string.modtype_soundeffect_prim)
         modType[ModPackageInfo.MODTYPE_SOUNDEFFECT_SEC] =
-            res.getString(R.string.modtype_soundeffect_sec)
+                res.getString(R.string.modtype_soundeffect_sec)
         modType[ModPackageInfo.MODTYPE_CV] = res.getString(R.string.modtype_captainvoice)
         modType[ModPackageInfo.SUB_MODTYPE_CV_CN] = res.getString(R.string.modtype_captainvoice_cn)
         modType[ModPackageInfo.SUB_MODTYPE_CV_EN] = res.getString(R.string.modtype_captainvoice_en)
         modType[ModPackageInfo.SUB_MODTYPE_CV_JP_CV] =
-            res.getString(R.string.modtype_captainvoice_ja_cv)
+                res.getString(R.string.modtype_captainvoice_ja_cv)
         modType[ModPackageInfo.SUB_MODTYPE_CV_JP_BB] =
-            res.getString(R.string.modtype_captainvoice_ja_bb)
+                res.getString(R.string.modtype_captainvoice_ja_bb)
         modType[ModPackageInfo.SUB_MODTYPE_CV_JP_CA] =
-            res.getString(R.string.modtype_captainvoice_ja_ca)
+                res.getString(R.string.modtype_captainvoice_ja_ca)
         modType[ModPackageInfo.SUB_MODTYPE_CV_JP_DD] =
-            res.getString(R.string.modtype_captainvoice_ja_dd)
+                res.getString(R.string.modtype_captainvoice_ja_dd)
         modType[ModPackageInfo.SUB_MODTYPE_CV_DE] = res.getString(R.string.modtype_captainvoice_de)
         modType[ModPackageInfo.SUB_MODTYPE_CV_RU] = res.getString(R.string.modtype_captainvoice_ru)
+        modType[ModPackageInfo.SUB_MODTYPE_CV_FR] = res.getString(R.string.modtype_captainvoice_fr)
         modType[ModPackageInfo.SUB_MODTYPE_CV_RU_VLAD] =
-            res.getString(R.string.modtype_captainvoice_ru_vlad)
+                res.getString(R.string.modtype_captainvoice_ru_vlad)
         modType[ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD] =
-            res.getString(R.string.modtype_captainvoice_ru_beard)
+                res.getString(R.string.modtype_captainvoice_ru_beard)
         modType[ModPackageInfo.MOSTYPE_CUSTOMSHIPNAME] =
-            res.getString(R.string.modtype_customshipname)
+                res.getString(R.string.modtype_customshipname)
 
         inited = true
         Logger.i("ModPackageManagerV2 initialized")
@@ -502,10 +503,10 @@ object ModPackageManagerV2 {
             synchronized(duplicatedFileInfo) {
                 synchronized(modList) {
                     val config = Config(
-                        version = managerVer,
-                        isOverride = override,
-                        modInfos = modList.toMutableList(),
-                        duplicationInfos = duplicatedFileInfo.toMutableSet()
+                            version = managerVer,
+                            isOverride = override,
+                            modInfos = modList.toMutableList(),
+                            duplicationInfos = duplicatedFileInfo.toMutableSet()
                     )
 //                    Utils.ensureFileParent(dataFile)
                     if (!dataFile.toDocumentFile().canWrite()) {
@@ -513,7 +514,7 @@ object ModPackageManagerV2 {
                         return@thread
                     }
                     val sink =
-                        dataFile.toBufferedSink(ModHelperApplication.getModHelperApplication())
+                            dataFile.toBufferedSink(ModHelperApplication.getModHelperApplication())
                     sink.writeUtf8(json.encodeToString(Config.serializer(), config))
                     sink.close()
                 }
@@ -531,20 +532,20 @@ object ModPackageManagerV2 {
 
     @Serializable
     data class ModInstallationInfo(
-        val name: String,
-        var type: String,
-        var subType: String,
-        var version: Int,
-        var status: Status,
-        var files: MutableSet<String>
+            val name: String,
+            var type: String,
+            var subType: String,
+            var version: Int,
+            var status: Status,
+            var files: MutableSet<String>
     ) {}
 
     @Serializable
     data class Config(
-        var version: Int = managerVer,
-        var isOverride: Boolean,
-        var modInfos: MutableList<ModInstallationInfo>,
-        var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf()
+            var version: Int = managerVer,
+            var isOverride: Boolean,
+            var modInfos: MutableList<ModInstallationInfo>,
+            var duplicationInfos: MutableSet<DuplicationInfo> = mutableSetOf()
     )
 
     /**
@@ -559,10 +560,10 @@ object ModPackageManagerV2 {
     }
 
     data class PendingInstallation(
-        val name: String,
-        val type: String,
-        val subType: String,
-        val isUpdate: Boolean
+            val name: String,
+            val type: String,
+            val subType: String,
+            val isUpdate: Boolean
     )
 
     enum class Status(val status: Int) {
@@ -578,14 +579,14 @@ object ModPackageManagerV2 {
      */
     @Serializable
     data class DuplicationInfo(
-        val fileName: String,
-        var files: MutableList<DuplicatedFile> = mutableListOf()
+            val fileName: String,
+            var files: MutableList<DuplicatedFile> = mutableListOf()
     )
 
 
     @Suppress("DEPRECATION")
     class MigrationHelper(@SuppressLint("StaticFieldLeak") private val activity: Main) :
-        AsyncTask<File, String, Boolean>() {
+            AsyncTask<File, String, Boolean>() {
         private lateinit var progressDialog: ProgressDialog
         override fun onPreExecute() {
             super.onPreExecute()
@@ -598,7 +599,7 @@ object ModPackageManagerV2 {
             progressDialog.show()
         }
 
-        override fun doInBackground(@NonNull vararg params: File?): Boolean {
+        override fun doInBackground(vararg params: File?): Boolean {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
                 throw UnsupportedOperationException("Migration helper is not available!")
             }
@@ -612,9 +613,9 @@ object ModPackageManagerV2 {
                         subType = it.key
                     }
                     val parentDirPath = ModPackageInstallHelper.getPath(
-                        type,
-                        ModPackageInstallHelper.getSubTypeId(subType),
-                        application
+                            type,
+                            ModPackageInstallHelper.getSubTypeId(subType),
+                            application
                     )
                     val prefix = parentDirPath + File.separatorChar
                     val fileNames = listFiles(File(parentDirPath))
@@ -623,14 +624,14 @@ object ModPackageManagerV2 {
                         files.add(it.removePrefix(prefix))
                     }
                     modList.add(
-                        ModInstallationInfo(
-                            it.value,
-                            type,
-                            subType,
-                            -1,
-                            ModPackageManagerV2.Status.INSTALLED,
-                            files
-                        )
+                            ModInstallationInfo(
+                                    it.value,
+                                    type,
+                                    subType,
+                                    -1,
+                                    ModPackageManagerV2.Status.INSTALLED,
+                                    files
+                            )
                     )
                 }
                 publishProgress()

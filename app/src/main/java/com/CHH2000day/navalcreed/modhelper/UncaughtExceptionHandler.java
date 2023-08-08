@@ -1,10 +1,12 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.CHH2000day.navalcreed.modhelper.R;
 
 import java.io.File;
 import java.io.FileInputStream;

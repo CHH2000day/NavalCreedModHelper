@@ -1,6 +1,8 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import androidx.fragment.app.Fragment;
+
+import com.chh2000day.navalcreed.modhelper.Main;
 
 public abstract class ModFragment extends Fragment {
     /*

@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -17,7 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.CHH2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException;
+import com.chh2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException;
+import com.CHH2000day.navalcreed.modhelper.R;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;
@@ -46,6 +47,8 @@ public class ModPackageInstallHelper {
     public static final int SUBTYPE_CV_DE = 1206;
     public static final int SUBTYPE_CV_RU_BEARD = 1207;
     public static final int SUBTYPE_CV_RU_VLAD = 1208;
+
+    public static final int SUBTYPE_CV_FR = 1209;
     /*
     Mark original russian voice for migration.
     */
@@ -74,6 +77,7 @@ public class ModPackageInstallHelper {
     private static final String SUBPATH_CV_RU = File.separatorChar + "RussianUsual";
     private static final String SUBPATH_CV_RU_VLAD = File.separatorChar + "RussianUsual_Vlad";
     private static final String SUBPATH_CV_RU_BEARD = File.separatorChar + "RussianUsual_Beard";
+    public static final String SUBPATH_CV_FR = File.separatorChar + "frenchusual";
     private onModPackageLoadDoneListener mlistener;
     private long totalFileSize;
     private Handler mHandler;
@@ -122,6 +126,9 @@ public class ModPackageInstallHelper {
             case ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD:
                 subt = ModPackageInstallHelper.SUBTYPE_CV_RU_BEARD;
                 break;
+            case ModPackageInfo.SUB_MODTYPE_CV_FR:
+                subt = ModPackageInstallHelper.SUBTYPE_CV_FR;
+                break;
         }
         return subt;
     }
@@ -159,6 +166,8 @@ public class ModPackageInstallHelper {
             case SUBTYPE_CV_RU_BEARD:
                 s = ModPackageInfo.SUB_MODTYPE_CV_RU_BEARD;
                 break;
+            case SUBTYPE_CV_FR:
+                s = ModPackageInfo.SUB_MODTYPE_CV_FR;
             default:
                 s = ModPackageInfo.SUBTYPE_EMPTY;
                 break;
@@ -203,6 +212,8 @@ public class ModPackageInstallHelper {
                     case SUBTYPE_CV_RU_BEARD:
                         pth += SUBPATH_CV_RU_BEARD;
                         break;
+                    case SUBTYPE_CV_FR:
+                        pth += SUBPATH_CV_FR;
                 }
                 break;
             case ModPackageInfo.MODTYPE_BACKGROUND:

@@ -1,7 +1,9 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.content.Context;
 import android.content.res.Resources;
+
+import com.CHH2000day.navalcreed.modhelper.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

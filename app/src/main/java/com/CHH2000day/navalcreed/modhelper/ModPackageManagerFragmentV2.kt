@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper
+package com.chh2000day.navalcreed.modhelper
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,11 +11,11 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.ToggleButton
-import androidx.annotation.NonNull
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.CHH2000day.navalcreed.modhelper.R
 import com.google.android.material.snackbar.Snackbar
 
 class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChangedListener {
@@ -44,7 +44,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         if (ModPackageManagerV2.override) {
             ovrdSwitch.isChecked = true
         }
-        adapter = MyAdapter(activity!!)
+        adapter = MyAdapter(requireActivity())
         recyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerView.addItemDecoration(VerticalSpaceItemDecoration())
         recyclerView.adapter = adapter
@@ -110,6 +110,9 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
                     ModPackageInfo.SUB_MODTYPE_CV_JP_DD -> {
                         getString(R.string.modtype_captainvoice_ja_dd)
                     }
+                    ModPackageInfo.SUB_MODTYPE_CV_FR -> {
+                        getString(R.string.modtype_captainvoice_fr)
+                    }
                     else -> {
                         getString(R.string.modtype_captainvoice)
                     }
@@ -159,7 +162,7 @@ class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChange
         }
 
 
-        override fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val v = (holder as ViewHolder).view
             val relativeLayout = v.findViewById<RelativeLayout>(R.id.modmanageritemV2RelativeLayout)
             val modName = v.findViewById<TextView>(R.id.modmanageritemV2ModName)

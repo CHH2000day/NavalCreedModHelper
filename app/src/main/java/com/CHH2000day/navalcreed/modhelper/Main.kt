@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper
+package com.chh2000day.navalcreed.modhelper
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -28,9 +28,10 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.CHH2000day.navalcreed.modhelper.CustomShipNameHelper.init
-import com.CHH2000day.navalcreed.modhelper.ModPackageInstallerFragment.UriLoader
-import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.MigrationHelper
+import com.chh2000day.navalcreed.modhelper.CustomShipNameHelper.init
+import com.chh2000day.navalcreed.modhelper.ModPackageInstallerFragment.UriLoader
+import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.MigrationHelper
+import com.CHH2000day.navalcreed.modhelper.R
 import com.chh2000day.navalcreedmodhelper_v2.structs.AnnouncementResult
 import com.chh2000day.navalcreedmodhelper_v2.structs.ServerResult
 import com.chh2000day.navalcreedmodhelper_v2.structs.VersionCheckResult
@@ -486,7 +487,7 @@ open class Main : AppCompatActivity(), UriLoader {
                 val body: RequestBody = FormBody.Builder()
                     .add(ServerActions.ACTION, ServerActions.ACTION_CHECKUPDATE)
                     .add(
-                        ServerActions.VALUE_BUILD_TYPE,
+                            ServerActions.VALUE_BUILD_TYPE,
                         if (useAlphaChannel) ServerActions.BUILD_TYPE_ALPHA else ServerActions.BUILD_TYPE_RELEASE
                     )
                     .add(ServerActions.VALUE_LEGACY, "0")
@@ -581,7 +582,7 @@ open class Main : AppCompatActivity(), UriLoader {
                                                             ad.dismiss()
                                                             Snackbar.make(
                                                                 mContentView,
-                                                                R.string.failed,
+                                                                    R.string.failed,
                                                                 Snackbar.LENGTH_LONG
                                                             ).show()
                                                         }
@@ -635,7 +636,7 @@ open class Main : AppCompatActivity(), UriLoader {
                 val formBuilder = FormBody.Builder()
                 formBuilder.add(ServerActions.ACTION, ServerActions.ACTION_GET_ANNOUNCEMENT)
                 formBuilder.add(
-                    ServerActions.VALUE_BUILD_TYPE,
+                        ServerActions.VALUE_BUILD_TYPE,
                     if (BuildConfig.DEBUG) ServerActions.BUILD_TYPE_ALPHA else ServerActions.BUILD_TYPE_RELEASE
                 )
                 formBuilder.add(ServerActions.VALUE_LEGACY, "0")
