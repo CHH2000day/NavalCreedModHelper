@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.os.Build
-import com.CHH2000day.navalcreed.modhelper.R
 import kotlinx.serialization.Serializable
 import com.orhanobut.logger.Logger
 import kotlinx.serialization.json.Json

@@ -15,7 +15,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.CHH2000day.navalcreed.modhelper.R
 import com.google.android.material.snackbar.Snackbar
 
 class ModPackageManagerFragmentV2 : Fragment(), ModPackageManagerV2.OnDataChangedListener {

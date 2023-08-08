@@ -16,7 +16,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.CHH2000day.navalcreed.modhelper.R
 import com.chh2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException
 import com.chh2000day.navalcreed.modhelper.ModPackageInstallHelper.onModPackageLoadDoneListener
 import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.getModTypeName

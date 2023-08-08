@@ -18,7 +18,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.CHH2000day.navalcreed.modhelper.R;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;

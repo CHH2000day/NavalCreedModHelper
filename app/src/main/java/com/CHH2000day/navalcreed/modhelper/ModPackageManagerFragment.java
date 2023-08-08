@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.CHH2000day.navalcreed.modhelper.R;
 import com.google.android.material.snackbar.Snackbar;
 
 public class ModPackageManagerFragment extends Fragment implements ModPackageManager.OnDataChangedListener

@@ -10,7 +10,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.CHH2000day.navalcreed.modhelper.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
 

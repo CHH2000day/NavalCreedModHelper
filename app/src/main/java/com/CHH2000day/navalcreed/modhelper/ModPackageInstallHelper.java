@@ -18,7 +18,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.chh2000day.navalcreed.modhelper.ModPackageInfo.IllegalModInfoException;
-import com.CHH2000day.navalcreed.modhelper.R;
 import com.orhanobut.logger.Logger;
 
 import java.io.File;

@@ -31,7 +31,6 @@ import androidx.viewpager.widget.ViewPager
 import com.chh2000day.navalcreed.modhelper.CustomShipNameHelper.init
 import com.chh2000day.navalcreed.modhelper.ModPackageInstallerFragment.UriLoader
 import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.MigrationHelper
-import com.CHH2000day.navalcreed.modhelper.R
 import com.chh2000day.navalcreedmodhelper_v2.structs.AnnouncementResult
 import com.chh2000day.navalcreedmodhelper_v2.structs.ServerResult
 import com.chh2000day.navalcreedmodhelper_v2.structs.VersionCheckResult
