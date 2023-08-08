@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.CHH2000day.navalcreed.modhelper.R;
 import com.google.android.material.snackbar.Snackbar;
 import com.orhanobut.logger.Logger;
 

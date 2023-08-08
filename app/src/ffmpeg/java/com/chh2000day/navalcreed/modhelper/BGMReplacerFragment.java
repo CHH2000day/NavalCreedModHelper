@@ -1,5 +1,6 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -7,7 +8,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,13 +36,7 @@ import java.util.HashSet;
 
 public class BGMReplacerFragment extends ModFragment {
 
-    public static final int TYPE_HARBOR = 10;
-    public static final int TYPE_LOADING = 11;
-    public static final int TYPE_BATTLESTART = 12;
-    public static final int TYPE_BATTLEHEAT = 13;
-    public static final int TYPE_BATTLEEND = 14;
-    public static final int TYPE_BATTLEVICTORY = 15;
-    public static final int TYPE_BATTLEFAIL = 16;
+
     private static final int MUSICCOUNT_HARBOR = 8;
     private static final int MUSICCOUNT_LOADING = 3;
     private static final int MUSICCOUNT_BATTLESTART = 4;
@@ -51,18 +45,29 @@ public class BGMReplacerFragment extends ModFragment {
     private static final int MUSICCOUNT_BATTLEVICTORY = 4;
     private static final int MUSICCOUNT_BATTLEFAIL = 2;
     private static final String[] SCENE = {"Harbor", "Loading", "BattleStart", "BattleHeat", "BattleEnd", "Victory", "Fial"/*因为你游程序员把Fail打成Fial了，所以将错就错了*/};
-    private static final String[] FILENAMES_UNIVERSAL = {"1", "2", "3", "4", "5", "6", "7", "8"};
-    private static final String[] FILENAMES_BATTLEFAIL = {"Danger", "Fail"};
-    private static final String[] FILENAMES_LOADING = {"Loading", "Login", "Queuing"};
-    private static final int TEXTVIEW_RES_ID = R.layout.support_simple_spinner_dropdown_item;
-    private static final int QUERY_CODE = 2;
-    private static final String PREFIX = "CUSTOMBGM";
     //private static final String[] SCENE_TOSHOW={"港口","加载音乐","战斗开始","战斗激战","战斗即将结束","战斗胜利","战斗失败"};
     private static String[] scene_toshow;
+    private static final String[] FILENAMES_UNIVERSAL = {"1", "2", "3", "4", "5", "6", "7", "8"};
+    //private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
+    private static String[] filenames_unselected;
+    private static final String[] FILENAMES_BATTLEFAIL = {"Danger", "Fail"};
     //private static final String[] FILENAMES_BATTLEFAIL_TOSHOW={"即将失败","失败"};
     private static String[] filenames_battlefail_toshow;
+    private static final String[] FILENAMES_LOADING = {"Loading", "Login", "Queuing"};
     //private static final String[] FILENAMES_LOADING_TOSHOW={"加载中","登录","匹配中"};
     private static String[] filenames_loading_toshow;
+    private static final int TEXTVIEW_RES_ID = R.layout.support_simple_spinner_dropdown_item;
+    public static final int TYPE_HARBOR = 10;
+    public static final int TYPE_LOADING = 11;
+    public static final int TYPE_BATTLESTART = 12;
+    public static final int TYPE_BATTLEHEAT = 13;
+    public static final int TYPE_BATTLEEND = 14;
+    public static final int TYPE_BATTLEVICTORY = 15;
+    public static final int TYPE_BATTLEFAIL = 16;
+
+    private static final int QUERY_CODE = 2;
+
+    private FileNameAdapter mfilenameadapter;
     private View v;
     private Spinner mSceneSpinner, mFileNameSpinner;
     private int curr_scene, curr_type, curr_music;
@@ -70,44 +75,8 @@ public class BGMReplacerFragment extends ModFragment {
     private TextView mtextview;
     //private String fileformat;
     private Uri srcfile;
+    private static final String PREFIX = "CUSTOMBGM";
 
-    private static String[] getFileNameStringsToShow(int type) {
-        if (type == TYPE_BATTLEFAIL) {
-            return filenames_battlefail_toshow;
-        }
-        if (type == TYPE_LOADING) {
-            return filenames_loading_toshow;
-        }
-        return getFileNameStrings(type);
-    }
-
-    private static String[] getFileNameStrings(int type) {
-        if (type == TYPE_BATTLEFAIL) {
-            return FILENAMES_BATTLEFAIL;
-        }
-        if (type == TYPE_LOADING) {
-            return FILENAMES_LOADING;
-        }
-        int count = 0;
-        switch (type) {
-            case TYPE_HARBOR:
-                count = MUSICCOUNT_HARBOR;
-                break;
-            case TYPE_BATTLESTART:
-                count = MUSICCOUNT_BATTLESTART;
-                break;
-            case TYPE_BATTLEHEAT:
-                count = MUSICCOUNT_BATTLEHEAT;
-                break;
-            case TYPE_BATTLEEND:
-                count = MUSICCOUNT_BATTLEEND;
-                break;
-            case TYPE_BATTLEVICTORY:
-                count = MUSICCOUNT_BATTLEVICTORY;
-                break;
-        }
-        return Arrays.copyOf(FILENAMES_UNIVERSAL, count);
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -132,17 +101,16 @@ public class BGMReplacerFragment extends ModFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //showAd(v);
     }
 
     private void initValues() {
         Resources res = getResources();
         scene_toshow = res.getStringArray(R.array.bgm_scene_toshow);
-        //private static final String[] FILENAMES_UNSELECTED={"请选择情景"};
-        String[] filenames_unselected = res.getStringArray(R.array.bgm_select_a_scene);
+        filenames_unselected = res.getStringArray(R.array.bgm_select_a_scene);
         filenames_loading_toshow = res.getStringArray(R.array.bgm_loading_toshow);
         filenames_battlefail_toshow = res.getStringArray(R.array.bgm_battlefail_toshow);
     }
+
 
     private void initview() {
         select.setOnClickListener(new OnClickListener() {
@@ -169,7 +137,6 @@ public class BGMReplacerFragment extends ModFragment {
 
                             @Override
                             public void onClick(DialogInterface p1, int p2) {
-
                                 //注销所有缓存文件
                                 FormatHelperFactory.denyAllCaches();
                                 HashSet<String> mods = new HashSet<>();
@@ -219,7 +186,6 @@ public class BGMReplacerFragment extends ModFragment {
             }
         });
         update.setOnClickListener(new OnClickListener() {
-
             View dialogView;
             TextView progress;
             ProgressBar pb;
@@ -240,13 +206,7 @@ public class BGMReplacerFragment extends ModFragment {
                     adb.setTitle(R.string.notice)
                             .setMessage(R.string.modpkg_install_ovwtmsg)
                             .setNegativeButton(R.string.cancel, null)
-                            .setPositiveButton(R.string.uninstall_and_continue, new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface p1, int p2) {
-                                    install(name, path);
-                                }
-                            });
+                            .setPositiveButton(R.string.uninstall_and_continue, (p11, p2) -> install(name, path));
                     adb.create().show();
                 } else {
                     install(name, path);
@@ -268,7 +228,7 @@ public class BGMReplacerFragment extends ModFragment {
                 final Monitor mon = new Monitor(ad);
                 ad.setOnShowListener(mon);
                 ad.setCancelable(false);
-                @android.annotation.SuppressLint("HandlerLeak") final Handler h = new Handler() {
+                @SuppressLint("HandlerLeak") final Handler uiHandler = new Handler() {
                     public void handleMessage(Message msg) {
                         if (!isAdded()) return;
                         switch (msg.what) {
@@ -290,18 +250,14 @@ public class BGMReplacerFragment extends ModFragment {
                                 long usedtime = System.currentTimeMillis() - starttime;
                                 pb.setIndeterminate(false);
                                 pb.setProgress(100);
+                                progress.setText(getString(R.string.transcode_success, usedtime));
                                 ad.setTitle(R.string.success);
-                                if (isAdded()) {
-                                    progress.setText(getString(R.string.transcode_success, usedtime));
-                                    mon.onDone();
-                                } else {
-                                    ad.dismiss();
-                                }
+                                mon.onDone();
                                 break;
                             case AudioFormatHelper.STATUS_ERROR:
                                 String s = progress.getText().toString();
-                                Exception e = (Exception) msg.obj;
                                 long l = System.currentTimeMillis() - starttime;
+                                Exception e = (Exception) msg.obj;
                                 progress.setText(getString(R.string.transcode_failed, s, l, Utils.getErrMsg(e)));
                                 pb.setIndeterminate(false);
                                 pb.setProgress(100);
@@ -309,8 +265,6 @@ public class BGMReplacerFragment extends ModFragment {
                                 mon.onDone();
                                 break;
                             case 1:
-                                //停用该功能以避免IllegalArgumentException
-                                //Snackbar.make ( v, (String)msg.obj, Snackbar.LENGTH_LONG ).show ( );
                                 break;
                         }
                     }
@@ -319,19 +273,16 @@ public class BGMReplacerFragment extends ModFragment {
                 final AudioFormatHelper afh = FormatHelperFactory.getAudioFormatHelper(srcfile, getActivity());
                 new Thread() {
                     public void run() {
-                        //try
-                        //{
-							/*音频转码，移除原代码
-							 Utils.copyFile ( getActivity ( ).getContentResolver ( ).openInputStream ( srcfile ), getTargetFile ( curr_scene, curr_type, curr_music, Utils.FORMAT_WAV ) );
-							 */
                         starttime = System.currentTimeMillis();
+                        uiHandler.sendEmptyMessage(AudioFormatHelper.STATUS_START);
                         if (ModPackageManagerV2.INSTANCE.requestInstall(name, ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY)) {
                             File file = getTargetFile(curr_scene, curr_type, curr_music, Utils.FORMAT_WAV);
-                            _FileUtilsKt.mkdirCompatible(file);
-                            if (_FileUtilsKt.existsCompatible(file)) {
+                            Utils.ensureFileParent(file);
+                            if (file.exists()) {
                                 ModPackageManagerV2.INSTANCE.renameConflict(path);
                             }
-                            String result = afh.compressToWav(file, h);
+                            uiHandler.sendEmptyMessage(AudioFormatHelper.STATUS_TRANSCODING);
+                            String result = afh.compressToWav(file, uiHandler);
                             afh.recycle();
                             boolean isSuccess = AudioFormatHelper.RESULT_OK.equals(result);
                             result = isSuccess ? getString(R.string.success) : result;
@@ -341,17 +292,10 @@ public class BGMReplacerFragment extends ModFragment {
                             } else {
                                 ModPackageManagerV2.INSTANCE.onInstallFail();
                             }
-                            h.sendMessage(h.obtainMessage(1, result));
+                            uiHandler.sendMessage(uiHandler.obtainMessage(AudioFormatHelper.STATUS_DONE, result));
                         } else {
-                            h.sendMessage(h.obtainMessage(AudioFormatHelper.STATUS_ERROR, "Start error"));
+                            uiHandler.sendMessage(uiHandler.obtainMessage(AudioFormatHelper.STATUS_ERROR, new IOException("Failed to start")));
                         }
-
-                        //}
-							/*catch (IOException e)
-							 {
-							 h.sendMessage ( h.obtainMessage ( 1, e ) );
-							 }*/
-
                     }
                 }.start();
 
@@ -360,15 +304,18 @@ public class BGMReplacerFragment extends ModFragment {
         //配置场景选择的适配器
         mSceneSpinner.setAdapter(new ArrayAdapter<String>(getActivity(), TEXTVIEW_RES_ID, scene_toshow));
         //初始化文件名的适配器
-        FileNameAdapter mfilenameadapter = FileNameAdapter.getInstance(getActivity(), TEXTVIEW_RES_ID, TYPE_HARBOR);
+        mfilenameadapter = FileNameAdapter.getInstance(
+
+                getActivity(), TEXTVIEW_RES_ID, TYPE_HARBOR);
         mFileNameSpinner.setAdapter(mfilenameadapter);
         mSceneSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> p1, View p2, int pos, long p4) {
-                curr_scene = pos;
-                curr_type = pos + 10;
+            public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4) {
+                curr_scene = p3;
+                curr_type = p3 + 10;
                 mFileNameSpinner.setAdapter(FileNameAdapter.getInstance(getActivity(), TEXTVIEW_RES_ID, curr_type));
+
             }
 
             @Override
@@ -389,6 +336,7 @@ public class BGMReplacerFragment extends ModFragment {
             }
         });
     }
+
 
     private String getModName(int scene, int type, int num) {
         return PREFIX + '-' + SCENE[scene] + '-' + getFileName(type, num);
@@ -414,7 +362,6 @@ public class BGMReplacerFragment extends ModFragment {
                         "Music" +
                         File.separatorChar +
                         getPath(scene, type, num, format)
-
         );
     }
 
@@ -426,47 +373,61 @@ public class BGMReplacerFragment extends ModFragment {
         return Utils.identifyFormat(in, closeStream);
     }
 
+    private static String[] getFileNameStringsToShow(int type) {
+        if (type == TYPE_BATTLEFAIL) {
+            return filenames_battlefail_toshow;
+        }
+        if (type == TYPE_LOADING) {
+            return filenames_loading_toshow;
+        }
+        return getFileNameStrings(type);
+    }
+
+    private static String[] getFileNameStrings(int type) {
+        if (type == TYPE_BATTLEFAIL) {
+            return FILENAMES_BATTLEFAIL;
+        }
+        if (type == TYPE_LOADING) {
+            return FILENAMES_LOADING;
+        }
+        int count = 0;
+        switch (type) {
+            case TYPE_HARBOR:
+                count = MUSICCOUNT_HARBOR;
+                break;
+            case TYPE_BATTLESTART:
+                count = MUSICCOUNT_BATTLESTART;
+                break;
+            case TYPE_BATTLEHEAT:
+                count = MUSICCOUNT_BATTLEHEAT;
+                break;
+            case TYPE_BATTLEEND:
+                count = MUSICCOUNT_BATTLEEND;
+                break;
+            case TYPE_BATTLEVICTORY:
+                count = MUSICCOUNT_BATTLEVICTORY;
+                break;
+        }
+        return Arrays.copyOf(FILENAMES_UNIVERSAL, count);
+    }
+
     @Override
     public boolean uninstallMod() {
         //注销所有缓存
-        FormatHelperFactory.denyAllCaches();
-        ModPackageManager.getInstance().postUninstall(ModPackageInfo.MODTYPE_BGM, ModPackageInfo.SUBTYPE_EMPTY);
-        return Utils.delDir(getTargetFile(curr_scene, curr_type, curr_music, Utils.FORMAT_WAV).getParentFile().getParentFile());
+        return true;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) return;
         if (requestCode == QUERY_CODE && resultCode == AppCompatActivity.RESULT_OK) {
             if (data != null) {
                 if (data.getData() == null) {
                     Snackbar.make(v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG).show();
                     return;
                 }
-				/*测试音频转码,跳过音频格式验证
-				 try
-				 {
-				 s = identifyFormat ( getActivity ( ).getContentResolver ( ).openInputStream ( data.getData ( ) ), true ) ;
-				 }
-				 catch (IOException e)
-				 {Snackbar.make ( v, e.getMessage ( ), Snackbar.LENGTH_LONG ).show ( );}
-				 if ( !Utils.FORMAT_WAV.equals ( s ) )
-				 {
-				 Snackbar.make ( v, "文件格式错误！文件不为wav编码", Snackbar.LENGTH_LONG ).show ( );
-				 return;
-				 }
-				 else
-				 {
-				 srcfile = data.getData ( );
-				 //fileformat=s;
-				 mtextview.setText ( new StringBuilder ( ).append ( srcfile.getPath ( ) ).toString ( ) );
-				 }*/
                 srcfile = data.getData();
-                mtextview.setText(new StringBuilder().append(srcfile.getPath()).toString());
-
-
+                mtextview.setText(srcfile.getPath());
             } else {
                 Snackbar.make(v, R.string.source_file_cannot_be_empty, Snackbar.LENGTH_LONG).show();
                 return;
@@ -481,10 +442,6 @@ public class BGMReplacerFragment extends ModFragment {
         private static String[] act_data;
         private static FileNameAdapter self;
 
-        private FileNameAdapter(Context context, int textViewResourceId, String[] data) {
-            super(context, textViewResourceId, data);
-        }
-
         public static FileNameAdapter getInstance(Context context, int textViewResId, int type) {
             data = getFileNameStringsToShow(type);
             act_data = getFileNameStrings(type);
@@ -492,19 +449,13 @@ public class BGMReplacerFragment extends ModFragment {
             return self;
         }
 
-        /*
-         public void reconfigure (int type)
-         {
-         this.clear ( );
-         this.data = getFileNameStringsToShow ( type );
-         this.act_data = getFileNameStrings ( type );
-         this.addAll(data);
-         }*/
+        private FileNameAdapter(Context context, int textViewResourceId, String[] data) {
+            super(context, textViewResourceId, data);
+        }
+
         public String[] getCurrentData() {
             return this.act_data;
         }
-
-
     }
 
     public class Monitor implements DialogInterface.OnShowListener {
@@ -517,7 +468,6 @@ public class BGMReplacerFragment extends ModFragment {
         }
 
         public void onDone() {
-            if (!ad.isShowing()) return;
             button.setTextColor(color);
             button.setClickable(true);
         }
@@ -536,8 +486,5 @@ public class BGMReplacerFragment extends ModFragment {
             button.setClickable(false);
             button.setTextColor(Color.GRAY);
         }
-
-
     }
-
 }

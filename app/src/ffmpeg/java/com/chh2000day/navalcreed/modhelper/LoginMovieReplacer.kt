@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper
+package com.chh2000day.navalcreed.modhelper
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -13,13 +13,13 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.onFileInstalled
-import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.postInstall
-import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.renameConflict
-import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.requestInstall
-import com.CHH2000day.navalcreed.modhelper.ModPackageManagerV2.uninstall
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.FFmpeg
+import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.onFileInstalled
+import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.postInstall
+import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.renameConflict
+import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.requestInstall
+import com.chh2000day.navalcreed.modhelper.ModPackageManagerV2.uninstall
 import com.google.android.material.snackbar.Snackbar
 import com.orhanobut.logger.Logger
 import okio.buffer

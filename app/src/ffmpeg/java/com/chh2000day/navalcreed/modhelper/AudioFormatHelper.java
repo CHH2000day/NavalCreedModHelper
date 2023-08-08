@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import static com.arthenica.mobileffmpeg.Config.RETURN_CODE_SUCCESS;
 

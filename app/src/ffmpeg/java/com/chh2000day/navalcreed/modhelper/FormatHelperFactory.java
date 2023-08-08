@@ -1,4 +1,4 @@
-package com.CHH2000day.navalcreed.modhelper;
+package com.chh2000day.navalcreed.modhelper;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,26 +8,27 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class FormatHelperFactory {
-    private static HashMap<Uri, AudioFormatHelper> audiohelpers;
+    private static HashMap<Uri, AudioFormatHelper> audioHelperMap;
 
     public static AudioFormatHelper getAudioFormatHelper(Uri file, Context ctx) {
         AudioFormatHelper afh = null;
-        if (audiohelpers == null) {
-            audiohelpers = new HashMap<>();
+
+        if (audioHelperMap == null) {
+            audioHelperMap = new HashMap<>();
         }
-        afh = audiohelpers.get(file);
+        afh = audioHelperMap.get(file);
         if (afh == null) {
             afh = new AudioFormatHelper(file, ctx);
-            audiohelpers.put(file, afh);
+            audioHelperMap.put(file, afh);
         }
         return afh;
     }
 
     public synchronized static void refreshCache(File file) {
-        if (audiohelpers == null) {
+        if (audioHelperMap == null) {
             return;
         }
-        Collection c = audiohelpers.values();
+        Collection c = audioHelperMap.values();
         for (Object o : c) {
             AudioFormatHelper afh = (AudioFormatHelper) o;
             afh.invalidCache(file);
@@ -35,14 +36,13 @@ public class FormatHelperFactory {
     }
 
     public synchronized static void denyAllCaches() {
-        if (audiohelpers == null) {
+        if (audioHelperMap == null) {
             return;
         }
-        Collection c = audiohelpers.values();
+        Collection c = audioHelperMap.values();
         for (Object o : c) {
             AudioFormatHelper afh = (AudioFormatHelper) o;
-            afh.invalidCache(null, afh.MODE_DENY_ALL_CACHE);
+            afh.invalidCache(null, AudioFormatHelper.MODE_DENY_ALL_CACHE);
         }
     }
-
 }
