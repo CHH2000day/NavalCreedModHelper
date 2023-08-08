@@ -121,5 +121,6 @@
 	<string name="installed">已安装</string>
     <string name="version_too_high">不支持的设备!\n安卓11起强制执行的分区储存使的我们无法获取所需的权限,因此我们无法对这些系统进行适配</string>
     <string name="android11_saf_message">请在下个界面中直接选择屏幕下方的\"使用此文件夹\"</string>
+    <string name="modtype_captainvoice_fr">舰长语音-法语</string>
 
 </resources>
